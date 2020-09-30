@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Cluster &mdash; vectorai 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Array &amp; Dictionary" href="array_dict_vectorizer.html" />
+    <link rel="prev" title="Write" href="write.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> vectorai
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Vector AI - Essentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html">Vector Search / Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Search">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Collection-Metadata">Collection Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Search">Advanced Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Vector-Search">Advanced Vector Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-based-Recommendations-(Search-by-Id)">Vector based Recommendations (Search by Id)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-Analytics/Aggregation">Vector Analytics/Aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Dimensionality-Reduction">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Visualisation">Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_encodings_example.html">Custom Encodings</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_nba_players.html">Example - Vector Recommendations With NBA Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Frequently Asked Questions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write.html">Write</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cluster</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="array_dict_vectorizer.html">Array &amp; Dictionary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analytics.html">Visualisations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vectorai</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Cluster</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cluster.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="cluster">
+<h1>Cluster<a class="headerlink" href="#cluster" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Cluster<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Documentation for vector clustering goes here.</p>
+<span class="target" id="module-vectorai.api.cluster"></span><dl class="py class">
+<dt id="vectorai.api.cluster.ViClusterClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.api.cluster.</code><code class="sig-name descname">ViClusterClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clustering</p>
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.clustering_job">
+<code class="sig-name descname">clustering_job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">n_clusters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">refresh</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.clustering_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clusters a collection by a vector field</p>
+<p>Clusters a collection into groups using unsupervised machine learning. Clusters can then be aggregated to understand whats in them and how vectors are seperating data into different groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Vector field to perform clustering on</p></li>
+<li><p><strong>n_clusters</strong> – Number of clusters</p></li>
+<li><p><strong>refresh</strong> – Whether to refresh the whole collection and retrain the cluster model</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.cluster_aggregate">
+<code class="sig-name descname">cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate every cluster in a collection</p>
+<p>Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.</p>
+<p>Only can be used after a vector field has been clustered with /cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>aggregation_query</strong> – Aggregation query to aggregate data</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.cluster_facets">
+<code class="sig-name descname">cluster_facets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_facets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Facets in each cluster in a collection</p>
+<p>Takes a high level aggregation of every field and every cluster in a collection. This helps you interpret each cluster and what is in them.</p>
+<p>Only can be used after a vector field has been clustered with /cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>facets_fields</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>page_size</strong> – Size of facet page</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>date_interval</strong> – Interval for date facets</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.cluster_centroids">
+<code class="sig-name descname">cluster_centroids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the cluster centers of a collection by a vector field</p>
+<p>Only can be used after a vector field has been clustered with /cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.cluster_centroid_documents">
+<code class="sig-name descname">cluster_centroid_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_centroid_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the document closest to each cluster center of a collection</p>
+<p>Only can be used after a vector field has been clustered with /cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.advanced_clustering_job">
+<code class="sig-name descname">advanced_clustering_job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">n_clusters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_init</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">n_iter</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">refresh</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_clustering_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clusters a collection by a vector field</p>
+<p>Clusters a collection into groups using unsupervised machine learning. Clusters can then be aggregated to understand whats in them and how vectors are seperating data into different groups.
+Advanced cluster allows for more parameters to tune and alias to name each differently trained clusters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Vector field to perform clustering on</p></li>
+<li><p><strong>alias</strong> – Alias is used to name a cluster</p></li>
+<li><p><strong>n_clusters</strong> – Number of clusters</p></li>
+<li><p><strong>n_iter</strong> – Number of iterations in each run</p></li>
+<li><p><strong>n_init</strong> – Number of runs to run with different centroid seeds</p></li>
+<li><p><strong>refresh</strong> – Whether to refresh the whole collection and retrain the cluster model</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate">
+<code class="sig-name descname">advanced_cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate every cluster in a collection</p>
+<p>Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.</p>
+<p>Only can be used after a vector field has been clustered with /advanced_cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>aggregation_query</strong> – Aggregation query to aggregate data</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>alias</strong> – Alias of a cluster</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.advanced_cluster_facets">
+<code class="sig-name descname">advanced_cluster_facets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">facets_fields</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_facets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Facets in each cluster in a collection</p>
+<p>Takes a high level aggregation of every field and every cluster in a collection. This helps you interpret each cluster and what is in them.</p>
+<p>Only can be used after a vector field has been clustered with /advanced_cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>alias</strong> – Alias is used to name a cluster</p></li>
+<li><p><strong>facets_fields</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>page_size</strong> – Size of facet page</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>date_interval</strong> – Interval for date facets</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.advanced_cluster_centroids">
+<code class="sig-name descname">advanced_cluster_centroids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_centroids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the cluster centers of a collection by a vector field</p>
+<p>Only can be used after a vector field has been clustered with /advanced_cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>alias</strong> – Alias is used to name a cluster</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.cluster.ViClusterClient.advanced_cluster_centroid_documents">
+<code class="sig-name descname">advanced_cluster_centroid_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_centroid_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the document closest to each cluster center of a collection</p>
+<p>Only can be used after a vector field has been clustered with /advanced_cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_field</strong> – Clustered vector field</p></li>
+<li><p><strong>alias</strong> – Alias is used to name a cluster</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="array_dict_vectorizer.html" class="btn btn-neutral float-right" title="Array &amp; Dictionary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="write.html" class="btn btn-neutral float-left" title="Write" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, OnSearch Pty Ltd
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

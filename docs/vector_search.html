@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Search &mdash; vectorai 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Images" href="image.html" />
+    <link rel="prev" title="Dimensionality Reduction" href="dimensionality_reduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> vectorai
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Vector AI - Essentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html">Vector Search / Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Search">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Collection-Metadata">Collection Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Search">Advanced Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Vector-Search">Advanced Vector Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-based-Recommendations-(Search-by-Id)">Vector based Recommendations (Search by Id)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-Analytics/Aggregation">Vector Analytics/Aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Dimensionality-Reduction">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Visualisation">Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_encodings_example.html">Custom Encodings</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_nba_players.html">Example - Vector Recommendations With NBA Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Frequently Asked Questions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write.html">Write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array_dict_vectorizer.html">Array &amp; Dictionary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Search</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analytics.html">Visualisations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vectorai</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/vector_search.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="search">
+<h1>Search<a class="headerlink" href="#search" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Search<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Search</p>
+<span class="target" id="module-vectorai.api.search"></span><dl class="py class">
+<dt id="vectorai.api.search.ViSearchClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.api.search.</code><code class="sig-name descname">ViSearchClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search and Advanced Search Operations</p>
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.hybrid_search">
+<code class="sig-name descname">hybrid_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">text_fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">traditional_weight</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.hybrid_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search a text field with vector and text using Vector Search and Traditional Search</p>
+<p>Vector similarity search + Traditional Fuzzy Search with text and vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – Text Search Query (not encoded as vector)</p></li>
+<li><p><strong>vector</strong> – Vector, a list/array of floats that represents a piece of data.</p></li>
+<li><p><strong>text_fields</strong> – Text fields to search against</p></li>
+<li><p><strong>traditional_weight</strong> – Multiplier of traditional search. A value of 0.025~0.1 is good.</p></li>
+<li><p><strong>fuzzy</strong> – Fuzziness of the search. A value of 1-3 is good.</p></li>
+<li><p><strong>join</strong> – Whether to consider cases where there is a space in the word. E.g. Go Pro vs GoPro.</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.search_by_id">
+<code class="sig-name descname">search_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.search_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single Product Recommendations (Search by an id)</p>
+<p>Recommendation by retrieving the vector from the specified id’s document. Then performing a search with that vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document_id</strong> – ID of a document</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_field</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.search_by_ids">
+<code class="sig-name descname">search_by_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_ids</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.search_by_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi Product Recommendations (Search by ids)</p>
+<p>Recommendation by retrieving the vectors from the specified list of ids documents. Then performing a search with an aggregated vector that is the sum (depends on vector_operation) of those vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document_ids</strong> – IDs of documents</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_field</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.search_by_positive_negative_ids">
+<code class="sig-name descname">search_by_positive_negative_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">positive_document_ids</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">negative_document_ids</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.search_by_positive_negative_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi Product Recommendations with Likes and Dislikes (Search by ids)</p>
+<p>Recommendation by retrieving the vectors from the specified list of positive and negative ids documents. Then performing a search with an aggregated vector that is the sum (depends on vector_operation) of positive id vectors minus the negative id vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>positive_document_ids</strong> – Positive Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>negative_document_ids</strong> – Negative Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_field</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.search_with_positive_negative_ids_as_history">
+<code class="sig-name descname">search_with_positive_negative_ids_as_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">positive_document_ids</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">negative_document_ids</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.search_with_positive_negative_ids_as_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi Product Recommendations with Likes and Dislikes (Search by ids)</p>
+<p>Search by retrieving the vectors from the specified list of positive and negative ids documents. Then performing a search with search query vector and aggregated vector, that is the sum (depends on vector_operation) of positive id vectors minus the negative id vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> – Vector, a list/array of floats that represents a piece of data.</p></li>
+<li><p><strong>positive_document_ids</strong> – Positive Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>negative_document_ids</strong> – Negative Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_field</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_search">
+<code class="sig-name descname">advanced_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">multivector_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering</p>
+<p>Advance Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.</p>
+<p>For example: Search with a product image and description vectors to find the most similar products by what it looks like and what its described to do.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>multivector_query</strong> – Query for advance search that allows for multiple vector and field querying</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViCollectionClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">collection_name</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">advanced_search_query</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &#39;text&#39; : {&#39;vector&#39;: encode_question(&quot;How do I cluster?&quot;), &#39;fields&#39; : [&#39;function_vector_&#39;]}</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search</span><span class="p">(</span><span class="n">advanced_search_query</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_hybrid_search">
+<code class="sig-name descname">advanced_hybrid_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">multivector_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">text_fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_hybrid_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Search a text field with vector and text using Vector Search and Traditional Search</p>
+<p>Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>multivector_query</strong> – Query for advance search that allows for multiple vector and field querying</p></li>
+<li><p><strong>text</strong> – Text Search Query (not encoded as vector)</p></li>
+<li><p><strong>text_fields</strong> – Text fields to search against</p></li>
+<li><p><strong>traditional_weight</strong> – Multiplier of traditional search. A value of 0.025~0.1 is good.</p></li>
+<li><p><strong>fuzzy</strong> – Fuzziness of the search. A value of 1-3 is good.</p></li>
+<li><p><strong>join</strong> – Whether to consider cases where there is a space in the word. E.g. Go Pro vs GoPro.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_search_by_id">
+<code class="sig-name descname">advanced_search_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_search_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Single Product Recommendations (Search by an id).</p>
+<p>For example: Search with id of a product in the database, and using the product’s image and description vectors to find the most similar products by what it looks like and what its described to do.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>document_id</strong> – ID of a document</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search against, and the weightings for them.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_search_by_ids">
+<code class="sig-name descname">advanced_search_by_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_ids</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_search_by_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Multi Product Recommendations (Search by ids).</p>
+<p>For example: Search with multiple ids of products in the database, and using the product’s image and description vectors to find the most similar products by what it looks like and what its described to do.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>You can also give weightings of on each product as well e.g. product ID-A weights 100% whilst product ID-B 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>document_ids</strong> – Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search against, and the weightings for them.</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_search_by_positive_negative_ids">
+<code class="sig-name descname">advanced_search_by_positive_negative_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">positive_document_ids</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">negative_document_ids</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_search_by_positive_negative_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Multi Product Recommendations with likes and dislikes (Search by ids).</p>
+<p>For example: Search with multiple ids of liked and dislike products in the database. Then using the product’s image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>You can also give weightings of on each product as well e.g. product ID-A weights 100% whilst product ID-B 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>positive_document_ids</strong> – Positive Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>negative_document_ids</strong> – Negative Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search against, and the weightings for them.</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.search.ViSearchClient.advanced_search_with_positive_negative_ids_as_history">
+<code class="sig-name descname">advanced_search_with_positive_negative_ids_as_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">positive_document_ids</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">negative_document_ids</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_operation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.search.ViSearchClient.advanced_search_with_positive_negative_ids_as_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advanced Search with Likes and Dislikes as history</p>
+<p>For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product’s image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.</p>
+<p>You can also give weightings of each vector field towards the search, e.g. image_vector_ weights 100%, whilst description_vector_ 50%.</p>
+<p>You can also give weightings of on each product as well e.g. product ID-A weights 100% whilst product ID-B 50%.</p>
+<p>Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>facets</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+<li><p><strong>include_facets</strong> – Include facets in the search results</p></li>
+<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>positive_document_ids</strong> – Positive Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>negative_document_ids</strong> – Negative Document IDs to get recommendations for, and the weightings of each document</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search against, and the weightings for them.</p></li>
+<li><p><strong>vector_operation</strong> – Aggregation for the vectors, choose from [‘mean’, ‘sum’, ‘min’, ‘max’]</p></li>
+<li><p><strong>vector</strong> – Vector, a list/array of floats that represents a piece of data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="image.html" class="btn btn-neutral float-right" title="Images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dimensionality_reduction.html" class="btn btn-neutral float-left" title="Dimensionality Reduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, OnSearch Pty Ltd
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

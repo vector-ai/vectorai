@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Vector AI - Essentials &mdash; vectorai 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="QuickStart" href="quickstart.html" />
+    <link rel="prev" title="Welcome to Vector AI’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> vectorai
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vector AI - Essentials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#important-terminologies">Important Terminologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documents-in-vector-ai">Documents in Vector AI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models-with-vector-ai">Models With Vector AI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html">Vector Search / Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Search">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Collection-Metadata">Collection Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Search">Advanced Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Vector-Search">Advanced Vector Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-based-Recommendations-(Search-by-Id)">Vector based Recommendations (Search by Id)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-Analytics/Aggregation">Vector Analytics/Aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Dimensionality-Reduction">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Visualisation">Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_encodings_example.html">Custom Encodings</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_nba_players.html">Example - Vector Recommendations With NBA Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Frequently Asked Questions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write.html">Write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array_dict_vectorizer.html">Array &amp; Dictionary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analytics.html">Visualisations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vectorai</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Vector AI - Essentials</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="vector-ai-essentials">
+<h1>Vector AI - Essentials<a class="headerlink" href="#vector-ai-essentials" title="Permalink to this headline">¶</a></h1>
+<p>Vector AI is built to store vectors alongside documents (text/audio/images/videos).
+It is designed to be a light-weight library to create, manipulate, search and analyse vectors to power machine
+learning applications such as semantic search, recommendations, etc.</p>
+<div class="section" id="important-terminologies">
+<h2>Important Terminologies<a class="headerlink" href="#important-terminologies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Vectors</strong> (aka. embeddings, 1D arrays)</p></li>
+<li><p><strong>Models/Encoders</strong> (aka. Embedders) Turns data into vectors e.g. Word2Vec turns words into vectors</p></li>
+<li><p><strong>Vector Similarity Search</strong> (aka. Nearest Neighbor Search, Distance Search)</p></li>
+<li><p><strong>Collection</strong> (aka. Index, Table) ~ a collection is made up of multiple documents</p></li>
+<li><p><strong>Documents</strong> (aka. Json, Item, Dictionary, Row) ~ a document can contain vector + other important information</p></li>
+</ul>
+<p>Some important information: for predefined vectors use the suffix “_vector_” in the name like “<a href="#id1"><span class="problematic" id="id2">description_vector_</span></a>”, for ids to do quick key value lookup use the name “_id”</p>
+</div>
+<div class="section" id="documents-in-vector-ai">
+<h2>Documents in Vector AI<a class="headerlink" href="#documents-in-vector-ai" title="Permalink to this headline">¶</a></h2>
+<p>Documents (dictionaries) consists of fields (dictionary keys) and values.</p>
+<ol class="arabic">
+<li><p>Vector AI is document orientated (dictionaries/jsons) which means you can have nested fields. This means that you have documents such as:</p>
+<blockquote>
+<div><div class="highlight-RST notranslate"><div class="highlight"><pre><span></span>document_example = {
+    &quot;car&quot;: {
+        &quot;wheels&quot;:
+            {
+                &quot;number&quot;: 4
+            }
+    }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>then running vi_client.get_field(“car.wheels.number”) will return 4</p>
+<ol class="arabic simple" start="2">
+<li><p>When uploading documents into VectorAi, it will infer the schema from the first document being inserted.</p></li>
+</ol>
+<p>You are able to navigate the documents within the fields by using the functions below, allowing you to navigate through
+nested documents if the fields are separated by .’s.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">set_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">set_field_across_documents</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">docs</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">get_field_across_documents</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">docs</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="models-with-vector-ai">
+<h2>Models With Vector AI<a class="headerlink" href="#models-with-vector-ai" title="Permalink to this headline">¶</a></h2>
+<p>Vector AI has deployed models that we’ve handpicked and tuned to work nicely out of the box on most problems.
+These models, however, may be changed over time. When they do we make sure that
+previous models are still deployed and can be used.
+To prototype something quickly we highly recommend using these deployed models.</p>
+<p><strong>If you are working on a problem that requires highly customised or finetuned models, reach out to us
+for enterprise services where we can fine tune these models for your use case or feel free to build your own.</strong></p>
+<dl class="simple">
+<dt>Currently, our deployed models are:</dt><dd><ul class="simple">
+<li><p>ViText2Vec - our text to vector model</p></li>
+<li><p>ViImage2Vec - our image to vector model</p></li>
+<li><p>ViAudio2Vec - our audio to vector model</p></li>
+<li><p>dimensionality_reduction_job - perform dimensionality reduction on your vectors</p></li>
+<li><p>clustering_job - perform clustering on your vectors</p></li>
+<li><p>advanced_cluster_job - perform clustering with advanced options on your vectors</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="QuickStart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Vector AI’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, OnSearch Pty Ltd
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

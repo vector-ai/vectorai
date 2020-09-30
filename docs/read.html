@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Read &mdash; vectorai 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Write" href="write.html" />
+    <link rel="prev" title="Client" href="client.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> vectorai
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Vector AI - Essentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html">Vector Search / Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Search">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Collection-Metadata">Collection Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Search">Advanced Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Vector-Search">Advanced Vector Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-based-Recommendations-(Search-by-Id)">Vector based Recommendations (Search by Id)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-Analytics/Aggregation">Vector Analytics/Aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Dimensionality-Reduction">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Visualisation">Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_encodings_example.html">Custom Encodings</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_nba_players.html">Example - Vector Recommendations With NBA Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Frequently Asked Questions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Read</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Read</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="write.html">Write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array_dict_vectorizer.html">Array &amp; Dictionary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analytics.html">Visualisations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vectorai</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Read</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/read.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="read">
+<h1>Read<a class="headerlink" href="#read" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>Read<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Read</p>
+<span class="target" id="module-vectorai.api.read"></span><dl class="py class">
+<dt id="vectorai.api.read.ViReadAPIClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.api.read.</code><code class="sig-name descname">ViReadAPIClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Operations</p>
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.collection_stats">
+<code class="sig-name descname">collection_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.collection_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves stats about a collection</p>
+<p>Stats include: size, searches, number of documents, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of Collection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.collection_schema">
+<code class="sig-name descname">collection_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.collection_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the schema of a collection</p>
+<p>The schema of a collection can include types of: text, numeric, date, bool, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of Collection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.id">
+<code class="sig-name descname">id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up a document by its id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document_id</strong> – ID of a document</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.bulk_id">
+<code class="sig-name descname">bulk_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.bulk_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up multiple document by their ids</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document_ids</strong> – IDs of documents</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.retrieve_documents">
+<code class="sig-name descname">retrieve_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cursor</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sort</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_fields</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.retrieve_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve some documents</p>
+<p>Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_fields</strong> – Fields to include in the document, if empty list [] then all is returned</p></li>
+<li><p><strong>cursor</strong> – Cursor to paginate the document retrieval</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>sort</strong> – Fields to sort the documents by</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.random_documents">
+<code class="sig-name descname">random_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.random_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve some documents randomly</p>
+<p>Mainly for testing purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed</strong> – Random Seed for retrieving random documents.</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.id_lookup_joined">
+<code class="sig-name descname">id_lookup_joined</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">join_query</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">doc_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.id_lookup_joined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up a document by its id with joins</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>join_query</strong> – <p>.</p>
+</p></li>
+<li><p><strong>doc_id</strong> – ID of a Document</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.aggregate">
+<code class="sig-name descname">aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate a collection</p>
+<p>Aggregation/Groupby of a collection using an aggregation query.
+The aggregation query is a json body that follows the schema of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;groupby&quot;</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">nickname</span><span class="o">/</span><span class="n">alias</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">field</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">collection</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;agg&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">another_nickname</span><span class="o">/</span><span class="n">alias</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">another</span> <span class="n">groupby</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">collection</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;agg&quot;</span><span class="p">:</span> <span class="s2">&quot;category&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;metrics&quot;</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">nickname</span><span class="o">/</span><span class="n">alias</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">numeric</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">collection</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;agg&quot;</span><span class="p">:</span> <span class="s2">&quot;avg&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>“groupby” is the fields you want to split the data into. These are the available groupby types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>category” : groupby a field that is a category</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>“metrics” is the fields you want to metrics you want to calculate in each of those. These are the available metric types: every aggregation includes a frequency metric:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>average”, “max”, “min”, “sum”, “cardinality”</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>aggregation_query</strong> – Aggregation query to aggregate data</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.facets">
+<code class="sig-name descname">facets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.facets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the facets of a collection</p>
+<p>Takes a high level aggregation of every field in a collection. This is used in advance search to help create the filter bar for search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>facets_fields</strong> – Fields to include in the facets, if [] then all</p></li>
+<li><p><strong>date_interval</strong> – Interval for date facets</p></li>
+<li><p><strong>page_size</strong> – Size of facet page</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.filters">
+<code class="sig-name descname">filters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters a collection</p>
+<p>Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.</p>
+<p>The filters query is a json body that follows the schema of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">field</span> <span class="n">to</span> <span class="nb">filter</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nb">type</span> <span class="n">of</span> <span class="nb">filter</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span><span class="s2">&quot;america&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">field</span> <span class="n">to</span> <span class="nb">filter</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nb">type</span> <span class="n">of</span> <span class="nb">filter</span><span class="o">&gt;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span><span class="mi">90</span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>These are the available filter_type types:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">1.</span> <span class="s2">&quot;contains&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">documents</span> <span class="n">that</span> <span class="n">contains</span> <span class="n">a</span> <span class="n">string</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span> <span class="s2">&quot;bluetoo&quot;</span><span class="p">]}</span>
+<span class="mf">2.</span> <span class="s2">&quot;exact_match&quot;</span><span class="o">/</span><span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">documents</span> <span class="n">that</span> <span class="n">matches</span> <span class="n">a</span> <span class="n">string</span> <span class="ow">or</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">strings</span> <span class="n">exactly</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;categories&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span> <span class="s2">&quot;tv&quot;</span><span class="p">]}</span>
+<span class="mf">3.</span> <span class="s2">&quot;categories&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">documents</span> <span class="n">that</span> <span class="n">contains</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">a</span> <span class="n">category</span> <span class="kn">from</span> <span class="nn">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">categories</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;categories&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tv&quot;</span><span class="p">,</span> <span class="s2">&quot;smart&quot;</span><span class="p">,</span> <span class="s2">&quot;bluetooth_compatible&quot;</span><span class="p">]}</span>
+<span class="mf">4.</span> <span class="s2">&quot;exists&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">documents</span> <span class="n">that</span> <span class="n">contains</span> <span class="n">a</span> <span class="n">field</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;purchased&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span><span class="s2">&quot; &quot;</span><span class="p">}</span>
+<span class="mf">5.</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">date</span> <span class="n">by</span> <span class="n">date</span> <span class="nb">range</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;insert_date_&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">}</span>
+<span class="mf">6.</span> <span class="s2">&quot;numeric&quot;</span><span class="p">:</span> <span class="k">for</span> <span class="n">filtering</span> <span class="n">by</span> <span class="n">numeric</span> <span class="nb">range</span><span class="o">.</span>
+        <span class="p">{</span><span class="s1">&#39;field&#39;</span> <span class="p">:</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_type&#39;</span> <span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s2">&quot;condition&quot;</span><span class="p">:</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;condition_value&quot;</span><span class="p">:</span><span class="mi">90</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>These are the available conditions:</p>
+<blockquote>
+<div><p>“==”, “!=”, “&gt;=”, “&gt;”, “&lt;”, “&lt;=”</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>filters</strong> – Query for filtering the search results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.job_status">
+<code class="sig-name descname">job_status</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.job_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get status of a job. Whether its starting, running, failed or finished.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> – <p>.</p>
+</p></li>
+<li><p><strong>job_name</strong> – <p>.</p>
+</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.read.ViReadAPIClient.list_jobs">
+<code class="sig-name descname">list_jobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.read.ViReadAPIClient.list_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get history of jobs</p>
+<p>List and get a history of all the jobs and its job_id, parameters, start time, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of Collection</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-vectorai.read"></span><p>Reads Operations designed for python</p>
+<dl class="py class">
+<dt id="vectorai.read.ViReadClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.read.</code><code class="sig-name descname">ViReadClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="vectorai.read.ViReadClient.random_aggregation_query">
+<code class="sig-name descname">random_aggregation_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.random_aggregation_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random filter query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – name of collection</p></li>
+<li><p><strong>groupby</strong> – The number of groupbys to randomly generate</p></li>
+<li><p><strong>metrics</strong> – The number of metrics to randomly generate</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">random_aggregation_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.search">
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search</p>
+<p>Enables machine learning search with vector search. Search with a vector for the most similar vectors.</p>
+<p>For example: Search with a person’s characteristics, who are the most similar (querying the “persons_characteristics_vector” field):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Query</span> <span class="n">person</span><span class="s1">&#39;s characteristics as a vector:</span>
+<span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">]</span> <span class="n">representing</span> <span class="p">[</span><span class="n">height</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
+
+<span class="n">Search</span> <span class="n">Results</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">Adam</span> <span class="n">Levine</span><span class="p">,</span> <span class="s2">&quot;persons_characteristics_vector&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">71</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">Brad</span> <span class="n">Pitt</span><span class="p">,</span> <span class="s2">&quot;persons_characteristics_vector&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">65</span><span class="p">]},</span>
+<span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> – Vector, a list/array of floats that represents a piece of data.</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – Include count in the search results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.random_filter_query">
+<code class="sig-name descname">random_filter_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">text_filters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">numeric_filters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.random_filter_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random filter query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – name of collection</p></li>
+<li><p><strong>text_filters</strong> – The number of text filters to randomly generate</p></li>
+<li><p><strong>numeric_filters</strong> – The number of numeric filters to randomly generate</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">random_filter_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_filters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numeric_filters</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.head">
+<code class="sig-name descname">head</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">return_as_pandas_df</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main Vi client with most of the available read and write methods available to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – The name of your collection</p></li>
+<li><p><strong>page_size</strong> – The number of results to return</p></li>
+<li><p><strong>return_as_pandas_df</strong> – If True, return as a pandas DataFrame rather than a JSON.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.retrieve_all_documents">
+<code class="sig-name descname">retrieve_all_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sort_by</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_fields</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.retrieve_all_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all documents in a given collection. We recommend specifying specific fields to extract
+as otherwise this function may take a long time to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection.</p></li>
+<li><p><strong>sort_by</strong> – Select the fields by which to sort by.</p></li>
+<li><p><strong>asc</strong> – If true, returns in ascending order of what is sort.</p></li>
+<li><p><strong>include_vector</strong> – If true, includes _vector_ fields to return them.</p></li>
+<li><p><strong>include_fields</strong> – Adjust which fields are returned.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_documents</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">retrieve_all_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.wait_till_jobs_complete">
+<code class="sig-name descname">wait_till_jobs_complete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.wait_till_jobs_complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until a specific job is complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection.</p></li>
+<li><p><strong>job_id</strong> – ID of the job.</p></li>
+<li><p><strong>job_name</strong> – Name of the job.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">dimensionality_reduction_job</span><span class="p">(</span><span class="s1">&#39;nba_season_per_36_stats_demo&#39;</span><span class="p">,</span> <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;season_vector_&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="s1">&#39;nba_season_per_36_stats_demo&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">job</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.check_schema">
+<code class="sig-name descname">check_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.check_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the schema of a given collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of collection.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">check_schema</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.list_collections">
+<code class="sig-name descname">list_collections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#vectorai.read.ViReadClient.list_collections" title="Permalink to this definition">¶</a></dt>
+<dd><p>List Collections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> – <p>Username
+api_key:</p>
+<blockquote>
+<div><p>Api Key, you can request it from request_api_key</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of collections</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;fried&#39;</span><span class="p">},</span> <span class="s1">&#39;food_vector_&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">_check_schema</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="write.html" class="btn btn-neutral float-right" title="Write" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="client.html" class="btn btn-neutral float-left" title="Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, OnSearch Pty Ltd
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

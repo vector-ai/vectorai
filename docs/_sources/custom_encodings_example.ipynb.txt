@@ -1,0 +1,376 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Custom Encodings"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Custom Encodings (Bring Your Own Vectors) is for advanced users who have their own encoders and want to use their models with Vi. This is especially important as users are expected to perform a lot of experimentation with their vectors (it seems new SOTA models are achieved with every week!)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "nbsphinx": "hidden",
+    "slideshow": {
+     "slide_type": "slide"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import string\n",
+    "import requests\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import random\n",
+    "import datetime\n",
+    "import time\n",
+    "import json"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "nbsphins": "hidden"
+   },
+   "outputs": [],
+   "source": [
+    "vecdb_url = 'https://api.vctr.ai'\n",
+    "username = 'your_username'\n",
+    "api_key = 'your_api_key'\n",
+    "collection_name = 'your_collection_name'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### How To Write Custom Encoders"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The main requirement we have for encoders is that they need to be json-serializable outputs. We made this easy by implementing a method to check inputs prior to uploading, garbage collection and chunking for different data formats. This can be seen below.\n",
+    "\n",
+    "Note: Vi tries to handle inputs at a **document-level**. This means that functions are created with inputs mainly being dictionaries. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vectorai.models.base import ViText2Vec, ViAudio2Vec, ViImage2Vec"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "For example - we may want to use tensorflow hub models. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "texts = [\n",
+    "    {\n",
+    "        \"text\": \"Vi is the ultimate database to upload vectors.\"\n",
+    "    },\n",
+    "    {\n",
+    "        \"text\": \"The authors of Vi are both named Jacky.\"\n",
+    "    }\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%%capture\n",
+    "import tensorflow_hub as hub \n",
+    "model = hub.load(\"https://tfhub.dev/google/universal-sentence-encoder-large/5\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Logged in. Welcome test. To view list of available collections, call list_collections() method.\n"
+     ]
+    }
+   ],
+   "source": [
+    "from vectorai import ViClient\n",
+    "vi_client = ViClient(username, api_key)\n",
+    "\n",
+    "# Here, we want to inherit from the base class in order.\n",
+    "class USEEncoder(ViText2Vec):\n",
+    "    def encode_text(self, text):\n",
+    "        \"\"\"Encode text an item level if possible, otherwise encode string directly.\n",
+    "        \"\"\"\n",
+    "        return model(text)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "encoder = USEEncoder()\n",
+    "vectors = encoder.encode_text([\"HI\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<tf.Tensor: shape=(2, 512), dtype=float32, numpy=\n",
+       " array([[-0.00337365,  0.07936656, -0.06529631, ..., -0.04366795,\n",
+       "         -0.00061513, -0.03553966],\n",
+       "        [-0.02114094, -0.01992319,  0.03013013, ...,  0.05736907,\n",
+       "         -0.00945254, -0.000416  ]], dtype=float32)>]"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# This will automatically instantiate a bulk-encoding methodology.\n",
+    "vectors = encoder.bulk_encode_text([\"Hi\", \"Aman!\"])\n",
+    "vectors"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Automatically bulk-encode items as well \n",
+    "vectors = encoder.bulk_encode_text(texts, text_input_field=\"text\", vector_output_field=\"text_vector_\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Training On Transformers\n",
+    "\n",
+    "We made encoding with transformers really really easy. You can not access state-of-the-art NLP encoders with 1 line of code with tonnes of customisability. \n",
+    "\n",
+    "The current supported models can be seen here:\n",
+    "https://github.com/img-more/vecdb-python/blob/master/vectorai/models/transformer_models/transformer_models.py\n",
+    "\n",
+    "You can now load the encodings from this model in 1 line of code and you can load custom pre-trained weights in the same function!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vectorai.models import Transformer2Vec"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "encoder = Transformer2Vec('distilbert')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vector = encoder.encode_text(text=\"Vectors are cool.\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Finished updating documents with additional field.\n"
+     ]
+    }
+   ],
+   "source": [
+    "encoder.bulk_encode_text(texts=texts, text_input_field='text', vector_output_field='text_distilbert_vector_')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We also added a generic way to fine-tune your encodings."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from tensorflow.keras.optimizers import Adam\n",
+    "from tensorflow.keras.losses import MeanSquaredError\n",
+    "from tensorflow.keras.metrics import MeanAbsoluteError"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "x_fields = ['name', 'description']\n",
+    "y_fields = ['store_id']\n",
+    "optimizer = Adam()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('product.json', 'r') as infile:\n",
+    "    documents = json.load(infile)\n",
+    "# Select the first 300 documents \n",
+    "documents = documents[:300]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epoch 1/2\n",
+      "115/115 [==============================] - 62s 543ms/step - loss: 1858391.0000 - val_loss: 1567845.0000\n",
+      "Epoch 2/2\n",
+      "115/115 [==============================] - 62s 543ms/step - loss: 1608951.8750 - val_loss: 687381.9375\n",
+      "Saved model. This can be found in /home/jacky/.cache/transformers/vectorai-trained-distilbert-base-cased\n"
+     ]
+    }
+   ],
+   "source": [
+    "encoder.run_finetuning_for_classification(\n",
+    "    documents=documents, \n",
+    "    x_fields=['name', 'description'], \n",
+    "    y_fields=['price'],\n",
+    "    optimizer=Adam(),\n",
+    "    loss=MeanSquaredError(),\n",
+    "    metric=[MeanAbsoluteError()])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can then use the classification model by using the argument \n",
+    "`use_classification_model=True`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "vectors = encoder.encode_text(document=documents[0], document_fields=['name', 'description'], \n",
+    "                    use_classification_model=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Or you can load your pretrained model using your own pretrained_model_weights by setting `classification_save_dir`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vector = encoder.encode_text(document=documents[0], document_fields=['name', 'description'], \n",
+    "                    use_classification_model=True, \n",
+    "                    classification_save_dir='/home/jacky/.cache/transformers/vectorai-trained-distilbert-base-cased')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Voila!"
+   ]
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Edit Metadata",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

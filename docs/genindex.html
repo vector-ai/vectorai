@@ -1,0 +1,962 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Index &mdash; vectorai 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> vectorai
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Vector AI - Essentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">QuickStart</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html">Vector Search / Nearest Neighbors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Search">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Collection-Metadata">Collection Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Search">Advanced Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Advanced-Vector-Search">Advanced Vector Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-based-Recommendations-(Search-by-Id)">Vector based Recommendations (Search by Id)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="industry_ecommerce.html#Vector-Analytics/Aggregation">Vector Analytics/Aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Dimensionality-Reduction">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_analytics_example.html#Visualisation">Visualisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_encodings_example.html">Custom Encodings</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Case Studies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="industry_nba_players.html">Example - Vector Recommendations With NBA Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Frequently Asked Questions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">Frequently Asked Questions</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">Read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write.html">Write</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="array_dict_vectorizer.html">Array &amp; Dictionary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimensionality_reduction.html">Dimensionality Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector_search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Texts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">Audios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analytics.html">Visualisations</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vectorai</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Index</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate">advanced_cluster_aggregate() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_cluster_aggregate">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.advanced_cluster_centroid_documents">advanced_cluster_centroid_documents() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_cluster_centroid_documents">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.advanced_cluster_centroids">advanced_cluster_centroids() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_cluster_centroids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.advanced_cluster_facets">advanced_cluster_facets() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_cluster_facets">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.advanced_clustering_job">advanced_clustering_job() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_clustering_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_hybrid_search">advanced_hybrid_search() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_hybrid_search">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_search">advanced_search() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_search">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_search_by_id">advanced_search_by_id() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_search_by_id">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_search_by_ids">advanced_search_by_ids() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_search_by_ids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_search_by_positive_negative_ids">advanced_search_by_positive_negative_ids() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_search_by_positive_negative_ids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.advanced_search_with_positive_negative_ids_as_history">advanced_search_with_positive_negative_ids_as_history() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.advanced_search_with_positive_negative_ids_as_history">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.aggregate">aggregate() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.aggregate">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.bulk_id">bulk_id() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.bulk_id">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.bulk_insert">bulk_insert() (vectorai.api.write.ViWriteAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.bulk_insert">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.check_schema">check_schema() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.check_schema">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="write.html#vectorai.write.ViWriteClient.chunk">chunk() (vectorai.write.ViWriteClient static method)</a>
+</li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.cluster_aggregate">cluster_aggregate() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.cluster_aggregate">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.cluster_centroid_documents">cluster_centroid_documents() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.cluster_centroid_documents">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.cluster_centroids">cluster_centroids() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.cluster_centroids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.cluster_facets">cluster_facets() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.cluster_facets">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient.clustering_job">clustering_job() (vectorai.api.cluster.ViClusterClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.clustering_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.collection_schema">collection_schema() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.collection_schema">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.collection_stats">collection_stats() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.collection_stats">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.create_collection">create_collection() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.create_collection">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.create_collection_from_document">create_collection_from_document() (vectorai.api.write.ViWriteAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.create_collection_from_document">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.delete_by_id">delete_by_id() (vectorai.api.write.ViWriteAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.delete_by_id">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.delete_collection">delete_collection() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.delete_collection">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.delete_published_aggregation">delete_published_aggregation() (vectorai.api.write.ViWriteAPIClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dimensionality_reduction.html#vectorai.api.dimensionality_reduction.ViDimensionalityReductionClient.dimensionality_reduce">dimensionality_reduce() (vectorai.api.dimensionality_reduction.ViDimensionalityReductionClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.dimensionality_reduce">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="dimensionality_reduction.html#vectorai.api.dimensionality_reduction.ViDimensionalityReductionClient.dimensionality_reduction_job">dimensionality_reduction_job() (vectorai.api.dimensionality_reduction.ViDimensionalityReductionClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.dimensionality_reduction_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="write.html#vectorai.write.ViWriteClient.dummy_vector">dummy_vector() (vectorai.write.ViWriteClient static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.edit_document">edit_document() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.edit_document">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.edit_documents">edit_documents() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.edit_documents">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.encode_array">encode_array() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.encode_array_field">encode_array_field() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="audio.html#vectorai.api.audio.ViAudioClient.encode_audio">encode_audio() (vectorai.api.audio.ViAudioClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_audio">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="audio.html#vectorai.api.audio.ViAudioClient.encode_audio_job">encode_audio_job() (vectorai.api.audio.ViAudioClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_audio_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.encode_dictionary">encode_dictionary() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.encode_dictionary_field">encode_dictionary_field() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="image.html#vectorai.api.image.ViImageClient.encode_image">encode_image() (vectorai.api.image.ViImageClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_image">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="image.html#vectorai.api.image.ViImageClient.encode_image_job">encode_image_job() (vectorai.api.image.ViImageClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_image_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="text.html#vectorai.api.text.ViTextClient.encode_text">encode_text() (vectorai.api.text.ViTextClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_text">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="text.html#vectorai.api.text.ViTextClient.encode_text_job">encode_text_job() (vectorai.api.text.ViTextClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.encode_text_job">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.facets">facets() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.facets">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.filters">filters() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.filters">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.head">head() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.head">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.hybrid_search">hybrid_search() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.hybrid_search">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.id">id() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.id">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.id_lookup_joined">id_lookup_joined() (vectorai.api.read.ViReadAPIClient method)</a>
+</li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.insert">insert() (vectorai.api.write.ViWriteAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.insert">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.insert_df">insert_df() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.insert_df">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.insert_document">insert_document() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.insert_document">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.insert_documents">insert_documents() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.insert_documents">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.insert_single_document">insert_single_document() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="write.html#vectorai.write.ViWriteClient.insert_single_document">(vectorai.write.ViWriteClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.job_status">job_status() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.job_status">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.join_collections">join_collections() (vectorai.api.write.ViWriteAPIClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.read.ViReadClient.list_collections">list_collections() (vectorai.read.ViReadClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.list_jobs">list_jobs() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.list_jobs">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    module
+
+      <ul>
+        <li><a href="analytics.html#module-vectorai.analytics.viz">vectorai.analytics.viz</a>
+</li>
+        <li><a href="array_dict_vectorizer.html#module-vectorai.api.array_dict_vectorizer">vectorai.api.array_dict_vectorizer</a>
+</li>
+        <li><a href="audio.html#module-vectorai.api.audio">vectorai.api.audio</a>
+</li>
+        <li><a href="cluster.html#module-vectorai.api.cluster">vectorai.api.cluster</a>
+</li>
+        <li><a href="dimensionality_reduction.html#module-vectorai.api.dimensionality_reduction">vectorai.api.dimensionality_reduction</a>
+</li>
+        <li><a href="image.html#module-vectorai.api.image">vectorai.api.image</a>
+</li>
+        <li><a href="read.html#module-vectorai.api.read">vectorai.api.read</a>
+</li>
+        <li><a href="vector_search.html#module-vectorai.api.search">vectorai.api.search</a>
+</li>
+        <li><a href="text.html#module-vectorai.api.text">vectorai.api.text</a>
+</li>
+        <li><a href="write.html#module-vectorai.api.write">vectorai.api.write</a>
+</li>
+        <li><a href="client.html#module-vectorai.client">vectorai.client</a>
+</li>
+        <li><a href="read.html#module-vectorai.read">vectorai.read</a>
+</li>
+        <li><a href="write.html#module-vectorai.write">vectorai.write</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analytics.html#vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity">plot_1d_cosine_similarity() (vectorai.analytics.viz.VizMixin method)</a>
+</li>
+      <li><a href="analytics.html#vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity">plot_2d_cosine_similarity() (vectorai.analytics.viz.VizMixin method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="analytics.html#vectorai.analytics.viz.VizMixin.plot_dimensionality_reduced_vectors">plot_dimensionality_reduced_vectors() (vectorai.analytics.viz.VizMixin method)</a>
+</li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.publish_aggregation">publish_aggregation() (vectorai.api.write.ViWriteAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.publish_aggregation">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.random_aggregation_query">random_aggregation_query() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.random_aggregation_query">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.random_documents">random_documents() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.random_documents">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.random_filter_query">random_filter_query() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.random_filter_query">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.request_api_key">request_api_key() (in module vectorai.client)</a>
+</li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.retrieve_all_documents">retrieve_all_documents() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.retrieve_all_documents">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient.retrieve_documents">retrieve_documents() (vectorai.api.read.ViReadAPIClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.retrieve_documents">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.search">search() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.search">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="audio.html#vectorai.api.audio.ViAudioClient.search_audio">search_audio() (vectorai.api.audio.ViAudioClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_audio">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="audio.html#vectorai.api.audio.ViAudioClient.search_audio_by_upload">search_audio_by_upload() (vectorai.api.audio.ViAudioClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_audio_by_upload">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.search_by_id">search_by_id() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_by_id">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.search_by_ids">search_by_ids() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_by_ids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.search_by_positive_negative_ids">search_by_positive_negative_ids() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_by_positive_negative_ids">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="image.html#vectorai.api.image.ViImageClient.search_image">search_image() (vectorai.api.image.ViImageClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_image">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="image.html#vectorai.api.image.ViImageClient.search_image_by_upload">search_image_by_upload() (vectorai.api.image.ViImageClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_image_by_upload">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="text.html#vectorai.api.text.ViTextClient.search_text">search_text() (vectorai.api.text.ViTextClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_text">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.search_with_array">search_with_array() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient.search_with_dictionary">search_with_dictionary() (vectorai.api.array_dict_vectorizer.ViArrayDictClient method)</a>
+</li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient.search_with_positive_negative_ids_as_history">search_with_positive_negative_ids_as_history() (vectorai.api.search.ViSearchClient method)</a>
+
+      <ul>
+        <li><a href="client.html#vectorai.client.ViCollectionClient.search_with_positive_negative_ids_as_history">(vectorai.client.ViCollectionClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="write.html#vectorai.write.ViWriteClient.set_field">set_field() (vectorai.write.ViWriteClient static method)</a>
+</li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.start_aggregation">start_aggregation() (vectorai.api.write.ViWriteAPIClient method)</a>
+</li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient.stop_aggregation">stop_aggregation() (vectorai.api.write.ViWriteAPIClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    vectorai.analytics.viz
+
+      <ul>
+        <li><a href="analytics.html#module-vectorai.analytics.viz">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.array_dict_vectorizer
+
+      <ul>
+        <li><a href="array_dict_vectorizer.html#module-vectorai.api.array_dict_vectorizer">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.audio
+
+      <ul>
+        <li><a href="audio.html#module-vectorai.api.audio">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.cluster
+
+      <ul>
+        <li><a href="cluster.html#module-vectorai.api.cluster">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.dimensionality_reduction
+
+      <ul>
+        <li><a href="dimensionality_reduction.html#module-vectorai.api.dimensionality_reduction">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.image
+
+      <ul>
+        <li><a href="image.html#module-vectorai.api.image">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.read
+
+      <ul>
+        <li><a href="read.html#module-vectorai.api.read">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.search
+
+      <ul>
+        <li><a href="vector_search.html#module-vectorai.api.search">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.text
+
+      <ul>
+        <li><a href="text.html#module-vectorai.api.text">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.api.write
+
+      <ul>
+        <li><a href="write.html#module-vectorai.api.write">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    vectorai.client
+
+      <ul>
+        <li><a href="client.html#module-vectorai.client">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.read
+
+      <ul>
+        <li><a href="read.html#module-vectorai.read">module</a>
+</li>
+      </ul></li>
+      <li>
+    vectorai.write
+
+      <ul>
+        <li><a href="write.html#module-vectorai.write">module</a>
+</li>
+      </ul></li>
+      <li><a href="array_dict_vectorizer.html#vectorai.api.array_dict_vectorizer.ViArrayDictClient">ViArrayDictClient (class in vectorai.api.array_dict_vectorizer)</a>
+</li>
+      <li><a href="audio.html#vectorai.api.audio.ViAudioClient">ViAudioClient (class in vectorai.api.audio)</a>
+</li>
+      <li><a href="client.html#vectorai.client.ViClient">ViClient (class in vectorai.client)</a>
+</li>
+      <li><a href="cluster.html#vectorai.api.cluster.ViClusterClient">ViClusterClient (class in vectorai.api.cluster)</a>
+</li>
+      <li><a href="client.html#vectorai.client.ViCollectionClient">ViCollectionClient (class in vectorai.client)</a>
+</li>
+      <li><a href="dimensionality_reduction.html#vectorai.api.dimensionality_reduction.ViDimensionalityReductionClient">ViDimensionalityReductionClient (class in vectorai.api.dimensionality_reduction)</a>
+</li>
+      <li><a href="image.html#vectorai.api.image.ViImageClient">ViImageClient (class in vectorai.api.image)</a>
+</li>
+      <li><a href="read.html#vectorai.api.read.ViReadAPIClient">ViReadAPIClient (class in vectorai.api.read)</a>
+</li>
+      <li><a href="read.html#vectorai.read.ViReadClient">ViReadClient (class in vectorai.read)</a>
+</li>
+      <li><a href="vector_search.html#vectorai.api.search.ViSearchClient">ViSearchClient (class in vectorai.api.search)</a>
+</li>
+      <li><a href="text.html#vectorai.api.text.ViTextClient">ViTextClient (class in vectorai.api.text)</a>
+</li>
+      <li><a href="write.html#vectorai.api.write.ViWriteAPIClient">ViWriteAPIClient (class in vectorai.api.write)</a>
+</li>
+      <li><a href="write.html#vectorai.write.ViWriteClient">ViWriteClient (class in vectorai.write)</a>
+</li>
+      <li><a href="analytics.html#vectorai.analytics.viz.VizMixin">VizMixin (class in vectorai.analytics.viz)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="client.html#vectorai.client.ViCollectionClient.wait_till_jobs_complete">wait_till_jobs_complete() (vectorai.client.ViCollectionClient method)</a>
+
+      <ul>
+        <li><a href="read.html#vectorai.read.ViReadClient.wait_till_jobs_complete">(vectorai.read.ViReadClient method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, OnSearch Pty Ltd
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

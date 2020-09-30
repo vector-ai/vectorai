@@ -1,0 +1,7 @@
+{
+    "internalise": [
+        "list_collections",
+        "create_collection",
+        "search"
+    ]
+}

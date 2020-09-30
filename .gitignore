@@ -1,3 +1,5 @@
+Example.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -70,6 +72,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+_build/
 
 # PyBuilder
 target/
@@ -127,3 +130,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore doctrees 
+.doctrees/
+doctrees/
+docsrc/_build/*
+docs/*.ipynb
+docsrc/*.ipynb

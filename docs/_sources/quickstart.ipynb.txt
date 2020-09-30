@@ -1,0 +1,1467 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# QuickStart"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "nbsphinx": "hidden"
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload\n",
+    "%autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "nbsphinx": "hidden",
+    "slideshow": {
+     "slide_type": "skip"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import IPython.display as ipd\n",
+    "from IPython.core.interactiveshell import InteractiveShell\n",
+    "InteractiveShell.ast_node_interactivity = \"all\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Build NLP Search in 5 Minutes"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Log into the client as belows."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "nbsphinx": "hidden"
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "username = os.environ['USERNAME']\n",
+    "api_key = os.environ['API_KEY']\n",
+    "url = \"https://api.vctr.ai\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vectorai.client import ViClient\n",
+    "vi_client = ViClient(username, api_key, url)\n",
+    "collection_name = 'nlp_quickstart'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "nbsphinx": "hidden"
+   },
+   "outputs": [],
+   "source": [
+    "# vi_client.delete_collection(collection_name)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Then use our Text2Vec model to convert the text to vectors!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vectorai.models.deployed import ViText2Vec\n",
+    "text_encoder = ViText2Vec(username, api_key, url)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Then insert the data as shown below!\n",
+    "\n",
+    "For the example below, we got the data from: \n",
+    "https://www.kaggle.com/datatattle/covid-19-nlp-text-classification"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>UserName</th>\n",
+       "      <th>ScreenName</th>\n",
+       "      <th>Location</th>\n",
+       "      <th>TweetAt</th>\n",
+       "      <th>OriginalTweet</th>\n",
+       "      <th>Sentiment</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>11344</th>\n",
+       "      <td>15143</td>\n",
+       "      <td>60095</td>\n",
+       "      <td>India</td>\n",
+       "      <td>20-03-2020</td>\n",
+       "      <td>Crude #oil prices have plummeted by 20% since ...</td>\n",
+       "      <td>Negative</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>29408</th>\n",
+       "      <td>33207</td>\n",
+       "      <td>78159</td>\n",
+       "      <td>Ontario, Canada</td>\n",
+       "      <td>05-04-2020</td>\n",
+       "      <td>Grocery prices are INSANE! Normally spend 180-...</td>\n",
+       "      <td>Extremely Negative</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       UserName  ScreenName         Location     TweetAt  \\\n",
+       "11344     15143       60095            India  20-03-2020   \n",
+       "29408     33207       78159  Ontario, Canada  05-04-2020   \n",
+       "\n",
+       "                                           OriginalTweet           Sentiment  \n",
+       "11344  Crude #oil prices have plummeted by 20% since ...            Negative  \n",
+       "29408  Grocery prices are INSANE! Normally spend 180-...  Extremely Negative  "
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "df = pd.read_csv('data/Corona_NLP_train.csv', encoding='latin-1')\n",
+    "df.sample(2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "vi_client.insert_df(collection_name, df, models={'OriginalTweet':text_encoder.encode})"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As we are inserting the data, note that the vector field names automatically adapt to our schema.\n",
+    "In other words, the field\n",
+    "**\"OriginalTweet\"** ends up becoming **\"OriginalTweet_vector_\"**.\n",
+    "Before we search, let us take a quick look at all our data to make sure it's been properly inserted.\n",
+    "And now, our data is ready to search!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'size_mb': 316.401376,\n",
+       " 'number_of_documents': 41157,\n",
+       " 'number_of_searches': 2,\n",
+       " 'number_of_id_lookups': 0}"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "vi_client.collection_stats(collection_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 87,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>OriginalTweet</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Tissue Issue</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>No toilet paper Do this</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Toilet paper anyone</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Dont touch my toiletpaper</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Toilet paper</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "               OriginalTweet\n",
+       "0               Tissue Issue\n",
+       "1    No toilet paper Do this\n",
+       "2      Toilet paper anyone  \n",
+       "3  Dont touch my toiletpaper\n",
+       "4               Toilet paper"
+      ]
+     },
+     "execution_count": 87,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "result = vi_client.search(collection_name, text_encoder.encode('No more tissue paper'), \n",
+    "    field='OriginalTweet_vector_', page_size=5)\n",
+    "vi_client.results_pretty(result, 'OriginalTweet')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And provide recommendations (also known as search by ID)!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Build Image Search In 5 Minutes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "username = 'your_username'\n",
+    "api_key = 'your_api_key'\n",
+    "url = 'https://api.vctr.ai'\n",
+    "collection_name = 'pokemon_images'\n",
+    "use_jobs = False"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "documents = []\n",
+    "for i in range(1, 20):\n",
+    "    documents.append({\n",
+    "        'image': 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/{}.png'.format(f'{i:03}'),\n",
+    "        'pokemon_id' : str(i),\n",
+    "        '_id': i\n",
+    "    })"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1. specify the vdb client\n",
+    "from vectorai.client import ViClient\n",
+    "vi_client = ViClient(username, api_key, url)\n",
+    "\n",
+    "#2. specify an image encoder\n",
+    "from vectorai.models.deployed import ViImage2Vec\n",
+    "image_encoder = ViImage2Vec(username, api_key, url)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "nbsphinx": "hidden"
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'status': 'error', 'message': 'pokemon_images does not exist'}"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "vi_client.delete_collection(collection_name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "4b4219de10714d22a04e2596637f3663",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "HBox(children=(FloatProgress(value=0.0, max=1.0), HTML(value='')))"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Failed: []\n",
+      "Failed: []\n",
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'inserted_successfully': 19, 'failed': 0, 'failed_document_ids': []}"
+      ]
+     },
+     "execution_count": 42,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#3. insert the documents and encode images simultaneously\n",
+    "if use_jobs:\n",
+    "    vi_client.insert_documents(collection_name, documents)\n",
+    "    job = vi_client.encode_image_job(collection_name, 'image')\n",
+    "    vi_client.wait_till_jobs_complete(collection_name, job['job_id'], job['job_name'])\n",
+    "else:\n",
+    "    vi_client.insert_documents(collection_name, documents, models={'image':image_encoder.encode})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>image</th>\n",
+       "      <th>pokemon_id</th>\n",
+       "      <th>insert_date_</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>3</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png\" width=\"150\" ></td>\n",
+       "      <td>3</td>\n",
+       "      <td>2020-09-29T09:54:11.334926</td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png\" width=\"150\" ></td>\n",
+       "      <td>2</td>\n",
+       "      <td>2020-09-29T09:54:11.332865</td>\n",
+       "      <td>0.920337</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>1</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png\" width=\"150\" ></td>\n",
+       "      <td>1</td>\n",
+       "      <td>2020-09-29T09:54:11.330522</td>\n",
+       "      <td>0.838996</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>17</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/017.png\" width=\"150\" ></td>\n",
+       "      <td>17</td>\n",
+       "      <td>2020-09-29T09:54:22.218190</td>\n",
+       "      <td>0.835111</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>16</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png\" width=\"150\" ></td>\n",
+       "      <td>16</td>\n",
+       "      <td>2020-09-29T09:54:22.215866</td>\n",
+       "      <td>0.813012</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "execution_count": 47,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#4. search\n",
+    "search_results = vi_client.search(collection_name,\n",
+    "    image_encoder.encode('https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png'), \n",
+    "    'image_vector_', page_size=5)\n",
+    "\n",
+    "#4.2 first result is the query audio itself\n",
+    "vi_client.show_json(search_results, image_fields=['image'], image_width=150)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>image</th>\n",
+       "      <th>pokemon_id</th>\n",
+       "      <th>insert_date_</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>2</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png\" width=\"150\" ></td>\n",
+       "      <td>2</td>\n",
+       "      <td>2020-09-29T09:54:11.332865</td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>3</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png\" width=\"150\" ></td>\n",
+       "      <td>3</td>\n",
+       "      <td>2020-09-29T09:54:11.334926</td>\n",
+       "      <td>0.920337</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>1</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png\" width=\"150\" ></td>\n",
+       "      <td>1</td>\n",
+       "      <td>2020-09-29T09:54:11.330522</td>\n",
+       "      <td>0.895991</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>7</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png\" width=\"150\" ></td>\n",
+       "      <td>7</td>\n",
+       "      <td>2020-09-29T09:54:11.345444</td>\n",
+       "      <td>0.839945</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>17</td>\n",
+       "      <td><img src=\"https://assets.pokemon.com/assets/cms2/img/pokedex/full/017.png\" width=\"150\" ></td>\n",
+       "      <td>17</td>\n",
+       "      <td>2020-09-29T09:54:22.218190</td>\n",
+       "      <td>0.833277</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "execution_count": 50,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#5 recommendation by id\n",
+    "search_by_id_results = vi_client.search_by_id(collection_name, '2', 'image_vector_', page_size=5)\n",
+    "\n",
+    "#5.2 first result is the id's audio itself\n",
+    "vi_client.show_json(search_by_id_results, image_fields=['image'], image_width=150)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Build Audio Search in 5 Minutes"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Building Audio search is easy with Vi!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#create the documents\n",
+    "documents = []\n",
+    "for i in range(1, 1001):\n",
+    "    documents.append({\n",
+    "        'audio': 'https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_{}.wav'.format(i),\n",
+    "        'name' : 'common_voice_en_{}.wav'.format(i),\n",
+    "        '_id': i\n",
+    "    })"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "nbsphinx": "hidden"
+   },
+   "outputs": [],
+   "source": [
+    "username = 'your_username'\n",
+    "api_key = 'your_api_key'\n",
+    "url = 'https://api.vctr.ai'\n",
+    "collection_name = 'audio_quickstart'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "use_jobs = True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#1. specify the vdb client\n",
+    "from vectorai.client import ViClient\n",
+    "vi_client = ViClient(username, api_key, url)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vectorai.models.deployed import ViAudio2Vec\n",
+    "audio_encoder = ViAudio2Vec(username, api_key, url)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "39a89983bef6427388599de43489ac6c",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "HBox(children=(FloatProgress(value=0.0, max=66.0), HTML(value='')))"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "{'status': 'Finished'}\n"
+     ]
+    }
+   ],
+   "source": [
+    "#2. specify an audio encoder\n",
+    "from vectorai.models.deployed import ViAudio2Vec\n",
+    "audio_encoder = ViAudio2Vec(username, api_key, url)\n",
+    "\n",
+    "#3. insert the documents and encode audio simultaneously\n",
+    "if use_jobs:\n",
+    "    vi_client.insert_documents(collection_name, documents)\n",
+    "    job = vi_client.encode_audio_job(collection_name, 'audio')\n",
+    "    vi_client.wait_till_jobs_complete(collection_name, job['job_id'], job['job_name'])\n",
+    "else:\n",
+    "    vi_client.insert_documents(collection_name, documents, models={'audio':audio_encoder.encode})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>name</th>\n",
+       "      <th>audio</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>common_voice_en_1.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_1.wav' type='audio/wav'></audio></td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>12</td>\n",
+       "      <td>common_voice_en_12.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_12.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.893219</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>32</td>\n",
+       "      <td>common_voice_en_32.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_32.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.891373</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>20</td>\n",
+       "      <td>common_voice_en_20.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_20.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.882336</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>15</td>\n",
+       "      <td>common_voice_en_15.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_15.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.877323</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import IPython.display as ipd\n",
+    "#4. search\n",
+    "search_results = vi_client.search(collection_name, audio_encoder.encode(documents[0]['audio']), \n",
+    "    'audio_vector_', page_size=5)\n",
+    "\n",
+    "vi_client.show_json(search_results, audio_fields=['audio'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>name</th>\n",
+       "      <th>audio</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>2</td>\n",
+       "      <td>common_voice_en_2.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_2.wav' type='audio/wav'></audio></td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>40</td>\n",
+       "      <td>common_voice_en_40.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_40.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.884632</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>common_voice_en_3.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_3.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.879187</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>14</td>\n",
+       "      <td>common_voice_en_14.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_14.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.874556</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>21</td>\n",
+       "      <td>common_voice_en_21.wav</td>\n",
+       "      <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_21.wav' type='audio/wav'></audio></td>\n",
+       "      <td>0.865409</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>"
+      ],
+      "text/plain": [
+       "<IPython.core.display.HTML object>"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#5 recommendation by id\n",
+    "search_by_id_results = vi_client.search_by_id(collection_name, '2', 'audio_vector_', page_size=5)\n",
+    "\n",
+    "vi_client.show_json(search_by_id_results, audio_fields=['audio'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Build Text QA Search in 5 minutes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%pip install nlp"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import nlp\n",
+    "squad_dataset = nlp.load_dataset('squad')\n",
+    "documents = [{'_id':str(n), **d} for n, d in enumerate(squad_dataset['validation'])]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#your credentials\n",
+    "vecdb_url = 'https://api.vctr.ai'\n",
+    "username = 'your_username'\n",
+    "api_key = 'your_api_key'\n",
+    "collection_name = 'squad'\n",
+    "use_jobs = True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.\n"
+     ]
+    }
+   ],
+   "source": [
+    "#1. specify the vdb client\n",
+    "from vectorai.client import ViClient\n",
+    "vi_client = ViClient(username, api_key, vecdb_url)\n",
+    "\n",
+    "#2. specify an audio encoder\n",
+    "from vectorai.models.deployed import ViText2Vec\n",
+    "text_encoder = ViText2Vec(username, api_key, 'https://api.vctr.ai')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "597bea73619d4f6aaf12f65c65a009a1",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "HBox(children=(IntProgress(value=0, max=704), HTML(value='')))"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'inserted_successfully': 10570, 'failed': 0, 'failed_document_ids': []}"
+      ]
+     },
+     "execution_count": 78,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'status': 'Finished'}\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "'Done'"
+      ]
+     },
+     "execution_count": 78,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#3. insert the documents and encode text simultaneously\n",
+    "if use_jobs:\n",
+    "    vi_client.insert_documents(collection_name, documents)\n",
+    "    job = vi_client.encode_text_job(collection_name, 'question')\n",
+    "    vi_client.wait_till_jobs_complete(collection_name, job['job_id'], job['job_name'])\n",
+    "else:\n",
+    "    vi_client.insert_documents(collection_name, documents, models={'question':text_encoder.encode})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>question</th>\n",
+       "      <th>answers</th>\n",
+       "      <th>context</th>\n",
+       "      <th>insert_date_</th>\n",
+       "      <th>id</th>\n",
+       "      <th>title</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>11</td>\n",
+       "      <td>Who won Super Bowl 50?</td>\n",
+       "      <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>\n",
+       "      <td>Super Bowl 50 was an American football game to...</td>\n",
+       "      <td>2020-09-20T14:17:12.051093</td>\n",
+       "      <td>56beace93aeaaa14008c91df</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.798744</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>24</td>\n",
+       "      <td>Who won Super Bowl 50?</td>\n",
+       "      <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>\n",
+       "      <td>Super Bowl 50 was an American football game to...</td>\n",
+       "      <td>2020-09-20T14:17:12.352544</td>\n",
+       "      <td>56d20362e7d4791d009025eb</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.798744</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Which NFL team won Super Bowl 50?</td>\n",
+       "      <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>\n",
+       "      <td>Super Bowl 50 was an American football game to...</td>\n",
+       "      <td>2020-09-20T14:17:12.051093</td>\n",
+       "      <td>56be4db0acb8001400a502ef</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.763209</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>55</td>\n",
+       "      <td>Who was the Super Bowl 50 MVP?</td>\n",
+       "      <td>{'answer_start': [248, 248, 252], 'text': ['Vo...</td>\n",
+       "      <td>The Broncos took an early lead in Super Bowl 5...</td>\n",
+       "      <td>2020-09-20T14:17:12.741881</td>\n",
+       "      <td>56be4eafacb8001400a50302</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.754090</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>26</td>\n",
+       "      <td>Which team won Super Bowl 50.</td>\n",
+       "      <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>\n",
+       "      <td>Super Bowl 50 was an American football game to...</td>\n",
+       "      <td>2020-09-20T14:17:12.352544</td>\n",
+       "      <td>56d600e31c85041400946eb0</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.742759</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "  _id                           question  \\\n",
+       "0  11             Who won Super Bowl 50?   \n",
+       "1  24             Who won Super Bowl 50?   \n",
+       "2   3  Which NFL team won Super Bowl 50?   \n",
+       "3  55     Who was the Super Bowl 50 MVP?   \n",
+       "4  26      Which team won Super Bowl 50.   \n",
+       "\n",
+       "                                             answers  \\\n",
+       "0  {'answer_start': [177, 177, 177], 'text': ['De...   \n",
+       "1  {'answer_start': [177, 177, 177], 'text': ['De...   \n",
+       "2  {'answer_start': [177, 177, 177], 'text': ['De...   \n",
+       "3  {'answer_start': [248, 248, 252], 'text': ['Vo...   \n",
+       "4  {'answer_start': [177, 177, 177], 'text': ['De...   \n",
+       "\n",
+       "                                             context  \\\n",
+       "0  Super Bowl 50 was an American football game to...   \n",
+       "1  Super Bowl 50 was an American football game to...   \n",
+       "2  Super Bowl 50 was an American football game to...   \n",
+       "3  The Broncos took an early lead in Super Bowl 5...   \n",
+       "4  Super Bowl 50 was an American football game to...   \n",
+       "\n",
+       "                 insert_date_                        id          title  \\\n",
+       "0  2020-09-20T14:17:12.051093  56beace93aeaaa14008c91df  Super_Bowl_50   \n",
+       "1  2020-09-20T14:17:12.352544  56d20362e7d4791d009025eb  Super_Bowl_50   \n",
+       "2  2020-09-20T14:17:12.051093  56be4db0acb8001400a502ef  Super_Bowl_50   \n",
+       "3  2020-09-20T14:17:12.741881  56be4eafacb8001400a50302  Super_Bowl_50   \n",
+       "4  2020-09-20T14:17:12.352544  56d600e31c85041400946eb0  Super_Bowl_50   \n",
+       "\n",
+       "   _search_score  \n",
+       "0       0.798744  \n",
+       "1       0.798744  \n",
+       "2       0.763209  \n",
+       "3       0.754090  \n",
+       "4       0.742759  "
+      ]
+     },
+     "execution_count": 79,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#4. search\n",
+    "search_results = vi_client.search(collection_name, \n",
+    "                                   text_encoder.encode('who was the winner for nfl fifty'), \n",
+    "                                   'question_vector_', page_size=5)\n",
+    "\n",
+    "#4.2 first result is the query text itself\n",
+    "vi_client.results_to_df(search_results)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>question</th>\n",
+       "      <th>answers</th>\n",
+       "      <th>context</th>\n",
+       "      <th>insert_date_</th>\n",
+       "      <th>id</th>\n",
+       "      <th>title</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>50</td>\n",
+       "      <td>Who did Denver beat in the 2015 AFC Championsh...</td>\n",
+       "      <td>{'answer_start': [372, 368, 372], 'text': ['Ne...</td>\n",
+       "      <td>The Panthers finished the regular season with ...</td>\n",
+       "      <td>2020-09-20T14:17:12.741881</td>\n",
+       "      <td>56d6017d1c85041400946ec1</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>48</td>\n",
+       "      <td>Who did Denver beat in the AFC championship?</td>\n",
+       "      <td>{'answer_start': [372, 368, 372], 'text': ['Ne...</td>\n",
+       "      <td>The Panthers finished the regular season with ...</td>\n",
+       "      <td>2020-09-20T14:17:12.741881</td>\n",
+       "      <td>56d2045de7d4791d009025f6</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.960072</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>331</td>\n",
+       "      <td>Who did the Broncos beat to win their division...</td>\n",
+       "      <td>{'answer_start': [25, 25, 36], 'text': ['Pitts...</td>\n",
+       "      <td>The Broncos defeated the Pittsburgh Steelers i...</td>\n",
+       "      <td>2020-09-20T14:17:16.565142</td>\n",
+       "      <td>56d99f99dc89441400fdb628</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.923735</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>330</td>\n",
+       "      <td>Who did the Broncos defeat in the AFC Champion...</td>\n",
+       "      <td>{'answer_start': [192, 192, 204], 'text': ['Ne...</td>\n",
+       "      <td>The Broncos defeated the Pittsburgh Steelers i...</td>\n",
+       "      <td>2020-09-20T14:17:16.565142</td>\n",
+       "      <td>56d7018a0d65d214001982c5</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.915792</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>328</td>\n",
+       "      <td>Who did the Broncos beat in the divisional game?</td>\n",
+       "      <td>{'answer_start': [25, 21, 36], 'text': ['Pitts...</td>\n",
+       "      <td>The Broncos defeated the Pittsburgh Steelers i...</td>\n",
+       "      <td>2020-09-20T14:17:16.370009</td>\n",
+       "      <td>56d7018a0d65d214001982c2</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.906187</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   _id                                           question  \\\n",
+       "0   50  Who did Denver beat in the 2015 AFC Championsh...   \n",
+       "1   48       Who did Denver beat in the AFC championship?   \n",
+       "2  331  Who did the Broncos beat to win their division...   \n",
+       "3  330  Who did the Broncos defeat in the AFC Champion...   \n",
+       "4  328   Who did the Broncos beat in the divisional game?   \n",
+       "\n",
+       "                                             answers  \\\n",
+       "0  {'answer_start': [372, 368, 372], 'text': ['Ne...   \n",
+       "1  {'answer_start': [372, 368, 372], 'text': ['Ne...   \n",
+       "2  {'answer_start': [25, 25, 36], 'text': ['Pitts...   \n",
+       "3  {'answer_start': [192, 192, 204], 'text': ['Ne...   \n",
+       "4  {'answer_start': [25, 21, 36], 'text': ['Pitts...   \n",
+       "\n",
+       "                                             context  \\\n",
+       "0  The Panthers finished the regular season with ...   \n",
+       "1  The Panthers finished the regular season with ...   \n",
+       "2  The Broncos defeated the Pittsburgh Steelers i...   \n",
+       "3  The Broncos defeated the Pittsburgh Steelers i...   \n",
+       "4  The Broncos defeated the Pittsburgh Steelers i...   \n",
+       "\n",
+       "                 insert_date_                        id          title  \\\n",
+       "0  2020-09-20T14:17:12.741881  56d6017d1c85041400946ec1  Super_Bowl_50   \n",
+       "1  2020-09-20T14:17:12.741881  56d2045de7d4791d009025f6  Super_Bowl_50   \n",
+       "2  2020-09-20T14:17:16.565142  56d99f99dc89441400fdb628  Super_Bowl_50   \n",
+       "3  2020-09-20T14:17:16.565142  56d7018a0d65d214001982c5  Super_Bowl_50   \n",
+       "4  2020-09-20T14:17:16.370009  56d7018a0d65d214001982c2  Super_Bowl_50   \n",
+       "\n",
+       "   _search_score  \n",
+       "0       1.000000  \n",
+       "1       0.960072  \n",
+       "2       0.923735  \n",
+       "3       0.915792  \n",
+       "4       0.906187  "
+      ]
+     },
+     "execution_count": 80,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#5 recommendation by id\n",
+    "search_by_id_results = vi_client.search_by_id(collection_name, documents[50]['_id'], 'question_vector_', page_size=5)\n",
+    "\n",
+    "#5.2 first result is the id's text itself\n",
+    "vi_client.results_to_df(search_by_id_results)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>_id</th>\n",
+       "      <th>question</th>\n",
+       "      <th>answers</th>\n",
+       "      <th>context</th>\n",
+       "      <th>insert_date_</th>\n",
+       "      <th>id</th>\n",
+       "      <th>title</th>\n",
+       "      <th>_search_score</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>258</td>\n",
+       "      <td>How old was Peyton Manning in 2015?</td>\n",
+       "      <td>{'answer_start': [817, 817, 817], 'text': ['39...</td>\n",
+       "      <td>Following their loss in the divisional round o...</td>\n",
+       "      <td>2020-09-20T14:17:15.618332</td>\n",
+       "      <td>56bf301c3aeaaa14008c9550</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.630390</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>276</td>\n",
+       "      <td>How may yards did Peyton Manning throw?</td>\n",
+       "      <td>{'answer_start': [77, 77, 77], 'text': ['2,249...</td>\n",
+       "      <td>Manning finished the year with a career-low 67...</td>\n",
+       "      <td>2020-09-20T14:17:15.813571</td>\n",
+       "      <td>56bf38383aeaaa14008c956c</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.623954</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>270</td>\n",
+       "      <td>What was Peyton Manning's passer rating for th...</td>\n",
+       "      <td>{'answer_start': [44, 44, 44], 'text': ['67.9'...</td>\n",
+       "      <td>Manning finished the year with a career-low 67...</td>\n",
+       "      <td>2020-09-20T14:17:15.813571</td>\n",
+       "      <td>56beb57b3aeaaa14008c9279</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.608059</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>252</td>\n",
+       "      <td>Who did Peyton Manning play for as a rookie?</td>\n",
+       "      <td>{'answer_start': [641, 637, 654], 'text': ['In...</td>\n",
+       "      <td>Following their loss in the divisional round o...</td>\n",
+       "      <td>2020-09-20T14:17:15.435333</td>\n",
+       "      <td>56beb4e43aeaaa14008c9267</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.603111</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>356</td>\n",
+       "      <td>Peyton Manning took how many different teams t...</td>\n",
+       "      <td>{'answer_start': [57, 57, 57, 57], 'text': ['t...</td>\n",
+       "      <td>Peyton Manning became the first quarterback ev...</td>\n",
+       "      <td>2020-09-20T14:17:16.763268</td>\n",
+       "      <td>56d704430d65d214001982de</td>\n",
+       "      <td>Super_Bowl_50</td>\n",
+       "      <td>0.602743</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   _id                                           question  \\\n",
+       "0  258                How old was Peyton Manning in 2015?   \n",
+       "1  276            How may yards did Peyton Manning throw?   \n",
+       "2  270  What was Peyton Manning's passer rating for th...   \n",
+       "3  252       Who did Peyton Manning play for as a rookie?   \n",
+       "4  356  Peyton Manning took how many different teams t...   \n",
+       "\n",
+       "                                             answers  \\\n",
+       "0  {'answer_start': [817, 817, 817], 'text': ['39...   \n",
+       "1  {'answer_start': [77, 77, 77], 'text': ['2,249...   \n",
+       "2  {'answer_start': [44, 44, 44], 'text': ['67.9'...   \n",
+       "3  {'answer_start': [641, 637, 654], 'text': ['In...   \n",
+       "4  {'answer_start': [57, 57, 57, 57], 'text': ['t...   \n",
+       "\n",
+       "                                             context  \\\n",
+       "0  Following their loss in the divisional round o...   \n",
+       "1  Manning finished the year with a career-low 67...   \n",
+       "2  Manning finished the year with a career-low 67...   \n",
+       "3  Following their loss in the divisional round o...   \n",
+       "4  Peyton Manning became the first quarterback ev...   \n",
+       "\n",
+       "                 insert_date_                        id          title  \\\n",
+       "0  2020-09-20T14:17:15.618332  56bf301c3aeaaa14008c9550  Super_Bowl_50   \n",
+       "1  2020-09-20T14:17:15.813571  56bf38383aeaaa14008c956c  Super_Bowl_50   \n",
+       "2  2020-09-20T14:17:15.813571  56beb57b3aeaaa14008c9279  Super_Bowl_50   \n",
+       "3  2020-09-20T14:17:15.435333  56beb4e43aeaaa14008c9267  Super_Bowl_50   \n",
+       "4  2020-09-20T14:17:16.763268  56d704430d65d214001982de  Super_Bowl_50   \n",
+       "\n",
+       "   _search_score  \n",
+       "0       0.630390  \n",
+       "1       0.623954  \n",
+       "2       0.608059  \n",
+       "3       0.603111  \n",
+       "4       0.602743  "
+      ]
+     },
+     "execution_count": 81,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#6 hybrid search combining traditional and nlp vector search\n",
+    "search_results = vi_client.hybrid_search(collection_name, 'Peyton Men passing',\n",
+    "                                          text_encoder.encode('Peyton Men'),\n",
+    "                                          ['question_vector_'], ['question'],\n",
+    "                                          traditional_weight=0.015,\n",
+    "                                          page_size=5)\n",
+    "vi_client.results_to_df(search_results)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Edit Metadata",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
