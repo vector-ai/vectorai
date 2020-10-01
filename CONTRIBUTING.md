@@ -68,6 +68,18 @@ The best feature requests will provide:
 If your issue is well written we're already 80% of the way there by the time you
 post it.
 
+### How To Make A Pull Request
+
+We suggest the following method if you are interested in contributing code to Vector AI!
+
+1. Fork the repository. 
+2. Clone the forked repository. 
+3. Create a new branch. 
+4. Push changes to your repository. 
+5. Change remote to this repository.
+6. Create a PR to this public repository. 
+
+For detailed instructions, , we recommend: [this detailed guide on making pull requests in open source projects](https://opensource.com/article/19/7/create-pull-request-github).
 
 ### Running Tests
 
