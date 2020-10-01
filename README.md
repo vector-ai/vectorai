@@ -7,6 +7,7 @@
 Vector AI is built to store vectors alongside documents (text/audio/images/videos). It is designed to be a light-weight library to create, manipulate, search and analyse vectors to power machine learning applications such as semantic search, recommendations, etc.
 </h3>
 
+- Visit our website at: https://getvectorai.com
 - For Python Documentation: https://vector-ai.github.io/vectorai
 - For REST API Documentation: https://api.vctr.ai/documentation
 - Join our discord: https://discord.gg/CbwUxyD
