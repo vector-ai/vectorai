@@ -151,6 +151,6 @@ example_item = {
 ## Building Products with Vector AI
 Creating a multi-language AI fashion assistant: https://fashionfiesta.me | [Blog](https://getvectorai.com/how-we-built-a-vector-powered-outfit-recommender/)
 
-![Demo](https://getvectorai.com/assets/gif/fashion-fiesta-demo-french.gif)
+![Demo](https://getvectorai.com/assets/gif/fashion-fiesta-demo.gif)
 
 Do share with us any blogs or websites you create with Vector AI!
