@@ -413,23 +413,19 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         # Ensure all models have a bulk_encode method.
         for f, model_list in models.items():
             if not isinstance(model_list, list):
-                model_list = [model_list]
-            for model in model_list:
+                models[f] = [model_list]
+            for model in models[f]:
                 if model.__name__ is not None:
                     assert hasattr(model, 'bulk_encode'), f"Model {model.__name__} cannot be encoded in bulk. Missing bulk_encode method."    
                 else:
                     assert hasattr(model, 'bulk_encode'), "Model cannot be encoded in bulk. Missing bulk_encode method."
         # Now bulk-encode and then set the field for each dictionary
-        for k in models.keys():
-            if isinstance(models[k], list):
-                for f, model_list in models.items():
-                    if not isinstance(model_list, list):
-                        model_list = [model_list]
-                    for model in model_list:
-                        vector_field = self._get_vector_name_for_encoding(f, model, models)
-                        values = self.get_field_across_documents(k, documents)
-                        vectors = model.bulk_encode(values)
-                        self.set_field_across_documents(vector_field, vectors, documents)
+        for f, model_list in models.items():
+            for model in model_list:
+                vector_field = self._get_vector_name_for_encoding(f, model, models)
+                values = self.get_field_across_documents(f, documents)
+                vectors = model.bulk_encode(values)
+                self.set_field_across_documents(vector_field, vectors, documents)
         return documents
 
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
