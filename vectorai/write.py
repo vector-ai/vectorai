@@ -568,6 +568,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         workers: int = 1,
+        verbose: bool = True
     ):
         """
         Insert dataframe into a collection
@@ -593,6 +594,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             models=models,
             chunksize=chunksize,
             workers=workers,
+            verbose=verbose
         )
 
     def edit_document(self, collection_name: str, edits: Dict[str, str], verbose=True):
