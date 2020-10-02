@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -457,20 +456,38 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Build-NLP-Search-in-5-Minutes">
 <h2>Build NLP Search in 5 Minutes<a class="headerlink" href="#Build-NLP-Search-in-5-Minutes" title="Permalink to this headline">¶</a></h2>
 <p>Log into the client as belows.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
 <span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;nlp_quickstart&#39;</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;status&#39;: &#39;complete&#39;, &#39;message&#39;: &#39;nlp_quickstart deleted&#39;}
+</pre></div></div>
+</div>
 <p>Then use our Text2Vec model to convert the text to vectors!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -482,7 +499,7 @@ div.rendered_html tbody tr:hover {
 <p>Then insert the data as shown below!</p>
 <p>For the example below, we got the data from: <a class="reference external" href="https://www.kaggle.com/datatattle/covid-19-nlp-text-classification">https://www.kaggle.com/datatattle/covid-19-nlp-text-classification</a></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -493,7 +510,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -525,39 +542,63 @@ div.rendered_html tbody tr:hover {
   </thead>
   <tbody>
     <tr>
-      <th>11344</th>
-      <td>15143</td>
-      <td>60095</td>
-      <td>India</td>
-      <td>20-03-2020</td>
-      <td>Crude #oil prices have plummeted by 20% since ...</td>
+      <th>22789</th>
+      <td>26588</td>
+      <td>71540</td>
+      <td>Instagram @secupp</td>
+      <td>25-03-2020</td>
+      <td>Do not do this.\r\r\n\r\r\nNJ Man Charged for Coughing on Grocery Store Employee and Saying He Had Coronavirus: AG https://t.co/XGAhnn1BjP via @lawcrimenews</td>
       <td>Negative</td>
     </tr>
     <tr>
-      <th>29408</th>
-      <td>33207</td>
-      <td>78159</td>
-      <td>Ontario, Canada</td>
-      <td>05-04-2020</td>
-      <td>Grocery prices are INSANE! Normally spend 180-...</td>
-      <td>Extremely Negative</td>
+      <th>23097</th>
+      <td>26896</td>
+      <td>71848</td>
+      <td>Salt Lake City, UT</td>
+      <td>25-03-2020</td>
+      <td>https://t.co/MpRWsgiJ17 ÂThereÂs a lot more at stake for transplant patients. What gives them the sniffles could potentially kill me.Â For many in the transplant community who are immunosuppressed, the recommended daily precautions against #coronavirus are already second nature.</td>
+      <td>Negative</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_df</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;OriginalTweet&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_df</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;OriginalTweet&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="p">},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_bulk_encode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>As we are inserting the data, note that the vector field names automatically adapt to our schema. In other words, the field <strong>“OriginalTweet”</strong> ends up becoming <strong>“OriginalTweet_vector_”</strong>. Before we search, let us take a quick look at all our data to make sure it’s been properly inserted. And now, our data is ready to search!</p>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "266479118baa44858314b85063354df5", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;inserted_successfully&#39;: 41157, &#39;failed&#39;: 0, &#39;failed_document_ids&#39;: []}
+</pre></div></div>
+</div>
+<p>As we are inserting the data, note that the vector field names automatically adapt to our schema. In other words, the field <strong>“OriginalTweet”</strong> ends up becoming <strong>“OriginalTweet_vector_”</strong>.</p>
+<p>Before we search, let us take a quick look at all our data to make sure it’s been properly inserted. And now, our data is ready to search!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -566,31 +607,31 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;size_mb&#39;: 316.401376,
- &#39;number_of_documents&#39;: 41157,
- &#39;number_of_searches&#39;: 2,
+{&#39;size_mb&#39;: 216.298816,
+ &#39;number_of_documents&#39;: 450,
+ &#39;number_of_searches&#39;: 0,
  &#39;number_of_id_lookups&#39;: 0}
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;No more tissue paper&#39;</span><span class="p">),</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;helping older people&#39;</span><span class="p">),</span>
     <span class="n">field</span><span class="o">=</span><span class="s1">&#39;OriginalTweet_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">vi_client</span><span class="o">.</span><span class="n">results_pretty</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;OriginalTweet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -618,51 +659,39 @@ div.rendered_html tbody tr:hover {
   <tbody>
     <tr>
       <th>0</th>
-      <td>Tissue Issue</td>
+      <td>Important information about supermarket opening times to help elderly and vulnerable customers</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>No toilet paper Do this</td>
+      <td>PLEASE PLEASE Dont hoard things that elderly people need if you see them in a grocery store please help them They are our national treasure and we need to protect them</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Toilet paper anyone</td>
+      <td>Be sure to look after the elders in your community they are the ones that need your help the most from the team</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>Dont touch my toiletpaper</td>
+      <td>We've got some resources on those topics -- Here's how volunteers are helping seniors: https://t.co/zZCzwfp7Ih \r\r\n\r\r\nAnd a little more info on how localities are trying to protect them: https://t.co/93WVMi0Qg1 \r\r\n\r\r\nAnd some stores with senior-only shopping times https://t.co/AE7m8xUXx7 https://t.co/MChaqLKdc8</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>Toilet paper</td>
+      <td>Coping with coronavirus practical guidance for older people</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>And provide recommendations (also known as search by ID)!</p>
 </div>
 <div class="section" id="Build-Image-Search-In-5-Minutes">
 <h2>Build Image Search In 5 Minutes<a class="headerlink" href="#Build-Image-Search-In-5-Minutes" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;your_username&#39;</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="s1">&#39;your_api_key&#39;</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span>
-<span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;pokemon_images&#39;</span>
-<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">False</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documents</span> <span class="o">=</span> <span class="p">[]</span>
+<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;pokemon_images&#39;</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">):</span>
     <span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;https://assets.pokemon.com/assets/cms2/img/pokedex/full/</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">03</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span>
@@ -672,14 +701,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">#1. specify the vdb client</span>
 <span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
 <span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
 
 <span class="c1">#2. specify an image encoder</span>
 <span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViImage2Vec</span>
@@ -687,12 +717,32 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;status&#39;: &#39;complete&#39;, &#39;message&#39;: &#39;pokemon_images deleted&#39;}
+</pre></div></div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">#3. insert the documents and encode images simultaneously</span>
+<span class="c1"># using jobs means that the encoding process takes place on our servers as opposed to your computer</span>
+<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">False</span>
+
 <span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
     <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_image_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;image&#39;</span><span class="p">)</span>
@@ -706,20 +756,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4b4219de10714d22a04e2596637f3663", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "82cb6f5ed0d5415eac27727b6ee1bba8", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Failed: []
-Failed: []
 
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -728,7 +776,7 @@ Failed: []
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -739,12 +787,11 @@ Failed: []
 
 <span class="c1">#4.2 first result is the query audio itself</span>
 <span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
-
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -765,7 +812,7 @@ Failed: []
       <td>3</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png" width="150" ></td>
       <td>3</td>
-      <td>2020-09-29T09:54:11.334926</td>
+      <td>2020-10-02T07:07:18.799559</td>
       <td>1.000000</td>
     </tr>
     <tr>
@@ -773,7 +820,7 @@ Failed: []
       <td>2</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png" width="150" ></td>
       <td>2</td>
-      <td>2020-09-29T09:54:11.332865</td>
+      <td>2020-10-02T07:07:18.797693</td>
       <td>0.920337</td>
     </tr>
     <tr>
@@ -781,7 +828,7 @@ Failed: []
       <td>1</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png" width="150" ></td>
       <td>1</td>
-      <td>2020-09-29T09:54:11.330522</td>
+      <td>2020-10-02T07:07:18.795655</td>
       <td>0.838996</td>
     </tr>
     <tr>
@@ -789,7 +836,7 @@ Failed: []
       <td>17</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/017.png" width="150" ></td>
       <td>17</td>
-      <td>2020-09-29T09:54:22.218190</td>
+      <td>2020-10-02T07:07:30.587841</td>
       <td>0.835111</td>
     </tr>
     <tr>
@@ -797,14 +844,14 @@ Failed: []
       <td>16</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png" width="150" ></td>
       <td>16</td>
-      <td>2020-09-29T09:54:22.215866</td>
+      <td>2020-10-02T07:07:30.585399</td>
       <td>0.813012</td>
     </tr>
   </tbody>
 </table></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -817,7 +864,7 @@ Failed: []
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -838,7 +885,7 @@ Failed: []
       <td>2</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png" width="150" ></td>
       <td>2</td>
-      <td>2020-09-29T09:54:11.332865</td>
+      <td>2020-10-02T07:07:18.797693</td>
       <td>1.000000</td>
     </tr>
     <tr>
@@ -846,7 +893,7 @@ Failed: []
       <td>3</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png" width="150" ></td>
       <td>3</td>
-      <td>2020-09-29T09:54:11.334926</td>
+      <td>2020-10-02T07:07:18.799559</td>
       <td>0.920337</td>
     </tr>
     <tr>
@@ -854,7 +901,7 @@ Failed: []
       <td>1</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png" width="150" ></td>
       <td>1</td>
-      <td>2020-09-29T09:54:11.330522</td>
+      <td>2020-10-02T07:07:18.795655</td>
       <td>0.895991</td>
     </tr>
     <tr>
@@ -862,7 +909,7 @@ Failed: []
       <td>7</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png" width="150" ></td>
       <td>7</td>
-      <td>2020-09-29T09:54:11.345444</td>
+      <td>2020-10-02T07:07:18.807199</td>
       <td>0.839945</td>
     </tr>
     <tr>
@@ -870,7 +917,7 @@ Failed: []
       <td>17</td>
       <td><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/017.png" width="150" ></td>
       <td>17</td>
-      <td>2020-09-29T09:54:22.218190</td>
+      <td>2020-10-02T07:07:30.587841</td>
       <td>0.833277</td>
     </tr>
   </tbody>
@@ -881,11 +928,13 @@ Failed: []
 <h2>Build Audio Search in 5 Minutes<a class="headerlink" href="#Build-Audio-Search-in-5-Minutes" title="Permalink to this headline">¶</a></h2>
 <p>Building Audio search is easy with Vi!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#create the documents</span>
+<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;audio_quickstart&#39;</span>
+
+<span class="c1">#create the documents</span>
 <span class="n">documents</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">):</span>
     <span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
@@ -896,46 +945,47 @@ Failed: []
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">#1. specify the vdb client</span>
 <span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
 <span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViAudio2Vec</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+
+<span class="c1">#2. specify an audio encoder</span>
+<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViAudio2Vec</span>
 <span class="n">audio_encoder</span> <span class="o">=</span> <span class="n">ViAudio2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;status&#39;: &#39;complete&#39;, &#39;message&#39;: &#39;audio_quickstart deleted&#39;}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#2. specify an audio encoder</span>
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViAudio2Vec</span>
-<span class="n">audio_encoder</span> <span class="o">=</span> <span class="n">ViAudio2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span></span><span class="c1">#3. insert the documents and encode audio simultaneously</span>
+<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="c1">#3. insert the documents and encode audio simultaneously</span>
 <span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
     <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
     <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_audio_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;audio&#39;</span><span class="p">)</span>
@@ -948,20 +998,54 @@ Failed: []
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "39a89983bef6427388599de43489ac6c", "version_major": 2, "version_minor": 0}</script></div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find a vector field. Check that the vector field is _vector_.
+  &#34;Potential issue. Cannot find a vector field. Check that the vector field is _vector_.&#34;
+</pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f1b5d6b126b4459facb92dadabb1764f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;inserted_successfully&#39;: 1000, &#39;failed&#39;: 0, &#39;failed_document_ids&#39;: []}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 {&#39;status&#39;: &#39;Finished&#39;}
 </pre></div></div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;Done&#39;
+</pre></div></div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -975,7 +1059,7 @@ Failed: []
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -985,6 +1069,7 @@ Failed: []
       <th></th>
       <th>_id</th>
       <th>name</th>
+      <th>insert_date_</th>
       <th>audio</th>
       <th>_search_score</th>
     </tr>
@@ -994,6 +1079,7 @@ Failed: []
       <th>0</th>
       <td>1</td>
       <td>common_voice_en_1.wav</td>
+      <td>2020-10-02T07:07:34.725378</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_1.wav' type='audio/wav'></audio></td>
       <td>1.000000</td>
     </tr>
@@ -1001,6 +1087,7 @@ Failed: []
       <th>1</th>
       <td>12</td>
       <td>common_voice_en_12.wav</td>
+      <td>2020-10-02T07:07:34.726100</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_12.wav' type='audio/wav'></audio></td>
       <td>0.893219</td>
     </tr>
@@ -1008,6 +1095,7 @@ Failed: []
       <th>2</th>
       <td>32</td>
       <td>common_voice_en_32.wav</td>
+      <td>2020-10-02T07:07:35.271638</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_32.wav' type='audio/wav'></audio></td>
       <td>0.891373</td>
     </tr>
@@ -1015,6 +1103,7 @@ Failed: []
       <th>3</th>
       <td>20</td>
       <td>common_voice_en_20.wav</td>
+      <td>2020-10-02T07:07:35.046128</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_20.wav' type='audio/wav'></audio></td>
       <td>0.882336</td>
     </tr>
@@ -1022,6 +1111,7 @@ Failed: []
       <th>4</th>
       <td>15</td>
       <td>common_voice_en_15.wav</td>
+      <td>2020-10-02T07:07:34.726251</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_15.wav' type='audio/wav'></audio></td>
       <td>0.877323</td>
     </tr>
@@ -1029,7 +1119,7 @@ Failed: []
 </table></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1041,7 +1131,7 @@ Failed: []
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1051,6 +1141,7 @@ Failed: []
       <th></th>
       <th>_id</th>
       <th>name</th>
+      <th>insert_date_</th>
       <th>audio</th>
       <th>_search_score</th>
     </tr>
@@ -1060,6 +1151,7 @@ Failed: []
       <th>0</th>
       <td>2</td>
       <td>common_voice_en_2.wav</td>
+      <td>2020-10-02T07:07:34.725536</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_2.wav' type='audio/wav'></audio></td>
       <td>1.000000</td>
     </tr>
@@ -1067,6 +1159,7 @@ Failed: []
       <th>1</th>
       <td>40</td>
       <td>common_voice_en_40.wav</td>
+      <td>2020-10-02T07:07:35.272603</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_40.wav' type='audio/wav'></audio></td>
       <td>0.884632</td>
     </tr>
@@ -1074,6 +1167,7 @@ Failed: []
       <th>2</th>
       <td>3</td>
       <td>common_voice_en_3.wav</td>
+      <td>2020-10-02T07:07:34.725629</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_3.wav' type='audio/wav'></audio></td>
       <td>0.879187</td>
     </tr>
@@ -1081,6 +1175,7 @@ Failed: []
       <th>3</th>
       <td>14</td>
       <td>common_voice_en_14.wav</td>
+      <td>2020-10-02T07:07:34.726200</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_14.wav' type='audio/wav'></audio></td>
       <td>0.874556</td>
     </tr>
@@ -1088,6 +1183,7 @@ Failed: []
       <th>4</th>
       <td>21</td>
       <td>common_voice_en_21.wav</td>
+      <td>2020-10-02T07:07:35.046224</td>
       <td><audio controls><source src='https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_21.wav' type='audio/wav'></audio></td>
       <td>0.865409</td>
     </tr>
@@ -1097,52 +1193,12 @@ Failed: []
 </div>
 <div class="section" id="Build-Text-QA-Search-in-5-minutes">
 <h2>Build Text QA Search in 5 minutes<a class="headerlink" href="#Build-Text-QA-Search-in-5-minutes" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">pip</span> install nlp
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">nlp</span>
-<span class="n">squad_dataset</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;squad&#39;</span><span class="p">)</span>
-<span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">**</span><span class="n">d</span><span class="p">}</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">squad_dataset</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">])]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#your credentials</span>
-<span class="n">vecdb_url</span> <span class="o">=</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span>
-<span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;your_username&#39;</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="s1">&#39;your_api_key&#39;</span>
-<span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;squad&#39;</span>
-<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#1. specify the vdb client</span>
-<span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vecdb_url</span><span class="p">)</span>
-
-<span class="c1">#2. specify an audio encoder</span>
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
-<span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span><span class="p">)</span>
+<span></span><span class="o">%</span><span class="k">pip</span> install datasets
 </pre></div>
 </div>
 </div>
@@ -1151,21 +1207,53 @@ Failed: []
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
+Requirement already satisfied: datasets in c:\users\jacky\anaconda3\lib\site-packages (1.0.1)
+Requirement already satisfied: filelock in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (3.0.12)
+Requirement already satisfied: dill in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (0.3.1.1)
+Requirement already satisfied: pyarrow&gt;=0.17.1 in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (1.0.0)
+Requirement already satisfied: requests&gt;=2.19.0 in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (2.22.0)
+Requirement already satisfied: numpy&gt;=1.17 in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (1.19.1)
+Requirement already satisfied: pandas in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (0.25.2)
+Requirement already satisfied: tqdm&gt;=4.27 in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (4.36.1)
+Requirement already satisfied: xxhash in c:\users\jacky\anaconda3\lib\site-packages (from datasets) (2.0.0)
+Requirement already satisfied: certifi&gt;=2017.4.17 in c:\users\jacky\anaconda3\lib\site-packages (from requests&gt;=2.19.0-&gt;datasets) (2020.6.20)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,&lt;1.26,&gt;=1.21.1 in c:\users\jacky\anaconda3\lib\site-packages (from requests&gt;=2.19.0-&gt;datasets) (1.24.2)
+Requirement already satisfied: idna&lt;2.9,&gt;=2.5 in c:\users\jacky\anaconda3\lib\site-packages (from requests&gt;=2.19.0-&gt;datasets) (2.8)
+Requirement already satisfied: chardet&lt;3.1.0,&gt;=3.0.2 in c:\users\jacky\anaconda3\lib\site-packages (from requests&gt;=2.19.0-&gt;datasets) (3.0.4)
+Requirement already satisfied: pytz&gt;=2017.2 in c:\users\jacky\anaconda3\lib\site-packages (from pandas-&gt;datasets) (2019.3)
+Requirement already satisfied: python-dateutil&gt;=2.6.1 in c:\users\jacky\anaconda3\lib\site-packages (from pandas-&gt;datasets) (2.8.0)
+Requirement already satisfied: six&gt;=1.5 in c:\users\jacky\anaconda3\lib\site-packages (from python-dateutil&gt;=2.6.1-&gt;pandas-&gt;datasets) (1.12.0)
+Note: you may need to restart the kernel to use updated packages.
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#3. insert the documents and encode text simultaneously</span>
-<span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
-    <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_text_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;question&#39;</span><span class="p">)</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;squad&#39;</span>
+
+<span class="c1">#use huggingface&#39;s datasets library to download squad</span>
+<span class="kn">import</span> <span class="nn">datasets</span>
+<span class="n">squad_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;squad&#39;</span><span class="p">)</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">**</span><span class="n">d</span><span class="p">}</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">squad_dataset</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">])]</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#1. specify the vdb client</span>
+<span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+
+<span class="c1">#2. specify a text encoder</span>
+<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1173,7 +1261,50 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "597bea73619d4f6aaf12f65c65a009a1", "version_major": 2, "version_minor": 0}</script></div>
+<div class="highlight"><pre>
+Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;status&#39;: &#39;error&#39;, &#39;message&#39;: &#39;squad does not exist&#39;}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#3. insert the documents and encode text simultaneously</span>
+<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
+    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_text_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;question&#39;</span><span class="p">)</span>
+    <span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="p">},</span> <span class="n">use_bulk_encode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find a vector field. Check that the vector field is _vector_.
+  &#34;Potential issue. Cannot find a vector field. Check that the vector field is _vector_.&#34;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cbe3f07f6cdb4be78030b4b89440a277", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1184,7 +1315,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1201,7 +1332,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1210,7 +1341,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1225,7 +1356,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1264,7 +1395,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who won Super Bowl 50?</td>
       <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>
       <td>Super Bowl 50 was an American football game to...</td>
-      <td>2020-09-20T14:17:12.051093</td>
+      <td>2020-10-02T07:47:06.947313</td>
       <td>56beace93aeaaa14008c91df</td>
       <td>Super_Bowl_50</td>
       <td>0.798744</td>
@@ -1275,7 +1406,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who won Super Bowl 50?</td>
       <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>
       <td>Super Bowl 50 was an American football game to...</td>
-      <td>2020-09-20T14:17:12.352544</td>
+      <td>2020-10-02T07:47:07.285182</td>
       <td>56d20362e7d4791d009025eb</td>
       <td>Super_Bowl_50</td>
       <td>0.798744</td>
@@ -1286,7 +1417,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Which NFL team won Super Bowl 50?</td>
       <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>
       <td>Super Bowl 50 was an American football game to...</td>
-      <td>2020-09-20T14:17:12.051093</td>
+      <td>2020-10-02T07:47:06.946694</td>
       <td>56be4db0acb8001400a502ef</td>
       <td>Super_Bowl_50</td>
       <td>0.763209</td>
@@ -1297,7 +1428,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who was the Super Bowl 50 MVP?</td>
       <td>{'answer_start': [248, 248, 252], 'text': ['Vo...</td>
       <td>The Broncos took an early lead in Super Bowl 5...</td>
-      <td>2020-09-20T14:17:12.741881</td>
+      <td>2020-10-02T07:47:07.759154</td>
       <td>56be4eafacb8001400a50302</td>
       <td>Super_Bowl_50</td>
       <td>0.754090</td>
@@ -1308,7 +1439,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Which team won Super Bowl 50.</td>
       <td>{'answer_start': [177, 177, 177], 'text': ['De...</td>
       <td>Super Bowl 50 was an American football game to...</td>
-      <td>2020-09-20T14:17:12.352544</td>
+      <td>2020-10-02T07:47:07.285403</td>
       <td>56d600e31c85041400946eb0</td>
       <td>Super_Bowl_50</td>
       <td>0.742759</td>
@@ -1318,7 +1449,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1331,7 +1462,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1370,7 +1501,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did Denver beat in the 2015 AFC Championsh...</td>
       <td>{'answer_start': [372, 368, 372], 'text': ['Ne...</td>
       <td>The Panthers finished the regular season with ...</td>
-      <td>2020-09-20T14:17:12.741881</td>
+      <td>2020-10-02T07:47:07.758767</td>
       <td>56d6017d1c85041400946ec1</td>
       <td>Super_Bowl_50</td>
       <td>1.000000</td>
@@ -1381,7 +1512,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did Denver beat in the AFC championship?</td>
       <td>{'answer_start': [372, 368, 372], 'text': ['Ne...</td>
       <td>The Panthers finished the regular season with ...</td>
-      <td>2020-09-20T14:17:12.741881</td>
+      <td>2020-10-02T07:47:07.758541</td>
       <td>56d2045de7d4791d009025f6</td>
       <td>Super_Bowl_50</td>
       <td>0.960072</td>
@@ -1392,7 +1523,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did the Broncos beat to win their division...</td>
       <td>{'answer_start': [25, 25, 36], 'text': ['Pitts...</td>
       <td>The Broncos defeated the Pittsburgh Steelers i...</td>
-      <td>2020-09-20T14:17:16.565142</td>
+      <td>2020-10-02T07:47:12.209038</td>
       <td>56d99f99dc89441400fdb628</td>
       <td>Super_Bowl_50</td>
       <td>0.923735</td>
@@ -1403,7 +1534,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did the Broncos defeat in the AFC Champion...</td>
       <td>{'answer_start': [192, 192, 204], 'text': ['Ne...</td>
       <td>The Broncos defeated the Pittsburgh Steelers i...</td>
-      <td>2020-09-20T14:17:16.565142</td>
+      <td>2020-10-02T07:47:12.208876</td>
       <td>56d7018a0d65d214001982c5</td>
       <td>Super_Bowl_50</td>
       <td>0.915792</td>
@@ -1414,7 +1545,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did the Broncos beat in the divisional game?</td>
       <td>{'answer_start': [25, 21, 36], 'text': ['Pitts...</td>
       <td>The Broncos defeated the Pittsburgh Steelers i...</td>
-      <td>2020-09-20T14:17:16.370009</td>
+      <td>2020-10-02T07:47:11.956089</td>
       <td>56d7018a0d65d214001982c2</td>
       <td>Super_Bowl_50</td>
       <td>0.906187</td>
@@ -1424,12 +1555,12 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">#6 hybrid search combining traditional and nlp vector search</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">hybrid_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;Peyton Men passing&#39;</span><span class="p">,</span>
+<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">hybrid_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;Peyton Men&#39;</span><span class="p">,</span>
                                           <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;Peyton Men&#39;</span><span class="p">),</span>
                                           <span class="p">[</span><span class="s1">&#39;question_vector_&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">],</span>
                                           <span class="n">traditional_weight</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span>
@@ -1439,7 +1570,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1478,10 +1609,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>How old was Peyton Manning in 2015?</td>
       <td>{'answer_start': [817, 817, 817], 'text': ['39...</td>
       <td>Following their loss in the divisional round o...</td>
-      <td>2020-09-20T14:17:15.618332</td>
+      <td>2020-10-02T07:47:11.000830</td>
       <td>56bf301c3aeaaa14008c9550</td>
       <td>Super_Bowl_50</td>
-      <td>0.630390</td>
+      <td>0.641220</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1489,10 +1620,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>How may yards did Peyton Manning throw?</td>
       <td>{'answer_start': [77, 77, 77], 'text': ['2,249...</td>
       <td>Manning finished the year with a career-low 67...</td>
-      <td>2020-09-20T14:17:15.813571</td>
+      <td>2020-10-02T07:47:11.239195</td>
       <td>56bf38383aeaaa14008c956c</td>
       <td>Super_Bowl_50</td>
-      <td>0.623954</td>
+      <td>0.634783</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1500,10 +1631,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>What was Peyton Manning's passer rating for th...</td>
       <td>{'answer_start': [44, 44, 44], 'text': ['67.9'...</td>
       <td>Manning finished the year with a career-low 67...</td>
-      <td>2020-09-20T14:17:15.813571</td>
+      <td>2020-10-02T07:47:11.238646</td>
       <td>56beb57b3aeaaa14008c9279</td>
       <td>Super_Bowl_50</td>
-      <td>0.608059</td>
+      <td>0.617874</td>
     </tr>
     <tr>
       <th>3</th>
@@ -1511,10 +1642,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Who did Peyton Manning play for as a rookie?</td>
       <td>{'answer_start': [641, 637, 654], 'text': ['In...</td>
       <td>Following their loss in the divisional round o...</td>
-      <td>2020-09-20T14:17:15.435333</td>
+      <td>2020-10-02T07:47:10.760423</td>
       <td>56beb4e43aeaaa14008c9267</td>
       <td>Super_Bowl_50</td>
-      <td>0.603111</td>
+      <td>0.612926</td>
     </tr>
     <tr>
       <th>4</th>
@@ -1522,10 +1653,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
       <td>Peyton Manning took how many different teams t...</td>
       <td>{'answer_start': [57, 57, 57, 57], 'text': ['t...</td>
       <td>Peyton Manning became the first quarterback ev...</td>
-      <td>2020-09-20T14:17:16.763268</td>
+      <td>2020-10-02T07:47:12.428915</td>
       <td>56d704430d65d214001982de</td>
       <td>Super_Bowl_50</td>
-      <td>0.602743</td>
+      <td>0.611716</td>
     </tr>
   </tbody>
 </table>
