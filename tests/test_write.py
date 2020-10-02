@@ -284,12 +284,12 @@ def test_bulk_encode_documents_with_deployed_model(test_client, test_text_encode
     """
     # Test when model key input is a list
     documents = test_client.create_sample_documents(10)
-    test_client._encode_documents_with_models_in_bulk(documents, models={'color': [test_text_encoder]}, use_bulk_encode=True)
+    test_client._encode_documents_with_models(documents, models={'color': [test_text_encoder]}, use_bulk_encode=True)
     assert 'color_vector_' in documents[0].keys()
     assert len(documents[0]['color_vector_']) > 0
     del documents
     documents = test_client.create_sample_documents(10)
-    test_client._encode_documents_with_models_in_bulk(documents, models={'color': test_text_encoder}, use_bulk_encode=True)
+    test_client._encode_documents_with_models(documents, models={'color': test_text_encoder}, use_bulk_encode=True)
     assert 'color_vector_' in documents[0].keys()
     assert len(documents[0]['color_vector_']) > 0
 
