@@ -3,6 +3,7 @@ Plotting functions of Vi go here.
 """
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from tqdm.notebook import tqdm
 import copy
 from typing import Union, List, Dict, Any
@@ -245,6 +246,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         anchor_index: Union[str, int] = 0,
         orientation="h",
         barmode="group",
+        rows=1,
     ):
         """
         Compare 1 document against other documents.
@@ -275,7 +277,6 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     alias=alias)
         
         """
-        fig = go.Figure()
         if isinstance(vector_fields, str):
             vector_fields = [vector_fields]
         if anchor_document is None:
@@ -288,18 +289,16 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     if anchor_index == doc["_id"]:
                         anchor_document = other_documents.pop(i)
                         break
-        for vector_field in vector_fields:
+        fig = make_subplots(rows=rows, cols=len(vector_fields))
+        for i, vector_field in enumerate(vector_fields):
             fig.add_trace(self._plot_1d_cosine_similarity_for_1_vector_field(
                 documents=documents,
                 vector_field=vector_field,
                 label=label,
                 anchor_document=anchor_document, 
                 anchor_index=anchor_index,
-                orientation=orientation))
-        fig.update_layout(
-            barmode='group', 
-            title=f"Comparing with {anchor_document[label]}"
-        )
+                orientation=orientation),
+                row=1, col=(i%i)+ 1)
         return fig
     
     def _plot_1d_cosine_similarity_for_1_vector_field(self, 
