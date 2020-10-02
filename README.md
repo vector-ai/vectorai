@@ -22,7 +22,7 @@ Features:
 
 ## Why Vector AI compared to other Nearest Neighbor implementations?
 
-- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infastructure as your use case scales.
+- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infrastructure as your use case scales.
 - **Richer understanding of your vectors and their properties**: Our library is designed to allow people to do more than just obtain nearest neighbors but to actually experiment and use in production-ready search systems - allowing users to analyse, iterate, improve and productionise their vectors the moment they are added to the index.
 - **Simple to use. Quick to get started.**: One of our core design principles is that we focus a lot on how people can get started on using Vector AI as quickly as possible, while ensuring there is still a tonne of functionality and customisability options.
 - **Framework agnostic**: We are never going to force a specific framework on Vector AI. If you have a framework of choice, you can use it - as long as your documents are JSON-serializable! 
