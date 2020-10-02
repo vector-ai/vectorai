@@ -480,7 +480,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         workers: int = 1,
-        verbose=True,
+        verbose=False,
         use_bulk_encode=False
     ):
         """
@@ -496,6 +496,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Models with an encode method 
             use_bulk_encode:
                 Use the bulk_encode method in models
+            verbose:
+                Whether to print document ids that have failed when inserting.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -568,7 +570,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         workers: int = 1,
-        verbose: bool = True
+        verbose: bool = True,
+        use_bulk_encode: bool = False,
     ):
         """
         Insert dataframe into a collection
@@ -578,9 +581,10 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Name of collection
             df:
                 Pandas DataFrame
-            
             models:
-                Models with an encode method 
+                Models with an encode method
+            verbose:
+                Whether to print document ids that have failed when inserting.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -594,7 +598,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             models=models,
             chunksize=chunksize,
             workers=workers,
-            verbose=verbose
+            verbose=verbose,
+            use_bulk_encode=use_bulk_encode
         )
 
     def edit_document(self, collection_name: str, edits: Dict[str, str], verbose=True):

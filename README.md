@@ -16,6 +16,8 @@ Features:
 - **Multimedia Data Vectorisation**: Image2Vec, Audio2Vec, etc (Any data can be turned into vectors through machine learning)
 - **Document Orientated Store**: Store your vectors alongside documents without having to do a db lookup for metadata about the vectors.
 - **Vector Similarity Search**: Enable searching of vectors and rich multimedia with vector similarity search. The backbone of many popular A.I use cases like reverse image search, recommendations, personalisation, etc.
+- **Hybrid Search**: There are scenarios where vector search is not as effective as traditional search, e.g. searching for skus. Vector AI lets you combine vector search with all the features of traditional search such as filtering, fuzzy search, keyword matching to create an even more powerful search.
+- **Multi-Model Weighted Search**: Our Vector search is highly customisable and you can peform searches with multiple vectors from multiple models and give them different weightings.
 - **Vector Operations**: Flexible search with out of the box operations on vectors. e.g. mean, median, sum, etc.
 - **Aggregation**: All the traditional aggregation you'd expect. e.g. group by mean, pivot tables, etc
 - **Clustering**: Interpret your vectors and data by allocating them to buckets and get statistics about these different buckets based on data you provide.
