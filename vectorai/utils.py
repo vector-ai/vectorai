@@ -61,7 +61,7 @@ class UtilsMixin:
                 field='OriginalTweet_vector_', page_size=5)
             >>> vi_client.results_pretty(result, 'OriginalTweet')
         """
-        pd.set_option('display.max_colwidth', None)
+        pd.set_option('display.max_colwidth', 10000)
         if 'results' in results.keys():
             results = results['results']
         return pd.DataFrame({self.get_field(field, x) for x in results}, columns=[field])

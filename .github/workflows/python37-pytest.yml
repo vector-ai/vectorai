@@ -4,9 +4,17 @@ on:
   push:
     branches: 
       - master
+    paths:
+      - 'vectorai/**'
+      - 'tests/**'
+      - 'setup.py'
   pull_request:
     branches:
       - master
+    paths:
+      - 'vectorai/**'
+      - 'tests/**'
+      - 'setup.py'
       
 jobs:
   run_test:

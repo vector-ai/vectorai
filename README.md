@@ -4,7 +4,7 @@
     </a>
 </p>
 <h3 align="center">
-Vector AI is built to store vectors alongside documents (text/audio/images/videos). It is designed to be a light-weight library to create, manipulate, search and analyse vectors to power machine learning applications such as semantic search, recommendations, etc.
+Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, recommendations, personalisation, etc.
 </h3>
 
 - Visit our website at: https://getvectorai.com
@@ -14,20 +14,14 @@ Vector AI is built to store vectors alongside documents (text/audio/images/video
 
 Features:
 - **Multimedia Data Vectorisation**: Image2Vec, Audio2Vec, etc (Any data can be turned into vectors through machine learning)
+- **Document Orientated Store**: Store your vectors alongside documents without having to do a db lookup for metadata about the vectors.
 - **Vector Similarity Search**: Enable searching of vectors and rich multimedia with vector similarity search. The backbone of many popular A.I use cases like reverse image search, recommendations, personalisation, etc.
+- **Hybrid Search**: There are scenarios where vector search is not as effective as traditional search, e.g. searching for skus. Vector AI lets you combine vector search with all the features of traditional search such as filtering, fuzzy search, keyword matching to create an even more powerful search.
+- **Multi-Model Weighted Search**: Our Vector search is highly customisable and you can peform searches with multiple vectors from multiple models and give them different weightings.
 - **Vector Operations**: Flexible search with out of the box operations on vectors. e.g. mean, median, sum, etc.
 - **Aggregation**: All the traditional aggregation you'd expect. e.g. group by mean, pivot tables, etc
 - **Clustering**: Interpret your vectors and data by allocating them to buckets and get statistics about these different buckets based on data you provide.
 - **Vector Analytics**: Get better understanding of your vectors by using out-of-the-box practical vector analytics, giving you better understanding of the quality of your vectors.
-
-## Why Vector AI compared to other Nearest Neighbor implementations?
-
-- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infastructure as your use case scales.
-- **Richer understanding of your vectors and their properties**: Our library is designed to allow people to do more than just obtain nearest neighbors but to actually experiment and use in production-ready search systems - allowing users to analyse, iterate, improve and productionise their vectors the moment they are added to the index.
-- **Simple to use. Quick to get started.**: One of our core design principles is that we focus a lot on how people can get started on using Vector AI as quickly as possible, while ensuring there is still a tonne of functionality and customisability options.
-- **Framework agnostic**: We are never going to force a specific framework on Vector AI. If you have a framework of choice, you can use it - as long as your documents are JSON-serializable! 
-- **Store vector data with ease**: The document-orientated nature for Vector AI allows users to label, filter search and understand their vectors as much as possible. We think that other libraries that simply provide a nearest-neighbor implementation do not have as rich functionality.
-- **Real time access to data**: Vector AI data is accessible in real time, as soon as the data is inserted it is searchable straight away. No need to wait hours to build an index.
 
 ## Quick Terminologies
 
@@ -58,11 +52,13 @@ from vectorai import request_api_key
 api_key = request_api_key(username=<username>, email=<email>, description=<description>, referral_code="github_referred")
 ```
 
-Or ask the admins on discord for a referral code to get an api key even more quickly: https://discord.gg/CbwUxyD
+Or ask the admins on [discord](https://discord.gg/CbwUxyD) for a referral code to get an api key even more quickly.
 
 ## QuickStart
 
-Vector AI has been designed to be easy to encode data into vectors and perform search, analytics and operation on those vectors. 
+Vector AI has been designed to be easy to encode data into vectors and perform search, analytics and operation on those vectors.
+
+Check out our quickstart notebook on how to make a text/image/audio search engine in 5 minutes: [quickstart.ipynb](examples/quickstart.ipynb)
 
 ```
 from vectorai import ViClient
@@ -70,7 +66,7 @@ from vectorai import ViClient
 vi_client = ViClient(username=<username>, api_key=<api_key>)
 
 from vectorai.models.deployed import ViText2Vec
-text_encoder = ViText2Vec(username, api_key, vectorai_url)
+text_encoder = ViText2Vec(<username>, <api_key>)
 
 documents = [
     {
@@ -118,7 +114,14 @@ vi_client.plot_1d_cosine_similarity(
 Compare vectors and their search performance on your documents easily!
 ![1D plot cosine simlarity](https://getvectorai.com/assets/gif/1d_cosine_similarity.gif)
 
+## Why Vector AI compared to other Nearest Neighbor implementations?
 
+- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infrastructure as your use case scales.
+- **Simple to use. Quick to get started.**: One of our core design principles is that we focus on how people can get started on using Vector AI as quickly as possible, whilst ensuring there is still a tonne of functionality and customisability options.
+- **Richer understanding of your vectors and their properties**: Our library is designed to allow people to do more than just obtain nearest neighbors, but to actually experiment, analyse, interpret and improve on them the moment the data added to the index.
+- **Store vector data with ease**: The document-orientated nature for Vector AI allows users to label, filter search and understand their vectors as much as possible.
+- **Real time access to data**: Vector AI data is accessible in real time, as soon as the data is inserted it is searchable straight away. No need to wait hours to build an index.
+- **Framework agnostic**: We are never going to force a specific framework on Vector AI. If you have a framework of choice, you can use it - as long as your documents are JSON-serializable! 
 
 ## Bring your own Model or Vector
 
@@ -144,3 +147,10 @@ example_item = {
     'skillsvector_': [0.123, 0.456, 0.789, 0.987, 0.654, 0.321]
 }
 ```
+
+## Building Products with Vector AI
+Creating a multi-language AI fashion assistant: https://fashionfiesta.me | [Blog](https://getvectorai.com/how-we-built-a-vector-powered-outfit-recommender/)
+
+![Demo](https://getvectorai.com/assets/gif/fashion-fiesta-demo.gif)
+
+Do share with us any blogs or websites you create with Vector AI!
