@@ -3,6 +3,7 @@ Plotting functions of Vi go here.
 """
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from tqdm.notebook import tqdm
 import copy
 from typing import Union, List, Dict, Any
@@ -243,8 +244,11 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         label: str,
         anchor_document: dict = None,
         anchor_index: Union[str, int] = 0,
-        orientation="h",
-        barmode="group",
+        orientation: int="h",
+        barmode: int="group",
+        num_cols: int=None,
+        y_axis_tickangle: int=-15,
+        x_axis_tickangle: int=15
     ):
         """
         Compare 1 document against other documents.
@@ -256,8 +260,11 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             label: the x label for the bar plot 
             anchor_document: the document to compare it on
             anchor_index: the anchor index to compare it on
-            orientation: The orientation of the bar chart
-        
+            orientation: The orientation of the bar chart. Can be 'v' (vertical) or 'h' (horizontal)
+            num_cols: The number of columns. The default will put everything into 1 row. If you want to 
+            put things into multiple rows, then please reduce the number of columns. 
+            y_axis_tickangle: This will change the tick angles of the y axis in the vertical chart.
+            x_axis_tickangle: This will change the tick angels of the x axis in the vertical chart.
         Returns:
             Plotly Figure: returns a horizontal barplot showing cosine similarity scores.
         
@@ -275,7 +282,6 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     alias=alias)
         
         """
-        fig = go.Figure()
         if isinstance(vector_fields, str):
             vector_fields = [vector_fields]
         if anchor_document is None:
@@ -288,18 +294,32 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     if anchor_index == doc["_id"]:
                         anchor_document = other_documents.pop(i)
                         break
-        for vector_field in vector_fields:
+        import math
+        if num_cols is None:
+            num_cols = len(vector_fields)
+        fig = make_subplots(rows=int(len(vector_fields) / num_cols) + 1, cols=num_cols, 
+        subplot_titles=vector_fields)
+        row_num = 1
+        col_num = 1
+        for i, vector_field in enumerate(vector_fields):
             fig.add_trace(self._plot_1d_cosine_similarity_for_1_vector_field(
                 documents=documents,
                 vector_field=vector_field,
                 label=label,
                 anchor_document=anchor_document, 
                 anchor_index=anchor_index,
-                orientation=orientation))
-        fig.update_layout(
-            barmode='group', 
-            title=f"Comparing with {anchor_document[label]}"
-        )
+                orientation=orientation),
+                row=row_num, col=col_num)
+            if col_num % num_cols == 0:
+                row_num += 1
+                col_num = 1
+            else:
+                col_num += 1
+        if orientation == 'h':
+            fig.update_yaxes(tickangle=y_axis_tickangle)
+        if orientation == 'v':
+            fig.update_xaxes(tickangle=x_axis_tickangle)
+        
         return fig
     
     def _plot_1d_cosine_similarity_for_1_vector_field(self, 
@@ -352,13 +372,21 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 mean_dict[doc[label]] = doc["cos_score"]
             
             x, y = mean_dict.get_x_y()
-
-            return go.Bar(
-                x=y,
-                y=x,
-                orientation=orientation,
-                name=vector_field
-            )
+            if orientation == 'h':
+                return go.Bar(
+                    x=y,
+                    y=x,
+                    orientation=orientation,
+                    name=vector_field
+                )
+            else:
+                return go.Bar(
+                    x=x,
+                    y=y,
+                    text=x,
+                    orientation=orientation,
+                    name=vector_field
+                )
         
     def plot_2d_cosine_similarity(
         self,
