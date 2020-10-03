@@ -23,15 +23,6 @@ Features:
 - **Clustering**: Interpret your vectors and data by allocating them to buckets and get statistics about these different buckets based on data you provide.
 - **Vector Analytics**: Get better understanding of your vectors by using out-of-the-box practical vector analytics, giving you better understanding of the quality of your vectors.
 
-## Why Vector AI compared to other Nearest Neighbor implementations?
-
-- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infrastructure as your use case scales.
-- **Simple to use. Quick to get started.**: One of our core design principles is that we focus on how people can get started on using Vector AI as quickly as possible, whilst ensuring there is still a tonne of functionality and customisability options.
-- **Richer understanding of your vectors and their properties**: Our library is designed to allow people to do more than just obtain nearest neighbors, but to actually experiment, analyse, interpret and improve on them the moment the data added to the index.
-- **Store vector data with ease**: The document-orientated nature for Vector AI allows users to label, filter search and understand their vectors as much as possible.
-- **Real time access to data**: Vector AI data is accessible in real time, as soon as the data is inserted it is searchable straight away. No need to wait hours to build an index.
-- **Framework agnostic**: We are never going to force a specific framework on Vector AI. If you have a framework of choice, you can use it - as long as your documents are JSON-serializable! 
-
 ## Quick Terminologies
 
 - Models/Encoders (aka. Embedders) ~ Turns data into vectors e.g. Word2Vec turns words into vector
@@ -123,7 +114,14 @@ vi_client.plot_1d_cosine_similarity(
 Compare vectors and their search performance on your documents easily!
 ![1D plot cosine simlarity](https://getvectorai.com/assets/gif/1d_cosine_similarity.gif)
 
+## Why Vector AI compared to other Nearest Neighbor implementations?
 
+- **Production Ready**: Our API is fully managed and can scale to power hundreds of millions of searches a day. Even at millions of searches it is blazing fast through edge caching, GPU utilisation and software optimisation so you never have to worry about scaling your infrastructure as your use case scales.
+- **Simple to use. Quick to get started.**: One of our core design principles is that we focus on how people can get started on using Vector AI as quickly as possible, whilst ensuring there is still a tonne of functionality and customisability options.
+- **Richer understanding of your vectors and their properties**: Our library is designed to allow people to do more than just obtain nearest neighbors, but to actually experiment, analyse, interpret and improve on them the moment the data added to the index.
+- **Store vector data with ease**: The document-orientated nature for Vector AI allows users to label, filter search and understand their vectors as much as possible.
+- **Real time access to data**: Vector AI data is accessible in real time, as soon as the data is inserted it is searchable straight away. No need to wait hours to build an index.
+- **Framework agnostic**: We are never going to force a specific framework on Vector AI. If you have a framework of choice, you can use it - as long as your documents are JSON-serializable! 
 
 ## Bring your own Model or Vector
 
