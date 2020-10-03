@@ -30,7 +30,7 @@ Features:
 - Collection (aka. Index, Table) ~ a collection is made up of multiple documents
 - Documents (aka. Json, Item, Dictionary, Row) ~ a document can contain vectors, text and links to videos/images/audio.
 
-## Installation
+## QuickStart
 
 Install via pip! Compatible with any OS.
 
@@ -38,35 +38,17 @@ Install via pip! Compatible with any OS.
 pip install vectorai
 ```
 
-Install from source
-
-```
-cd vectorai
-pip install -e .
-```
-
-## API Key
-Request an api key (note: If the queue is short you will get the api key instantly):
-```
-from vectorai import request_api_key
-api_key = request_api_key(username=<username>, email=<email>, description=<description>, referral_code="github_referred")
-```
-
-Or ask the admins on [discord](https://discord.gg/CbwUxyD) for a referral code to get an api key even more quickly.
-
-## QuickStart
-
-Vector AI has been designed to be easy to encode data into vectors and perform search, analytics and operation on those vectors.
-
 Check out our quickstart notebook on how to make a text/image/audio search engine in 5 minutes: [quickstart.ipynb](examples/quickstart.ipynb)
 
 ```
-from vectorai import ViClient
+from vectorai import ViClient, request_api_key
 
-vi_client = ViClient(username=<username>, api_key=<api_key>)
+api_key = request_api_key(username=<username>, email=<email>, description=<description>, referral_code="github_referred")
+
+vi_client = ViClient(username=username, api_key=api_key)
 
 from vectorai.models.deployed import ViText2Vec
-text_encoder = ViText2Vec(<username>, <api_key>)
+text_encoder = ViText2Vec(username, api_key)
 
 documents = [
     {
