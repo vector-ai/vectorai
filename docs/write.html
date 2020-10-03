@@ -394,7 +394,7 @@ This should then create the following entries if they dont exist:
 
 <dl class="py method">
 <dt id="vectorai.write.ViWriteClient.insert_documents">
-<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert documents into a collection with an option to encode with models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -403,7 +403,6 @@ This should then create the following entries if they dont exist:
 <li><p><strong>documents</strong> – All documents.</p></li>
 <li><p><strong>models</strong> – Models with an encode method</p></li>
 <li><p><strong>use_bulk_encode</strong> – Use the bulk_encode method in models</p></li>
-<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
 </ul>
 </dd>
 </dl>
@@ -418,7 +417,7 @@ This should then create the following entries if they dont exist:
 
 <dl class="py method">
 <dt id="vectorai.write.ViWriteClient.insert_df">
-<code class="sig-name descname">insert_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_df" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert dataframe into a collection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -426,7 +425,6 @@ This should then create the following entries if they dont exist:
 <li><p><strong>collection_name</strong> – Name of collection</p></li>
 <li><p><strong>df</strong> – Pandas DataFrame</p></li>
 <li><p><strong>models</strong> – Models with an encode method</p></li>
-<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
 </ul>
 </dd>
 </dl>
