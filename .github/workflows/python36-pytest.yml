@@ -35,6 +35,8 @@ jobs:
       env:
         USERNAME: ${{ secrets.USERNAME }}
         API_KEY: ${{ secrets.API_KEY }}
+        VI_USERNAME: ${{ secrets.VI_USERNAME }}
+        VI_API_KEY: ${{ secrets.VI_API_KEY }}
       run: |
         pip install pytest
         pip install tensorflow==2.2.0
