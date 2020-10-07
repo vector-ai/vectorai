@@ -304,9 +304,8 @@ Args:
     def _check_schema(
         self,
         document: Dict,
-        schema={},
         is_missing_vector_field=True,
-        return_schema: bool = False,
+        is_nested=False
     ):
         """
         Check the schema of a given collection.
@@ -314,12 +313,10 @@ Args:
         Args:
             document:
                 A JSON file/python dictionary
-            schema:
-                A schema tracker if the schema wants to be returned.
             is_missing_vector_field:
                 A tracker to return if the dictionary is missing a vector field
-            return_schema:
-                A boolean representation if you want the schema returned.
+            is_nested:
+                Returns True if is a nested. Used internally.
 
         Example:
             >>> from vectorai.client import ViClient
@@ -329,29 +326,27 @@ Args:
         """
         VECTOR_FIELD_NAME = "_vector_"
         MISSING_VECTOR_FIELD = True
-        for field in document.keys():
-            if "_vectors_" in field:
-                warnings.warn(
-                    f"Rename {field} to contain {field.replace('_vectors_', '_vector_')}"
-                )
-            if VECTOR_FIELD_NAME in field:
-                MISSING_VECTOR_FIELD = False
-            value = self.get_field(field, document)
-            schema[field] = {}
+        for field, value in document.items():
             if isinstance(value, dict):
                 MISSING_VECTOR_FIELD = self._check_schema(
                     document[field],
-                    schema=schema[field],
                     is_missing_vector_field=MISSING_VECTOR_FIELD,
-                    return_schema=False,
+                    is_nested=True
                 )
-
-        if MISSING_VECTOR_FIELD:
-            warnings.warn(
-                "Potential issue. Cannot find a vector field. Check that the vector field contains _vector_."
-            )
-        if return_schema:
-            return MISSING_VECTOR_FIELD, schema
+            if "_vectors_" in field:
+                warnings.warn(
+                    f"Rename {field} to {field.replace('_vectors_', '_vector_')}"
+                )
+        
+        for field in document.keys():
+            if VECTOR_FIELD_NAME in field:
+                MISSING_VECTOR_FIELD = False
+        
+        if not is_nested:
+            if MISSING_VECTOR_FIELD:
+                warnings.warn(
+                    "Potential issue. Cannot find a vector field. Check that the vector field contains _vector_."
+                )
         return MISSING_VECTOR_FIELD
 
     def list_collections(self) -> List[str]:
