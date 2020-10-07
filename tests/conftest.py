@@ -1,4 +1,5 @@
-"""Global testing variables.
+"""
+Global testing variables.
 """
 import pytest
 import os
@@ -33,12 +34,12 @@ def get_random_string(length):
 
 @pytest.fixture
 def test_username():
-    return os.environ['USERNAME']
+    return os.environ['VI_USERNAME']
 
 
 @pytest.fixture
 def test_api_key():
-    return os.environ['API_KEY']
+    return os.environ['VI_API_KEY']
 
 
 @pytest.fixture
@@ -96,5 +97,5 @@ def test_text_encoder():
     """
         Text Encoder
     """
-    model = ViText2Vec(os.environ['USERNAME'], os.environ['API_KEY'])
+    model = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
     return model
