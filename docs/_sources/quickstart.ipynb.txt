@@ -58,8 +58,8 @@
    "outputs": [],
    "source": [
     "import os\n",
-    "username = os.environ['USERNAME']\n",
-    "api_key = os.environ['API_KEY']\n",
+    "username = os.environ['VI_USERNAME']\n",
+    "api_key = os.environ['VI_API_KEY']\n",
     "url = \"https://api.vctr.ai\""
    ]
   },
