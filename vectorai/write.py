@@ -54,8 +54,9 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> response = requests.get(...) 
             >>> ViClient._raise_error(response)
         """
-        if response["status"] == "error":
-            raise APIError(response["message"])
+        if 'status' in response.keys():
+            if response["status"] == "error":
+                raise APIError(response["message"])
 
     @classmethod
     def _as_json(self, documents: Union[Dict[Any, Any], List], flatten=False):
