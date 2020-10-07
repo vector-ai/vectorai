@@ -54,8 +54,9 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> response = requests.get(...) 
             >>> ViClient._raise_error(response)
         """
-        if response["status"] == "error":
-            raise APIError(response["message"])
+        if 'status' in response.keys():
+            if response["status"] == "error":
+                raise APIError(response["message"])
 
     @classmethod
     def _as_json(self, documents: Union[Dict[Any, Any], List], flatten=False):
@@ -518,6 +519,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode
                 )
+                self._raise_error(result)
                 if verbose:
                     print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
@@ -536,8 +538,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 ),
                 total=int(len(documents) / chunksize),
             ):
+                self._raise_error(result)
                 if verbose:
                     print(f"Failed: {result['failed_document_ids']}")
+                    if len(result['failed_document_ids'] > 0):
+                        warnings.warn("""There are failed documents. Try re-inserting these IDs
+                        and test by choosing the most important fields first!""")
                 failed.append(result["failed_document_ids"])
             pool.close()
             pool.join()
