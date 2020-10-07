@@ -3,9 +3,9 @@
 
 from .dimensionality_reduction import *
 from .viz import *
+from .tables import *
 
-
-class ViAnalyticsMixin(VizMixin):
+class ViAnalyticsMixin(VizMixin, TableMixin):
     """
     Vi Analytics Mixin.
     Currently includes visualisation mixin. 
