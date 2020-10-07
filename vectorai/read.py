@@ -348,7 +348,7 @@ Args:
 
         if MISSING_VECTOR_FIELD:
             warnings.warn(
-                "Potential issue. Cannot find a vector field. Check that the vector field is _vector_."
+                "Potential issue. Cannot find a vector field. Check that the vector field contains _vector_."
             )
         if return_schema:
             return MISSING_VECTOR_FIELD, schema
