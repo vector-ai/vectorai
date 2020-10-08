@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -462,10 +461,10 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-<span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;nlp_quickstart&#39;</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>from vectorai.client import ViClient
+vi_client = ViClient(username, api_key, url)
+collection_name = &#39;nlp_quickstart&#39;
+vi_client.delete_collection(collection_name)
 </pre></div>
 </div>
 </div>
@@ -492,8 +491,8 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
-<span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span></span>from vectorai.models.deployed import ViText2Vec
+text_encoder = ViText2Vec(username, api_key, url)
 </pre></div>
 </div>
 </div>
@@ -504,9 +503,9 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/Corona_NLP_train.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin-1&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span></span>import pandas as pd
+df = pd.read_csv(&#39;data/Corona_NLP_train.csv&#39;, encoding=&#39;latin-1&#39;)
+df.sample(2)
 </pre></div>
 </div>
 </div>
@@ -569,7 +568,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_df</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;OriginalTweet&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="p">},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_bulk_encode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span>vi_client.insert_df(collection_name, df, models={&#39;OriginalTweet&#39;:text_encoder}, verbose=False, use_bulk_encode=True)
 </pre></div>
 </div>
 </div>
@@ -603,7 +602,7 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">collection_stats</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>vi_client.collection_stats(collection_name)
 </pre></div>
 </div>
 </div>
@@ -624,10 +623,10 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;helping older people&#39;</span><span class="p">),</span>
-    <span class="n">field</span><span class="o">=</span><span class="s1">&#39;OriginalTweet_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">results_pretty</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;OriginalTweet&#39;</span><span class="p">)</span>
+<span></span>import pandas as pd
+result = vi_client.search(collection_name, text_encoder.encode(&#39;helping older people&#39;),
+    field=&#39;OriginalTweet_vector_&#39;, page_size=5)
+vi_client.results_pretty(result, &#39;OriginalTweet&#39;)
 </pre></div>
 </div>
 </div>
@@ -690,15 +689,15 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;pokemon_images&#39;</span>
+<span></span>collection_name = &#39;pokemon_images&#39;
 
-<span class="n">documents</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">):</span>
-    <span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;https://assets.pokemon.com/assets/cms2/img/pokedex/full/</span><span class="si">{}</span><span class="s1">.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s1">03</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;pokemon_id&#39;</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
-        <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="n">i</span>
-    <span class="p">})</span>
+documents = []
+for i in range(1, 20):
+    documents.append({
+        &#39;image&#39;: &#39;https://assets.pokemon.com/assets/cms2/img/pokedex/full/{}.png&#39;.format(f&#39;{i:03}&#39;),
+        &#39;pokemon_id&#39; : str(i),
+        &#39;_id&#39;: i
+    })
 </pre></div>
 </div>
 </div>
@@ -707,14 +706,14 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#1. specify the vdb client</span>
-<span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>#1. specify the vdb client
+from vectorai.client import ViClient
+vi_client = ViClient(username, api_key, url)
+vi_client.delete_collection(collection_name)
 
-<span class="c1">#2. specify an image encoder</span>
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViImage2Vec</span>
-<span class="n">image_encoder</span> <span class="o">=</span> <span class="n">ViImage2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+#2. specify an image encoder
+from vectorai.models.deployed import ViImage2Vec
+image_encoder = ViImage2Vec(username, api_key, url)
 </pre></div>
 </div>
 </div>
@@ -740,16 +739,16 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#3. insert the documents and encode images simultaneously</span>
-<span class="c1"># using jobs means that the encoding process takes place on our servers as opposed to your computer</span>
-<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">False</span>
+<span></span>#3. insert the documents and encode images simultaneously
+# using jobs means that the encoding process takes place on our servers as opposed to your computer
+use_jobs = False
 
-<span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
-    <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_image_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;image&#39;</span><span class="p">)</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span><span class="n">image_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+if use_jobs:
+    vi_client.insert_documents(collection_name, documents)
+    job = vi_client.encode_image_job(collection_name, &#39;image&#39;)
+    vi_client.wait_till_jobs_complete(collection_name, job[&#39;job_id&#39;], job[&#39;job_name&#39;])
+else:
+    vi_client.insert_documents(collection_name, documents, models={&#39;image&#39;:image_encoder.encode})
 </pre></div>
 </div>
 </div>
@@ -781,13 +780,13 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#4. search</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">image_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png&#39;</span><span class="p">),</span>
-    <span class="s1">&#39;image_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>#4. search
+search_results = vi_client.search(collection_name,
+    image_encoder.encode(&#39;https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png&#39;),
+    &#39;image_vector_&#39;, page_size=5)
 
-<span class="c1">#4.2 first result is the query audio itself</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+#4.2 first result is the query audio itself
+vi_client.show_json(search_results, image_fields=[&#39;image&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -856,11 +855,11 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#5 recommendation by id</span>
-<span class="n">search_by_id_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;image_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>#5 recommendation by id
+search_by_id_results = vi_client.search_by_id(collection_name, &#39;2&#39;, &#39;image_vector_&#39;, page_size=5)
 
-<span class="c1">#5.2 first result is the id&#39;s audio itself</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_by_id_results</span><span class="p">,</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+#5.2 first result is the id&#39;s audio itself
+vi_client.show_json(search_by_id_results, image_fields=[&#39;image&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -933,16 +932,16 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;audio_quickstart&#39;</span>
+<span></span>collection_name = &#39;audio_quickstart&#39;
 
-<span class="c1">#create the documents</span>
-<span class="n">documents</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">):</span>
-    <span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;audio&#39;</span><span class="p">:</span> <span class="s1">&#39;https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_</span><span class="si">{}</span><span class="s1">.wav&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
-        <span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="s1">&#39;common_voice_en_</span><span class="si">{}</span><span class="s1">.wav&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
-        <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="n">i</span>
-    <span class="p">})</span>
+#create the documents
+documents = []
+for i in range(1, 1001):
+    documents.append({
+        &#39;audio&#39;: &#39;https://vecsearch-bucket.s3.us-east-2.amazonaws.com/voices/common_voice_en_{}.wav&#39;.format(i),
+        &#39;name&#39; : &#39;common_voice_en_{}.wav&#39;.format(i),
+        &#39;_id&#39;: i
+    })
 </pre></div>
 </div>
 </div>
@@ -951,14 +950,14 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#1. specify the vdb client</span>
-<span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>#1. specify the vdb client
+from vectorai.client import ViClient
+vi_client = ViClient(username, api_key, url)
+vi_client.delete_collection(collection_name)
 
-<span class="c1">#2. specify an audio encoder</span>
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViAudio2Vec</span>
-<span class="n">audio_encoder</span> <span class="o">=</span> <span class="n">ViAudio2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+#2. specify an audio encoder
+from vectorai.models.deployed import ViAudio2Vec
+audio_encoder = ViAudio2Vec(username, api_key, url)
 </pre></div>
 </div>
 </div>
@@ -984,15 +983,15 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#3. insert the documents and encode audio simultaneously</span>
-<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
+<span></span>#3. insert the documents and encode audio simultaneously
+use_jobs = True
 
-<span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
-    <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_audio_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;audio&#39;</span><span class="p">)</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;audio&#39;</span><span class="p">:</span><span class="n">audio_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+if use_jobs:
+    vi_client.insert_documents(collection_name, documents)
+    job = vi_client.encode_audio_job(collection_name, &#39;audio&#39;)
+    vi_client.wait_till_jobs_complete(collection_name, job[&#39;job_id&#39;], job[&#39;job_name&#39;])
+else:
+    vi_client.insert_documents(collection_name, documents, models={&#39;audio&#39;:audio_encoder.encode})
 </pre></div>
 </div>
 </div>
@@ -1050,12 +1049,12 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">IPython.display</span> <span class="k">as</span> <span class="nn">ipd</span>
-<span class="c1">#4. search</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">audio_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;audio&#39;</span><span class="p">]),</span>
-    <span class="s1">&#39;audio_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>import IPython.display as ipd
+#4. search
+search_results = vi_client.search(collection_name, audio_encoder.encode(documents[0][&#39;audio&#39;]),
+    &#39;audio_vector_&#39;, page_size=5)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">audio_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">])</span>
+vi_client.show_json(search_results, audio_fields=[&#39;audio&#39;])
 </pre></div>
 </div>
 </div>
@@ -1124,10 +1123,10 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#5 recommendation by id</span>
-<span class="n">search_by_id_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;audio_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>#5 recommendation by id
+search_by_id_results = vi_client.search_by_id(collection_name, &#39;2&#39;, &#39;audio_vector_&#39;, page_size=5)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_by_id_results</span><span class="p">,</span> <span class="n">audio_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">])</span>
+vi_client.show_json(search_by_id_results, audio_fields=[&#39;audio&#39;])
 </pre></div>
 </div>
 </div>
@@ -1199,7 +1198,7 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">pip</span> install datasets
+<span></span>%pip install datasets
 </pre></div>
 </div>
 </div>
@@ -1232,13 +1231,13 @@ Note: you may need to restart the kernel to use updated packages.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;squad&#39;</span>
+<span></span>collection_name = &#39;squad&#39;
 
-<span class="c1">#use huggingface&#39;s datasets library to download squad</span>
-<span class="kn">import</span> <span class="nn">datasets</span>
-<span class="n">squad_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;squad&#39;</span><span class="p">)</span>
-<span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="o">**</span><span class="n">d</span><span class="p">}</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">squad_dataset</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">])]</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+#use huggingface&#39;s datasets library to download squad
+import datasets
+squad_dataset = datasets.load_dataset(&#39;squad&#39;)
+documents = [{&#39;_id&#39;:str(n), **d} for n, d in enumerate(squad_dataset[&#39;validation&#39;])]
+vi_client.delete_collection(collection_name)
 </pre></div>
 </div>
 </div>
@@ -1247,14 +1246,14 @@ Note: you may need to restart the kernel to use updated packages.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#1. specify the vdb client</span>
-<span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>#1. specify the vdb client
+from vectorai.client import ViClient
+vi_client = ViClient(username, api_key, url)
+vi_client.delete_collection(collection_name)
 
-<span class="c1">#2. specify a text encoder</span>
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
-<span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span><span class="p">)</span>
+#2. specify a text encoder
+from vectorai.models.deployed import ViText2Vec
+text_encoder = ViText2Vec(username, api_key, &#39;https://api.vctr.ai&#39;)
 </pre></div>
 </div>
 </div>
@@ -1280,15 +1279,15 @@ Logged in. Welcome public-demo. To view list of available collections, call list
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#3. insert the documents and encode text simultaneously</span>
-<span class="n">use_jobs</span> <span class="o">=</span> <span class="kc">True</span>
+<span></span>#3. insert the documents and encode text simultaneously
+use_jobs = True
 
-<span class="k">if</span> <span class="n">use_jobs</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">)</span>
-    <span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">encode_text_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;question&#39;</span><span class="p">)</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;question&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="p">},</span> <span class="n">use_bulk_encode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+if use_jobs:
+    vi_client.insert_documents(collection_name, documents)
+    job = vi_client.encode_text_job(collection_name, &#39;question&#39;)
+    vi_client.wait_till_jobs_complete(collection_name, job[&#39;job_id&#39;], job[&#39;job_name&#39;])
+else:
+    vi_client.insert_documents(collection_name, documents, models={&#39;question&#39;:text_encoder}, use_bulk_encode=True)
 </pre></div>
 </div>
 </div>
@@ -1346,13 +1345,13 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#4. search</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span>
-                                   <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;who was the winner for nfl fifty&#39;</span><span class="p">),</span>
-                                   <span class="s1">&#39;question_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>#4. search
+search_results = vi_client.search(collection_name,
+                                   text_encoder.encode(&#39;who was the winner for nfl fifty&#39;),
+                                   &#39;question_vector_&#39;, page_size=5)
 
-<span class="c1">#4.2 first result is the query text itself</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">search_results</span><span class="p">)</span>
+#4.2 first result is the query text itself
+vi_client.results_to_df(search_results)
 </pre></div>
 </div>
 </div>
@@ -1454,11 +1453,11 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#5 recommendation by id</span>
-<span class="n">search_by_id_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">documents</span><span class="p">[</span><span class="mi">50</span><span class="p">][</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="s1">&#39;question_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>#5 recommendation by id
+search_by_id_results = vi_client.search_by_id(collection_name, documents[50][&#39;_id&#39;], &#39;question_vector_&#39;, page_size=5)
 
-<span class="c1">#5.2 first result is the id&#39;s text itself</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">search_by_id_results</span><span class="p">)</span>
+#5.2 first result is the id&#39;s text itself
+vi_client.results_to_df(search_by_id_results)
 </pre></div>
 </div>
 </div>
@@ -1560,13 +1559,13 @@ d:\kda\vectorai\vectorai\read.py:351: UserWarning: Potential issue. Cannot find 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#6 hybrid search combining traditional and nlp vector search</span>
-<span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">hybrid_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;Peyton Men&#39;</span><span class="p">,</span>
-                                          <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;Peyton Men&#39;</span><span class="p">),</span>
-                                          <span class="p">[</span><span class="s1">&#39;question_vector_&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">],</span>
-                                          <span class="n">traditional_weight</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span>
-                                          <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">search_results</span><span class="p">)</span>
+<span></span>#6 hybrid search combining traditional and nlp vector search
+search_results = vi_client.hybrid_search(collection_name, &#39;Peyton Men&#39;,
+                                          text_encoder.encode(&#39;Peyton Men&#39;),
+                                          [&#39;question_vector_&#39;], [&#39;question&#39;],
+                                          traditional_weight=0.015,
+                                          page_size=5)
+vi_client.results_to_df(search_results)
 </pre></div>
 </div>
 </div>

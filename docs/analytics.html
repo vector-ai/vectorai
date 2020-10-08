@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -266,7 +265,7 @@
 
 <dl class="py method">
 <dt id="vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity">
-<code class="sig-name descname">plot_1d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">anchor_document</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anchor_index</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">'h'</span></em>, <em class="sig-param"><span class="n">barmode</span><span class="o">=</span><span class="default_value">'group'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_1d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">anchor_document</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anchor_index</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">'h'</span></em>, <em class="sig-param"><span class="n">barmode</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">'group'</span></em>, <em class="sig-param"><span class="n">num_cols</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_axis_tickangle</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 15</span></em>, <em class="sig-param"><span class="n">x_axis_tickangle</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare 1 document against other documents.
 Ensure that the name is unique, otherwise the plot will simply take the mean.</p>
 <dl class="field-list simple">
@@ -277,7 +276,12 @@ Ensure that the name is unique, otherwise the plot will simply take the mean.</p
 <li><p><strong>label</strong> – the x label for the bar plot</p></li>
 <li><p><strong>anchor_document</strong> – the document to compare it on</p></li>
 <li><p><strong>anchor_index</strong> – the anchor index to compare it on</p></li>
-<li><p><strong>orientation</strong> – The orientation of the bar chart</p></li>
+<li><p><strong>orientation</strong> – The orientation of the bar chart. Can be ‘v’ (vertical) or ‘h’ (horizontal)</p></li>
+<li><p><strong>num_cols</strong> – The number of columns. The default will put everything into 1 row. If you want to</p></li>
+<li><p><strong>things into multiple rows</strong> (<em>put</em>) – </p></li>
+<li><p><strong>please reduce the number of columns.</strong> (<em>then</em>) – </p></li>
+<li><p><strong>y_axis_tickangle</strong> – This will change the tick angles of the y axis in the vertical chart.</p></li>
+<li><p><strong>x_axis_tickangle</strong> – This will change the tick angels of the x axis in the vertical chart.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

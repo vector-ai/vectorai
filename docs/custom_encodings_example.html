@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -458,10 +457,10 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vecdb_url</span> <span class="o">=</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span>
-<span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;your_username&#39;</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="s1">&#39;your_api_key&#39;</span>
-<span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;your_collection_name&#39;</span>
+<span></span>vecdb_url = &#39;https://api.vctr.ai&#39;
+username = &#39;your_username&#39;
+api_key = &#39;your_api_key&#39;
+collection_name = &#39;your_collection_name&#39;
 </pre></div>
 </div>
 </div>
@@ -474,7 +473,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.models.base</span> <span class="kn">import</span> <span class="n">ViText2Vec</span><span class="p">,</span> <span class="n">ViAudio2Vec</span><span class="p">,</span> <span class="n">ViImage2Vec</span>
+<span></span>from vectorai.models.base import ViText2Vec, ViAudio2Vec, ViImage2Vec
 </pre></div>
 </div>
 </div>
@@ -484,14 +483,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Vi is the ultimate database to upload vectors.&quot;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;The authors of Vi are both named Jacky.&quot;</span>
-    <span class="p">}</span>
-<span class="p">]</span>
+<span></span>texts = [
+    {
+        &quot;text&quot;: &quot;Vi is the ultimate database to upload vectors.&quot;
+    },
+    {
+        &quot;text&quot;: &quot;The authors of Vi are both named Jacky.&quot;
+    }
+]
 </pre></div>
 </div>
 </div>
@@ -500,9 +499,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%%capture</span>
-<span class="kn">import</span> <span class="nn">tensorflow_hub</span> <span class="k">as</span> <span class="nn">hub</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;https://tfhub.dev/google/universal-sentence-encoder-large/5&quot;</span><span class="p">)</span>
+<span></span>%%capture
+import tensorflow_hub as hub
+model = hub.load(&quot;https://tfhub.dev/google/universal-sentence-encoder-large/5&quot;)
 </pre></div>
 </div>
 </div>
@@ -511,15 +510,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+<span></span>from vectorai import ViClient
+vi_client = ViClient(username, api_key)
 
-<span class="c1"># Here, we want to inherit from the base class in order.</span>
-<span class="k">class</span> <span class="nc">USEEncoder</span><span class="p">(</span><span class="n">ViText2Vec</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">encode_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Encode text an item level if possible, otherwise encode string directly.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+# Here, we want to inherit from the base class in order.
+class USEEncoder(ViText2Vec):
+    def encode_text(self, text):
+        &quot;&quot;&quot;Encode text an item level if possible, otherwise encode string directly.
+        &quot;&quot;&quot;
+        return model(text)
 </pre></div>
 </div>
 </div>
@@ -536,8 +535,8 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">encoder</span> <span class="o">=</span> <span class="n">USEEncoder</span><span class="p">()</span>
-<span class="n">vectors</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode_text</span><span class="p">([</span><span class="s2">&quot;HI&quot;</span><span class="p">])</span>
+<span></span>encoder = USEEncoder()
+vectors = encoder.encode_text([&quot;HI&quot;])
 </pre></div>
 </div>
 </div>
@@ -546,9 +545,9 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># This will automatically instantiate a bulk-encoding methodology.</span>
-<span class="n">vectors</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">bulk_encode_text</span><span class="p">([</span><span class="s2">&quot;Hi&quot;</span><span class="p">,</span> <span class="s2">&quot;Aman!&quot;</span><span class="p">])</span>
-<span class="n">vectors</span>
+<span></span># This will automatically instantiate a bulk-encoding methodology.
+vectors = encoder.bulk_encode_text([&quot;Hi&quot;, &quot;Aman!&quot;])
+vectors
 </pre></div>
 </div>
 </div>
@@ -570,8 +569,8 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Automatically bulk-encode items as well</span>
-<span class="n">vectors</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">bulk_encode_text</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">text_input_field</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">vector_output_field</span><span class="o">=</span><span class="s2">&quot;text_vector_&quot;</span><span class="p">)</span>
+<span></span># Automatically bulk-encode items as well
+vectors = encoder.bulk_encode_text(texts, text_input_field=&quot;text&quot;, vector_output_field=&quot;text_vector_&quot;)
 </pre></div>
 </div>
 </div>
@@ -586,7 +585,7 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.models</span> <span class="kn">import</span> <span class="n">Transformer2Vec</span>
+<span></span>from vectorai.models import Transformer2Vec
 </pre></div>
 </div>
 </div>
@@ -595,7 +594,7 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Transformer2Vec</span><span class="p">(</span><span class="s1">&#39;distilbert&#39;</span><span class="p">)</span>
+<span></span>encoder = Transformer2Vec(&#39;distilbert&#39;)
 </pre></div>
 </div>
 </div>
@@ -604,7 +603,7 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vector</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode_text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Vectors are cool.&quot;</span><span class="p">)</span>
+<span></span>vector = encoder.encode_text(text=&quot;Vectors are cool.&quot;)
 </pre></div>
 </div>
 </div>
@@ -613,7 +612,7 @@ Logged in. Welcome test. To view list of available collections, call list_collec
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">encoder</span><span class="o">.</span><span class="n">bulk_encode_text</span><span class="p">(</span><span class="n">texts</span><span class="o">=</span><span class="n">texts</span><span class="p">,</span> <span class="n">text_input_field</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">vector_output_field</span><span class="o">=</span><span class="s1">&#39;text_distilbert_vector_&#39;</span><span class="p">)</span>
+<span></span>encoder.bulk_encode_text(texts=texts, text_input_field=&#39;text&#39;, vector_output_field=&#39;text_distilbert_vector_&#39;)
 </pre></div>
 </div>
 </div>
@@ -631,9 +630,9 @@ Finished updating documents with additional field.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
-<span class="kn">from</span> <span class="nn">tensorflow.keras.losses</span> <span class="kn">import</span> <span class="n">MeanSquaredError</span>
-<span class="kn">from</span> <span class="nn">tensorflow.keras.metrics</span> <span class="kn">import</span> <span class="n">MeanAbsoluteError</span>
+<span></span>from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.losses import MeanSquaredError
+from tensorflow.keras.metrics import MeanAbsoluteError
 </pre></div>
 </div>
 </div>
@@ -642,9 +641,9 @@ Finished updating documents with additional field.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">x_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">]</span>
-<span class="n">y_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;store_id&#39;</span><span class="p">]</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">()</span>
+<span></span>x_fields = [&#39;name&#39;, &#39;description&#39;]
+y_fields = [&#39;store_id&#39;]
+optimizer = Adam()
 </pre></div>
 </div>
 </div>
@@ -653,10 +652,10 @@ Finished updating documents with additional field.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;product.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
-    <span class="n">documents</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-<span class="c1"># Select the first 300 documents</span>
-<span class="n">documents</span> <span class="o">=</span> <span class="n">documents</span><span class="p">[:</span><span class="mi">300</span><span class="p">]</span>
+<span></span>with open(&#39;product.json&#39;, &#39;r&#39;) as infile:
+    documents = json.load(infile)
+# Select the first 300 documents
+documents = documents[:300]
 </pre></div>
 </div>
 </div>
@@ -665,13 +664,13 @@ Finished updating documents with additional field.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">encoder</span><span class="o">.</span><span class="n">run_finetuning_for_classification</span><span class="p">(</span>
-    <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span>
-    <span class="n">x_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">],</span>
-    <span class="n">y_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span>
-    <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(),</span>
-    <span class="n">loss</span><span class="o">=</span><span class="n">MeanSquaredError</span><span class="p">(),</span>
-    <span class="n">metric</span><span class="o">=</span><span class="p">[</span><span class="n">MeanAbsoluteError</span><span class="p">()])</span>
+<span></span>encoder.run_finetuning_for_classification(
+    documents=documents,
+    x_fields=[&#39;name&#39;, &#39;description&#39;],
+    y_fields=[&#39;price&#39;],
+    optimizer=Adam(),
+    loss=MeanSquaredError(),
+    metric=[MeanAbsoluteError()])
 </pre></div>
 </div>
 </div>
@@ -693,8 +692,8 @@ Saved model. This can be found in /home/jacky/.cache/transformers/vectorai-train
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vectors</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode_text</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">document_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">],</span>
-                    <span class="n">use_classification_model</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span>vectors = encoder.encode_text(document=documents[0], document_fields=[&#39;name&#39;, &#39;description&#39;],
+                    use_classification_model=True)
 </pre></div>
 </div>
 </div>
@@ -704,9 +703,9 @@ Saved model. This can be found in /home/jacky/.cache/transformers/vectorai-train
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vector</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode_text</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">document_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">],</span>
-                    <span class="n">use_classification_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">classification_save_dir</span><span class="o">=</span><span class="s1">&#39;/home/jacky/.cache/transformers/vectorai-trained-distilbert-base-cased&#39;</span><span class="p">)</span>
+<span></span>vector = encoder.encode_text(document=documents[0], document_fields=[&#39;name&#39;, &#39;description&#39;],
+                    use_classification_model=True,
+                    classification_save_dir=&#39;/home/jacky/.cache/transformers/vectorai-trained-distilbert-base-cased&#39;)
 </pre></div>
 </div>
 </div>

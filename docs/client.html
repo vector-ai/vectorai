@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -790,6 +789,18 @@ e.g. “product_description_vector_”</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.compare_vector_search_results">
+<code class="sig-name descname">compare_vector_search_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">id_document</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">id_value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.compare_vector_search_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare vector results
+:param vector_fields: The list of vectors
+:param id_value: The value of the ID of the document
+:param id_document: The document with the id_value in it
+:param label: The label for the vector</p>
+<p class="rubric">Example</p>
+<p>compare_vector_search_results(collection_name, vector_fields)</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.create_collection">
 <code class="sig-name descname">create_collection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">collection_schema</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.create_collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a collection</p>
@@ -1256,7 +1267,7 @@ e.g. “product_description_vector_”</p>
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.insert_df">
-<code class="sig-name descname">insert_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_df" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert dataframe into a collection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1264,6 +1275,7 @@ e.g. “product_description_vector_”</p>
 <li><p><strong>collection_name</strong> – Name of collection</p></li>
 <li><p><strong>df</strong> – Pandas DataFrame</p></li>
 <li><p><strong>models</strong> – Models with an encode method</p></li>
+<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1299,7 +1311,7 @@ e.g. “product_description_vector_”</p>
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.insert_documents">
-<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert documents into a collection with an option to encode with models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1308,6 +1320,7 @@ e.g. “product_description_vector_”</p>
 <li><p><strong>documents</strong> – All documents.</p></li>
 <li><p><strong>models</strong> – Models with an encode method</p></li>
 <li><p><strong>use_bulk_encode</strong> – Use the bulk_encode method in models</p></li>
+<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
 </ul>
 </dd>
 </dl>

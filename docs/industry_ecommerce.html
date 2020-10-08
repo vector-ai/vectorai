@@ -33,7 +33,6 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -486,10 +485,10 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;VI_USERNAME&#39;</span><span class="p">]</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;VI_API_KEY&#39;</span><span class="p">]</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://api.vctr.ai&quot;</span>
+<span></span>import os
+username = os.environ[&#39;VI_USERNAME&#39;]
+api_key = os.environ[&#39;VI_API_KEY&#39;]
+url = &quot;https://api.vctr.ai&quot;
 </pre></div>
 </div>
 </div>
@@ -498,7 +497,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;ecommerce&#39;</span>
+<span></span>collection_name = &#39;ecommerce&#39;
 </pre></div>
 </div>
 </div>
@@ -507,12 +506,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
-<span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span></span>from vectorai.client import ViClient
+vi_client = ViClient(username, api_key, url)
 
-<span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span><span class="p">,</span> <span class="n">ViImage2Vec</span><span class="p">,</span> <span class="n">ViAudio2Vec</span>
-<span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span><span class="p">)</span>
-<span class="n">image_encoder</span> <span class="o">=</span> <span class="n">ViImage2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;https://api.vctr.ai&#39;</span><span class="p">)</span>
+from vectorai.models.deployed import ViText2Vec, ViImage2Vec, ViAudio2Vec
+text_encoder = ViText2Vec(username, api_key, &#39;https://api.vctr.ai&#39;)
+image_encoder = ViImage2Vec(username, api_key, &#39;https://api.vctr.ai&#39;)
 </pre></div>
 </div>
 </div>
@@ -522,13 +521,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span>
-    <span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">documents</span><span class="p">,</span>
-    <span class="n">models</span><span class="o">=</span><span class="p">{</span>
-        <span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">)</span>
+<span></span>vi_client.insert_documents(
+    collection_name,
+    documents,
+    models={
+        &#39;name&#39;:text_encoder.encode,
+    }
+)
 </pre></div>
 </div>
 </div>
@@ -538,8 +537,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">job</span> <span class="o">=</span> <span class="n">vdb_client</span><span class="o">.</span><span class="n">encode_image_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;image_url&#39;</span><span class="p">)</span>
-<span class="n">vdb_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
+<span></span>job = vdb_client.encode_image_job(collection_name, &#39;image_url&#39;)
+vdb_client.wait_till_jobs_complete(collection_name, job[&#39;job_id&#39;], job[&#39;job_name&#39;])
 </pre></div>
 </div>
 </div>
@@ -552,11 +551,11 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;samsung phone&#39;</span><span class="p">),</span> <span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span></span>search_results = vi_client.search(collection_name,
+    text_encoder.encode(&#39;samsung phone&#39;), &#39;name_vector_&#39;, page_size=5, page=1)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span>
-    <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+vi_client.show_json(search_results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;],
+    image_fields=[&#39;image_url&#39;], image_width=100)
 </pre></div>
 </div>
 </div>
@@ -620,10 +619,10 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">product_id</span> <span class="o">=</span> <span class="s1">&#39;1_50198&#39;</span>
-<span class="n">search_by_id_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span> <span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_by_id_results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span>
-    <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span></span>product_id = &#39;1_50198&#39;
+search_by_id_results = vi_client.search_by_id(collection_name, product_id, &#39;name_vector_&#39;, page_size=3)
+vi_client.show_json(search_by_id_results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;],
+    image_fields=[&#39;image_url&#39;], image_width=100)
 </pre></div>
 </div>
 </div>
@@ -693,9 +692,9 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;R170NZKAXSA&#39;</span><span class="p">),</span> <span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span>
-    <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span></span>search_results = vi_client.search(collection_name, text_encoder.encode(&#39;R170NZKAXSA&#39;), &#39;name_vector_&#39;, page_size=3)
+vi_client.show_json(search_results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;],
+    image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -745,13 +744,13 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">search_results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">hybrid_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;R170NZKAXSA&#39;</span><span class="p">,</span>
-      <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;R170NZKAXSA&#39;</span><span class="p">),</span>
-      <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">],</span> <span class="n">text_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
-      <span class="n">traditional_weight</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span>
-      <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">search_results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span>
-    <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span></span>search_results = vi_client.hybrid_search(collection_name, &#39;R170NZKAXSA&#39;,
+      text_encoder.encode(&#39;R170NZKAXSA&#39;),
+      fields=[&#39;name_vector_&#39;], text_fields=[&#39;name&#39;],
+      traditional_weight=0.015,
+      page_size=3)
+vi_client.show_json(search_results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;],
+    image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -805,7 +804,7 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">collection_schema</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>vi_client.collection_schema(collection_name)
 </pre></div>
 </div>
 </div>
@@ -875,7 +874,7 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">collection_stats</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>vi_client.collection_stats(collection_name)
 </pre></div>
 </div>
 </div>
@@ -897,7 +896,7 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">list_collections</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+<span></span>vi_client.list_collections()[0:5]
 </pre></div>
 </div>
 </div>
@@ -920,9 +919,9 @@ dict_keys([&#39;_id&#39;, &#39;short_description&#39;, &#39;on_special&#39;, &#3
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">document</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="s1">&#39;1_50198&#39;</span><span class="p">,</span> <span class="n">include_vector</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">document</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">document</span><span class="p">[</span><span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">document</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">document</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">],</span> <span class="n">document</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">],</span> <span class="n">document</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]</span>
+<span></span>document = vi_client.id(collection_name, &#39;1_50198&#39;, include_vector=False)
+document.keys()
+document[&#39;sku&#39;], document[&#39;name&#39;], document[&#39;description&#39;], document[&#39;categories&#39;], document[&#39;manufacturer&#39;]
 </pre></div>
 </div>
 </div>
@@ -961,7 +960,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">facets</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">asc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;attribute_set&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">])</span>
+<span></span>vi_client.facets(collection_name, page=1, page_size=20, asc=False, fields=[&#39;attribute_set&#39;, &#39;price&#39;, &#39;manufacturer&#39;])
 </pre></div>
 </div>
 </div>
@@ -1020,8 +1019,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">filter_query</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">random_filter_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_filters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numeric_filters</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">filter_query</span>
+<span></span>filter_query = vi_client.random_filter_query(collection_name, text_filters=1, numeric_filters=0)
+filter_query
 </pre></div>
 </div>
 </div>
@@ -1043,7 +1042,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">vi_client</span><span class="o">.</span><span class="n">filters</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">filter_query</span><span class="p">))[[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">]]</span>
+<span></span>vi_client.results_to_df(vi_client.filters(collection_name, filter_query))[[&#39;_id&#39;, &#39;name&#39;, &#39;description&#39;, &#39;sku&#39;]]
 </pre></div>
 </div>
 </div>
@@ -1158,20 +1157,20 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">advanced_search_query</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;text&#39;</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;vector&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;iphone earphones&#39;</span><span class="p">),</span> <span class="s1">&#39;fields&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">]}</span>
-<span class="p">}</span>
+<span></span>advanced_search_query = {
+    &#39;text&#39; : {&#39;vector&#39;: text_encoder.encode(&#39;iphone earphones&#39;), &#39;fields&#39; : [&#39;name_vector_&#39;]}
+}
 
-<span class="n">filter_query</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;attribute_set&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;filter_type&#39;</span><span class="p">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;condition_value&#39;</span><span class="p">:</span> <span class="s1">&#39;Bluetooth Headphones&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;==&#39;</span><span class="p">}</span>
-<span class="p">]</span>
+filter_query = [
+    {&#39;field&#39;: &#39;attribute_set&#39;,
+    &#39;filter_type&#39;: &#39;text&#39;,
+    &#39;condition_value&#39;: &#39;Bluetooth Headphones&#39;,
+    &#39;condition&#39;: &#39;==&#39;}
+]
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">advanced_search_query</span><span class="p">,</span>
-                                    <span class="n">filters</span><span class="o">=</span><span class="n">filter_query</span><span class="p">,</span> <span class="n">include_facets</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                    <span class="n">min_score</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">facets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;attribute_set&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">])</span>
+results = vi_client.advanced_search(collection_name, advanced_search_query,
+                                    filters=filter_query, include_facets=True,
+                                    min_score=0.01, page_size=3, facets=[&#39;attribute_set&#39;, &#39;price&#39;])
 </pre></div>
 </div>
 </div>
@@ -1180,7 +1179,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">results</span><span class="p">)[[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">]]</span>
+<span></span>vi_client.results_to_df(results)[[&#39;_id&#39;, &#39;name&#39;, &#39;description&#39;, &#39;sku&#39;]]
 </pre></div>
 </div>
 </div>
@@ -1244,7 +1243,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;facets&#39;</span><span class="p">]</span>
+<span></span>results[&#39;facets&#39;]
 </pre></div>
 </div>
 </div>
@@ -1283,8 +1282,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">image_vector</span> <span class="o">=</span> <span class="n">image_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;https://specials-images.forbesimg.com/imageserve/5e19e401a854780006e84e28/960x0.jpg?fit=scale&#39;</span><span class="p">)</span>
-<span class="n">ipd</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="s1">&#39;https://specials-images.forbesimg.com/imageserve/5e19e401a854780006e84e28/960x0.jpg&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span></span>image_vector = image_encoder.encode(&#39;https://specials-images.forbesimg.com/imageserve/5e19e401a854780006e84e28/960x0.jpg?fit=scale&#39;)
+ipd.Image(&#39;https://specials-images.forbesimg.com/imageserve/5e19e401a854780006e84e28/960x0.jpg&#39;, width=200)
 </pre></div>
 </div>
 </div>
@@ -1301,14 +1300,14 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">advanced_search_query</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;vector&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;256gb&#39;</span><span class="p">),</span> <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">]},</span>
-    <span class="s1">&#39;image_url&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;vector&#39;</span><span class="p">:</span> <span class="n">image_vector</span><span class="p">,</span> <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;image_url_vector_&#39;</span><span class="p">]}</span>
-<span class="p">}</span>
+<span></span>advanced_search_query = {
+    &#39;text&#39;: {&#39;vector&#39;: text_encoder.encode(&#39;256gb&#39;), &#39;fields&#39;: [&#39;name_vector_&#39;]},
+    &#39;image_url&#39;: {&#39;vector&#39;: image_vector, &#39;fields&#39;: [&#39;image_url_vector_&#39;]}
+}
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">advanced_search_query</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+results = vi_client.advanced_search(collection_name, advanced_search_query, page_size=3)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -1366,10 +1365,10 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">advanced_search_query</span><span class="p">,</span>
-                                    <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sum_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span>results = vi_client.advanced_search(collection_name, advanced_search_query,
+                                    page_size=3, sum_fields=False)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">])</span>
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;description&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;])
 </pre></div>
 </div>
 </div>
@@ -1427,14 +1426,14 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">advanced_search_query</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;vector&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;iphone 11&#39;</span><span class="p">),</span> <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">}},</span>
-    <span class="s1">&#39;image_url&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;vector&#39;</span><span class="p">:</span> <span class="n">image_vector</span><span class="p">,</span> <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image_url_vector_&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">}}</span>
-<span class="p">}</span>
+<span></span>advanced_search_query = {
+    &#39;text&#39;: {&#39;vector&#39;: text_encoder.encode(&#39;iphone 11&#39;), &#39;fields&#39;: {&#39;name_vector_&#39;:0.9}},
+    &#39;image_url&#39;: {&#39;vector&#39;: image_vector, &#39;fields&#39;: {&#39;image_url_vector_&#39;:0.5}}
+}
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">advanced_search_query</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+results = vi_client.advanced_search(collection_name, advanced_search_query, page_size=3)
 
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -1494,11 +1493,11 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">product_id</span> <span class="o">=</span> <span class="s1">&#39;1_50017&#39;</span>
+<span></span>product_id = &#39;1_50017&#39;
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span> <span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span>
-    <span class="n">nrows</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+results = vi_client.search_by_id(collection_name, product_id, &#39;name_vector_&#39;, page_size=10)
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;],
+    nrows=10, image_width=80)
 </pre></div>
 </div>
 </div>
@@ -1598,9 +1597,9 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search_by_id</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span>
-                                          <span class="p">{</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;image_url_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span></span>results = vi_client.advanced_search_by_id(collection_name, product_id,
+                                          {&#39;name_vector_&#39;:1, &#39;image_url_vector_&#39;:1}, page_size=3)[&#39;results&#39;]
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -1648,8 +1647,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </div>
 <div class="section" id="Multi-Item-Recommendations-(Many--&gt;-Many)">
 <h2>Multi Item Recommendations (Many -&gt; Many)<a class="headerlink" href="#Multi-Item-Recommendations-(Many-->-Many)" title="Permalink to this headline">¶</a></h2>
-<p>e.g. I liked product A+B, recommend me products similar to it</p>
-<p>e.g. A like Product A only about 7/10, I like Product B 10/10</p>
+<p>e.g. I liked product A+B, recommend me products similar to it</p>
+<p>e.g. A like Product A only about 7/10, I like Product B 10/10</p>
 <p><span class="math notranslate nohighlight">\(0.7\times Vector_{ProductA} + 1\times Vector_{ProductB} = Search Query\)</span></p>
 <p>Recommendations for multiple products.</p>
 <div class="nbinput docutils container">
@@ -1657,8 +1656,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">search_by_ids</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1_50017&#39;</span><span class="p">,</span> <span class="s1">&#39;1_50021&#39;</span><span class="p">],</span> <span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span></span>results = vi_client.search_by_ids(collection_name, [&#39;1_50017&#39;, &#39;1_50021&#39;], &#39;name_vector_&#39;, page_size=5)
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=100)
 </pre></div>
 </div>
 </div>
@@ -1722,10 +1721,10 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search_by_ids</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;1_50017&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;1_50021&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-                                           <span class="p">{</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;image_url_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-                                           <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">vector_operation</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span></span>results = vi_client.advanced_search_by_ids(collection_name, {&#39;1_50017&#39;:1, &#39;1_50021&#39;:1},
+                                           {&#39;name_vector_&#39;:1, &#39;image_url_vector_&#39;:1},
+                                           page_size=5, vector_operation=&#39;mean&#39;)
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=100)
 </pre></div>
 </div>
 </div>
@@ -1791,11 +1790,11 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search_by_positive_negative_ids</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span>
-    <span class="p">{</span><span class="s1">&#39;1_50017&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;1_50018&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;1_50021&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-    <span class="p">{</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">vector_operation</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span></span>results = vi_client.advanced_search_by_positive_negative_ids(collection_name,
+    {&#39;1_50017&#39;:1, &#39;1_50018&#39;:1}, {&#39;1_50021&#39;:1},
+    {&#39;name_vector_&#39;:1}, page_size=5,
+    vector_operation=&#39;sum&#39;)
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=150)
 </pre></div>
 </div>
 </div>
@@ -1863,15 +1862,15 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_search_with_positive_negative_ids_as_history</span><span class="p">(</span>
-    <span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;Delonghi&#39;</span><span class="p">),</span>
-    <span class="n">positive_document_ids</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1_50017&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;1_50018&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-    <span class="n">negative_document_ids</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1_50021&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-    <span class="n">fields</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span>
-    <span class="n">page_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">vector_operation</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">show_json</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">selected_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;sku&#39;</span><span class="p">],</span> <span class="n">image_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">],</span> <span class="n">image_width</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span></span>results = vi_client.advanced_search_with_positive_negative_ids_as_history(
+    collection_name,
+    text_encoder.encode(&#39;Delonghi&#39;),
+    positive_document_ids={&#39;1_50017&#39;:1, &#39;1_50018&#39;:1},
+    negative_document_ids={&#39;1_50021&#39;:1},
+    fields={&#39;name_vector_&#39;:1},
+    page_size=5,
+    vector_operation=&#39;sum&#39;)
+vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#39;sku&#39;], image_fields=[&#39;image_url&#39;], image_width=100)
 </pre></div>
 </div>
 </div>
@@ -1944,8 +1943,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">aggregation_query</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">random_aggregation_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">aggregation_query</span>
+<span></span>aggregation_query = vi_client.random_aggregation_query(collection_name, groupby=1, metrics=1)
+aggregation_query
 </pre></div>
 </div>
 </div>
@@ -1965,7 +1964,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">aggregation_query</span><span class="p">)</span>
+<span></span>vi_client.aggregate(collection_name, aggregation_query)
 </pre></div>
 </div>
 </div>
@@ -1991,11 +1990,11 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">aggregation_query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;groupby&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span>
-   <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span>
-   <span class="s1">&#39;agg&#39;</span><span class="p">:</span> <span class="s1">&#39;texts&#39;</span><span class="p">}],</span>
- <span class="s1">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;agg&#39;</span><span class="p">:</span> <span class="s1">&#39;avg&#39;</span><span class="p">}]}</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">aggregation_query</span><span class="p">)</span>
+<span></span>aggregation_query = {&#39;groupby&#39;: [{&#39;name&#39;: &#39;manufacturer&#39;,
+   &#39;field&#39;: &#39;manufacturer&#39;,
+   &#39;agg&#39;: &#39;texts&#39;}],
+ &#39;metrics&#39;: [{&#39;name&#39;: &#39;price&#39;, &#39;field&#39;: &#39;price&#39;, &#39;agg&#39;: &#39;avg&#39;}]}
+vi_client.aggregate(collection_name, aggregation_query)
 </pre></div>
 </div>
 </div>
@@ -2032,8 +2031,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">aggregated_collection_name</span> <span class="o">=</span> <span class="s1">&#39;aggregated_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
-<span class="n">aggregation_name</span> <span class="o">=</span> <span class="s1">&#39;aggregation_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+<span></span>aggregated_collection_name = &#39;aggregated_{}&#39;.format(collection_name)
+aggregation_name = &#39;aggregation_{}&#39;.format(collection_name)
 </pre></div>
 </div>
 </div>
@@ -2042,14 +2041,14 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">publish_aggregation</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span>
-                               <span class="n">aggregation_query</span><span class="p">,</span>
-                               <span class="n">aggregation_name</span><span class="o">=</span><span class="n">aggregation_name</span><span class="p">,</span>
-                               <span class="n">aggregated_collection_name</span><span class="o">=</span><span class="n">aggregated_collection_name</span><span class="p">,</span>
-                               <span class="n">description</span><span class="o">=</span><span class="s1">&#39;some aggregation for </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">collection_name</span><span class="p">),</span>
-                               <span class="n">refresh_time</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                               <span class="n">start_immediately</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">start_aggregation</span><span class="p">(</span><span class="n">aggregation_name</span><span class="p">)</span>
+<span></span>vi_client.publish_aggregation(collection_name,
+                               aggregation_query,
+                               aggregation_name=aggregation_name,
+                               aggregated_collection_name=aggregated_collection_name,
+                               description=&#39;some aggregation for {}&#39;.format(collection_name),
+                               refresh_time=2,
+                               start_immediately=False)
+vi_client.start_aggregation(aggregation_name)
 </pre></div>
 </div>
 </div>
@@ -2078,7 +2077,7 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">results_to_df</span><span class="p">(</span><span class="n">vi_client</span><span class="o">.</span><span class="n">retrieve_documents</span><span class="p">(</span><span class="n">aggregated_collection_name</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span></span>vi_client.results_to_df(vi_client.retrieve_documents(aggregated_collection_name, 3))
 </pre></div>
 </div>
 </div>
@@ -2121,10 +2120,10 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">dr_job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">dimensionality_reduction_job</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">cluster_job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_clustering_job</span><span class="p">(</span>
-    <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span>
-    <span class="n">n_clusters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span></span>dr_job = vi_client.dimensionality_reduction_job(collection_name, vector_field=&#39;name_vector_&#39;, n_components=2)
+cluster_job = vi_client.advanced_clustering_job(
+    collection_name=collection_name, alias=&#39;default&#39;, vector_field=&#39;name_vector_&#39;,
+    n_clusters=50, n_init=5)
 </pre></div>
 </div>
 </div>
@@ -2134,8 +2133,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">dr_job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">dr_job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">cluster_job</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span> <span class="n">cluster_job</span><span class="p">[</span><span class="s1">&#39;job_name&#39;</span><span class="p">])</span>
+<span></span>vi_client.wait_till_jobs_complete(collection_name, dr_job[&#39;job_id&#39;], dr_job[&#39;job_name&#39;])
+vi_client.wait_till_jobs_complete(collection_name, cluster_job[&#39;job_id&#39;], cluster_job[&#39;job_name&#39;])
 </pre></div>
 </div>
 </div>
@@ -2145,8 +2144,8 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_cluster_facets</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span>
-    <span class="n">facets_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute_set&#39;</span><span class="p">])[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span>
+<span></span>vi_client.advanced_cluster_facets(collection_name, vector_field=&#39;name_vector_&#39;,
+    facets_fields=[&#39;manufacturer&#39;, &#39;attribute_set&#39;])[&#39;0&#39;]
 </pre></div>
 </div>
 </div>
@@ -2219,10 +2218,10 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_cluster_aggregate</span><span class="p">(</span>
-    <span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">aggregation_query</span><span class="p">,</span>
-    <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">)[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span>
+<span></span>vi_client.advanced_cluster_aggregate(
+    collection_name,
+    aggregation_query,
+    vector_field=&#39;name_vector_&#39;)[&#39;0&#39;]
 </pre></div>
 </div>
 </div>
@@ -2249,10 +2248,10 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">advanced_cluster_aggregate</span><span class="p">(</span>
-    <span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">aggregation_query</span><span class="p">,</span>
-    <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">)[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>
+<span></span>vi_client.advanced_cluster_aggregate(
+    collection_name,
+    aggregation_query,
+    vector_field=&#39;name_vector_&#39;)[&#39;1&#39;]
 </pre></div>
 </div>
 </div>
@@ -2273,14 +2272,14 @@ dict_keys([&#39;short_description&#39;, &#39;on_special&#39;, &#39;categories_se
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_dimensionality_reduced_vectors</span><span class="p">(</span>
-    <span class="n">collection</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
-    <span class="n">cluster_field</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span>
-    <span class="n">cluster_label</span><span class="o">=</span><span class="s1">&#39;_clusters_.name_vector_.default&#39;</span><span class="p">,</span>
-    <span class="n">point_label</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span>
-    <span class="n">dim_reduction_field</span><span class="o">=</span><span class="s1">&#39;_dr_.default.2.name_vector_&#39;</span><span class="p">,</span>
-    <span class="n">include_centroids</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+<span></span>vi_client.plot_dimensionality_reduced_vectors(
+    collection=collection_name,
+    cluster_field=&#39;name_vector_&#39;,
+    cluster_label=&#39;_clusters_.name_vector_.default&#39;,
+    point_label=&#39;name&#39;,
+    dim_reduction_field=&#39;_dr_.default.2.name_vector_&#39;,
+    include_centroids=True,
+    alias=&#39;default&#39;)
 </pre></div>
 </div>
 </div>
@@ -2429,7 +2428,7 @@ if (outputEl) {{
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">docs</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">retrieve_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)[</span><span class="s1">&#39;documents&#39;</span><span class="p">]</span>
+<span></span>docs = vi_client.retrieve_documents(collection_name)[&#39;documents&#39;]
 </pre></div>
 </div>
 </div>
@@ -2438,7 +2437,7 @@ if (outputEl) {{
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_1d_cosine_similarity</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">vector_fields</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">anchor_document</span><span class="o">=</span><span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span></span>vi_client.plot_1d_cosine_similarity(docs, vector_fields=&#39;name_vector_&#39;, label=&#39;name&#39;, anchor_document=docs[0])
 </pre></div>
 </div>
 </div>
@@ -2495,7 +2494,7 @@ if (outputEl) {{
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_2d_cosine_similarity</span><span class="p">(</span><span class="n">docs</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">docs</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">vector_fields</span><span class="o">=</span><span class="s1">&#39;name_vector_&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+<span></span>vi_client.plot_2d_cosine_similarity(docs[:20], docs[:2], vector_fields=&#39;name_vector_&#39;, label=&#39;name&#39;)
 </pre></div>
 </div>
 </div>
@@ -2556,9 +2555,9 @@ if (outputEl) {{
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vi_client</span><span class="o">.</span><span class="n">stop_aggregation</span><span class="p">(</span><span class="n">aggregation_name</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_published_aggregation</span><span class="p">(</span><span class="n">aggregation_name</span><span class="p">)</span>
-<span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">aggregated_collection_name</span><span class="p">)</span>
+<span></span>vi_client.stop_aggregation(aggregation_name)
+vi_client.delete_published_aggregation(aggregation_name)
+vi_client.delete_collection(aggregated_collection_name)
 </pre></div>
 </div>
 </div>
