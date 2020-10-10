@@ -59,7 +59,7 @@ class ViImageArray2Vec(ViDeployedModel):
         self.collection_name = collection_name
 
     def encode(self, images):
-        return _vector_operation(
+        return self._vector_operation(
             requests.get(
                 url="{}/collection/bulk_encode_image".format(self.url),
                 params={
