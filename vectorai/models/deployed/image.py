@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from .base import ViDeployedModel
-
+from typing import List
 
 class ViImage2Vec(ViDeployedModel):
     def encode(self, image):
@@ -13,6 +13,20 @@ class ViImage2Vec(ViDeployedModel):
                 "api_key": self.api_key,
                 "collection_name": self.collection_name,
                 "image_url": image,
+            },
+        ).json()
+
+    def bulk_encode(self, images: List[str]):
+        """
+            Bulk convert text to vectors
+        """
+        return requests.get(
+            url="{}/collection/bulk_encode_image".format(self.url),
+            params={
+                "username": self.username,
+                "api_key": self.api_key,
+                "collection_name": self.collection_name,
+                "image_urls": images,
             },
         ).json()
 
@@ -46,18 +60,15 @@ class ViImageArray2Vec(ViDeployedModel):
 
     def encode(self, images):
         return _vector_operation(
-            [
-                requests.get(
-                    url="{}/collection/encode_image".format(self.url),
-                    params={
-                        "username": self.username,
-                        "api_key": self.api_key,
-                        "collection_name": self.collection_name,
-                        "image_url": image,
-                    },
-                ).json()
-                for image in images
-            ],
+            requests.get(
+                url="{}/collection/bulk_encode_image".format(self.url),
+                params={
+                    "username": self.username,
+                    "api_key": self.api_key,
+                    "collection_name": self.collection_name,
+                    "image_urls": images,
+                },
+            ).json(),
             vector_operation=self.vector_operation,
         )
 

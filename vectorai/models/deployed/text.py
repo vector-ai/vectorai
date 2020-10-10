@@ -74,7 +74,8 @@ class ViTextArray2Vec(ViDeployedModel):
                     "collection_name": self.collection_name,
                     "texts": texts,
                 }
-            ).json()
+            ).json(),
+            vector_operation=self.vector_operation,
         )
 
     @property
