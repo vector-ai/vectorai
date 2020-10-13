@@ -235,6 +235,7 @@ Args:
         page:int=1,
         page_size:int=10,
         asc:bool=False,
+        flatten:bool=True,
     ):
         """
 Aggregate a collection
@@ -270,6 +271,8 @@ Args:
 		Page of the results
 	asc:
 		Whether to sort results by ascending or descending order
+    flatten:
+        Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
         return requests.post(
             url="{}/collection/aggregate".format(self.url),
@@ -281,6 +284,7 @@ Args:
                 "page": page,
                 "page_size": page_size,
                 "asc": asc,
+                "flatten" : flatten
             },
         ).json()
 
