@@ -245,7 +245,7 @@
 
 <dl class="py method">
 <dt id="vectorai.api.cluster.ViClusterClient.cluster_aggregate">
-<code class="sig-name descname">cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_aggregate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flatten</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.cluster_aggregate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate every cluster in a collection</p>
 <p>Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.</p>
 <p>Only can be used after a vector field has been clustered with /cluster.</p>
@@ -256,7 +256,12 @@
 <li><p><strong>aggregation_query</strong> – Aggregation query to aggregate data</p></li>
 <li><p><strong>page_size</strong> – Size of each page of results</p></li>
 <li><p><strong>page</strong> – Page of the results</p></li>
-<li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
+<li><p><strong>asc</strong> – <p>Whether to sort results by ascending or descending order</p>
+<dl class="simple">
+<dt>flatten:</dt><dd><p>Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.</p>
+</dd>
+</dl>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -337,7 +342,7 @@ Advanced cluster allows for more parameters to tune and alias to name each diffe
 
 <dl class="py method">
 <dt id="vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate">
-<code class="sig-name descname">advanced_cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">advanced_cluster_aggregate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">aggregation_query</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'default'</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flatten</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.cluster.ViClusterClient.advanced_cluster_aggregate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate every cluster in a collection</p>
 <p>Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.</p>
 <p>Only can be used after a vector field has been clustered with /advanced_cluster.</p>
@@ -350,7 +355,12 @@ Advanced cluster allows for more parameters to tune and alias to name each diffe
 <li><p><strong>page</strong> – Page of the results</p></li>
 <li><p><strong>asc</strong> – Whether to sort results by ascending or descending order</p></li>
 <li><p><strong>vector_field</strong> – Clustered vector field</p></li>
-<li><p><strong>alias</strong> – Alias of a cluster</p></li>
+<li><p><strong>alias</strong> – <p>Alias of a cluster</p>
+<dl class="simple">
+<dt>flatten:</dt><dd><p>Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.</p>
+</dd>
+</dl>
+</p></li>
 </ul>
 </dd>
 </dl>
