@@ -57,6 +57,7 @@ Args:
         page: int = 1,
         page_size: int = 10,
         asc: bool = False,
+        flatten: bool = True,
     ):
         """
 Aggregate every cluster in a collection
@@ -76,6 +77,8 @@ Args:
 		Page of the results
 	asc:
 		Whether to sort results by ascending or descending order
+    flatten:
+        Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
         return requests.post(
             url="{}/collection/cluster_aggregate".format(self.url),
@@ -87,6 +90,7 @@ Args:
                 "page": page,
                 "page_size": page_size,
                 "asc": asc,
+                "flatten" : flatten
             },
         ).json()
 
@@ -232,7 +236,8 @@ Args:
         alias: str = "default",
         page: int = 1,
         page_size: int = 10,
-        asc: bool = False
+        asc: bool = False,
+        flatten:bool=True,
     ):
         """
 Aggregate every cluster in a collection
@@ -256,6 +261,8 @@ Args:
 		Clustered vector field
 	alias:
 		Alias of a cluster
+    flatten:
+        Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
         return requests.post(
             url="{}/collection/advanced_cluster_aggregate".format(self.url),
@@ -268,7 +275,8 @@ Args:
                 "page": page,
                 "page_size": page_size,
                 "asc": asc,
-                "alias": alias
+                "alias": alias,
+                "flatten" : flatten
             },
         ).json()
 
