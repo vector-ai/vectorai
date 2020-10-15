@@ -232,6 +232,8 @@ Args:
                 If true, includes _vector_ fields to return them.
             include_fields:
                 Adjust which fields are returned.
+            retrieve_chunk_size:
+                The number of documents to retrieve per request.
 
         Example:
             >>> from vectorai.client import ViClient
