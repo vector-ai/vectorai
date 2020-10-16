@@ -2,6 +2,7 @@ import time
 import pytest
 
 class TestCompare:
+    @pytest.mark.use_client
     def test_setup(self, test_client, test_collection_name):
         """
             Test Setup.
@@ -15,7 +16,7 @@ class TestCompare:
         [test_client.generate_vector(50) for x in range(num_of_docs)], documents)
         results = test_client.insert_documents(test_collection_name, documents)
         assert results['inserted_successfully'] == num_of_docs
-    
+    @pytest.mark.use_client
     @pytest.mark.parametrize("test_vector_fields", [("color_vector_"), ("color_2_vector_")])
     def test_compare_tables_simple(self, test_client, test_collection_name, test_vector_fields):
         """
@@ -26,7 +27,7 @@ class TestCompare:
         df = test_client.compare_vector_search_results(test_collection_name,
         vector_fields=[test_vector_fields], id_document=id_document, label='color')
         assert df.shape[0] > 0
-    
+    @pytest.mark.use_client
     def test_compare_tables_2_columns(self, test_client, test_collection_name):
         """
             Test compare a simple table.
@@ -36,7 +37,7 @@ class TestCompare:
         vector_fields=["color_vector_", "color_2_vector_"], id_document=id_document, label='color')
         assert df.shape[0] > 0
         assert df.shape[1] == 2
-
+    @pytest.mark.use_client
     def test_teardown(self, test_client, test_collection_name):
         """
             Teardown.

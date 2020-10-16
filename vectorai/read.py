@@ -214,7 +214,8 @@ Args:
         sort_by: List = [],
         asc: bool = True,
         include_vector: bool = True,
-        include_fields: List = []
+        include_fields: List = [],
+        retrieve_chunk_size: int=1000
     ):
         """
         Retrieve all documents in a given collection. We recommend specifying specific fields to extract
@@ -231,28 +232,34 @@ Args:
                 If true, includes _vector_ fields to return them.
             include_fields:
                 Adjust which fields are returned.
+            retrieve_chunk_size:
+                The number of documents to retrieve per request.
 
         Example:
             >>> from vectorai.client import ViClient
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> all_documents = vi_client.retrieve_all_documents(collection_name)
         """
-        d = self.retrieve_documents(
-            collection_name, 1000, sort=sort_by, asc=asc, include_vector=include_vector, 
-            include_fields=include_fields
-        )
-        all_docs = d["documents"]
-        while len(d["documents"]) > 0:
+        num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        with self.progress_bar(list(range(int(num_of_docs/ retrieve_chunk_size)))) as pbar:
             d = self.retrieve_documents(
-                collection_name,
-                1000,
-                d["cursor"],
-                sort=sort_by,
-                asc=asc,
-                include_vector=include_vector,
+                collection_name, retrieve_chunk_size, sort=sort_by, asc=asc, include_vector=include_vector, 
                 include_fields=include_fields
             )
-            all_docs += d["documents"]
+            all_docs = d["documents"]
+            pbar.update(1)
+            while len(d["documents"]) > 0:
+                d = self.retrieve_documents(
+                    collection_name,
+                    retrieve_chunk_size,
+                    d["cursor"],
+                    sort=sort_by,
+                    asc=asc,
+                    include_vector=include_vector,
+                    include_fields=include_fields
+                )
+                all_docs += d["documents"]
+                pbar.update(1)
         return all_docs
 
     def wait_till_jobs_complete(self, collection_name: str, job_id: str, job_name: str):

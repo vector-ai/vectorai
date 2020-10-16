@@ -57,9 +57,9 @@ nested documents if the fields are separated by .'s.
 .. code-block:: python
 
     vi_client.set_field(field, doc, value)
-    vi_client.get_field(field, doc, value)
+    vi_client.get_field(field, doc)
     vi_client.set_field_across_documents(field, docs, values)
-    vi_client.get_field_across_documents(field, docs, values)
+    vi_client.get_field_across_documents(field, docs)
 
 Models With Vector AI
 ========================
