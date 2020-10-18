@@ -11,6 +11,7 @@ Vector AI is a framework designed to make the process of building production gra
 - For Python Documentation: https://vector-ai.github.io/vectorai
 - For REST API Documentation: https://api.vctr.ai/documentation
 - Join our discord: https://discord.gg/CbwUxyD
+- For a more gentle introduction comparing our features, read https://getvectorai.com/production-ready-search-in-5-minutes/
 
 Features:
 - **Multimedia Data Vectorisation**: Image2Vec, Audio2Vec, etc (Any data can be turned into vectors through machine learning)
