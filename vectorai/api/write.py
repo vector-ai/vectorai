@@ -37,6 +37,27 @@ Args:
             },
         ).json()
 
+    def bulk_insert_and_encode(self, collection_name: str, docs: list, models: dict):
+        """
+            Client-side encoding of documents to improve speed of inserting. This removes
+            the step of retrieving the vectors and can be useful to accelerate the encoding
+            process if required.
+            Models can be one of 'text', 'audio' or 'image'.
+        """
+        # For each of the field values in the models, check that the deployed models
+        # are in the list below.
+        for k, v in models:
+            assert v in ['text', 'audio', 'image']
+        return requests.post(
+            url='{}/collection/bulk_insert_and_encode'.format(url), 
+            json={
+            'username' : self.username,
+            'api_key' : self.api_key,
+            'collection_name': collection_name,
+            'documents' : docs,
+            'models' : models
+        }).json()
+
     def _create_collection(self, collection_name: str, collection_schema: Dict = {}):
         return requests.post(
             url="{}/project/create_collection".format(self.url),
