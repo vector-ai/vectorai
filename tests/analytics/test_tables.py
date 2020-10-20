@@ -22,11 +22,13 @@ class TestCompare:
         """
             Test compare a simple table.
         """
-        time.sleep(5)
+        time.sleep(10)
         id_document = test_client.random_documents(test_collection_name, 1)['documents'][0]
+        print(id_document)
         df = test_client.compare_vector_search_results(test_collection_name,
         vector_fields=[test_vector_fields], id_document=id_document, label='color')
         assert df.shape[0] > 0
+
     @pytest.mark.use_client
     def test_compare_tables_2_columns(self, test_client, test_collection_name):
         """
