@@ -43,6 +43,6 @@ class TestCompare:
         """
             Teardown.
         """
-        test_client.delete_collection(test_collection_name)
+#         test_client.delete_collection(test_collection_name)
         time.sleep(5)
         assert test_collection_name not in test_client.list_collections()
