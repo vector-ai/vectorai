@@ -4,7 +4,7 @@
     </a>
 </p>
 <h3 align="center">
-Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, recommendations, personalisation, etc.
+Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, semantic search, personalised recommendations recommendations etc.
 </h3>
 
 - Visit our website at: https://getvectorai.com

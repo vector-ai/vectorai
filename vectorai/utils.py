@@ -13,20 +13,24 @@ import warnings
 class UtilsMixin:
     """Various utilties
     """
-    def generate_vector(self, vector_length: int):
+    def generate_vector(self, vector_length: int, num_of_constant_values: int=0):
         """
         Generate a random vector based on length
 
         Args:
             vector_length:
                 Length of a vector.
+            num_of_constant_values
+                The number of constant values in a vector. This is to help make the 
+                vectors more similar
 
         Example:
             >>> from vectorai.client import ViClient
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> vi_client.generate_vector(vector_length=20)
         """
-        return np.random.rand(vector_length).tolist()
+        return np.random.rand(vector_length - num_of_constant_values).tolist() + [0.5] * num_of_constant_values
+         
 
     @staticmethod
     def results_to_df(data):
