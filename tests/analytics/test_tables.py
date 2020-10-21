@@ -13,7 +13,7 @@ class TestCompare:
             time.sleep(5)
         documents = test_client.create_sample_documents(num_of_docs)
         test_client.set_field_across_documents('color_2_vector_',
-        [test_client.generate_vector(50) for x in range(num_of_docs)], documents)
+        [test_client.generate_vector(50, similar=True) for x in range(num_of_docs)], documents)
         results = test_client.insert_documents(test_collection_name, documents)
         assert results['inserted_successfully'] == num_of_docs
     @pytest.mark.use_client

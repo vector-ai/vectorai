@@ -13,7 +13,7 @@ import warnings
 class UtilsMixin:
     """Various utilties
     """
-    def generate_vector(self, vector_length: int):
+    def generate_vector(self, vector_length: int, similar: bool=False):
         """
         Generate a random vector based on length
 
@@ -26,7 +26,11 @@ class UtilsMixin:
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> vi_client.generate_vector(vector_length=20)
         """
-        return np.random.rand(vector_length).tolist()
+        if similar:
+            return np.random.rand(vector_length - 20).tolist() + [0.5] * 20
+        else:
+            return np.random.rand(vector_length).tolist()
+         
 
     @staticmethod
     def results_to_df(data):
