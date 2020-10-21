@@ -13,7 +13,7 @@ import warnings
 class UtilsMixin:
     """Various utilties
     """
-    def generate_vector(self, vector_length: int, num_of_constant_values: int=20):
+    def generate_vector(self, vector_length: int, num_of_constant_values: int=0):
         """
         Generate a random vector based on length
 
