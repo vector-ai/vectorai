@@ -10,7 +10,6 @@ class TestCompare:
         num_of_docs = 10
         if test_collection_name in test_client.list_collections():
             test_client.delete_collection(test_collection_name)
-            time.sleep(5)
         documents = test_client.create_sample_documents(num_of_docs)
         test_client.set_field_across_documents('color_2_vector_',
         [test_client.generate_vector(50, similar=True) for x in range(num_of_docs)], documents)
@@ -22,7 +21,7 @@ class TestCompare:
         """
             Test compare a simple table.
         """
-        time.sleep(10)
+        time.sleep(20)
         id_document = test_client.random_documents(test_collection_name, 1)['documents'][0]
         print(id_document)
         df = test_client.compare_vector_search_results(test_collection_name,
