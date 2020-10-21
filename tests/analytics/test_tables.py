@@ -24,7 +24,7 @@ class TestCompare:
         """
             Test compare a simple table.
         """
-        time.sleep(20)
+        time.sleep(10)
         id_document = test_client.random_documents(test_collection_name, 1)['documents'][0]
         print(id_document)
         df = test_client.compare_vector_search_results(test_collection_name,
