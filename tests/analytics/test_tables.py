@@ -7,15 +7,18 @@ class TestCompare:
         """
             Test Setup.
         """
-        num_of_docs = 10
+        num_of_docs = 50
         if test_collection_name in test_client.list_collections():
             test_client.delete_collection(test_collection_name)
             time.sleep(5)
         documents = test_client.create_sample_documents(num_of_docs)
+        test_client.set_field_across_documents('color_vector_',
+        [test_client.generate_vector(50, num_of_constant_values=49) for x in range(num_of_docs)], documents)
         test_client.set_field_across_documents('color_2_vector_',
-        [test_client.generate_vector(50, similar=True) for x in range(num_of_docs)], documents)
+        [test_client.generate_vector(50, num_of_constant_values=49) for x in range(num_of_docs)], documents)
         results = test_client.insert_documents(test_collection_name, documents)
         assert results['inserted_successfully'] == num_of_docs
+    
     @pytest.mark.use_client
     @pytest.mark.parametrize("test_vector_fields", [("color_vector_"), ("color_2_vector_")])
     def test_compare_tables_simple(self, test_client, test_collection_name, test_vector_fields):

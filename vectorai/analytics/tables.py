@@ -16,8 +16,8 @@ class TableMixin:
             label: label to compare with 
             collection_name: collection name
         """
-        results = self.search_by_id(collection_name=collection_name, 
-        document_id=id_value, field=vector_field)['results']
+        results = self.advanced_search_by_id(collection_name=collection_name, 
+        document_id=id_value, fields={vector_field: 1})['results']
         values = self.get_field_across_documents(label, results)
         return values
 
