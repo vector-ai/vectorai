@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://getvectorai.com">
-        <img src="https://getvectorai.com/assets/logo-with-text.png" width="400"></img>
+        <img src="https://getvectorai.com/assets/logo-with-text-v2.png" width="400"></img>
     </a>
 </p>
 <h3 align="center">
