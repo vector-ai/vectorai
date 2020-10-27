@@ -511,6 +511,15 @@ This should then create the following entries if they dont exist:
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.api.write.ViWriteAPIClient.bulk_insert_and_encode">
+<code class="sig-name descname">bulk_insert_and_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.write.ViWriteAPIClient.bulk_insert_and_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Client-side encoding of documents to improve speed of inserting. This removes
+the step of retrieving the vectors and can be useful to accelerate the encoding
+process if required.
+Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.api.write.ViWriteAPIClient.bulk_insert">
 <code class="sig-name descname">bulk_insert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">insert_date</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.write.ViWriteAPIClient.bulk_insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert multiple documents into a Collection

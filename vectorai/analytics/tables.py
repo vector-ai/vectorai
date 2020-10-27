@@ -20,8 +20,6 @@ class TableMixin:
             collection_name: collection name
             num_rows: The number of rows
         """
-        # results = self.search_by_id(collection_name=collection_name, 
-        # document_id=id_value, field=vector_field)
         results = self.advanced_search_by_id(collection_name, document_id=id_value, 
                                 fields={vector_field:1}, page_size=num_rows)
         if 'results' not in results.keys():

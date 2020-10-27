@@ -670,6 +670,15 @@ e.g. “product_description_vector_”</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.bulk_insert_and_encode">
+<code class="sig-name descname">bulk_insert_and_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.bulk_insert_and_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Client-side encoding of documents to improve speed of inserting. This removes
+the step of retrieving the vectors and can be useful to accelerate the encoding
+process if required.
+Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.check_schema">
 <code class="sig-name descname">check_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.check_schema" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the schema of a given collection.</p>

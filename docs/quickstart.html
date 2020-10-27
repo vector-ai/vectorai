@@ -201,21 +201,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -316,7 +330,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -382,6 +396,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -456,8 +471,8 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Build-NLP-Search-in-5-Minutes">
 <h2>Build NLP Search in 5 Minutes<a class="headerlink" href="#Build-NLP-Search-in-5-Minutes" title="Permalink to this headline">¶</a></h2>
 <p>Log into the client as belows.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -468,26 +483,9 @@ vi_client.delete_collection(collection_name)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Logged in. Welcome public-demo. To view list of available collections, call list_collections() method.
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;status&#39;: &#39;complete&#39;, &#39;message&#39;: &#39;nlp_quickstart deleted&#39;}
-</pre></div></div>
-</div>
 <p>Then use our Text2Vec model to convert the text to vectors!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -497,78 +495,57 @@ text_encoder = ViText2Vec(username, api_key, url)
 </div>
 </div>
 <p>Then insert the data as shown below!</p>
-<p>For the example below, we got the data from: <a class="reference external" href="https://www.kaggle.com/datatattle/covid-19-nlp-text-classification">https://www.kaggle.com/datatattle/covid-19-nlp-text-classification</a></p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>import pandas as pd
-df = pd.read_csv(&#39;data/Corona_NLP_train.csv&#39;, encoding=&#39;latin-1&#39;)
-df.sample(2)
+<span></span># %pip install datasets - we use the HuggingFace dataset.
+from datasets import load_dataset
+dataset = load_dataset(&#39;aeslc&#39;, split=&#39;test&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span># Add &#39;_id&#39; to the document ID
+documents = [{&#39;_id&#39;: str(n), **doc} for n, doc in enumerate(dataset)]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>documents[0:2]
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>UserName</th>
-      <th>ScreenName</th>
-      <th>Location</th>
-      <th>TweetAt</th>
-      <th>OriginalTweet</th>
-      <th>Sentiment</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>22789</th>
-      <td>26588</td>
-      <td>71540</td>
-      <td>Instagram @secupp</td>
-      <td>25-03-2020</td>
-      <td>Do not do this.\r\r\n\r\r\nNJ Man Charged for Coughing on Grocery Store Employee and Saying He Had Coronavirus: AG https://t.co/XGAhnn1BjP via @lawcrimenews</td>
-      <td>Negative</td>
-    </tr>
-    <tr>
-      <th>23097</th>
-      <td>26896</td>
-      <td>71848</td>
-      <td>Salt Lake City, UT</td>
-      <td>25-03-2020</td>
-      <td>https://t.co/MpRWsgiJ17 ÂThereÂs a lot more at stake for transplant patients. What gives them the sniffles could potentially kill me.Â For many in the transplant community who are immunosuppressed, the recommended daily precautions against #coronavirus are already second nature.</td>
-      <td>Negative</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;_id&#39;: &#39;0&#39;,
+  &#39;email_body&#39;: &#34;Phillip,   Could you please do me a favor?\nI would like  to read your current title policy to see what it says about easements.\nYou  should have received a copy during your closing.\nI don&#39;t know how many  pages it will be but let me know how you want to handle getting a copy  made.\nI&#39;ll be happy to make the copy, or whatever makes it easy for  you.\nThanks,\n&#34;,
+  &#39;subject_line&#39;: &#39;Huntley/question\n&#39;},
+ {&#39;_id&#39;: &#39;1&#39;,
+  &#39;email_body&#39;: &#39;The following reports have been waiting for your approval for more than 4 days.\nPlease review.\nOwner: James W Reitmeyer Report Name: JReitmeyer 10/24/01 Days In Mgr.\nQueue: 5\n&#39;,
+  &#39;subject_line&#39;: &#39;Expense Reports Awaiting Your Approval\n&#39;}]
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>vi_client.insert_df(collection_name, df, models={&#39;OriginalTweet&#39;:text_encoder}, verbose=False, use_bulk_encode=True)
+<span></span>vi_client.insert_documents(collection_name, documents[0:200], models={&#39;email_body&#39;:text_encoder},
+    verbose=False, use_bulk_encode=True, chunksize=3)
 </pre></div>
 </div>
 </div>
@@ -576,7 +553,7 @@ df.sample(2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "266479118baa44858314b85063354df5", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b0e59c6bbbef4486a6a440b18a40b9d6", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -587,18 +564,18 @@ df.sample(2)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;inserted_successfully&#39;: 41157, &#39;failed&#39;: 0, &#39;failed_document_ids&#39;: []}
+{&#39;inserted_successfully&#39;: 200, &#39;failed&#39;: 0, &#39;failed_document_ids&#39;: []}
 </pre></div></div>
 </div>
-<p>As we are inserting the data, note that the vector field names automatically adapt to our schema. In other words, the field <strong>“OriginalTweet”</strong> ends up becoming <strong>“OriginalTweet_vector_”</strong>.</p>
+<p>As we are inserting the data, note that the vector field names automatically adapt to our schema. In other words, the field <strong>“Email Body”</strong> ends up becoming <strong>“email_body_vector_”</strong>.</p>
 <p>Before we search, let us take a quick look at all our data to make sure it’s been properly inserted. And now, our data is ready to search!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -607,31 +584,31 @@ df.sample(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;size_mb&#39;: 216.298816,
- &#39;number_of_documents&#39;: 450,
+{&#39;size_mb&#39;: 3.653697,
+ &#39;number_of_documents&#39;: 205,
  &#39;number_of_searches&#39;: 0,
  &#39;number_of_id_lookups&#39;: 0}
 </pre></div></div>
 </div>
+<p>Let’s search through our e-mails for messages about viruses.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>import pandas as pd
-result = vi_client.search(collection_name, text_encoder.encode(&#39;helping older people&#39;),
-    field=&#39;OriginalTweet_vector_&#39;, page_size=5)
-vi_client.results_pretty(result, &#39;OriginalTweet&#39;)
+<span></span>result = vi_client.search(collection_name, text_encoder.encode(&#39;Emails about viruses.&#39;),
+    field=&#39;email_body_vector_&#39;, page_size=5)
+vi_client.results_pretty(result, &#39;email_body&#39;)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -653,29 +630,29 @@ vi_client.results_pretty(result, &#39;OriginalTweet&#39;)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>OriginalTweet</th>
+      <th>email_body</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Important information about supermarket opening times to help elderly and vulnerable customers</td>
+      <td>A virus has been detected in the Enron email environment.\nThe offending email has the following characteristics :  The SUBJECT is "Hi"  It contains the following text : How are you ?\nWhen I saw this screen saver, I immediately thought about you  I am in a harry, I promise you will love it!\nIt contains an attachment called "gone.scr" (41 KB) Please DO NOT launch the attachment (as this will launch the virus).\nDelete ALL occurances of this email from your mail box immediately.\nPlease note that opening/previewing the email does not launch the virus.\nFurthermore, it is absolutely against company policy to open any external (non-Enron) mail account from within the Enron environment.\nThis means that you should not open a browser from an Enron PC and go to any sites that offer Email services.\nWhen you do this, you are tracked and IT is aware of your actions.\nIn today's case, the virus that was launched caused a the entire global Email system to be shut down for about an hour and a half.\nIt is also against company policy to launch any attachments without saving it to your desktop first so that desktop virus scanning can take place.\nIf you did launch this virus, please call your Resolution Center/Help Desk and have your computer scanned.\nThank you for your assistance.\n</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>PLEASE PLEASE Dont hoard things that elderly people need if you see them in a grocery store please help them They are our national treasure and we need to protect them</td>
+      <td>You have received this message because someone has attempted to send you an e-mail from outside of Enron with an attachment type that Enron does not allow into our messaging environment.\nYour e-mail has been quarantined and is being held at the MailSweeper server.\nSender:  daphneco64@alltel.net\n</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Be sure to look after the elders in your community they are the ones that need your help the most from the team</td>
+      <td>Your mailbox has exceeded one or more size limits set by your administrator.\nYour mailbox size is 113195 KB.\nMailbox size limits: \tYou will receive a warning when your mailbox reaches 75000 KB.\nYou cannot send mail when your mailbox reaches 100000 KB.You may not be able to send or receive new mail until you reduce your mailbox size.\nTo make more space available, delete any items that you are no longer using or move them to your personal folder file (.pst).\nItems in all of your mailbox folders including the Deleted Items and Sent Items folders count against your size limit.\nYou must empty the Deleted Items folder after deleting items or the space will not be freed.\nSee client Help for more information.\n</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>We've got some resources on those topics -- Here's how volunteers are helping seniors: https://t.co/zZCzwfp7Ih \r\r\n\r\r\nAnd a little more info on how localities are trying to protect them: https://t.co/93WVMi0Qg1 \r\r\n\r\r\nAnd some stores with senior-only shopping times https://t.co/AE7m8xUXx7 https://t.co/MChaqLKdc8</td>
+      <td>Your mailbox has exceeded one or more size limits set by your administrator.\nYour mailbox size is 112312 KB.\nMailbox size limits: \tYou will receive a warning when your mailbox reaches 75000 KB.\nYou cannot send mail when your mailbox reaches 100000 KB.You may not be able to send or receive new mail until you reduce your mailbox size.\nTo make more space available, delete any items that you are no longer using or move them to your personal folder file (.pst).\nItems in all of your mailbox folders including the Deleted Items and Sent Items folders count against your size limit.\nYou must empty the Deleted Items folder after deleting items or the space will not be freed.\nSee client Help for more information.\n</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>Coping with coronavirus practical guidance for older people</td>
+      <td>Your mailbox has exceeded one or more size limits set by your administrator.\nYour mailbox size is 112231 KB.\nMailbox size limits: \tYou will receive a warning when your mailbox reaches 75000 KB.\nYou cannot send mail when your mailbox reaches 100000 KB.You may not be able to send or receive new mail until you reduce your mailbox size.\nTo make more space available, delete any items that you are no longer using or move them to your personal folder file (.pst).\nItems in all of your mailbox folders including the Deleted Items and Sent Items folders count against your size limit.\nYou must empty the Deleted Items folder after deleting items or the space will not be freed.\nSee client Help for more information.\n</td>
     </tr>
   </tbody>
 </table>
