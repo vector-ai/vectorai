@@ -814,12 +814,13 @@ Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.compare_vector_search_results">
-<code class="sig-name descname">compare_vector_search_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">id_document</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">id_value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.compare_vector_search_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compare_vector_search_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">id_document</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">id_value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.compare_vector_search_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare vector results
 :param vector_fields: The list of vectors
 :param id_value: The value of the ID of the document
 :param id_document: The document with the id_value in it
-:param label: The label for the vector</p>
+:param label: The label for the vector
+:param num_rows: The number of rows to compare search results for</p>
 <p class="rubric">Example</p>
 <p>compare_vector_search_results(collection_name, vector_fields)</p>
 </dd></dl>
