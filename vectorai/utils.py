@@ -280,6 +280,17 @@ class UtilsMixin:
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
 
+def get_random_int(low=0, high=9999):
+    """
+        Return a random int from 0 to 9999
+        Args:
+            low:
+                Lower boundary
+            High:
+                Higher boundary
+    """
+    return random.randint(low, high)
+
 def decorate_functions_by_argument(function_decorator, argument):
     """
         Decorate a function with an argument
