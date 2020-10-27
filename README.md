@@ -3,6 +3,19 @@
         <img src="https://getvectorai.com/assets/logo-with-text-v2.png" width="400"></img>
     </a>
 </p>
+<br>
+<p align="center">
+    <a href="https://github.com/vector-ai/vectorai">
+        <img alt="Release" src="https://img.shields.io/github/v/tag/vector-ai/vectorai?label=release">
+    </a>
+    <a href="https://getvectorai.com">
+        <img alt="Website" src="https://img.shields.io/website?up_message=online&label=website&url=https%3A%2F%2Fgetvectorai.com">
+    </a>
+    <a href="https://vector-ai.github.io/vectorhub">
+        <img alt="Documentation" src="https://img.shields.io/website?up_message=online&label=documentation&url=https%3A%2F%2Fvector-ai.github.io%2Fvectorai">
+    </a>
+</p>
+
 <h3 align="center">
 Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, semantic search, personalised recommendations recommendations etc.
 </h3>
