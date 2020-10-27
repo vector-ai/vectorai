@@ -1435,7 +1435,7 @@ vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#3
 <div class="section" id="Multi-vector-search-with-different-weightings:">
 <h3>Multi vector search with different weightings:<a class="headerlink" href="#Multi-vector-search-with-different-weightings:" title="Permalink to this headline">¶</a></h3>
 <p><span class="math notranslate nohighlight">\(0.9\times TextScore + 0.5\times ImageScore = SearchScore\)</span></p>
-<p>We then rank by the new search score (with 1000 documents there should be 1000 search scores.)</p>
+<p>We then rank by the new search score (with 1000 documents there should be 1000 search scores.) For the advanced search query, the aliases below <strong>text</strong> and <strong>image_url</strong> (the keys of the query) can be renamed to anything and are mainly used to provide an alias for the search query. However, <strong>vector</strong> and <strong>fields</strong> are required to identify the vector search component and the fields component.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
