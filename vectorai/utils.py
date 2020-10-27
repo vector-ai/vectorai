@@ -91,12 +91,27 @@ class UtilsMixin:
             Rename an object.
             Args:
                 object:
+                    Any Python instance/variable
+                value:
+                    Name of new instance 
+
+            Example:
+                >>> from vectorai.client import ViClient
+                >>> ViClient.rename(model, 'new_name')
+        """
+        object.__name__ = value
+
+    @staticmethod
+    def set_name(object: Any, value: str):
+        """
+            Rename an object.
+            Args:
+                object:
                     Any Python object 
 
             Example:
                 >>> from vectorai.client import ViClient
-                >>> def try_it: pass
-                >>> ViClient.rename(try_it, 'new_name')
+                >>> ViClient.set_name(model, 'new_name')
         """
         object.__name__ = value
     
@@ -268,6 +283,17 @@ class UtilsMixin:
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
+
+def get_random_int(low=0, high=9999):
+    """
+        Return a random int from 0 to 9999
+        Args:
+            low:
+                Lower boundary
+            High:
+                Higher boundary
+    """
+    return random.randint(low, high)
 
 def decorate_functions_by_argument(function_decorator, argument):
     """
