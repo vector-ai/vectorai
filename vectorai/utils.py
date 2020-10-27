@@ -87,12 +87,27 @@ class UtilsMixin:
             Rename an object.
             Args:
                 object:
+                    Any Python instance/variable
+                value:
+                    Name of new instance 
+
+            Example:
+                >>> from vectorai.client import ViClient
+                >>> ViClient.rename(model, 'new_name')
+        """
+        object.__name__ = value
+
+    @staticmethod
+    def set_name(object: Any, value: str):
+        """
+            Rename an object.
+            Args:
+                object:
                     Any Python object 
 
             Example:
                 >>> from vectorai.client import ViClient
-                >>> def try_it: pass
-                >>> ViClient.rename(try_it, 'new_name')
+                >>> ViClient.set_name(model, 'new_name')
         """
         object.__name__ = value
     
