@@ -449,3 +449,77 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
         )
         return fig
+
+    def _plot_radar(self, scores: list, spokes: list, name: str, fill=None):
+        """
+            Args:
+                Scores: The list of scores for cosine similarity
+                spokes: The outside labels 
+                name: The name of the plot
+        """
+        return go.Scatterpolar(
+            # Get the cosine similarity scores here 
+            r=scores + [scores[0]],
+            theta=spokes + [spokes[0]],
+            fill=fill,
+            name=name,
+        )
+
+    def plot_radar_across_documents(self, docs: List[Dict], anchor_documents: List[Dict], vector_field: str, 
+    label_field: str, range: List=[0, 1], fill: str=None, scoring_metric ='cosine'):
+        """
+            Radar plot for 1D cosine similarity across documents.
+            Args:
+                docs: A list of documents 
+                anchor_document: The document to compare against
+                vector_field: The vector vector field
+                label_field: The field of the documents to get labels.
+        """
+        categories = self.get_field_across_documents(label_field, docs)
+        fig = go.Figure()
+        for anchor_document in anchor_documents:
+            if scoring_metric == 'cosine':
+                scores = self.get_cosine_similarity_scores(docs, anchor_document, vector_field=vector_field)
+            else:
+                scores = scoring_metric(docs, anchor_document, vector_field=vector_field)
+            fig.add_trace(self._plot_radar(scores=scores, spokes=categories, name=vector_field, fill=fill))
+        
+        fig.update_layout(
+            polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=range
+            )),
+            showlegend=True
+        )
+        return fig
+
+    def plot_radar_across_vector_fields(self, docs: List[Dict], anchor_document: Dict, 
+    vector_fields: List[str], label_field: str, range=[0, 1], fill=None, scoring_metric='cosine'):
+        """
+            Radar plot for 1D cosine similarity across different vector spaces.
+            Args:
+                docs: A list of documents 
+                anchor_document: The document to compare against
+                vector_fields: the different vector fields
+                label_field: The field of the documents to get labels.
+        """
+        categories = self.get_field_across_documents(label_field, docs)
+        fig = go.Figure()
+        for vector in vector_fields:
+            if scoring_metric == 'cosine':
+                scores = self.get_cosine_similarity_scores(docs, anchor_document, vector_field=vector)
+            else:
+                scores = scoring_metric(docs, anchor_document, vector_field=vector)
+            
+            fig.add_trace(self._plot_radar(scores=scores, spokes=categories, name=vector, fill=fill))
+
+        fig.update_layout(
+            polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=range
+            )),
+            showlegend=True 
+        )
+        return fig
