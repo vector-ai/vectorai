@@ -190,20 +190,26 @@ class UtilsMixin:
                 return documents
     
     @classmethod
-    def create_sample_document(self):
+    def create_sample_document(self, document_id: str=None):
         """
-        Create sample document
+        Create sample document.
+        Args:
+            Document_id: the index of the document
         """
         rand_index = np.random.randint(0, 30)
-        return {
+        sample_document =  {
             'color': [random.choice(['red', 'blue', 'orange', 'green'])],
             'number': [random.choice(list(range(10)))],
             'color_vector_': np.random.rand(1, 30).tolist()[0],
+            'color_2_vector_': np.random.rand(1, 30).tolist()[0],
             'size': {
                 'feet': list(range(1, 31))[rand_index],
                 'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
             }
         }
+        if document_id is None:
+            sample_document.update({'_id': document_id})
+        return sample_document
     
     @classmethod
     def create_sample_documents(self, num_of_documents: int):
@@ -213,12 +219,7 @@ class UtilsMixin:
             num_of_documents:
                 Create sample documents.
         """
-        all_documents = []
-        for i in range(num_of_documents):
-            document = self.create_sample_document()
-            document['_id'] = str(i)
-            all_documents.append(document)
-        return all_documents
+        return [self.create_sample_document(i) for i in range(num_of_documents)]
 
     def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
         """
