@@ -208,7 +208,7 @@ class UtilsMixin:
                 'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
             }
         }
-        if document_id is None:
+        if document_id is not None:
             sample_document.update({'_id': str(document_id)})
         return sample_document
     
