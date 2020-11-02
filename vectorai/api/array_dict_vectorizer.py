@@ -98,8 +98,9 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,):
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False):
         """
 Search a dictionary field with a dictionary using Vector Search with a dictionary directly.
 
@@ -163,6 +164,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -247,8 +249,9 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,):
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False):
         """
 Search an array field with an array using Vector Search with an array directly.
 
@@ -312,5 +315,6 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()

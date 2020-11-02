@@ -25,8 +25,9 @@ class ViTextClient:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
     ):
         """
 Search a text field with text using Vector Search with text directly.
@@ -68,6 +69,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_with_text".format(self.url),
@@ -82,6 +85,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc
             },
         ).json()
 

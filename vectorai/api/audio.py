@@ -25,8 +25,9 @@ class ViAudioClient:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
     ):
         """
 Search an audio field with audio using Vector Search
@@ -71,6 +72,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         if type(audio) == str:
             if "http" in audio:
@@ -88,6 +91,7 @@ Args:
                         "page_size": page_size,
                         "include_vector": include_vector,
                         "include_count": include_count,
+                        "asc": asc
                     },
                 ).json()
         elif type(audio) == bytes:
@@ -105,6 +109,7 @@ Args:
                     "page_size": page_size,
                     "include_vector": include_vector,
                     "include_count": include_count,
+                    "asc": asc
                 },
             ).json()
 
@@ -117,8 +122,9 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
     ):
         """
 Search an audio field with uploaded audio using Vector Search with an uploaded audio directly.
@@ -150,6 +156,8 @@ Args:
 		Whether to scale up the metric by 100
 	audio:
 		Audio in local file path
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         with open(audio, "rb") as fd:
             contents = fd.read()
@@ -162,6 +170,7 @@ Args:
             page_size,
             include_vector,
             include_count,
+            asc
         )
 
     def encode_audio(self, collection_name: str, audio):
