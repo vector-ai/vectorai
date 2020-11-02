@@ -209,7 +209,7 @@ class UtilsMixin:
             }
         }
         if document_id is None:
-            sample_document.update({'_id': document_id})
+            sample_document.update({'_id': str(document_id)})
         return sample_document
     
     @classmethod
