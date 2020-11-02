@@ -200,6 +200,7 @@ class UtilsMixin:
         sample_document =  {
             'color': [random.choice(['red', 'blue', 'orange', 'green'])],
             'number': [random.choice(list(range(10)))],
+            'country': random.choice(['Italy', 'Australia', 'Denmark', 'Brazil', 'France']),
             'color_vector_': np.random.rand(1, 30).tolist()[0],
             'color_2_vector_': np.random.rand(1, 30).tolist()[0],
             'size': {
