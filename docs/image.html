@@ -228,7 +228,7 @@
 <dd><p>Search and Encoding of Images</p>
 <dl class="py method">
 <dt id="vectorai.api.image.ViImageClient.search_image">
-<code class="sig-name descname">search_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.image.ViImageClient.search_image" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.image.ViImageClient.search_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search an image field with image using Vector Search</p>
 <p>Vector similarity search with an image directly.</p>
 <p>_note: image has to be stored somewhere and be provided as image_url, a url that stores the <a href="#id2"><span class="problematic" id="id3">image_</span></a></p>
@@ -258,7 +258,12 @@
 <li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
 <li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
 <li><p><strong>include_count</strong> – Include count in the search results</p></li>
-<li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
+<li><p><strong>hundred_scale</strong> – <p>Whether to scale up the metric by 100</p>
+<dl class="simple">
+<dt>asc:</dt><dd><p>Whether to sort the score by ascending order (default is false, for getting most similar results)</p>
+</dd>
+</dl>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -266,7 +271,7 @@
 
 <dl class="py method">
 <dt id="vectorai.api.image.ViImageClient.search_image_by_upload">
-<code class="sig-name descname">search_image_by_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.image.ViImageClient.search_image_by_upload" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search_image_by_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.image.ViImageClient.search_image_by_upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search an image field with uploaded image using Vector Search</p>
 <p>Vector similarity search with an uploaded image directly.</p>
 <p>_note: image has to be sent as a base64 encoded <a href="#id4"><span class="problematic" id="id5">string_</span></a></p>
@@ -284,7 +289,12 @@
 <li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
 <li><p><strong>include_count</strong> – Include count in the search results</p></li>
 <li><p><strong>hundred_scale</strong> – Whether to scale up the metric by 100</p></li>
-<li><p><strong>image</strong> – Image in local file path</p></li>
+<li><p><strong>image</strong> – <p>Image in local file path</p>
+<dl class="simple">
+<dt>asc:</dt><dd><p>Whether to sort the score by ascending order (default is false, for getting most similar results)</p>
+</dd>
+</dl>
+</p></li>
 </ul>
 </dd>
 </dl>
