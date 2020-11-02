@@ -339,6 +339,26 @@ Ensure that the name is unique, otherwise the plot will simply take the mean.</p
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_radar_across_documents">
+<code class="sig-name descname">plot_radar_across_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">label_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">range</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[0, 1]</span></em>, <em class="sig-param"><span class="n">fill</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring_metric</span><span class="o">=</span><span class="default_value">'cosine'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_radar_across_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radar plot for 1D cosine similarity across documents.
+:param docs: A list of documents
+:param anchor_document: The document to compare against
+:param vector_field: The vector vector field
+:param label_field: The field of the documents to get labels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_radar_across_vector_fields">
+<code class="sig-name descname">plot_radar_across_vector_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_document</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">range</span><span class="o">=</span><span class="default_value">[0, 1]</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring_metric</span><span class="o">=</span><span class="default_value">'cosine'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_radar_across_vector_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radar plot for 1D cosine similarity across different vector spaces.
+:param docs: A list of documents
+:param anchor_document: The document to compare against
+:param vector_fields: the different vector fields
+:param label_field: The field of the documents to get labels.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
