@@ -1,6 +1,8 @@
 """
     Test visualisations
 """
+import plotly.graph_objects as go
+
 def test_radar_plot_across_documents(test_client):
     """
         Test radar plots across documents
