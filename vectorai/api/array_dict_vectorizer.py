@@ -147,6 +147,8 @@ Args:
 		A dictionary to encode into vectors
 	dictionary_field:
 		The dictionary field that encoding of the dictionary is trained on
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/search_with_dictionary".format(self.url),
@@ -298,6 +300,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_with_array".format(self.url),
