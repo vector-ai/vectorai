@@ -65,10 +65,11 @@ class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True):
-
-                """
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
+    ):
+        """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
 
 Enables machine learning search with vector search. Search with a vector for the most similar vectors.
@@ -107,23 +108,26 @@ Args:
 		Include vectors in the search results
 	include_count:
 		Include count in the search results
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """                
                 
-                search_fields ={}
-                advanced_search_query = {
-                    field.replace('_vector_', ''): {'vector': vector, 'fields': [field]}
-                }
-                return self.advanced_search(
-                    collection_name=collection_name,
-                    multivector_query=advanced_search_query,
-                    sum_fields=sum_fields,
-                    metric=metric,
-                    min_score=min_score,
-                    page=page,
-                    page_size=page_size,
-                    include_vector=include_vector,
-                    include_count=include_count
-                )
+        search_fields ={}
+        advanced_search_query = {
+            field.replace('_vector_', ''): {'vector': vector, 'fields': [field]}
+        }
+        return self.advanced_search(
+            collection_name=collection_name,
+            multivector_query=advanced_search_query,
+            sum_fields=sum_fields,
+            metric=metric,
+            min_score=min_score,
+            page=page,
+            page_size=page_size,
+            include_vector=include_vector,
+            include_count=include_count,
+            asc=asc
+        )
 
     def random_filter_query(
         self, collection_name: str, text_filters: int = 1, numeric_filters: int = 0

@@ -26,8 +26,9 @@ class ViSearchClient:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False,
     ):
         """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
@@ -68,6 +69,8 @@ Args:
 		Include vectors in the search results
 	include_count:
 		Include count in the search results
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search".format(self.url),
@@ -84,6 +87,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -100,8 +104,9 @@ Args:
         traditional_weight=0.075,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
     ):
         """
 Search a text field with vector and text using Vector Search and Traditional Search
@@ -143,6 +148,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/hybrid_search".format(self.url),
@@ -162,6 +169,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -175,8 +183,9 @@ Args:
         min_score=0,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False,
     ):
         """
 Single Product Recommendations (Search by an id)
@@ -208,6 +217,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_by_id".format(self.url),
@@ -224,6 +235,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -238,8 +250,9 @@ Args:
         min_score=0,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False,
     ):
         """
 Multi Product Recommendations (Search by ids)
@@ -273,6 +286,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_by_ids".format(self.url),
@@ -290,6 +305,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc
             },
         ).json()
 
@@ -305,8 +321,9 @@ Args:
         min_score=0,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
     ):
         """
 Multi Product Recommendations with Likes and Dislikes (Search by ids)
@@ -342,6 +359,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_by_positive_negative_ids".format(self.url),
@@ -360,6 +379,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc
             },
         ).json()
 
@@ -376,8 +396,9 @@ Args:
         min_score=0,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False,
     ):
         """
 Multi Product Recommendations with Likes and Dislikes (Search by ids)
@@ -415,6 +436,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_with_positive_negative_ids_as_history".format(self.url),
@@ -434,6 +457,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -448,9 +472,10 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False,
     ):
         """
 Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
@@ -467,6 +492,8 @@ Advanced search also supports filtering to only search through filtered results 
 Args:
 	collection_name:
 		Name of Collection
+	multivector_query:
+		Query for advance search that allows for multiple vector and field querying
 	page:
 		Page of the results
 	page_size:
@@ -491,8 +518,8 @@ Args:
 		Include facets in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
-	multivector_query:
-		Query for advance search that allows for multiple vector and field querying
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 
 Example:
     >>> vi_client = ViCollectionClient(username, api_key, collection_name, url)
@@ -518,6 +545,7 @@ Example:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc,
             },
         ).json()
 
@@ -534,9 +562,10 @@ Example:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False
     ):
         """
 Advanced Search a text field with vector and text using Vector Search and Traditional Search
@@ -587,6 +616,8 @@ Args:
 		Fuzziness of the search. A value of 1-3 is good.
 	join:
 		Whether to consider cases where there is a space in the word. E.g. Go Pro vs GoPro.
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/advanced_hybrid_search".format(self.url),
@@ -607,6 +638,7 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc,
             },
         ).json()
 
@@ -622,9 +654,10 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False
     ):
         """
 Advanced Single Product Recommendations (Search by an id).
@@ -667,6 +700,8 @@ Args:
 		ID of a document
 	search_fields:
 		Vector fields to search against, and the weightings for them.
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/advanced_search_by_id".format(self.url),
@@ -686,6 +721,7 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc
             },
         ).json()
 
@@ -702,9 +738,10 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False,
     ):
         """
 Advanced Multi Product Recommendations (Search by ids).
@@ -751,6 +788,8 @@ Args:
 		Vector fields to search against, and the weightings for them.
 	vector_operation:
 		Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/advanced_search_by_ids".format(self.url),
@@ -771,6 +810,7 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc
             },
         ).json()
 
@@ -788,9 +828,10 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False
     ):
         """
 Advanced Multi Product Recommendations with likes and dislikes (Search by ids).
@@ -839,6 +880,8 @@ Args:
 		Vector fields to search against, and the weightings for them.
 	vector_operation:
 		Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/advanced_search_by_positive_negative_ids".format(
@@ -862,6 +905,7 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc,
             },
         ).json()
 
@@ -880,9 +924,10 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,
-        include_facets=False,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False
     ):
         """
 Advanced Search with Likes and Dislikes as history
@@ -933,6 +978,8 @@ Args:
 		Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
 	vector:
 		Vector, a list/array of floats that represents a piece of data
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/advanced_search_with_positive_negative_ids_as_history".format(
@@ -957,5 +1004,6 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "include_facets": include_facets,
+                "asc": asc,
             },
         ).json()

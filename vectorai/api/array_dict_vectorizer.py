@@ -98,8 +98,9 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,):
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False):
         """
 Search a dictionary field with a dictionary using Vector Search with a dictionary directly.
 
@@ -146,6 +147,8 @@ Args:
 		A dictionary to encode into vectors
 	dictionary_field:
 		The dictionary field that encoding of the dictionary is trained on
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.post(
             url="{}/collection/search_with_dictionary".format(self.url),
@@ -163,6 +166,7 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
 
@@ -247,8 +251,9 @@ Args:
         min_score=None,
         page: int = 1,
         page_size: int = 10,
-        include_vector=False,
-        include_count=True,):
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False):
         """
 Search an array field with an array using Vector Search with an array directly.
 
@@ -295,6 +300,8 @@ Args:
 		Include count in the search results
 	hundred_scale:
 		Whether to scale up the metric by 100
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
         return requests.get(
             url="{}/collection/search_with_array".format(self.url),
@@ -312,5 +319,6 @@ Args:
                 "page_size": page_size,
                 "include_vector": include_vector,
                 "include_count": include_count,
+                "asc": asc,
             },
         ).json()
