@@ -15,7 +15,7 @@ extras_req["all"] = [p for r in extras_req.values() for p in r]
 
 setup(
     name="vectorai",
-    version="0.2.0",
+    version="0.2.1",
     author="OnSearch Pty Ltd",
     author_email="dev@vctr.ai",
     description="A Python framework for building vector based applications. Encode, query and analyse data using vectors.",
