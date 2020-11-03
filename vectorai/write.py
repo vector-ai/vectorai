@@ -717,11 +717,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed_document_ids": failed,
         }
 
-    def create_filter_query(self, collection_name, field, filter_type, filter_values: Union[List[str], str]=None):
+    def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """
             Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
             Filter types can be one of:
-            contains: Field must contain this specific string
+            contains: Field must contain this specific string. Not case sensitive.
             exact_match: Field must have an exact match 
             categories: Matches entire field
             exists: If field exists in document 
