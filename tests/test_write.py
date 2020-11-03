@@ -170,6 +170,26 @@ class TestEdit:
         assert doc["location"] == "Paris"
 
     @pytest.mark.use_client
+    def test_create_filter(self, test_client, test_collection_name):
+        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'location', 'contains', 'paris'))
+        assert len(results) > 0
+
+    @pytest.mark.use_client
+    def test_create_filter_2(self, test_client, test_collection_name):
+        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'location', 'exact_match', 'Paris'))
+        assert len(results) > 0
+
+    @pytest.mark.use_client
+    def test_create_filter_3(self, test_client, test_collection_name):
+        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'size.feet', '<=', '31'))
+        assert len(results) > 0
+
+    @pytest.mark.use_client
+    def test_create_filter_4(self, test_client, test_collection_name):
+        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'insert_date_', '>=', '2020-01-01'))
+        assert len(results) > 0
+
+    @pytest.mark.use_client
     def test_edit_documents(self, test_client, test_collection_name):
         """Test adding of an attribute
         """
