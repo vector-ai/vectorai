@@ -716,3 +716,37 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed": len(failed),
             "failed_document_ids": failed,
         }
+
+    def create_filter_query(self, collection_name, field, filter_type, filter_values: Union[List[str], str]=None):
+        """
+            Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
+            Filter types can be one of:
+            contains: Field must contain this specific string
+            exact_match: Field must have an exact match 
+            categories: Matches entire field
+            exists: If field exists in document 
+            >= / > / < / <= : Larger than or equal to / Larger than / Smaller than / Smaller than or equal to
+            These, however, can only be applied on numeric/date values. Check collection_schema.
+
+            Args:
+            collection_name: The name of the collection 
+            field: The field to filter on 
+            filter_type: One of contains/exact_match/categories/>=/>/<=/<.
+
+        """
+        print("After creating query, you can now apply this to filters.")
+        if filter_type == 'contains':
+            return [{'field' : field, 'filter_type' : 'contains', "condition":"==", "condition_value": filter_values}]
+        if filter_type == 'exact_match': 
+            return [{'field' : field, 'filter_type' : 'exact_match', "condition":"==", "condition_value": filter_values}]
+        if filter_type == 'categories':
+            return [{'field' : field, 'filter_type' : 'categories', "condition":"==", "condition_value": filter_values}]
+        if filter_type == 'exists':
+            return [{'field' : field, 'filter_type' : 'exists', "condition":">=", "condition_value":" "}]
+        if filter_type == '<=' or filter_type == '>=' or filter_type == '>' or filter_type == '<' or filter_type == '==':
+            if self.collection_schema(collection_name)[field] == 'date':
+                return [{'field' : field, 'filter_type' : 'date', "condition":filter_type, "condition_value": filter_values}]
+            elif self.collection_schema(collection_name)[field] == 'numeric':
+                return [{'field' : field, 'filter_type' : 'numeric', "condition":filter_type, "condition_value":filter_values}]
+        else:
+            raise ValueError(f"{filter_type} has not been defined. Please choose one of contains/exact_match/exists/categories/>=/<=/>/<.")
