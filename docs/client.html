@@ -901,6 +901,23 @@ Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.create_filter_query">
+<code class="sig-name descname">create_filter_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_type</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_values</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.create_filter_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
+Filter types can be one of:
+contains: Field must contain this specific string. Not case sensitive.
+exact_match: Field must have an exact match
+categories: Matches entire field
+exists: If field exists in document
+&gt;= / &gt; / &lt; / &lt;= : Larger than or equal to / Larger than / Smaller than / Smaller than or equal to
+These, however, can only be applied on numeric/date values. Check collection_schema.</p>
+<p>Args:
+collection_name: The name of the collection
+field: The field to filter on
+filter_type: One of contains/exact_match/categories/&gt;=/&gt;/&lt;=/&lt;.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.delete_by_id">
 <code class="sig-name descname">delete_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.delete_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a document in a Collection by its id</p>
