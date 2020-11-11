@@ -1,4 +1,5 @@
 import requests
+import random
 from typing import Dict, List
 from .audio import ViAudioClient
 from .image import ViImageClient
@@ -177,7 +178,7 @@ Args:
         self,
         collection_name: str,
         page_size: int = 20,
-        seed: int = 10,
+        seed: int = None,
         include_vector: bool = True,
     ):
         """
@@ -195,6 +196,8 @@ Args:
 	collection_name:
 		Name of Collection
 """
+        if seed is None:
+            seed = random.randint(0, 100)
         q_params = {
             "username": self.username,
             "api_key": self.api_key,
