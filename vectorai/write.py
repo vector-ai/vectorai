@@ -429,6 +429,17 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self.set_field_across_documents(vector_field, vectors, documents)
         return documents
 
+    def _insert_and_encode(
+        self, documents: list, collection_name: str, models: dict, verbose=False, use_bulk_encode=False
+    ):
+        """
+            Insert and encode documents
+        """
+        return self.bulk_insert(
+            collection_name=collection_name,
+            documents=self._encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
+        )
+        
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
         """
         Insert a document into a collection
@@ -502,7 +513,6 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> documents = [{'chicken': 'Big chicken'}, {'chicken': 'small_chicken'}, {'chicken': 'cow'}]
             >>> vi_client.insert_documents(documents, models={'chicken': text_encoder.encode})
         """
-        failed = []
         if collection_name not in self.list_collections():
             if len(models) == 0:
                 self._check_schema(documents[0])
@@ -541,7 +551,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self._raise_error(result)
                 if verbose:
                     print(f"Failed: {result['failed_document_ids']}")
-                    if len(result['failed_document_ids'] > 0):
+                    if len(result['failed_document_ids']) > 0:
                         warnings.warn("""There are failed documents. Try re-inserting these IDs
                         and test by choosing the most important fields first!""")
                 failed.append(result["failed_document_ids"])
@@ -554,16 +564,6 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed_document_ids": failed,
         }
 
-    def _insert_and_encode(
-        self, documents: list, collection_name: str, models: dict, verbose=False, use_bulk_encode=False
-    ):
-        """
-            Insert and encode documents
-        """
-        return self.bulk_insert(
-            collection_name=collection_name,
-            documents=self._encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
-        )
 
     def insert_df(
         self,
