@@ -502,6 +502,17 @@
 </ul>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filter_query</span> <span class="o">=</span> <span class="p">[</span>
+<span class="go">        {&#39;field&#39;: &#39;field_name&#39;,</span>
+<span class="go">        &#39;filter_type&#39;: &#39;text&#39;,</span>
+<span class="go">        &#39;condition_value&#39;: &#39;monkl&#39;,</span>
+<span class="go">        &#39;condition&#39;: &#39;==&#39;}</span>
+<span class="go">    ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">advanced_search_by_id</span><span class="p">(</span><span class="n">document_id</span><span class="o">=</span><span class="n">client</span><span class="o">.</span><span class="n">random_documents</span><span class="p">()[</span><span class="s1">&#39;documents&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+<span class="go">fields={&#39;image_url_field_flattened_vector_&#39;:1}, filters=filter_query)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
