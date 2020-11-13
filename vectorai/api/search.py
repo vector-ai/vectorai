@@ -702,6 +702,17 @@ Args:
 		Vector fields to search against, and the weightings for them.
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
+
+Example:
+    >>> filter_query = [
+            {'field': 'field_name',
+            'filter_type': 'text',
+            'condition_value': 'monkl',
+            'condition': '=='}
+        ]
+    >>> results = client.advanced_search_by_id(document_id=client.random_documents()['documents'][0]['_id'], 
+    fields={'image_url_field_flattened_vector_':1}, filters=filter_query)
+
 """
         return requests.post(
             url="{}/collection/advanced_search_by_id".format(self.url),
