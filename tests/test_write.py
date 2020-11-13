@@ -46,16 +46,6 @@ class TestCollectionBasics:
         response = test_client.delete_collection(collection_name=test_collection_name)
         assert response['status'] == 'complete'
 
-
-def test__as_json(test_client):
-    sample_document = {
-        "val": np.rand(20), 
-        "val_2": np.rand(100)
-    }
-    sample_document_result = test_client._as_json(sample_document)
-    assert sample_document_result == sample_document
-
-
 def assert_json_serializable(document, temp_json_file="test.json"):
     """Assert that an document is json serializable and is the same after loading back into Python.
     """
@@ -64,34 +54,6 @@ def assert_json_serializable(document, temp_json_file="test.json"):
     return_document = json.load(open(temp_json_file, "r"))
     os.remove(temp_json_file)
     assert return_document == document
-
-
-def test__as_json(test_client):
-    """Test automatic JSON conversion for numpy arrays.
-    """
-    sample_document = {"val": np.random.rand(20), "val_2": np.random.rand(100)}
-    sample_document_result = test_client._as_json(sample_document)
-    assert_json_serializable(sample_document_result)
-
-@pytest.mark.use_tensorflow
-def test__as_json_tensorflow(test_client):
-    """Test automatic JSON conversion for tensorflow tensors.
-    """
-    sample_document = {
-        "val": tf.random.uniform((1, 20)),
-        "val_2": tf.random.uniform((1, 20)),
-    }
-    sample_document_result = test_client._as_json(sample_document, flatten=True)
-    assert_json_serializable(sample_document_result)
-
-@pytest.mark.use_tensorflow
-def test__as_json_tensorflow_error_raise(test_client):
-    """Test that error is raised with tensorflow conversion when rank (ndims) is greater than 2.
-    """
-    sample_document = {"val": tf.random.uniform((1, 1, 20))}
-    with pytest.raises(APIError):
-        sample_document_result = test_client._as_json(sample_document)
-
 
 class TestInsert:   
     @pytest.mark.use_client
@@ -274,18 +236,6 @@ def test__write_document_nested_field_2():
     sample = {"this": {"is": {}}}
     ViWriteClient.set_field("this.is", doc=sample, value=[0, 2])
     assert sample["this"]["is"] == [0, 2]
-
-@pytest.mark.use_tensorflow
-def test__encode_documents_with_models(test_client, sample_documents):
-    """Test Model Encoding
-    """
-    model = Transformer2Vec('distilbert')
-    roberta_model = Transformer2Vec('distilroberta')
-    test_client._encode_documents_with_models(sample_documents, models={'team': [model, roberta_model]})
-    assert 'distilbert' in test_client.get_name(model)
-    assert 'roberta' in test_client.get_name(roberta_model)
-    assert 'team_distilroberta_text_vector_' in sample_documents[0].keys()
-    assert 'team_distilbert_text_vector_' in sample_documents[0].keys()
 
 @pytest.mark.use_client
 def test_encode_documents_with_deployed_model(test_client, test_text_encoder):

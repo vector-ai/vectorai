@@ -21,6 +21,19 @@ class TestRead:
             assert var in return_item
 
     @pytest.mark.use_client
+    def test_advanced_search_by_id(self, test_client, test_collection_name):
+        filter_query = [
+            {'field': 'color',
+            'filter_type': 'text',
+            'condition_value': 'red',
+            'condition': '=='}
+        ]
+        results = test_client.advanced_search_by_id(test_collection_name, 
+        document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'], 
+        fields={'color_vector_':1}, filters=filter_query)
+        assert len(results) > 0
+
+    @pytest.mark.use_client
     def test_get_document_by_bulk_id(self, test_client, test_collection_name):
         return_documents = test_client.bulk_id(
             collection_name=test_collection_name, document_ids=["0", "1"]

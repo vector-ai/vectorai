@@ -12,7 +12,7 @@ class ViDeployedModel:
             self.url = "https://api.vctr.ai"
         self.collection_name = collection_name
         self._name = "default"
-
+    
     def _vector_operation(self, vectors, vector_operation: str = "mean"):
         if vector_operation == "mean":
             return np.mean(vectors, axis=0).tolist()

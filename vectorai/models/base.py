@@ -65,10 +65,6 @@ class _Vi2Vec(ViWriteClient):
         )
         print("Checked! Feel free to upload!")
 
-    @staticmethod
-    def to_json(x):
-        return ViClient._as_json(x)
-
     @abstractmethod
     def encode(x):
         """An abstract method to specify the encode method.
