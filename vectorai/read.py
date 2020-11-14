@@ -13,13 +13,10 @@ from .utils import UtilsMixin
 from .doc_utils import DocUtilsMixin
 
 class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
-    def __init__(self, username, api_key, url=None):
+    def __init__(self, username: str, api_key: str, url: str="https://api.vctr.ai"):
         self.username = username
         self.api_key = api_key
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
+        self.url = url
 
     def random_aggregation_query(
         self, collection_name: str, groupby: int = 1, metrics: int = 1

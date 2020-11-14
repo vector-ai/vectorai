@@ -263,13 +263,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 for model in model_list:
                     vector_field = self._get_vector_name_for_encoding(f, model, model_list)
                     if not self.is_field(f, d):
-                        warnings.warn(f"""Missing {f} in a document. We will fill the missing with vectors of 1e-7.""")
+                        warnings.warn(f"""Missing {f} in a document. We will fill the missing with empty vectors.""")
                         try:
                             self.set_field(vector_field, d, self.dummy_vector(vector_length))
                         except:
-                            raise ValueError(
-                                "Need to ensure at least one passthrough is made to get vector length."
-                            )
+                            raise APIError("Need to ensure at least one passthrough is made to get vector length.")
                     if isinstance(model, (types.FunctionType, types.MethodType)):
                         vector = model(self.get_field(f, d))
                         vector_length = len(vector)
