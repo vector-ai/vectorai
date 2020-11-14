@@ -378,11 +378,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> vi_client.insert_document(document)
         """
         response = self.insert(collection_name=collection_name, document=document)
-        if response == "inserted":
-            if verbose:
-                print(f"Document inserted succesfully into {collection_name}")
-        else:
+        if response != "inserted":
             raise APIError(f"Document failed to insert into {collection_name}")
+        
+        if verbose:
+            print(f"Document inserted succesfully into {collection_name}")
+            
 
     def insert_single_document(self, collection_name: str, document: Dict):
         """
@@ -556,14 +557,18 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         response = self._edit_document(
             collection_name, edits=copy_doc, document_id=document_id
         )
-        if response == "updated":
-            if verbose:
-                print(f"Edited item with id {document_id} successfully.")
-        elif response == "no_changes_detected":
-            if verbose:
-                print(f"{document_id} has no changes.")
-        else:
+
+        VERBOSE_MESSAGE_DICT = {
+            'updated': f"Edited item with id {document_id} successfully.",
+            'no changes detected': f"{document_id} has no changes."
+        }
+
+        if response not in VERBOSE_MESSAGE_DICT.keys():
             raise APIError("Failed to edit item.")
+        
+        if verbose:
+            print(VERBOSE_MESSAGE_DICT[response])
+            
 
     def _edit_document_return_id(
         self, edits: Dict[str, str], collection_name: str
