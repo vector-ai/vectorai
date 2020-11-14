@@ -24,13 +24,10 @@ from .api.write import ViWriteAPIClient
 class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
     """Class to write to database."""
 
-    def __init__(self, username, api_key, url=None):
+    def __init__(self, username, api_key, url="https://api.vctr.ai" ):
         self.username = username
         self.api_key = api_key
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
+        self.url = url
 
     @staticmethod
     def _raise_error(response):
