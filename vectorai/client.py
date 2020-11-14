@@ -25,18 +25,14 @@ class ViClient(ViWriteClient, ViAnalyticsMixin):
             >>> vi_client.list_collections()
     """
 
-    def __init__(self, username: str, api_key: str, url: str = None, verbose: bool = True) -> None:
+    def __init__(self, username: str, api_key: str, url: str = "https://api.vctr.ai", verbose: bool = True) -> None:
         super().__init__(username, api_key, url)
         self.username = username
         self.api_key = api_key
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
+        self.url = url
 
         if verbose:
             self.check_login_details()
-
             print(
                 f"Logged in. Welcome {self.username}. To view list of available collections, call list_collections() method."
             )
@@ -93,15 +89,11 @@ class ViCollectionClient(ViClient):
             >>> vi_client = ViClient(username, api_key, collection_name, vectorai_url)
             >>> vi_client.insert_documents(documents)
     """
-    def __init__(self, collection_name: str, username: str, api_key: str, url: str = None, verbose: bool = True) -> None:
+    def __init__(self, collection_name: str, username: str, api_key: str, url: str="https://api.vctr.ai", verbose: bool=True) -> None:
         self.username = username
         self.api_key = api_key
         self._collection_name = collection_name
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
-        
+        self.url = url
         if verbose:
             self.check_login_details()
             print(

@@ -18,6 +18,9 @@ class APIError(Exception):
         """
         self.response_message = response_message
 
+class MissingFieldWarning(APIError, UserWarning):
+    pass
+
 class LoginError(APIError):
     """
     Login Error
