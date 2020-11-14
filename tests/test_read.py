@@ -29,7 +29,7 @@ class TestRead:
             'condition': '=='}
         ]
         results = test_client.advanced_search_by_id(test_collection_name, 
-        document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'], 
+        document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'],
         fields={'color_vector_':1}, filters=filter_query)
         assert len(results) > 0
 
@@ -58,3 +58,11 @@ def test_read(test_client):
     """
     nested_schema = {'chk': {'chk_vector_': [0]}}
     assert test_client._check_schema(nested_schema) is False
+
+def test_set_field_on_new_field(test_client):
+    """
+        Assert when set on new field.
+    """
+    doc = {}
+    test_client.set_field('balls', doc, 3)
+    assert doc['balls'] == 3

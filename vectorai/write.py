@@ -45,7 +45,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> ViClient._raise_error(response)
         """
         if 'status' in response.keys():
-            if response["status"] == "error":
+            if response["status"].lower() == "error":
                 raise APIError(response["message"])
 
     @classmethod

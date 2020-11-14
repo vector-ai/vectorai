@@ -171,62 +171,6 @@ class TestEdit:
             test_client.delete_collection(test_collection_name)
 
 
-# @pytest.mark.skip("Embed function is on pause until there is more clarity.")
-# def test_multiple_insert_documents_embed(
-#     test_client,
-#     test_api_key,
-#     test_username,
-#     test_collection_name,
-#     test_vector_field,
-#     test_id_field,
-# ):
-#     documents = [
-#         {"_id": "5", "attribute": "violet"},
-#         {"_id": "6", "attribute": "black"},
-#     ]
-
-#     class Model:
-#         def encode(self, document):
-#             return test_client.generate_vector(512)
-
-#     model = Model()
-
-#     test_client.insert_documents(
-#         test_collection_name, documents=documents, models={test_vector_field: model}
-#     )
-
-#     return_document = test_client.id(
-#         collection_name=test_collection_name, document_id="5"
-#     )
-#     assert return_document["attribute"] == "violet"
-#     return_document = test_client.id(
-#         collection_name=test_collection_name, document_id="6"
-#     )
-#     assert return_document["attribute"] == "black"
-
-
-# @pytest.mark.skip(
-#     "Function embedding needs to be more " + "thoroughly discussed and may change."
-# )
-# def test_insert_document_embed(
-#     test_client, test_api_key, test_username, test_collection_name
-# ):
-#     # The embed function string most be reproducible
-#     # test_client = ViClient(username="test")
-#     embed_func_str = f"""from vectorai import ViClient
-# test_client = ViClient("{test_username}", "{test_api_key}")
-# def embed_function(document):
-#     return test_client.generate_vector(512)
-# """
-#     document = {"_id": 2, "attribute": "orange"}
-#     test_client.insert_document(
-#         collection_name=test_collection_name,
-#         document=document,
-#         use_embed_func=True,
-#         embed_func_list=[embed_func_str],
-#         search_vector_fields=["document_vector_"],
-#     )
-
 def test__write_document_nested_field():
     sample = {"this": {}}
     ViWriteClient.set_field("this.is", doc=sample, value=[0, 2])
@@ -321,3 +265,9 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
     assert test_collection_client.collection_name in test_collection_client.list_collections()
     assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
     test_collection_client.delete_collection()
+
+def test_dummy_vector(test_client):
+    """
+        Test the dummy vector
+    """
+    assert len(test_client.dummy_vector(512)) == 512
