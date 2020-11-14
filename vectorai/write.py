@@ -250,9 +250,9 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     for v in values:
                         assert (
                             self.get_name(v) is not None
-                        ), "You need to name {v}. Please do this using the rename function."
+                        ), f"You need to name {v}. Please do this using the rename function."
 
-    def _encode_documents_with_models_using_encode(self, documents: List[Dict], models: Dict):
+    def encode_documents_with_models_using_encode(self, documents: List[Dict], models: Dict):
         """
         Encode documents with appropriate models without a bulk_encode function.
         Args:
@@ -277,7 +277,6 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                             raise ValueError(
                                 "Need to ensure at least one passthrough is made to get vector length."
                             )
-
                     if isinstance(model, (types.FunctionType, types.MethodType)):
                         vector = model(self.get_field(f, d))
                         vector_length = len(vector)
@@ -288,7 +287,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                         self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
         return documents
     
-    def _encode_documents_with_models(
+    def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
     ):
         """
@@ -306,16 +305,16 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> from vectorai.models.deployed import ViText2Vec
             >>> text_encoder = ViText2Vec(username, api_key, vectorai_url)
             >>> documents = [{'chicken': 'Big chicken'}, {'chicken': 'small_chicken'}, {'chicken': 'cow'}]
-            >>> vi_client._encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
+            >>> vi_client.encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
         """
         # TODO: refactor & test if changing black length
         self._check_if_multiple_models_have_names(models)
         if use_bulk_encode:
-            return self._encode_documents_with_models_in_bulk(documents=documents, models=models)
+            return self.encode_documents_with_models_in_bulk(documents=documents, models=models)
         else:
-            return self._encode_documents_with_models_using_encode(documents=documents, models=models)
+            return self.encode_documents_with_models_using_encode(documents=documents, models=models)
                                 
-    def _encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
+    def encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
         """
         Encode documents with models to allow for bulk_encode.
         
@@ -351,7 +350,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         return self.bulk_insert(
             collection_name=collection_name,
-            documents=self._encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
+            documents=self.encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -432,7 +431,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self._check_schema(documents[0])
             self.create_collection_from_document(
                 collection_name,
-                self._encode_documents_with_models([documents[0]], models)[0],
+                self.encode_documents_with_models([documents[0]], models)[0],
             )
         failed = []
         if workers == 1:
