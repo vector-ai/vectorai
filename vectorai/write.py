@@ -235,7 +235,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         for f, model_list in models.items():
             if not isinstance(model_list, list):
-                models = list(values)
+                models = list(model_list)
             name_list = []
             for model in model_list:
                 name = self.get_name(model)
