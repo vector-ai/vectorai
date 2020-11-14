@@ -58,11 +58,3 @@ def test_read(test_client):
     """
     nested_schema = {'chk': {'chk_vector_': [0]}}
     assert test_client._check_schema(nested_schema) is False
-
-def test_set_field_on_new_field(test_client):
-    """
-        Assert when set on new field.
-    """
-    doc = {}
-    test_client.set_field('balls', doc, 3)
-    assert doc['balls'] == 3

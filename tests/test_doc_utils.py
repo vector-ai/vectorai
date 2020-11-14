@@ -21,7 +21,7 @@ def test_set_and_get_field_across_documents(test_client):
     for i, doc in enumerate(docs):
         assert test_client.get_field('size.inches', doc) == i
 
-def testis_field(test_client):
+def test_is_field(test_client):
     """
         Test if it is a field
     """

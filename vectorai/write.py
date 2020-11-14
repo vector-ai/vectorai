@@ -202,12 +202,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         return self._delete_collection(collection_name)
 
-    def _get_vector_name_for_encoding(
-        self,
-        f: str,
-        model: Callable,
-        models: Dict[str, Union[List[Callable], Callable]],
-    ):
+    def _get_vector_name_for_encoding(self, f: str, model: Callable, model_list: List[Callable]):
         """
         Returns the vector names for encoding.
         
@@ -220,19 +215,15 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 A dictionary of fields and models to determine the type of encoding for each field.
 
         """
-        if isinstance(models[f], (types.FunctionType, types.MethodType)):
-            return f"{f}_vector_"
-        elif isinstance(models[f], list):
-            if len(models[f]) == 1:
-                return f"{f}_vector_"
-            else:
-                return f"{f}_{self.get_name(model)}_vector_"
-        elif hasattr(models[f], "encode"):
-            return f"{f}_vector_"
+        if len(model_list) == 1 and self.get_name(model) is None:
+            vector_name = f"{f}_vector_"
+        elif isinstance(model, (types.FunctionType, types.MethodType)):
+            vector_name = f"{f}_vector_"
         else:
-            return "_vector_"
+            vector_name = f"{f}_{self.get_name(model)}_vector_"
+        return vector_name
 
-    def _check_if_multiple_models_have_names(self, models: Dict):
+    def _check_if_multiple_models_have_same_name(self, models: Dict):
         """
             For a model dictionary, ensure that the name of a function is good.
 
@@ -241,13 +232,17 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     A dictionary where a key links to a dictionary.
 
         """
-        for f, values in models.items():
-            if isinstance(values, list):
-                if len(values) > 1:
-                    for v in values:
-                        assert (
-                            self.get_name(v) is not None
-                        ), f"You need to name {v}. Please do this using the rename function."
+        for f, model_list in models.items():
+            if not isinstance(model_list, list):
+                models = list(values)
+            name_list = []
+            for model in model_list:
+                name = self.get_name(model)
+                if name is None and len(model_list) > 1:
+                    assert self.get_name(m) is not None, f"Your models are missing names. Please set name using set_name(model) function."
+                name_list.append(name)
+            if len(set(name_list)) != len(name_list):
+                raise ValueError("Models have the set name. Check each model name is unique.")
 
     def encode_documents_with_models_using_encode(self, documents: List[Dict], models: Dict):
         """
@@ -265,7 +260,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 if not isinstance(model_list, list):
                     model_list = [model_list]
                 for model in model_list:
-                    vector_field = self._get_vector_name_for_encoding(f, model, models)
+                    vector_field = self._get_vector_name_for_encoding(f, model, model_list)
                     if not self.is_field(f, d):
                         warnings.warn(f"""Missing {f} in a document. We will fill the missing with vectors of 1e-7.""")
                         try:
@@ -305,7 +300,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> vi_client.encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
         """
         # TODO: refactor & test if changing black length
-        self._check_if_multiple_models_have_names(models)
+        self._check_if_multiple_models_have_same_name(models)
         if use_bulk_encode:
             return self.encode_documents_with_models_in_bulk(documents=documents, models=models)
         else:
