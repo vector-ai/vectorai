@@ -10,13 +10,6 @@ import warnings
 import requests
 import pandas as pd
 import numpy as np
-
-try:
-    import tensorflow as tf
-
-    HAS_TENSORFLOW = True
-except:
-    HAS_TENSORFLOW = False
 import copy
 from tqdm.notebook import tqdm
 from typing import List, Dict, Union, Any, Callable
@@ -279,6 +272,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> documents = [{'chicken': 'Big chicken'}, {'chicken': 'small_chicken'}, {'chicken': 'cow'}]
             >>> vi_client._encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
         """
+        # TODO: refactor & test if changing black length
         self._check_if_multiple_models_have_names(models)
         if use_bulk_encode:
             return self._encode_documents_with_models_in_bulk(documents=documents, models=models)
@@ -291,10 +285,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     for model in model_list:
                         vector_field = self._get_vector_name_for_encoding(f, model, models)
                         if not self._is_field(f, d):
-                            warnings.warn(
-                                f"""Missing {f} in a document.
-                                We will fill the missing with vectors of 1e-7."""
-                            )
+                            warnings.warn(f"""Missing {f} in a document. We will fill the missing with vectors of 1e-7.""")
                             try:
                                 self.set_field(
                                     vector_field, d, dummy_vector(vector_length)
@@ -310,20 +301,14 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                             self.set_field(vector_field, d, vector)
                         else:
                             if hasattr(model, "encode"):
-                                self.set_field(
-                                    vector_field,
-                                    d,
-                                    model.encode(self.get_field(f, d)),
-                                )
+                                self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
                             else:
-                                raise APIError(
-                                    "Not sure how to encode. Please sure the model class has an encode method."
-                                )
+                                raise APIError("Not sure how to encode. Please sure the model class has an encode method.")
         return documents
 
     def _encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
         """
-            Encode documents with models to allow for bulk_encode.
+        Encode documents with models to allow for bulk_encode.
         
         Args:
             documents:
@@ -413,8 +398,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         use_bulk_encode=False
     ):
         """
-        Insert documents into a collection with an option to encode with models.
-        
+        Insert documents into a collection with an option to encode with models.        
 
         Args:
             collection_name:
@@ -443,32 +427,20 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             )
         failed = []
         if workers == 1:
-            for c in self.progress_bar(
-                self._chunks(documents, chunksize),
-                total=int(len(documents) / chunksize),
-            ):
+            for c in self.progress_bar(self._chunks(documents, chunksize), total=int(len(documents) / chunksize)):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode
                 )
                 self._raise_error(result)
-                if verbose:
-                    print(f"Failed: {result['failed_document_ids']}")
+                if verbose: print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
         else:
 
             pool = Pool(processes=workers)
-
-            for result in self.progress_bar(
-                pool.imap_unordered(
-                    func=partial(
-                        self._insert_and_encode,
-                        models=models,
-                        collection_name=collection_name,
-                    ),
-                    iterable=self._chunks(documents, chunksize),
-                ),
-                total=int(len(documents) / chunksize),
-            ):
+            total_iterations = int(len(documents) / chunksize)
+            for result in self.progress_bar(pool.imap_unordered(
+                func=partial(self._insert_and_encode, models=models,collection_name=collection_name), iterable=self._chunks(documents, chunksize),
+            ), total=total_iterations):
                 self._raise_error(result)
                 if verbose:
                     print(f"Failed: {result['failed_document_ids']}")
