@@ -24,3 +24,8 @@ def test_operations_max(test_text_encoder):
 def test_operations_min(test_text_encoder):
     vectors = [[1, 2], [2, 3]]
     assert [1, 2] == test_text_encoder._vector_operation(vectors, vector_operation="min")
+
+def test_operations_min_with_error(test_text_encoder):
+    with pytest.raises(ValueError):
+        vectors = vectors = [[1, 2], [2, 3], [2, 4]]
+        test_text_encoder._vector_operation(vectors, vector_operation='minus')
