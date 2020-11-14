@@ -109,6 +109,7 @@ class TestEdit:
         test_client.insert_documents(
             collection_name=test_collection_name, documents=documents
         )
+        time.sleep(10)
         assert True
 
 
@@ -210,6 +211,7 @@ def test_multiprocess_insert(test_client, test_collection_name):
         test_client.delete_collection(test_collection_name)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_name in test_client.list_collections()
     assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -228,6 +230,7 @@ def test_multiprocess_insert_with_error(test_client, test_collection_name):
     
     # This should result in 1 failure
     results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_name in test_client.list_collections()
     assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -240,6 +243,7 @@ def test_multiprocess_with_collection_client(test_collection_client, test_collec
         test_collection_client.delete_collection()
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     results = test_collection_client.insert_documents(documents, workers=5)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_client.collection_name in test_collection_client.list_collections()
     assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -257,6 +261,7 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
     })
     # This should result in 1 failure
     results = test_collection_client.insert_documents(documents, workers=5)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_client.collection_name in test_collection_client.list_collections()
     assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED

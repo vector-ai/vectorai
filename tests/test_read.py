@@ -1,6 +1,7 @@
 """Testing the various read functions for Vi
 """
 import pytest
+import time
 
 class TestRead:
     @pytest.mark.use_client
@@ -12,6 +13,7 @@ class TestRead:
         test_client.insert_documents(
             collection_name=test_collection_name, documents=documents
         )
+        time.sleep(10)
         assert True
 
     @pytest.mark.use_client
