@@ -252,6 +252,42 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                             self.get_name(v) is not None
                         ), "You need to name {v}. Please do this using the rename function."
 
+    def _encode_documents_with_models_using_encode(self, documents: List[Dict], models: Dict):
+        """
+        Encode documents with appropriate models without a bulk_encode function.
+        Args:
+            documents: 
+                List of documents/JSONs/dictionaries. 
+            models:
+                A dictionary of fields and models to determine the type of encoding for each field. 
+        
+        """
+        for d in documents:
+            for f, model_list in models.items():
+                # Typecast callable to a list to easily pass through for-loop.
+                if not isinstance(model_list, list):
+                    model_list = [model_list]
+                for model in model_list:
+                    vector_field = self._get_vector_name_for_encoding(f, model, models)
+                    if not self.is_field(f, d):
+                        warnings.warn(f"""Missing {f} in a document. We will fill the missing with vectors of 1e-7.""")
+                        try:
+                            self.set_field(vector_field, d, self.dummy_vector(vector_length))
+                        except:
+                            raise ValueError(
+                                "Need to ensure at least one passthrough is made to get vector length."
+                            )
+
+                    if isinstance(model, (types.FunctionType, types.MethodType)):
+                        vector = model(self.get_field(f, d))
+                        vector_length = len(vector)
+                        self.set_field(vector_field, d, vector)
+                    else:
+                        if not hasattr(model, "encode"):
+                            raise APIError("Not sure how to encode. Please sure the model class has an encode method.")
+                        self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
+        return documents
+    
     def _encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
     ):
@@ -277,35 +313,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         if use_bulk_encode:
             return self._encode_documents_with_models_in_bulk(documents=documents, models=models)
         else:
-            for d in documents:
-                for f, model_list in models.items():
-                    # Typecast callable to a list to easily pass through for-loop.
-                    if not isinstance(model_list, list):
-                        model_list = [model_list]
-                    for model in model_list:
-                        vector_field = self._get_vector_name_for_encoding(f, model, models)
-                        if not self._is_field(f, d):
-                            warnings.warn(f"""Missing {f} in a document. We will fill the missing with vectors of 1e-7.""")
-                            try:
-                                self.set_field(
-                                    vector_field, d, dummy_vector(vector_length)
-                                )
-                            except:
-                                raise ValueError(
-                                    "Need to ensure at least one passthrough is made to get vector length."
-                                )
-
-                        if isinstance(model, (types.FunctionType, types.MethodType)):
-                            vector = model(self.get_field(f, d))
-                            vector_length = len(vector)
-                            self.set_field(vector_field, d, vector)
-                        else:
-                            if hasattr(model, "encode"):
-                                self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
-                            else:
-                                raise APIError("Not sure how to encode. Please sure the model class has an encode method.")
-        return documents
-
+            return self._encode_documents_with_models_using_encode(documents=documents, models=models)
+                                
     def _encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
         """
         Encode documents with models to allow for bulk_encode.

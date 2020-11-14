@@ -21,12 +21,12 @@ def test_set_and_get_field_across_documents(test_client):
     for i, doc in enumerate(docs):
         assert test_client.get_field('size.inches', doc) == i
 
-def test_is_field(test_client):
+def testis_field(test_client):
     """
         Test if it is a field
     """
     docs = test_client.create_sample_documents(10)
-    assert test_client._is_field("size", docs[0])
-    assert not test_client._is_field("hfueishfuie", docs[0])
-    assert test_client._is_field("size.cm", docs[0])
-    assert not test_client._is_field("size.bafehui", docs[0])
+    assert test_client.is_field("size", docs[0])
+    assert not test_client.is_field("hfueishfuie", docs[0])
+    assert test_client.is_field("size.cm", docs[0])
+    assert not test_client.is_field("size.bafehui", docs[0])

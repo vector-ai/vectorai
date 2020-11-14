@@ -171,7 +171,7 @@ class DocUtilsMixin:
             self.set_field(field, docs[i], value)
 
     @staticmethod
-    def _is_field(field: str, doc: Dict) -> bool:
+    def is_field(field: str, doc: Dict) -> bool:
         """
         For nested dictionaries, tries to access a field.
         e.g. 
@@ -195,7 +195,7 @@ class DocUtilsMixin:
             >>> from vectorai.client import ViClient
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> sample_document = {'kfc': {'item': 'chicken'}}
-            >>> vi_client._is_field('kfc.item', sample_document) == True
+            >>> vi_client.is_field('kfc.item', sample_document) == True
         """
         d = doc
         for f in field.split("."):
