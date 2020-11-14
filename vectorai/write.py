@@ -154,6 +154,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     d = d[f]
                 else:
                     d.update({f: {}})
+                    d = d[f]
 
     def create_collection(self, collection_name: str, collection_schema: Dict = {}):
         """
@@ -328,7 +329,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         # Now bulk-encode and then set the field for each dictionary
         for f, model_list in models.items():
             for model in model_list:
-                vector_field = self._get_vector_name_for_encoding(f, model, models)
+                vector_field = self._get_vector_name_for_encoding(f, model, model_list)
                 values = self.get_field_across_documents(f, documents)
                 vectors = model.bulk_encode(values)
                 self.set_field_across_documents(vector_field, vectors, documents)

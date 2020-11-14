@@ -276,6 +276,11 @@ def test_set_field_on_new_field(test_client):
     test_client.set_field('balls', doc, 3)
     assert doc['balls'] == 3
 
+def test_set_field_on_new_dict(test_client):
+    doc = {}
+    test_client.set_field('check.balls', doc, 3)
+    assert test_client.get_field('check.balls', doc) == 3
+
 def test_vector_name(test_client):
     text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
     test_client.set_name(text_encoder, 'vectorai_text')
@@ -296,3 +301,11 @@ def test_vector_name_same_name(test_client):
     text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
     with pytest.raises(ValueError):
         vector_name = test_client._check_if_multiple_models_have_same_name(models={'color':[text_encoder, text_encoder]})
+
+def test_encode_documents_With_models_using_encode(test_client):
+    docs = test_client.create_sample_documents(5)
+    text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    test_client.set_name(text_encoder, "vectorai_text")
+    test_client.encode_documents_with_models_using_encode(docs, models={'color': [text_encoder]})
+    assert 'color_vectorai_text_vector_' in docs[0].keys()
+
