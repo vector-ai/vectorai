@@ -334,14 +334,22 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         return documents
 
     def _insert_and_encode(
-        self, documents: list, collection_name: str, models: dict, verbose=False, use_bulk_encode=False
+        self, documents: list, collection_name: str, models: dict, verbose=False, 
+        use_bulk_encode=False, overwrite=False, missing_ids=None
     ):
         """
             Insert and encode documents
         """
+        if not overwrite:
+            documents = [doc for i, doc in enumerate(documents) if self.get_field('_id', doc) in missing_ids]
+        if len(documents) == 0:
+            return {
+                'failed_document_ids': []
+            }
         return self.bulk_insert(
             collection_name=collection_name,
-            documents=self.encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
+            documents=self.encode_documents_with_models(documents, models=models, 
+            use_bulk_encode=use_bulk_encode), overwrite=overwrite
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -394,7 +402,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         chunksize: int = 15,
         workers: int = 1,
         verbose=False,
-        use_bulk_encode=False
+        use_bulk_encode=False,
+        overwrite=False
     ):
         """
         Insert documents into a collection with an option to encode with models.        
@@ -410,6 +419,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Use the bulk_encode method in models
             verbose:
                 Whether to print document ids that have failed when inserting.
+            overwrite:
+                If True, overwrites document based on _id field.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -425,27 +436,32 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self.encode_documents_with_models([documents[0]], models)[0],
             )
         failed = []
+        bulk_id_list = self.get_field_across_documents('_id', documents)
+        missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
+        iter_len = int(len(documents) / chunksize)
+        iter_docs = self._chunks(documents, chunksize)
+
         if workers == 1:
-            for c in self.progress_bar(self._chunks(documents, chunksize), total=int(len(documents) / chunksize)):
+            for c in self.progress_bar(iter_docs, total=iter_len):
                 result = self._insert_and_encode(
-                    documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode
+                    documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
+                    missing_ids=missing_ids, overwrite=overwrite
                 )
                 self._raise_error(result)
                 if verbose: print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
         else:
-
             pool = Pool(processes=workers)
-            total_iterations = int(len(documents) / chunksize)
-            for result in self.progress_bar(pool.imap_unordered(
-                func=partial(self._insert_and_encode, models=models,collection_name=collection_name), iterable=self._chunks(documents, chunksize),
-            ), total=total_iterations):
+            # Using partial insert for compatibility with ViCollectionClient
+            partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
+            missing_ids=missing_ids, overwrite=overwrite)
+            for result in self.progress_bar(
+                pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
-                if verbose:
+                if verbose and len(result['failed_document_ids']) > 0:
+                    warnings.warn("""There are failed documents. Try re-inserting these IDs
+                    and test by choosing the most important fields first!""")
                     print(f"Failed: {result['failed_document_ids']}")
-                    if len(result['failed_document_ids']) > 0:
-                        warnings.warn("""There are failed documents. Try re-inserting these IDs
-                        and test by choosing the most important fields first!""")
                 failed.append(result["failed_document_ids"])
             pool.close()
             pool.join()

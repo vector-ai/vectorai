@@ -444,7 +444,7 @@ Args:
             Return IDs that are not in a collection.
         """
         return requests.post('{}/collection/bulk_missing_id'.format(self.url), 
-        params={
+        json={
             "username" : self.username,
             "api_key" : self.api_key,
             "collection_name": collection_name,
