@@ -2,7 +2,7 @@
 """
 import pytest
 import time
-from vectorai.errors import MissingFieldWarning
+from vectorai.errors import MissingFieldWarning, MissingFieldError
 class TestRead:
     @pytest.mark.use_client
     def test_setup_for_read(self, test_client, test_collection_name):
@@ -54,6 +54,11 @@ def test_get_field(test_client):
     """
     test_dict = {"kfc": {"item": "chickens"}}
     assert test_client.get_field("kfc.item", doc=test_dict) == "chickens"
+
+def test_get_empty_field(test_client):
+    with pytest.raises(MissingFieldError):
+        docs = test_client.create_sample_documents(10)
+        test_client.get_field_across_documents('_id_', docs)
 
 def test_check_schema(test_client):
     """Testing a nested dictionary to ensure it can detected a nested vector field

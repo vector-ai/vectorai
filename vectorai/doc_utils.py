@@ -1,6 +1,8 @@
 """Document-Specific Utilities
 """
 from typing import List, Dict, Any
+from .errors import MissingFieldError
+
 class DocUtilsMixin:
     @classmethod
     def get_field(self, field: str, doc: Dict):
@@ -32,7 +34,10 @@ class DocUtilsMixin:
             try:
                 d = d[f]
             except:
-                return doc[field]
+                try:
+                    return doc[field]
+                except:
+                    raise MissingFieldError("Document is missing " + field)
         return d
 
     @classmethod
