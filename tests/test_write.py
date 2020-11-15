@@ -323,6 +323,43 @@ def test_multiprocess_not_overwrite(test_client, test_collection_name):
     time.sleep(5)
     test_client.delete_collection(test_collection_name)
 
+@pytest.mark.use_client
+def test_multiprocess_overwrite_collection_client(test_collection_client, test_collection_name):
+    NUM_OF_DOCS = 10
+    docs = test_collection_client.create_sample_documents(NUM_OF_DOCS)
+    test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_collection_client.id(TEST_ID)
+    test_collection_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    docs[3].update({'_id': '3'})
+    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    overwrite=True)
+    id_document = test_collection_client.id(TEST_ID)
+    assert test_collection_client.get_field('test.field', id_document) == 'stranger'
+    time.sleep(5)
+    test_collection_client.delete_collection()
+
+@pytest.mark.use_client
+def test_multiprocess_not_overwrite_collection_client(test_collection_client, test_collection_name):
+    NUM_OF_DOCS = 10
+    docs = test_collection_client.create_sample_documents(NUM_OF_DOCS)
+    test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_collection_client.id(TEST_ID)
+    test_collection_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    docs[3].update({'_id': '3'})
+    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    overwrite=False)
+    id_document = test_collection_client.id(TEST_ID)
+    with pytest.raises(MissingFieldError):
+        test_collection_client.get_field('test.field', id_document)
+    time.sleep(5)
+    test_collection_client.delete_collection()
+
 def test_dummy_vector(test_client):
     """
         Test the dummy vector
