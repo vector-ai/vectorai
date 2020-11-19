@@ -1018,3 +1018,16 @@ Args:
                 "asc": asc,
             },
         ).json()
+
+    def chunk_search(self, collection_name, vector, search_fields: list, chunk_scoring: str="mean"):
+        """
+            Chunk search functionality
+        """
+        return requests.post('https://api.vctr.ai/collection/chunk_search', json={
+            "username" : self.username,
+            "api_key" : self.api_key,
+            "collection_name": collection_name,
+            "vector" : vector,
+            "chunk_scoring": chunk_scoring,
+            "search_fields" : search_fields,
+        }).json()
