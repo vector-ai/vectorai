@@ -246,7 +246,7 @@ class UtilsMixin:
             num_of_documents:
                 Create sample documents.
         """
-        return [self.create_sample_document(i, include_chunks=False) for i in range(num_of_documents)]
+        return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
     def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
         """
