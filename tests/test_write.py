@@ -209,9 +209,9 @@ def test_multiprocess_insert(test_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 10
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection(test_collection_name)
-        time.sleep(5)
+        time.sleep(10)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
-    results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=False)
     time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_name in test_client.list_collections()
@@ -259,7 +259,7 @@ def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collect
 
 @pytest.mark.use_client
 def test_multiprocess_with_collection_client(test_collection_client, test_collection_name):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_client.collection_name in test_collection_client.list_collections():    
         test_collection_client.delete_collection()
         time.sleep(5)
@@ -273,13 +273,13 @@ def test_multiprocess_with_collection_client(test_collection_client, test_collec
 
 @pytest.mark.use_client
 def test_multiprocess__with_error_with_collection_client(test_collection_client):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_client.collection_name in test_collection_client.list_collections():    
         test_collection_client.delete_collection()
         time.sleep(5)
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     documents.append({
-        '_id': 3,
+        '_id': 9993,
         'color': np.nan
     })
     # This should result in 1 failure
@@ -318,7 +318,7 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection()
         time.sleep(5)
-    NUM_OF_DOCS = 10
+    NUM_OF_DOCS = 100
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
     # For document with id '3'
@@ -340,7 +340,7 @@ def test_multiprocess_not_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection()
         time.sleep(5)
-    NUM_OF_DOCS = 10
+    NUM_OF_DOCS = 100
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
     # For document with id '3'

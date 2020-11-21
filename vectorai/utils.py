@@ -193,47 +193,60 @@ class UtilsMixin:
                 return documents
     
     @classmethod
-    def create_sample_document(self, document_id: str=None):
+    def create_sample_document(self, document_id: str=None, include_chunks=False):
         """
         Create sample document.
         Args:
             Document_id: the index of the document
         """
         rand_index = np.random.randint(0, 30)
-        sample_document =  {
-            'color': [random.choice(['red', 'blue', 'orange', 'green'])],
-            'number': [random.choice(list(range(10)))],
-            'country': random.choice(['Italy', 'Australia', 'Denmark', 'Brazil', 'France']),
-            'color_vector_': np.random.rand(1, 30).tolist()[0],
-            'color_2_vector_': np.random.rand(1, 30).tolist()[0],
-            'size': {
-                'feet': list(range(1, 31))[rand_index],
-                'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
-            },
-            'chunk':[
-                {
-                    'color_chunkvector_': np.random.rand(1, 30).tolist()[0],
-                    'color': random.choice(['red', 'blue', 'orange', 'green'])
+        if include_chunks:
+            sample_document =  {
+                'color': [random.choice(['red', 'blue', 'orange', 'green'])],
+                'number': [random.choice(list(range(10)))],
+                'country': random.choice(['Italy', 'Australia', 'Denmark', 'Brazil', 'France']),
+                'color_vector_': np.random.rand(1, 30).tolist()[0],
+                'color_2_vector_': np.random.rand(1, 30).tolist()[0],
+                'size': {
+                    'feet': list(range(1, 31))[rand_index],
+                    'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
                 },
-                {
-                    'color_2_chunkvector_': np.random.rand(1, 30).tolist()[0],
-                    'color': random.choice(['red', 'blue', 'orange', 'green'])
+                'chunk':[
+                    {
+                        'color_chunkvector_': np.random.rand(1, 30).tolist()[0],
+                        'color': random.choice(['red', 'blue', 'orange', 'green'])
+                    },
+                    {
+                        'color_2_chunkvector_': np.random.rand(1, 30).tolist()[0],
+                        'color': random.choice(['red', 'blue', 'orange', 'green'])
+                    }
+                ]
+            }
+        else:
+            sample_document =  {
+                'color': [random.choice(['red', 'blue', 'orange', 'green'])],
+                'number': [random.choice(list(range(10)))],
+                'country': random.choice(['Italy', 'Australia', 'Denmark', 'Brazil', 'France']),
+                'color_vector_': np.random.rand(1, 30).tolist()[0],
+                'color_2_vector_': np.random.rand(1, 30).tolist()[0],
+                'size': {
+                    'feet': list(range(1, 31))[rand_index],
+                    'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
                 }
-            ]
-        }
+            }
         if document_id is not None:
             sample_document.update({'_id': str(document_id)})
         return sample_document
     
     @classmethod
-    def create_sample_documents(self, num_of_documents: int):
+    def create_sample_documents(self, num_of_documents: int, include_chunks=False):
         """
         Create sample documents.
         Args:
             num_of_documents:
                 Create sample documents.
         """
-        return [self.create_sample_document(i) for i in range(num_of_documents)]
+        return [self.create_sample_document(i, include_chunks=False) for i in range(num_of_documents)]
 
     def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
         """
