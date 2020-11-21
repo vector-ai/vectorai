@@ -283,7 +283,7 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
         'color': np.nan
     })
     # This should result in 1 failure
-    results = test_collection_client.insert_documents(documents, workers=5)
+    results = test_collection_client.insert_documents(documents, workers=5, overwrite=True)
     time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_client.collection_name in test_collection_client.list_collections()
@@ -291,7 +291,7 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
 
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite(test_client, test_collection_name):
-    if test_client.collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():    
         test_client.delete_collection()
         time.sleep(5)
     NUM_OF_DOCS = 10
@@ -303,7 +303,7 @@ def test_multiprocess_with_overwrite(test_client, test_collection_name):
 
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite_insert(test_client, test_collection_name):
-    if test_client.collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():    
         test_client.delete_collection()
         time.sleep(5)
     NUM_OF_DOCS = 10
