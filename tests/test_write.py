@@ -212,9 +212,7 @@ def test_multiprocess_insert(test_client, test_collection_name):
         time.sleep(5)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     results = test_client.insert_documents(test_collection_name, documents, workers=5)
-    time.sleep(10)E       AttributeError: 'ViClient' object has no attribute 'collection_name'
-324
-
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_name in test_client.list_collections()
     assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
