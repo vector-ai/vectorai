@@ -1,0 +1,31 @@
+name: Push to vectorai-nightly
+
+# on:
+#   schedule:
+#     - cron: "0 0 * * *"
+
+on:
+  push:
+    branches: 
+      - main
+      - feature/upload_to_pypi
+
+jobs:
+  run_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Pytest 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    - name: Build and distribute package
+      env:
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_PW: ${{ secrets.PYPI_PW }}
+      run: |
+        python3 -m pip install .
+        python3 -m pip install --user --upgrade setuptools wheel
+        python3 setup.py sdist bdist_wheel
+        python3 -m pip install --user --upgrade twine
+        python3 -m twine upload --repository vectorai-nightly dist/* -u $PYPI_USERNAME -p $PYPI_PW
