@@ -2,10 +2,11 @@ import io
 import base64
 import requests
 import pandas as pd
+import os
 from .write import ViWriteClient
 from .analytics import ViAnalyticsMixin
 from .utils import decorate_functions_by_argument, set_default_collection
-from .errors import LoginError
+from .errors import LoginError, APIError
 
 class ViClient(ViWriteClient, ViAnalyticsMixin):
     """
@@ -13,11 +14,11 @@ class ViClient(ViWriteClient, ViAnalyticsMixin):
 
         Parameters:
             username:
-                your username for accessing vecdb
+                your username for accessing vectorai
             api_key:
-                your api key for accessing vecdb
+                your api key for accessing vectorai
             url:
-                url of the deployed vecdb database
+                url of the deployed vectorai database
 
         Example:
             >>> from vectorai.client import ViClient
@@ -25,8 +26,18 @@ class ViClient(ViWriteClient, ViAnalyticsMixin):
             >>> vi_client.list_collections()
     """
 
-    def __init__(self, username: str, api_key: str, url: str = "https://api.vctr.ai", verbose: bool = True) -> None:
+    def __init__(self, username: str=None, api_key: str=None, url: str = "https://api.vctr.ai", verbose: bool = True) -> None:
         super().__init__(username, api_key, url)
+        if username is None:
+            if 'VI_USERNAME' not in os.environ.keys():
+                raise APIError("Specify username of set VI_USERNAME as an environment variable.")
+            username = os.environ['VI_USERNAME']
+        
+        if api_key is None:
+            if 'VI_API_KEY' not in os.environ.keys():
+                raise APIError("Specify VectorAI API key VI_API_KEY as an environment variable.")
+            api_key = os.environ['VI_API_KEY']
+        
         self.username = username
         self.api_key = api_key
         self.url = url
