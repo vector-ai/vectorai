@@ -101,6 +101,16 @@ class ViCollectionClient(ViClient):
             >>> vi_client.insert_documents(documents)
     """
     def __init__(self, collection_name: str, username: str, api_key: str, url: str="https://api.vctr.ai", verbose: bool=True) -> None:
+        if username is None:
+            if 'VI_USERNAME' not in os.environ.keys():
+                raise APIError("Specify username of set VI_USERNAME as an environment variable.")
+            username = os.environ['VI_USERNAME']
+        
+        if api_key is None:
+            if 'VI_API_KEY' not in os.environ.keys():
+                raise APIError("Specify VectorAI API key VI_API_KEY as an environment variable.")
+            api_key = os.environ['VI_API_KEY']
+        
         self.username = username
         self.api_key = api_key
         self._collection_name = collection_name
