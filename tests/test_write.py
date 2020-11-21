@@ -292,7 +292,7 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
-        test_client.delete_collection()
+        test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 10
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
@@ -304,7 +304,7 @@ def test_multiprocess_with_overwrite(test_client, test_collection_name):
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite_insert(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
-        test_client.delete_collection()
+        test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 10
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
@@ -338,7 +338,7 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
-        test_client.delete_collection()
+        test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 100
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
@@ -443,4 +443,3 @@ def test_encode_documents_With_models_using_encode(test_client):
     test_client.set_name(text_encoder, "vectorai_text")
     test_client.encode_documents_with_models_using_encode(docs, models={'color': [text_encoder]})
     assert 'color_vectorai_text_vector_' in docs[0].keys()
-
