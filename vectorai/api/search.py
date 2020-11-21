@@ -1019,15 +1019,53 @@ Args:
             },
         ).json()
 
-    def chunk_search(self, collection_name, vector, search_fields: list, chunk_scoring: str="mean"):
+    def chunk_search(self, 
+        collection_name:  str, 
+        vector: List, 
+        search_fields: list, 
+        chunk_scoring: str="max",
+        facets: List = [],
+        filters: List = [],
+        metric: str = "cosine",
+        sum_fields: bool=True,
+        approx: int=0,
+        min_score=None,
+        page: int = 1,
+        page_size: int = 20,
+        include_vector:bool=False,
+        include_count:bool=True,
+        include_facets:bool=False,
+        asc:bool=False):
         """
             Chunk search functionality
+            Args:
+                collection_name: Name of collection
+                vector: A list of values 
+                Search_fields: A list of fields to search
+                chunk_scoring: How each chunk should be scored
+                approx: How many approximate neighbors to go through
         """
-        return requests.post('https://api.vctr.ai/collection/chunk_search', json={
+        return requests.post(
+            url="{}/collection/chunk_search".format(
+                self.url
+            ),
+            json={
             "username" : self.username,
             "api_key" : self.api_key,
             "collection_name": collection_name,
             "vector" : vector,
             "chunk_scoring": chunk_scoring,
             "search_fields" : search_fields,
+            "sum_fields": sum_fields,
+            "approx": approx,
+            "facets": facets,
+            "filters": filters,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "include_facets": include_facets,
+            "asc": asc
         }).json()

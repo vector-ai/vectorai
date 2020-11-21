@@ -342,6 +342,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         if not overwrite:
             documents = [doc for i, doc in enumerate(documents) if self.get_field('_id', doc) in missing_ids]
+        
         if len(documents) == 0:
             return {
                 'failed_document_ids': []
@@ -349,7 +350,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         return self.bulk_insert(
             collection_name=collection_name,
             documents=self.encode_documents_with_models(documents, models=models, 
-            use_bulk_encode=use_bulk_encode), overwrite=overwrite
+            use_bulk_encode=use_bulk_encode), 
+            overwrite=overwrite
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -401,9 +403,10 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         workers: int = 1,
-        verbose=False,
-        use_bulk_encode=False,
-        overwrite=False
+        verbose: bool=False,
+        use_bulk_encode: bool=False,
+        overwrite: bool=False,
+        show_progress_bar: bool=True
     ):
         """
         Insert documents into a collection with an option to encode with models.        
@@ -438,11 +441,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         failed = []
         bulk_id_list = self.get_field_across_documents('_id', documents)
         missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
-        iter_len = int(len(documents) / chunksize)
+        iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
         iter_docs = self._chunks(documents, chunksize)
 
         if workers == 1:
-            for c in self.progress_bar(iter_docs, total=iter_len):
+            for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
                     missing_ids=missing_ids, overwrite=overwrite

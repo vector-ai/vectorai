@@ -158,7 +158,7 @@ class UtilsMixin:
                 is_in_notebook = True
         return is_in_notebook
     
-    def progress_bar(self, documents: List, total: int=None):
+    def progress_bar(self, documents: List, total: int=None, show_progress_bar=True):
         """
         Returns a progress bar. depending on if notebook is available or not.
 
@@ -176,9 +176,12 @@ class UtilsMixin:
             for i in UtilsMixin.progress_bar(documents):
                 ...
         """
+        if not show_progress_bar:
+            return documents
+        
         if total is None:
             total = len(documents)
-            
+        
         if self.is_in_notebook():
             from tqdm.notebook import tqdm
             return tqdm(documents, total=total)
@@ -206,7 +209,17 @@ class UtilsMixin:
             'size': {
                 'feet': list(range(1, 31))[rand_index],
                 'cm': (np.array(range(30)) * 30.48).tolist()[rand_index]
-            }
+            },
+            'chunk':[
+                {
+                    'color_chunkvector_': np.random.rand(1, 30).tolist()[0],
+                    'color': random.choice(['red', 'blue', 'orange', 'green'])
+                },
+                {
+                    'color_2_chunkvector_': np.random.rand(1, 30).tolist()[0],
+                    'color': random.choice(['red', 'blue', 'orange', 'green'])
+                }
+            ]
         }
         if document_id is not None:
             sample_document.update({'_id': str(document_id)})

@@ -219,17 +219,36 @@ def test_multiprocess_insert(test_client, test_collection_name):
 
 @pytest.mark.use_client
 def test_multiprocess_insert_with_error(test_client, test_collection_name):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection(test_collection_name)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     documents.append({
-        '_id': 3,
+        '_id': '9993',
         'color': np.nan
     })
     
     # This should result in 1 failure
-    results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=False)
+    time.sleep(10)
+    assert len(results['failed_document_ids']) == 1
+    assert test_collection_name in test_client.list_collections()
+    assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
+    test_client.delete_collection(test_collection_name)
+
+@pytest.mark.use_client
+def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collection_name):
+    NUM_OF_DOCUMENTS_INSERTED = 100
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection(test_collection_name)
+    documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
+    documents.append({
+        '_id': '9993',
+        'color': np.nan
+    })
+    
+    # This should result in 1 failure
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=True)
     time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_name in test_client.list_collections()
