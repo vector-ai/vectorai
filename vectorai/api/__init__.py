@@ -6,3 +6,4 @@ from .audio import *
 from .text import *
 from .cluster import *
 from .dimensionality_reduction import *
+from .array_dict_vectorizer import *

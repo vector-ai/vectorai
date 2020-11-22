@@ -21,6 +21,7 @@ class ViSearchClient:
         collection_name: str,
         vector: List,
         fields: List,
+        approx: int = 0,
         sum_fields: bool = True,
         metric: str = "cosine",
         min_score=None,
@@ -79,8 +80,9 @@ Args:
                 "api_key": self.api_key,
                 "collection_name": collection_name,
                 "vector": vector,
-                "sum_fields": sum_fields,
                 "search_fields": fields,
+                "approx" : approx,
+                "sum_fields": sum_fields,
                 "metric": metric,
                 "min_score": min_score,
                 "page": page,
@@ -476,6 +478,7 @@ Args:
         include_count:bool=True,
         include_facets:bool=False,
         asc:bool=False,
+        apporx:int=0,
     ):
         """
 Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
@@ -538,6 +541,7 @@ Example:
                 "facets": facets,
                 "filters": filters,
                 "sum_fields": sum_fields,
+                "approx" : approx,
                 "metric": metric,
                 "min_score": min_score,
                 "page": page,

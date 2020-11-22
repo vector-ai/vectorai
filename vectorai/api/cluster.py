@@ -237,6 +237,7 @@ Args:
         page: int = 1,
         page_size: int = 10,
         asc: bool = False,
+        filters: list = [],
         flatten:bool=True,
     ):
         """
@@ -276,6 +277,7 @@ Args:
                 "page_size": page_size,
                 "asc": asc,
                 "alias": alias,
+                "filters" : filters,
                 "flatten" : flatten
             },
         ).json()

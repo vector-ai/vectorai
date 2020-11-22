@@ -7,6 +7,7 @@ from .text import ViTextClient
 from .cluster import ViClusterClient
 from .search import ViSearchClient
 from .dimensionality_reduction import ViDimensionalityReductionClient
+from .array_dict_vectorizer import ViArrayDictClient
 
 class ViReadAPIClient(
     ViSearchClient,
@@ -15,6 +16,7 @@ class ViReadAPIClient(
     ViImageClient,
     ViClusterClient,
     ViDimensionalityReductionClient,
+    ViArrayDictClient
 ):
     """
     Read Operations

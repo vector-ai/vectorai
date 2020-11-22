@@ -60,6 +60,7 @@ class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
         collection_name: str, 
         vector: List,
         field: List,
+        approx: int = 0,
         sum_fields: bool = True,
         metric: str = "cosine",
         min_score=None,
@@ -67,7 +68,7 @@ class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
     ):
         """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
@@ -113,12 +114,18 @@ Args:
 """                
                 
         search_fields ={}
-        advanced_search_query = {
-            field.replace('_vector_', ''): {'vector': vector, 'fields': [field]}
-        }
+        if isinstance(field, str):
+            advanced_search_query = {
+                field.replace('_vector_', ''): {'vector': vector, 'fields': [field]}
+            }
+        else:
+            advanced_search_query = {
+                field[0].replace('_vector_', ''): {'vector': vector, 'fields': field}
+            }
         return self.advanced_search(
             collection_name=collection_name,
             multivector_query=advanced_search_query,
+            approx=approx,
             sum_fields=sum_fields,
             metric=metric,
             min_score=min_score,
