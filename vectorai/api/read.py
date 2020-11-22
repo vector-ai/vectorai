@@ -180,6 +180,7 @@ Args:
         page_size: int = 20,
         seed: int = None,
         include_vector: bool = True,
+        include_fields: list = []
     ):
         """
 Retrieve some documents randomly
@@ -205,6 +206,7 @@ Args:
             "page_size": page_size,
             "seed": seed,
             "include_vector": include_vector,
+            "include_fields": include_fields
         }
 
         return requests.get(
