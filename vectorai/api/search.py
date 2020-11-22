@@ -478,7 +478,7 @@ Args:
         include_count:bool=True,
         include_facets:bool=False,
         asc:bool=False,
-        apporx:int=0,
+        approx:int=0,
     ):
         """
 Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
