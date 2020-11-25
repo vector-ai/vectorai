@@ -10,20 +10,13 @@ import warnings
 import requests
 import pandas as pd
 import numpy as np
-
-try:
-    import tensorflow as tf
-
-    HAS_TENSORFLOW = True
-except:
-    HAS_TENSORFLOW = False
 import copy
 from tqdm.notebook import tqdm
 from typing import List, Dict, Union, Any, Callable
 from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
-from .errors import *
+from .errors import APIError
 from .read import ViReadClient
 from .api.write import ViWriteAPIClient
 
@@ -31,13 +24,10 @@ from .api.write import ViWriteAPIClient
 class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
     """Class to write to database."""
 
-    def __init__(self, username, api_key, url=None):
+    def __init__(self, username, api_key, url="https://api.vctr.ai" ):
         self.username = username
         self.api_key = api_key
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
+        self.url = url
 
     @staticmethod
     def _raise_error(response):
@@ -55,7 +45,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> ViClient._raise_error(response)
         """
         if 'status' in response.keys():
-            if response["status"] == "error":
+            if response["status"].lower() == "error":
                 raise APIError(response["message"])
 
     @classmethod
@@ -164,6 +154,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     d = d[f]
                 else:
                     d.update({f: {}})
+                    d = d[f]
 
     def create_collection(self, collection_name: str, collection_schema: Dict = {}):
         """
@@ -212,12 +203,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         return self._delete_collection(collection_name)
 
-    def _get_vector_name_for_encoding(
-        self,
-        f: str,
-        model: Callable,
-        models: Dict[str, Union[List[Callable], Callable]],
-    ):
+    def _get_vector_name_for_encoding(self, f: str, model: Callable, model_list: List[Callable]):
         """
         Returns the vector names for encoding.
         
@@ -230,19 +216,15 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 A dictionary of fields and models to determine the type of encoding for each field.
 
         """
-        if isinstance(models[f], (types.FunctionType, types.MethodType)):
-            return f"{f}_vector_"
-        elif isinstance(models[f], list):
-            if len(models[f]) == 1:
-                return f"{f}_vector_"
-            else:
-                return f"{f}_{self.get_name(model)}_vector_"
-        elif hasattr(models[f], "encode"):
-            return f"{f}_vector_"
+        if len(model_list) == 1 and self.get_name(model) is None:
+            vector_name = f"{f}_vector_"
+        elif isinstance(model, (types.FunctionType, types.MethodType)):
+            vector_name = f"{f}_vector_"
         else:
-            return "_vector_"
+            vector_name = f"{f}_{self.get_name(model)}_vector_"
+        return vector_name
 
-    def _check_if_multiple_models_have_names(self, models: Dict):
+    def _check_if_multiple_models_have_same_name(self, models: Dict):
         """
             For a model dictionary, ensure that the name of a function is good.
 
@@ -251,15 +233,52 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     A dictionary where a key links to a dictionary.
 
         """
-        for f, values in models.items():
-            if isinstance(values, list):
-                if len(values) > 1:
-                    for v in values:
-                        assert (
-                            self.get_name(v) is not None
-                        ), "You need to name {v}. Please do this using the rename function."
+        for f, model_list in models.items():
+            if not isinstance(model_list, list):
+                model_list = [model_list]
+            name_list = []
+            for model in model_list:
+                name = self.get_name(model)
+                if name is None and len(model_list) > 1:
+                    assert self.get_name(m) is not None, f"Your models are missing names. Please set name using set_name(model) function."
+                name_list.append(name)
+            if len(set(name_list)) != len(name_list):
+                raise ValueError("Models have the set name. Check each model name is unique.")
 
-    def _encode_documents_with_models(
+    def encode_documents_with_models_using_encode(self, documents: List[Dict], models: Dict):
+        """
+        Encode documents with appropriate models without a bulk_encode function.
+        Args:
+            documents: 
+                List of documents/JSONs/dictionaries. 
+            models:
+                A dictionary of fields and models to determine the type of encoding for each field. 
+        
+        """
+        for d in documents:
+            for f, model_list in models.items():
+                # Typecast callable to a list to easily pass through for-loop.
+                if not isinstance(model_list, list):
+                    model_list = [model_list]
+                for model in model_list:
+                    vector_field = self._get_vector_name_for_encoding(f, model, model_list)
+                    if not self.is_field(f, d):
+                        warnings.warn(f"""Missing {f} in a document. We will fill the missing with empty vectors.""")
+                        try:
+                            self.set_field(vector_field, d, self.dummy_vector(vector_length))
+                        except:
+                            raise APIError("Need to ensure at least one passthrough is made to get vector length.")
+                    if isinstance(model, (types.FunctionType, types.MethodType)):
+                        vector = model(self.get_field(f, d))
+                        vector_length = len(vector)
+                        self.set_field(vector_field, d, vector)
+                    else:
+                        if not hasattr(model, "encode"):
+                            raise APIError("Not sure how to encode. Please sure the model class has an encode method.")
+                        self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
+        return documents
+    
+    def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
     ):
         """
@@ -277,53 +296,18 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> from vectorai.models.deployed import ViText2Vec
             >>> text_encoder = ViText2Vec(username, api_key, vectorai_url)
             >>> documents = [{'chicken': 'Big chicken'}, {'chicken': 'small_chicken'}, {'chicken': 'cow'}]
-            >>> vi_client._encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
+            >>> vi_client.encode_documents_with_models(documents=documents, models={'chicken': text_encoder.encode})
         """
-        self._check_if_multiple_models_have_names(models)
+        # TODO: refactor & test if changing black length
+        self._check_if_multiple_models_have_same_name(models)
         if use_bulk_encode:
-            return self._encode_documents_with_models_in_bulk(documents=documents, models=models)
+            return self.encode_documents_with_models_in_bulk(documents=documents, models=models)
         else:
-            for d in documents:
-                for f, model_list in models.items():
-                    # Typecast callable to a list to easily pass through for-loop.
-                    if not isinstance(model_list, list):
-                        model_list = [model_list]
-                    for model in model_list:
-                        vector_field = self._get_vector_name_for_encoding(f, model, models)
-                        if not self._is_field(f, d):
-                            warnings.warn(
-                                f"""Missing {f} in a document.
-                                We will fill the missing with vectors of 1e-7."""
-                            )
-                            try:
-                                self.set_field(
-                                    vector_field, d, dummy_vector(vector_length)
-                                )
-                            except:
-                                raise ValueError(
-                                    "Need to ensure at least one passthrough is made to get vector length."
-                                )
-
-                        if isinstance(model, (types.FunctionType, types.MethodType)):
-                            vector = model(self.get_field(f, d))
-                            vector_length = len(vector)
-                            self.set_field(vector_field, d, vector)
-                        else:
-                            if hasattr(model, "encode"):
-                                self.set_field(
-                                    vector_field,
-                                    d,
-                                    model.encode(self.get_field(f, d)),
-                                )
-                            else:
-                                raise APIError(
-                                    "Not sure how to encode. Please sure the model class has an encode method."
-                                )
-        return documents
-
-    def _encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
+            return self.encode_documents_with_models_using_encode(documents=documents, models=models)
+                                
+    def encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
         """
-            Encode documents with models to allow for bulk_encode.
+        Encode documents with models to allow for bulk_encode.
         
         Args:
             documents:
@@ -343,21 +327,31 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         # Now bulk-encode and then set the field for each dictionary
         for f, model_list in models.items():
             for model in model_list:
-                vector_field = self._get_vector_name_for_encoding(f, model, models)
+                vector_field = self._get_vector_name_for_encoding(f, model, model_list)
                 values = self.get_field_across_documents(f, documents)
                 vectors = model.bulk_encode(values)
                 self.set_field_across_documents(vector_field, vectors, documents)
         return documents
 
     def _insert_and_encode(
-        self, documents: list, collection_name: str, models: dict, verbose=False, use_bulk_encode=False
+        self, documents: list, collection_name: str, models: dict, verbose=False, 
+        use_bulk_encode=False, overwrite=False, missing_ids=None
     ):
         """
             Insert and encode documents
         """
+        if not overwrite:
+            documents = [doc for i, doc in enumerate(documents) if self.get_field('_id', doc) in missing_ids]
+        
+        if len(documents) == 0:
+            return {
+                'failed_document_ids': []
+            }
         return self.bulk_insert(
             collection_name=collection_name,
-            documents=self._encode_documents_with_models(documents, models=models, use_bulk_encode=use_bulk_encode)
+            documents=self.encode_documents_with_models(documents, models=models, 
+            use_bulk_encode=use_bulk_encode), 
+            overwrite=overwrite
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -378,11 +372,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> vi_client.insert_document(document)
         """
         response = self.insert(collection_name=collection_name, document=document)
-        if response == "inserted":
-            if verbose:
-                print(f"Document inserted succesfully into {collection_name}")
-        else:
+        if response != "inserted":
             raise APIError(f"Document failed to insert into {collection_name}")
+        
+        if verbose:
+            print(f"Document inserted succesfully into {collection_name}")
+            
 
     def insert_single_document(self, collection_name: str, document: Dict):
         """
@@ -408,12 +403,13 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         workers: int = 1,
-        verbose=False,
-        use_bulk_encode=False
+        verbose: bool=False,
+        use_bulk_encode: bool=False,
+        overwrite: bool=False,
+        show_progress_bar: bool=True
     ):
         """
-        Insert documents into a collection with an option to encode with models.
-        
+        Insert documents into a collection with an option to encode with models.        
 
         Args:
             collection_name:
@@ -426,6 +422,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Use the bulk_encode method in models
             verbose:
                 Whether to print document ids that have failed when inserting.
+            overwrite:
+                If True, overwrites document based on _id field.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -438,42 +436,35 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self._check_schema(documents[0])
             self.create_collection_from_document(
                 collection_name,
-                self._encode_documents_with_models([documents[0]], models)[0],
+                self.encode_documents_with_models([documents[0]], models)[0],
             )
         failed = []
+        bulk_id_list = self.get_field_across_documents('_id', documents)
+        missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
+        iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
+        iter_docs = self._chunks(documents, chunksize)
+
         if workers == 1:
-            for c in self.progress_bar(
-                self._chunks(documents, chunksize),
-                total=int(len(documents) / chunksize),
-            ):
+            for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
-                    documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode
+                    documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
+                    missing_ids=missing_ids, overwrite=overwrite
                 )
                 self._raise_error(result)
-                if verbose:
-                    print(f"Failed: {result['failed_document_ids']}")
+                if verbose: print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
         else:
-
             pool = Pool(processes=workers)
-
+            # Using partial insert for compatibility with ViCollectionClient
+            partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
+            missing_ids=missing_ids, overwrite=overwrite)
             for result in self.progress_bar(
-                pool.imap_unordered(
-                    func=partial(
-                        self._insert_and_encode,
-                        models=models,
-                        collection_name=collection_name,
-                    ),
-                    iterable=self._chunks(documents, chunksize),
-                ),
-                total=int(len(documents) / chunksize),
-            ):
+                pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
-                if verbose:
+                if verbose and len(result['failed_document_ids']) > 0:
+                    warnings.warn("""There are failed documents. Try re-inserting these IDs
+                    and test by choosing the most important fields first!""")
                     print(f"Failed: {result['failed_document_ids']}")
-                    if len(result['failed_document_ids']) > 0:
-                        warnings.warn("""There are failed documents. Try re-inserting these IDs
-                        and test by choosing the most important fields first!""")
                 failed.append(result["failed_document_ids"])
             pool.close()
             pool.join()
@@ -556,14 +547,18 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         response = self._edit_document(
             collection_name, edits=copy_doc, document_id=document_id
         )
-        if response == "updated":
-            if verbose:
-                print(f"Edited item with id {document_id} successfully.")
-        elif response == "no_changes_detected":
-            if verbose:
-                print(f"{document_id} has no changes.")
-        else:
+
+        VERBOSE_MESSAGE_DICT = {
+            'updated': f"Edited item with id {document_id} successfully.",
+            'no changes detected': f"{document_id} has no changes."
+        }
+
+        if response not in VERBOSE_MESSAGE_DICT.keys():
             raise APIError("Failed to edit item.")
+        
+        if verbose:
+            print(VERBOSE_MESSAGE_DICT[response])
+            
 
     def _edit_document_return_id(
         self, edits: Dict[str, str], collection_name: str
