@@ -4,7 +4,7 @@
 import time
 from functools import wraps
 
-def retry(num_of_retries=3, timeout=5):
+def retry(num_of_retries=3, timeout=10):
     """
     Allows the function to retry upon failure. 
     Args:
