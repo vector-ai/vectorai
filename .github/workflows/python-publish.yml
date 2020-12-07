@@ -26,6 +26,7 @@ jobs:
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PW }}
+        IS_VECTORAI_NIGHTLY: True
       run: |
         python setup.py sdist bdist_wheel
-        twine upload dist/* --repository vectorai-nightly
+        twine upload dist/*
