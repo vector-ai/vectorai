@@ -5,13 +5,9 @@ import pytest
 import os
 import time
 import numpy as np
-try:
-    import tensorflow as tf
-    from vectorai.models.transformer_models import Transformer2Vec
-except:
-    pass
+from vectorai.models.deployed import ViText2Vec
 from vectorai.write import ViWriteClient
-from vectorai.errors import APIError
+from vectorai.errors import APIError, MissingFieldError
 from vectorai.client import ViClient
 
 
@@ -113,6 +109,7 @@ class TestEdit:
         test_client.insert_documents(
             collection_name=test_collection_name, documents=documents
         )
+        time.sleep(10)
         assert True
 
 
@@ -171,62 +168,6 @@ class TestEdit:
             test_client.delete_collection(test_collection_name)
 
 
-# @pytest.mark.skip("Embed function is on pause until there is more clarity.")
-# def test_multiple_insert_documents_embed(
-#     test_client,
-#     test_api_key,
-#     test_username,
-#     test_collection_name,
-#     test_vector_field,
-#     test_id_field,
-# ):
-#     documents = [
-#         {"_id": "5", "attribute": "violet"},
-#         {"_id": "6", "attribute": "black"},
-#     ]
-
-#     class Model:
-#         def encode(self, document):
-#             return test_client.generate_vector(512)
-
-#     model = Model()
-
-#     test_client.insert_documents(
-#         test_collection_name, documents=documents, models={test_vector_field: model}
-#     )
-
-#     return_document = test_client.id(
-#         collection_name=test_collection_name, document_id="5"
-#     )
-#     assert return_document["attribute"] == "violet"
-#     return_document = test_client.id(
-#         collection_name=test_collection_name, document_id="6"
-#     )
-#     assert return_document["attribute"] == "black"
-
-
-# @pytest.mark.skip(
-#     "Function embedding needs to be more " + "thoroughly discussed and may change."
-# )
-# def test_insert_document_embed(
-#     test_client, test_api_key, test_username, test_collection_name
-# ):
-#     # The embed function string most be reproducible
-#     # test_client = ViClient(username="test")
-#     embed_func_str = f"""from vectorai import ViClient
-# test_client = ViClient("{test_username}", "{test_api_key}")
-# def embed_function(document):
-#     return test_client.generate_vector(512)
-# """
-#     document = {"_id": 2, "attribute": "orange"}
-#     test_client.insert_document(
-#         collection_name=test_collection_name,
-#         document=document,
-#         use_embed_func=True,
-#         embed_func_list=[embed_func_str],
-#         search_vector_fields=["document_vector_"],
-#     )
-
 def test__write_document_nested_field():
     sample = {"this": {}}
     ViWriteClient.set_field("this.is", doc=sample, value=[0, 2])
@@ -243,7 +184,7 @@ def test_encode_documents_with_deployed_model(test_client, test_text_encoder):
         Test single encoding method for models.
     """
     documents = test_client.create_sample_documents(10)
-    test_client._encode_documents_with_models(documents, models={'color': [test_text_encoder]}, use_bulk_encode=False)
+    test_client.encode_documents_with_models(documents, models={'color': [test_text_encoder]}, use_bulk_encode=False)
     assert 'color_vector_' in documents[0].keys()
     assert len(documents[0]['color_vector_']) > 0
 
@@ -254,12 +195,12 @@ def test_bulk_encode_documents_with_deployed_model(test_client, test_text_encode
     """
     # Test when model key input is a list
     documents = test_client.create_sample_documents(10)
-    test_client._encode_documents_with_models(documents, models={'color': [test_text_encoder]}, use_bulk_encode=True)
+    test_client.encode_documents_with_models(documents, models={'color': [test_text_encoder]}, use_bulk_encode=True)
     assert 'color_vector_' in documents[0].keys()
     assert len(documents[0]['color_vector_']) > 0
     del documents
     documents = test_client.create_sample_documents(10)
-    test_client._encode_documents_with_models(documents, models={'color': test_text_encoder}, use_bulk_encode=True)
+    test_client.encode_documents_with_models(documents, models={'color': test_text_encoder}, use_bulk_encode=True)
     assert 'color_vector_' in documents[0].keys()
     assert len(documents[0]['color_vector_']) > 0
 
@@ -268,8 +209,10 @@ def test_multiprocess_insert(test_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 10
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection(test_collection_name)
+        time.sleep(10)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
-    results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=False)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_name in test_client.list_collections()
     assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -277,17 +220,38 @@ def test_multiprocess_insert(test_client, test_collection_name):
 
 @pytest.mark.use_client
 def test_multiprocess_insert_with_error(test_client, test_collection_name):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_name in test_client.list_collections():    
         test_client.delete_collection(test_collection_name)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     documents.append({
-        '_id': 3,
+        '_id': '9993',
         'color': np.nan
     })
     
     # This should result in 1 failure
-    results = test_client.insert_documents(test_collection_name, documents, workers=5)
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=False)
+    time.sleep(10)
+    assert len(results['failed_document_ids']) == 1
+    assert test_collection_name in test_client.list_collections()
+    assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
+    test_client.delete_collection(test_collection_name)
+
+@pytest.mark.use_client
+def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collection_name):
+    NUM_OF_DOCUMENTS_INSERTED = 100
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection(test_collection_name)
+        time.sleep(5)
+    documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
+    documents.append({
+        '_id': '9993',
+        'color': np.nan
+    })
+    
+    # This should result in 1 failure
+    results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=True)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_name in test_client.list_collections()
     assert test_client.collection_stats(test_collection_name)['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -295,11 +259,13 @@ def test_multiprocess_insert_with_error(test_client, test_collection_name):
 
 @pytest.mark.use_client
 def test_multiprocess_with_collection_client(test_collection_client, test_collection_name):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_client.collection_name in test_collection_client.list_collections():    
         test_collection_client.delete_collection()
+        time.sleep(5)
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     results = test_collection_client.insert_documents(documents, workers=5)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 0
     assert test_collection_client.collection_name in test_collection_client.list_collections()
     assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
@@ -307,17 +273,173 @@ def test_multiprocess_with_collection_client(test_collection_client, test_collec
 
 @pytest.mark.use_client
 def test_multiprocess__with_error_with_collection_client(test_collection_client):
-    NUM_OF_DOCUMENTS_INSERTED = 10
+    NUM_OF_DOCUMENTS_INSERTED = 100
     if test_collection_client.collection_name in test_collection_client.list_collections():    
         test_collection_client.delete_collection()
+        time.sleep(5)
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     documents.append({
-        '_id': 3,
+        '_id': 9993,
         'color': np.nan
     })
     # This should result in 1 failure
-    results = test_collection_client.insert_documents(documents, workers=5)
+    results = test_collection_client.insert_documents(documents, workers=5, overwrite=True)
+    time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_client.collection_name in test_collection_client.list_collections()
-    assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
+    assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED 
+
+@pytest.mark.use_client
+def test_multiprocess_with_overwrite(test_client, test_collection_name):
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection(test_collection_name)
+        time.sleep(5)
+    NUM_OF_DOCS = 10
+    docs = test_client.create_sample_documents(NUM_OF_DOCS)
+    test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    overwrite=True)
+    assert response['inserted_successfully'] == 2
+
+@pytest.mark.use_client
+def test_multiprocess_with_overwrite_insert(test_client, test_collection_name):
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection(test_collection_name)
+        time.sleep(5)
+    NUM_OF_DOCS = 10
+    docs = test_client.create_sample_documents(NUM_OF_DOCS)
+    test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    overwrite=True)
+    assert response['inserted_successfully'] == 2
+
+@pytest.mark.use_client
+def test_multiprocess_overwrite(test_client, test_collection_name):
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection()
+        time.sleep(5)
+    NUM_OF_DOCS = 100
+    docs = test_client.create_sample_documents(NUM_OF_DOCS)
+    test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_client.id(test_collection_name, TEST_ID)
+    test_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    print(docs[3])
+    docs[3].update({'_id': '3'})
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    overwrite=True)
+    id_document = test_client.id(test_collection_name, TEST_ID)
+    assert test_client.get_field('test.field', id_document) == 'stranger'
+    time.sleep(5)
+    test_client.delete_collection(test_collection_name)
+
+@pytest.mark.use_client
+def test_multiprocess_not_overwrite(test_client, test_collection_name):
+    if test_collection_name in test_client.list_collections():    
+        test_client.delete_collection(test_collection_name)
+        time.sleep(5)
+    NUM_OF_DOCS = 100
+    docs = test_client.create_sample_documents(NUM_OF_DOCS)
+    test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_client.id(test_collection_name, TEST_ID)
+    test_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    docs[3].update({'_id': '3'})
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    overwrite=False)
+    id_document = test_client.id(test_collection_name, TEST_ID)
+    with pytest.raises(MissingFieldError):
+        test_client.get_field('test.field', id_document)
+    time.sleep(5)
+    test_client.delete_collection(test_collection_name)
+
+@pytest.mark.use_client
+def test_multiprocess_overwrite_collection_client(test_collection_client, test_collection_name):
+    if test_collection_client.collection_name in test_collection_client.list_collections():    
+        test_collection_client.delete_collection()
+        time.sleep(5)
+    NUM_OF_DOCS = 10
+    docs = test_collection_client.create_sample_documents(NUM_OF_DOCS)
+    test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_collection_client.id(TEST_ID)
+    test_collection_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    docs[3].update({'_id': '3'})
+    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    overwrite=True)
+    id_document = test_collection_client.id(TEST_ID)
+    assert test_collection_client.get_field('test.field', id_document) == 'stranger'
+    time.sleep(5)
     test_collection_client.delete_collection()
+
+@pytest.mark.use_client
+def test_multiprocess_not_overwrite_collection_client(test_collection_client, test_collection_name):
+    NUM_OF_DOCS = 10
+    docs = test_collection_client.create_sample_documents(NUM_OF_DOCS)
+    test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
+    # For document with id '3'
+    TEST_ID = '3'
+    id_document = test_collection_client.id(TEST_ID)
+    test_collection_client.set_field('test.field', id_document, 'stranger')
+    docs[3] = id_document
+    docs[3].update({'_id': '3'})
+    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    overwrite=False)
+    id_document = test_collection_client.id(TEST_ID)
+    with pytest.raises(MissingFieldError):
+        test_collection_client.get_field('test.field', id_document)
+    time.sleep(5)
+    test_collection_client.delete_collection()
+
+def test_dummy_vector(test_client):
+    """
+        Test the dummy vector
+    """
+    assert len(test_client.dummy_vector(512)) == 512
+
+def test_set_field_on_new_field(test_client):
+    """
+        Assert when set on new field.
+    """
+    doc = {}
+    test_client.set_field('balls', doc, 3)
+    assert doc['balls'] == 3
+
+def test_set_field_on_new_dict(test_client):
+    doc = {}
+    test_client.set_field('check.balls', doc, 3)
+    assert test_client.get_field('check.balls', doc) == 3
+
+def test_vector_name(test_client):
+    text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    test_client.set_name(text_encoder, 'vectorai_text')
+    vector_name = test_client._get_vector_name_for_encoding("color", text_encoder, model_list=[text_encoder])
+    assert vector_name == "color_vectorai_text_vector_"
+
+def test_vector_name_2(test_client):
+    text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    text_encoder_2 = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    test_client.set_name(text_encoder, "vectorai") 
+    test_client.set_name(text_encoder_2, "vectorai_2") 
+    vector_name = test_client._get_vector_name_for_encoding("color", text_encoder, model_list=[text_encoder, text_encoder_2])
+    assert vector_name == "color_vectorai_vector_"
+    vector_name = test_client._get_vector_name_for_encoding("color", text_encoder_2, model_list=[text_encoder, text_encoder_2])
+    assert vector_name == 'color_vectorai_2_vector_'
+
+def test_vector_name_same_name(test_client):
+    text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    with pytest.raises(ValueError):
+        vector_name = test_client._check_if_multiple_models_have_same_name(models={'color':[text_encoder, text_encoder]})
+
+def test_encode_documents_With_models_using_encode(test_client):
+    docs = test_client.create_sample_documents(5)
+    text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
+    test_client.set_name(text_encoder, "vectorai_text")
+    test_client.encode_documents_with_models_using_encode(docs, models={'color': [text_encoder]})
+    assert 'color_vectorai_text_vector_' in docs[0].keys()

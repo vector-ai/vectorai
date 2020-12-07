@@ -19,7 +19,7 @@ class ViAudio2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_audio"
+            return "vectorai_audio"
         return self._name
 
     @__name__.setter
@@ -64,7 +64,7 @@ class ViAudioArray2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_audio_array"
+            return "vectorai_audio_array"
         return self._name
 
     @__name__.setter

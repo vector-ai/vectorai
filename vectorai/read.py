@@ -11,15 +11,12 @@ from typing import List, Dict, Union, Any
 from .api.read import ViReadAPIClient
 from .utils import UtilsMixin
 from .doc_utils import DocUtilsMixin
-
+from .errors import MissingFieldWarning
 class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
-    def __init__(self, username, api_key, url=None):
+    def __init__(self, username: str, api_key: str, url: str="https://api.vctr.ai"):
         self.username = username
         self.api_key = api_key
-        if url:
-            self.url = url
-        else:
-            self.url = "https://api.vctr.ai"
+        self.url = url
 
     def random_aggregation_query(
         self, collection_name: str, groupby: int = 1, metrics: int = 1
@@ -303,7 +300,7 @@ Args:
         print(status)
         return "Done"
 
-    def check_schema(self, collection_name: str):
+    def check_schema(self, collection_name: str, document: Dict=None):
         """
         Check the schema of a given collection.
 
@@ -316,25 +313,27 @@ Args:
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> vi_client.check_schema(collection_name)
         """
-        document = self.retrieve_documents(collection_name, page_size=1)
+        if document is None:
+            document = self.retrieve_documents(collection_name, page_size=1)
         self._check_schema(document)
 
     def _check_schema(
         self,
         document: Dict,
         is_missing_vector_field=True,
+        is_missing_id_field=True,
         is_nested=False
     ):
         """
-        Check the schema of a given collection.
+        Check if there is a _vector_ field and an _id field.
 
         Args:
             document:
                 A JSON file/python dictionary
             is_missing_vector_field:
-                A tracker to return if the dictionary is missing a vector field
+                DO NOT CHANGE. A tracker to return if the dictionary is missing a vector field
             is_nested:
-                Returns True if is a nested. Used internally.
+                DO NOT CHANGE. Returns True if is a nested. Used internally for recursive functionality.
 
         Example:
             >>> from vectorai.client import ViClient
@@ -343,29 +342,39 @@ Args:
             >>> vi_client._check_schema(doc)
         """
         VECTOR_FIELD_NAME = "_vector_"
-        MISSING_VECTOR_FIELD = True
+        IS_VECTOR_FIELD_MISSING = True
+        IS_ID_FIELD_MISSING = True
         for field, value in document.items():
+            if field == '_id':
+                IS_ID_FIELD_MISSING = False
             if isinstance(value, dict):
-                MISSING_VECTOR_FIELD = self._check_schema(
+                IS_ID_FIELD_MISSING, IS_VECTOR_FIELD_MISSING = self._check_schema(
                     document[field],
-                    is_missing_vector_field=MISSING_VECTOR_FIELD,
+                    is_missing_vector_field=IS_VECTOR_FIELD_MISSING,
+                    is_missing_id_field=IS_ID_FIELD_MISSING,
                     is_nested=True
                 )
             if "_vectors_" in field:
                 warnings.warn(
-                    f"Rename {field} to {field.replace('_vectors_', '_vector_')}"
-                )
+                    "Rename " + field + "to " + field.replace('_vectors_', '_vector_')
+                , MissingFieldWarning)
         
         for field in document.keys():
             if VECTOR_FIELD_NAME in field:
-                MISSING_VECTOR_FIELD = False
+                IS_VECTOR_FIELD_MISSING = False
         
         if not is_nested:
-            if MISSING_VECTOR_FIELD:
+            if IS_VECTOR_FIELD_MISSING:
                 warnings.warn(
-                    "Potential issue. Cannot find a vector field. Check that the vector field contains _vector_."
+                    "Potential issue. Cannot find a vector field. Check that the vector field contains _vector_.",
+                    MissingFieldWarning
                 )
-        return MISSING_VECTOR_FIELD
+            if IS_ID_FIELD_MISSING:
+                warnings.warn(
+                    "Missing ID field. Please include an _id field to make inserting easier.",
+                    MissingFieldWarning
+                )
+        return IS_ID_FIELD_MISSING, IS_VECTOR_FIELD_MISSING
 
     def list_collections(self) -> List[str]:
         """

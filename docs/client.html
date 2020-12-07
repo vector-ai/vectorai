@@ -224,14 +224,14 @@
 <p>Documentation for Vector AI client goes here.</p>
 <span class="target" id="module-vectorai.client"></span><dl class="py class">
 <dt id="vectorai.client.ViClient">
-<em class="property">class </em><code class="sig-prename descclassname">vectorai.client.</code><code class="sig-name descname">ViClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.client.</code><code class="sig-name descname">ViClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://api.vctr.ai'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main Vi client with most of the available read and write methods available to it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>username</strong> – your username for accessing vecdb</p></li>
-<li><p><strong>api_key</strong> – your api key for accessing vecdb</p></li>
-<li><p><strong>url</strong> – url of the deployed vecdb database</p></li>
+<li><p><strong>username</strong> – your username for accessing vectorai</p></li>
+<li><p><strong>api_key</strong> – your api key for accessing vectorai</p></li>
+<li><p><strong>url</strong> – url of the deployed vectorai database</p></li>
 </ul>
 </dd>
 </dl>
@@ -262,7 +262,7 @@ Make sure to save the api key somewhere safe. If you have a valid referral code,
 
 <dl class="py class">
 <dt id="vectorai.client.ViCollectionClient">
-<em class="property">class </em><code class="sig-prename descclassname">vectorai.client.</code><code class="sig-name descname">ViCollectionClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.client.</code><code class="sig-name descname">ViCollectionClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://api.vctr.ai'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Vi client when you are mainly working with 1 client.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -720,8 +720,14 @@ Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.bulk_missing_id">
+<code class="sig-name descname">bulk_missing_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.bulk_missing_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return IDs that are not in a collection.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.check_schema">
-<code class="sig-name descname">check_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.check_schema" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.check_schema" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the schema of a given collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -734,6 +740,17 @@ Models can be one of ‘text’, ‘audio’ or ‘image’.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">check_schema</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.chunk_search">
+<code class="sig-name descname">chunk_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">search_fields</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">chunk_scoring</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">facets</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">filters</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">approx</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_facets</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.chunk_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chunk search functionality
+:param collection_name: Name of collection
+:param vector: A list of values
+:param Search_fields: A list of fields to search
+:param chunk_scoring: How each chunk should be scored
+:param approx: How many approximate neighbors to go through</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1517,7 +1534,7 @@ e.g. “product_description_vector_”</p>
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.insert_documents">
-<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show_progress_bar</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.insert_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert documents into a collection with an option to encode with models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1527,6 +1544,7 @@ e.g. “product_description_vector_”</p>
 <li><p><strong>models</strong> – Models with an encode method</p></li>
 <li><p><strong>use_bulk_encode</strong> – Use the bulk_encode method in models</p></li>
 <li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
+<li><p><strong>overwrite</strong> – If True, overwrites document based on _id field.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1631,7 +1649,7 @@ This new collection is just like any other collection and you can read, filter a
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.random_documents">
-<code class="sig-name descname">random_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.random_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">random_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_fields</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.random_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve some documents randomly</p>
 <p>Mainly for testing purposes.</p>
 <dl class="field-list simple">

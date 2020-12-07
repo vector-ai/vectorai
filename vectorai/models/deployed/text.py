@@ -38,7 +38,7 @@ class ViText2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_text"
+            return "vectorai_text"
         return self._name
 
     @__name__.setter
@@ -81,7 +81,7 @@ class ViTextArray2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_text_array"
+            return "vectorai_text_array"
         return self._name
 
     @__name__.setter
