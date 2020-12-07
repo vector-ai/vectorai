@@ -4,12 +4,8 @@
 name: Upload Python Package
 
 on:
-  # schedule:
-  #   - cron: "0 0 * * *"
-  push:
-    branches:
-      - feature/nightly_upload
-      - master
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   deploy:
@@ -33,4 +29,4 @@ jobs:
         IS_VECTORAI_NIGHTLY: True
       run: |
         python setup.py sdist bdist_wheel
-        twine upload dist/* --repository testpypi
+        twine upload dist/*
