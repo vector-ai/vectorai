@@ -1,7 +1,8 @@
 """Testing the various read functions for Vi
 """
 import pytest
-
+import time
+from vectorai.errors import MissingFieldWarning, MissingFieldError
 class TestRead:
     @pytest.mark.use_client
     def test_setup_for_read(self, test_client, test_collection_name):
@@ -12,6 +13,7 @@ class TestRead:
         test_client.insert_documents(
             collection_name=test_collection_name, documents=documents
         )
+        time.sleep(10)
         assert True
 
     @pytest.mark.use_client
@@ -29,7 +31,7 @@ class TestRead:
             'condition': '=='}
         ]
         results = test_client.advanced_search_by_id(test_collection_name, 
-        document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'], 
+        document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'],
         fields={'color_vector_':1}, filters=filter_query)
         assert len(results) > 0
 
@@ -53,8 +55,39 @@ def test_get_field(test_client):
     test_dict = {"kfc": {"item": "chickens"}}
     assert test_client.get_field("kfc.item", doc=test_dict) == "chickens"
 
-def test_read(test_client):
+def test_get_empty_field(test_client):
+    with pytest.raises(MissingFieldError):
+        docs = test_client.create_sample_documents(10)
+        test_client.get_field_across_documents('_id_', docs)
+
+def test_check_schema(test_client):
     """Testing a nested dictionary to ensure it can detected a nested vector field
     """
-    nested_schema = {'chk': {'chk_vector_': [0]}}
-    assert test_client._check_schema(nested_schema) is False
+    with pytest.warns(None) as record:
+        nested_schema = {}
+        test_client._check_schema(nested_schema)
+        # nested_schema = {'chk': {'chk_vector_': [0, 2, 3]}}
+    assert len(record) == 2
+    assert test_client._check_schema(nested_schema) == (True, True)
+
+def test_check_schema_with_vector_field(test_client):
+    """Testing a nested dictionary to ensure it can detected a nested vector field
+    """
+    with pytest.warns(None) as record:
+        nested_schema = {'chk': {'chk_vector_': [0, 2, 3]}}
+        test_client._check_schema(nested_schema)
+    assert len(record) == 1
+    assert test_client._check_schema(nested_schema) == (True, False)
+
+def test_check_schema_id_field(test_client):
+    with pytest.warns(None) as record:
+        nested_schema = {'_id': "text"}
+        test_client._check_schema(nested_schema)
+    assert len(record) == 1
+    assert test_client._check_schema(nested_schema) == (False, True)
+
+def test_check_schema_both(test_client):
+    with pytest.warns(None) as record:
+        nested_schema = {'_id': "text", "chk_vector_":[0, 1, 2]}
+    assert len(record) == 0
+    assert test_client._check_schema(nested_schema) == (False, False)

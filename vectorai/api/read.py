@@ -186,6 +186,7 @@ Args:
         page_size: int = 20,
         seed: int = None,
         include_vector: bool = True,
+        include_fields: list = []
     ):
         """
 Retrieve some documents randomly
@@ -211,6 +212,7 @@ Args:
             "page_size": page_size,
             "seed": seed,
             "include_vector": include_vector,
+            "include_fields": include_fields
         }
 
         return requests.get(
@@ -444,3 +446,15 @@ Args:
                 "collection_name": collection_name,
             },
         ).json()
+
+    def bulk_missing_id(self, collection_name: str, document_ids: List[str]):
+        """
+            Return IDs that are not in a collection.
+        """
+        return requests.post('{}/collection/bulk_missing_id'.format(self.url), 
+        json={
+            "username" : self.username,
+            "api_key" : self.api_key,
+            "collection_name": collection_name,
+            "document_ids" : document_ids
+        }).json()

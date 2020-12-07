@@ -226,7 +226,7 @@
 <span class="target" id="module-vectorai.write"></span><p>Write Operations for Vi that involves inserting documents, editing or deleting documents.</p>
 <dl class="py class">
 <dt id="vectorai.write.ViWriteClient">
-<em class="property">class </em><code class="sig-prename descclassname">vectorai.write.</code><code class="sig-name descname">ViWriteClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.write.</code><code class="sig-name descname">ViWriteClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">'https://api.vctr.ai'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="read.html#vectorai.read.ViReadClient" title="vectorai.read.ViReadClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.read.ViReadClient</span></code></a>, <a class="reference internal" href="#vectorai.api.write.ViWriteAPIClient" title="vectorai.api.write.ViWriteAPIClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.api.write.ViWriteAPIClient</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.utils.UtilsMixin</span></code></p>
 <p>Class to write to database.</p>
 <dl class="py method">
@@ -353,6 +353,51 @@ This should then create the following entries if they dont exist:
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models_using_encode">
+<code class="sig-name descname">encode_documents_with_models_using_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models_using_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with appropriate models without a bulk_encode function.
+:param documents: List of documents/JSONs/dictionaries.
+:param models: A dictionary of fields and models to determine the type of encoding for each field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models">
+<code class="sig-name descname">encode_documents_with_models</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Dict<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with appropriate models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p></li>
+<li><p><strong>models</strong> – A dictionary of fields and models to determine the type of encoding for each field.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;small_chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;cow&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">encode_documents_with_models</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models_in_bulk">
+<code class="sig-name descname">encode_documents_with_models_in_bulk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models_in_bulk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with models to allow for bulk_encode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p></li>
+<li><p><strong>models</strong> – A dictionary of fields and models to determine the type of encoding for each field.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.write.ViWriteClient.insert_document">
 <code class="sig-name descname">insert_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_document" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert a document into a collection</p>
@@ -393,7 +438,7 @@ This should then create the following entries if they dont exist:
 
 <dl class="py method">
 <dt id="vectorai.write.ViWriteClient.insert_documents">
-<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show_progress_bar</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert documents into a collection with an option to encode with models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -403,6 +448,7 @@ This should then create the following entries if they dont exist:
 <li><p><strong>models</strong> – Models with an encode method</p></li>
 <li><p><strong>use_bulk_encode</strong> – Use the bulk_encode method in models</p></li>
 <li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
+<li><p><strong>overwrite</strong> – If True, overwrites document based on _id field.</p></li>
 </ul>
 </dd>
 </dl>

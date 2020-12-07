@@ -33,7 +33,7 @@ class ViImage2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_image"
+            return "vectorai_image"
         return self._name
 
     @__name__.setter
@@ -75,7 +75,7 @@ class ViImageArray2Vec(ViDeployedModel):
     @property
     def __name__(self):
         if self._name is None:
-            return "deployed_image_array"
+            return "vectorai_image_array"
         return self._name
 
     @__name__.setter
