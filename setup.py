@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+import os
 
 core_req = ["requests", "numpy", "pandas", "appdirs>=1.4.4", "tqdm>=4.27.0", "plotly>=4.0.0"]
 extras_req = {
@@ -13,8 +14,13 @@ extras_req = {
 }
 extras_req["all"] = [p for r in extras_req.values() for p in r]
 
+if 'IS_VECTORAI_NIGHTLY' in os.environ.keys():
+    name = 'vectorai-nightly'
+else:
+    name = 'vectorai'
+
 setup(
-    name="vectorai",
+    name=name,
     version="0.2.1",
     author="OnSearch Pty Ltd",
     author_email="dev@vctr.ai",

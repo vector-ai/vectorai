@@ -4,8 +4,12 @@
 name: Upload Python Package
 
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  # schedule:
+  #   - cron: "0 0 * * *"
+  push:
+    branches:
+      - feature/nightly_upload
+      - master
 
 jobs:
   deploy:
@@ -26,6 +30,7 @@ jobs:
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PW }}
+        IS_VECTORAI_NIGHTLY: True
       run: |
         python setup.py sdist bdist_wheel
-        twine upload dist/* --repository vectorai-nightly
+        twine upload dist/* --repository testpypi
