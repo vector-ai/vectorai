@@ -447,6 +447,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def bulk_missing_id(self, collection_name: str, document_ids: List[str]):
         """
             Return IDs that are not in a collection.
