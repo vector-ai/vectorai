@@ -4,7 +4,7 @@
 import time
 from functools import wraps
 
-def retry(num_of_retries=3, timeout=10):
+def retry(num_of_retries=3, timeout=2):
     """
     Allows the function to retry upon failure. 
     Args:
@@ -20,6 +20,7 @@ def retry(num_of_retries=3, timeout=10):
                 # Using general error to avoid any possible error dependencies.
                 except Exception as error:
                     time.sleep(timeout)
+                    print("Retrying...")
                     if i == num_of_retries - 1:
                         raise error
                     continue
