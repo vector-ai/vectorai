@@ -241,6 +241,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_by_ids(
         self,
         collection_name: str,
@@ -311,6 +312,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_by_positive_negative_ids(
         self,
         collection_name: str,
@@ -385,6 +387,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_with_positive_negative_ids_as_history(
         self,
         collection_name: str,
@@ -463,6 +466,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_search(
         self,
         collection_name: str,
@@ -553,6 +557,7 @@ Example:
             },
         ).json()
 
+    @retry()
     def advanced_hybrid_search(
         self,
         collection_name: str,
@@ -646,6 +651,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_search_by_id(
         self,
         collection_name: str,
@@ -740,6 +746,7 @@ Example:
             },
         ).json()
 
+    @retry()
     def advanced_search_by_ids(
         self,
         collection_name: str,
@@ -829,6 +836,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_search_by_positive_negative_ids(
         self,
         collection_name: str,
@@ -924,6 +932,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_search_with_positive_negative_ids_as_history(
         self,
         collection_name: str,

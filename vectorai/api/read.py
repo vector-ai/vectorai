@@ -8,6 +8,7 @@ from .cluster import ViClusterClient
 from .search import ViSearchClient
 from .dimensionality_reduction import ViDimensionalityReductionClient
 from .array_dict_vectorizer import ViArrayDictClient
+from .utils import retry
 
 class ViReadAPIClient(
     ViSearchClient,
@@ -107,6 +108,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def bulk_id(self, collection_name: str, document_ids: List[str]):
         """
 Look up multiple document by their ids
@@ -129,6 +131,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def retrieve_documents(
         self,
         collection_name: str,
@@ -176,6 +179,7 @@ Args:
             url="{}/collection/retrieve_documents".format(self.url), params=q_params
         ).json()
 
+    @retry()
     def random_documents(
         self,
         collection_name: str,

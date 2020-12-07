@@ -1,7 +1,7 @@
 import requests
 from typing import Dict, List
 from .read import ViReadAPIClient
-
+from .utils import retry
 
 class ViWriteAPIClient(ViReadAPIClient):
     """
@@ -37,6 +37,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def bulk_insert_and_encode(self, collection_name: str, docs: list, models: dict):
         """
             Client-side encoding of documents to improve speed of inserting. This removes
@@ -90,6 +91,7 @@ Args:
     #         },
     #     ).json()
 
+    @retry()
     def bulk_insert(self, collection_name: str, documents: List, insert_date: bool=True, overwrite: bool=True):
         """
 Insert multiple documents into a Collection
@@ -118,7 +120,8 @@ Args:
                 "overwrite" : overwrite
             },
         ).json()
-
+    
+    @retry()
     def insert(self, collection_name: str, document: Dict, insert_date: bool=True, overwrite: bool=True):
         """
 Insert a document into a Collection
@@ -147,7 +150,8 @@ Args:
                 "overwrite" : overwrite
             },
         ).json()
-
+    
+    @retry()
     def _edit_document(self, collection_name: str, edits: Dict, document_id: str):
         return requests.post(
             url="{}/collection/edit_document".format(self.url),
