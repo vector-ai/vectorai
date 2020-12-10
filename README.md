@@ -55,6 +55,13 @@ Install via pip! Compatible with any OS.
 pip install vectorai
 ```
 
+If you require the nightly version due to on-going improvements, you can install the nightly version using: 
+```
+pip install vectorai-nightly
+```
+
+Note: while the nightly version will still pass automated tests, it may not be stable.
+
 Check out our quickstart notebook on how to make a text/image/audio search engine in 5 minutes: [quickstart.ipynb](examples/quickstart.ipynb)
 
 ```
