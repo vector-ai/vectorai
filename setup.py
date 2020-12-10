@@ -15,13 +15,16 @@ extras_req = {
 extras_req["all"] = [p for r in extras_req.values() for p in r]
 
 if 'IS_VECTORAI_NIGHTLY' in os.environ.keys():
+    from datetime import datetime
     name = 'vectorai-nightly'
+    version = '0.2.1' + '.' + datetime.today().date().__str__().replace('-', '.') 
 else:
     name = 'vectorai'
+    version = '0.2.1'
 
 setup(
     name=name,
-    version="0.2.1",
+    version=version,
     author="OnSearch Pty Ltd",
     author_email="dev@vctr.ai",
     description="A Python framework for building vector based applications. Encode, query and analyse data using vectors.",
