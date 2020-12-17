@@ -292,7 +292,7 @@ class UtilsMixin:
         warnings.warn("Unable to detect audio format. Must be either wav/mpeg/ogg.")
         return ''
 
-    def show_json(self, json: dict, selected_fields: List[str]=[], image_fields: List[str]=[], 
+    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
     audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector_fields=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
@@ -312,7 +312,7 @@ class UtilsMixin:
                 include_vector_fields:
                     Include the vector fields when showing JSON
         """
-        if selected_fields == []:
+        if selected_fields is None:
             return self.show_df(self.results_to_df(json).head(nrows), 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
