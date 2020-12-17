@@ -248,7 +248,7 @@ class UtilsMixin:
         """
         return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
-    def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
+    def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, include_vector_fields=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -262,7 +262,8 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
-
+                include_vector_fields:
+                    If True, includes the vector fields
         """
         def path_to_image_html(path):
             return '<img src="'+ path + f'" width="{image_width}" >'
@@ -273,6 +274,9 @@ class UtilsMixin:
         formatters = {image:path_to_image_html for image in image_fields}
         formatters.update({audio: show_audio for audio in audio_fields})
         try:
+            if not include_vector_fields:
+                cols = [x for x in list(df.columns) if '_vector_' not in x]
+                df = df[cols]
             from IPython.core.display import HTML
             return HTML(df.to_html(escape=False ,formatters=formatters))
         except ImportError:
@@ -289,7 +293,7 @@ class UtilsMixin:
         return ''
 
     def show_json(self, json: dict, selected_fields: List[str]=[], image_fields: List[str]=[], 
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60):
+    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector_fields=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
             Args:
@@ -305,12 +309,14 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
+                include_vector_fields:
+                    Include the vector fields when showing JSON
         """
         if selected_fields == []:
             return self.show_df(self.results_to_df(json).head(nrows), 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector_fields=include_vector_fields)
 
 def get_random_int(low=0, high=9999):
     """
