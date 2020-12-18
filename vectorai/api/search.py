@@ -16,6 +16,7 @@ class ViSearchClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @retry()
     def _search(
         self,
         collection_name: str,
@@ -93,6 +94,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def hybrid_search(
         self,
         collection_name: str,
@@ -175,6 +177,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_by_id(
         self,
         collection_name: str,
@@ -1032,6 +1035,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def chunk_search(self, 
         collection_name:  str, 
         vector: List, 

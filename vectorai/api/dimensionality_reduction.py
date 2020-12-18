@@ -1,6 +1,6 @@
-from typing import List
 import requests
-
+from typing import List
+from .utils import retry
 
 class ViDimensionalityReductionClient:
     """
@@ -14,6 +14,7 @@ class ViDimensionalityReductionClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @retry()
     def dimensionality_reduce(
         self,
         collection_name: str,
@@ -52,6 +53,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def dimensionality_reduction_job(
         self,
         collection_name: str,

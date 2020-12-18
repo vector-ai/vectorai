@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-
+from .utils import retry
 
 class ViImageClient:
     """
@@ -16,6 +16,7 @@ class ViImageClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @retry()
     def search_image(
         self,
         collection_name: str,
@@ -114,6 +115,7 @@ Args:
                 },
             ).json()
 
+    @retry()
     def search_image_by_upload(
         self,
         collection_name: str,
@@ -176,6 +178,7 @@ Args:
             asc
         )
 
+    @retry()
     def encode_image(self, collection_name: str, image):
         """
 Encode image into a vector
@@ -206,6 +209,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_image_job(
         self, collection_name: str, image_field: str, refresh: bool = False
     ):

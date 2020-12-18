@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-
+from .utils import retry
 
 class ViAudioClient:
     """
@@ -15,7 +15,7 @@ class ViAudioClient:
             self.url = url
         else:
             self.url = "https://api.vctr.ai"
-
+    @retry()
     def search_audio(
         self,
         collection_name: str,
@@ -113,6 +113,7 @@ Args:
                 },
             ).json()
 
+    @retry()
     def search_audio_by_upload(
         self,
         collection_name: str,
@@ -172,7 +173,8 @@ Args:
             include_count,
             asc
         )
-
+    
+    @retry()
     def encode_audio(self, collection_name: str, audio):
         """
 Encode encode into a vector
@@ -203,6 +205,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_audio_job(
         self, collection_name: str, audio_field: str, refresh: bool = False
     ):

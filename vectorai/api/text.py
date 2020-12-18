@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-
+from .utils import retry
 
 class ViTextClient:
     """
@@ -16,6 +16,7 @@ class ViTextClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @retry()
     def search_text(
         self,
         collection_name: str,
@@ -89,6 +90,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_text(self, collection_name: str, text):
         """
 Encode text into a vector
@@ -117,6 +119,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_text_job(
         self, collection_name: str, text_field: str, refresh: bool = False
     ):

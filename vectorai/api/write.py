@@ -15,6 +15,7 @@ class ViWriteAPIClient(ViReadAPIClient):
         else:
             self.url = "https://api.vctr.ai"
 
+    @retry()
     def create_collection_from_document(self, collection_name: str, document: dict):
         """
 Creates a collection by infering the schema from a document
@@ -59,6 +60,7 @@ Args:
             'models' : models
         }).json()
 
+    @retry()
     def _create_collection(self, collection_name: str, collection_schema: Dict = {}):
         return requests.post(
             url="{}/project/create_collection".format(self.url),
@@ -70,6 +72,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def _delete_collection(self, collection_name: str):
         return requests.get(
             url="{}/project/delete_collection".format(self.url),
@@ -164,6 +167,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def delete_by_id(self, collection_name: str, document_id: str):
         """
 Delete a document in a Collection by its id
@@ -184,6 +188,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def publish_aggregation(
         self,
         collection_name: str,
@@ -234,6 +239,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def start_aggregation(self, aggregation_name: str):
         """
 Start your published aggregation
@@ -252,6 +258,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def stop_aggregation(self, aggregation_name: str):
         """
 Stop your published aggregation
@@ -270,6 +277,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def delete_published_aggregation(self, aggregation_name: str):
         """
 Delete a published aggregation and collection
@@ -288,6 +296,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def join_collections(self, join_query: dict, joined_collection_name:str):
         """
 Join collections with a query

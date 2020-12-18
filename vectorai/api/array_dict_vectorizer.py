@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-
+from .utils import retry
 
 class ViArrayDictClient:
     """
@@ -16,7 +16,7 @@ class ViArrayDictClient:
         else:
             self.url = "https://api.vctr.ai"
 
-
+    @retry()
     def encode_dictionary_field(self, collection_name: str, dictionary_fields: List):
         """
 Encode all dictionaries in a field for collection into vectors
@@ -56,6 +56,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_dictionary(self, collection_name: str, dictionary: Dict, dictionary_field: str):
         """
 Encode an dictionary into a vector
@@ -91,6 +92,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_with_dictionary(self, collection_name: str, dictionary: Dict, dictionary_field: str,
         fields: List,
         sum_fields: bool = True,
@@ -170,6 +172,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_array_field(self, collection_name: str, array_fields: List):
         """
 Encode all arrays in a field for a collection into vectors
@@ -209,6 +212,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def encode_array(self, collection_name: str, array: List, array_field: str):
         """
 Encode an array into a vector
@@ -244,6 +248,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def search_with_array(self, collection_name: str, array: List, array_field: str,
         fields: List,
         sum_fields: bool = True,

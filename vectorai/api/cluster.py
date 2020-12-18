@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-
+from .utils import retry
 
 class ViClusterClient:
     """
@@ -15,7 +15,8 @@ class ViClusterClient:
             self.url = url
         else:
             self.url = "https://api.vctr.ai"
-
+    
+    @retry()
     def clustering_job(
         self,
         collection_name: str,
@@ -50,6 +51,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def cluster_aggregate(
         self,
         collection_name: str,
@@ -94,6 +96,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def cluster_facets(self, collection_name: str, fields: List = [], asc: bool = True):
         """
 Get Facets in each cluster in a collection
@@ -125,6 +128,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def cluster_centroids(self, collection_name: str, vector_field: str):
         """
 Returns the cluster centers of a collection by a vector field
@@ -147,6 +151,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def cluster_centroid_documents(
         self,
         collection_name: str,
@@ -181,6 +186,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_clustering_job(
         self,
         collection_name: str,
@@ -228,6 +234,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_cluster_aggregate(
         self,
         collection_name: str,
@@ -282,6 +289,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_cluster_facets(
         self,
         collection_name: str,
@@ -327,6 +335,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_cluster_centroids(
         self, collection_name: str, vector_field: str, alias: str = "default"
     ):
@@ -354,6 +363,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def advanced_cluster_centroid_documents(
         self,
         collection_name: str,
