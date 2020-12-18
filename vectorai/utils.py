@@ -248,7 +248,8 @@ class UtilsMixin:
         """
         return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
-    def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, include_vector_fields=False):
+    def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, 
+    include_vector_fields: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -273,10 +274,10 @@ class UtilsMixin:
         
         formatters = {image:path_to_image_html for image in image_fields}
         formatters.update({audio: show_audio for audio in audio_fields})
+        if not include_vector_fields:
+            cols = [x for x in list(df.columns) if '_vector_' not in x]
+            df = df[cols]
         try:
-            if not include_vector_fields:
-                cols = [x for x in list(df.columns) if '_vector_' not in x]
-                df = df[cols]
             from IPython.core.display import HTML
             return HTML(df.to_html(escape=False ,formatters=formatters))
         except ImportError:
@@ -314,7 +315,7 @@ class UtilsMixin:
         """
         if selected_fields is None:
             return self.show_df(self.results_to_df(json).head(nrows), 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector_fields=include_vector_fields)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector_fields=include_vector_fields)
 
