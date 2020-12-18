@@ -29,7 +29,7 @@ class ViReadAPIClient(
             self.url = url
         else:
             self.url = "https://api.vctr.ai"
-
+    @retry()
     def _list_collections(self):
         """
 Lists all the collections in a project
@@ -47,6 +47,7 @@ Args:
             params={"username": self.username, "api_key": self.api_key},
         ).json()
 
+    @retry()
     def collection_stats(self, collection_name: str):
         """
 Retrieves stats about a collection
@@ -66,6 +67,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def collection_schema(self, collection_name: str):
         """
 Retrieves the schema of a collection
@@ -85,6 +87,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def id(self, collection_name: str, document_id: str, include_vector: bool = True):
         """
 Look up a document by its id
@@ -219,6 +222,7 @@ Args:
             url="{}/collection/random_documents".format(self.url), params=q_params
         ).json()
 
+    @retry()
     def id_lookup_joined(self, join_query: dict, doc_id:str):
         """
 Look up a document by its id with joins
@@ -239,6 +243,7 @@ Args:
             },
         ).json()
         
+    @retry()
     def aggregate(
         self,
         collection_name: str,
@@ -299,6 +304,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def facets(
         self,
         collection_name: str,
@@ -339,6 +345,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def filters(
         self,
         collection_name: str,
@@ -405,6 +412,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def job_status(self, collection_name: str, job_id: str, job_name: str):
         """
 Get status of a job. Whether its starting, running, failed or finished.
@@ -428,6 +436,7 @@ Args:
             },
         ).json()
 
+    @retry()
     def list_jobs(self, collection_name: str):
         """
 Get history of jobs
