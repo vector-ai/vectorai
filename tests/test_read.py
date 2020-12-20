@@ -110,6 +110,5 @@ def test_search_collections_case_senitive(test_client):
     test_client.create_collection(cn)
     assert len(test_client.search_collections('123y8iohui'), case_sensitive=True) == 0, "Case-sensitive Searching fails"
     test_client.delete_collection(cn)
-    assert len(test_client.search_collections('123y8ioHUI'), case_sensitive=False)) > 0, "Non case-sensitive searching works"
+    assert len(test_client.search_collections('123y8ioHUI'), case_sensitive=False) > 0, "Non case-sensitive searching works"
     test_client.delete_collection(cn)
-    
