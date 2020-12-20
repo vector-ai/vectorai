@@ -340,9 +340,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
             Insert and encode documents
         """
+        self._convert_ids_to_string(documents)
+
         if not overwrite:
             documents = [doc for i, doc in enumerate(documents) if self.get_field('_id', doc) in missing_ids]
-        
+
         if len(documents) == 0:
             return {
                 'failed_document_ids': []
@@ -400,6 +402,16 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         return self.insert_document(collection_name=collection_name, document=document)
 
+    def _convert_ids_to_string(self, documents: List[Dict]):
+        """
+        Convert IDs in a document to strings if the first document has a field.
+        """
+        if self.is_field('_id', documents[0]):
+            id_values = self.get_field_across_documents('_id', documents)
+            # Typecast to string
+            id_values = [str(x) for x in id_values]
+            self.set_field_across_documents('_id', id_values, documents)
+
     def insert_documents(
         self,
         collection_name: str,
@@ -448,7 +460,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
         else:
             missing_ids = []
-        
+
         iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
         iter_docs = self._chunks(documents, chunksize)
 

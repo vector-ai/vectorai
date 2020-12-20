@@ -51,7 +51,53 @@ def assert_json_serializable(document, temp_json_file="test.json"):
     os.remove(temp_json_file)
     assert return_document == document
 
-class TestInsert:   
+class TestInsert:
+    @pytest.mark.use_client
+    def test_insert_documents_simple_and_collection_stats_match(self, test_client, test_collection_name):
+        """
+            Testing for simple document insertion
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        test_client.insert_documents(test_collection_name, sample_documents)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_without_id_fields(self, test_client, test_collection_name):
+        """
+            Test inserting documents if they do not have an ID field.
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Remove the ID fields
+        {x.pop('_id') for x in sample_documents}
+        test_client.insert_documents(test_collection_name, sample_documents)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_when_id_is_not_a_string(self, test_client, test_collection_name):
+        """
+            Test inserting documents when ID is not a string
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Create integer IDs strings
+        {x.update({'_id': int(x['_id']}) for x in sample_documents}
+        test_client.insert_documents(test_collection_name, sample_documents)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
     @pytest.mark.use_client
     def test_insert_single_document(self, test_client, test_collection_name):
         if test_collection_name not in test_client.list_collections():
