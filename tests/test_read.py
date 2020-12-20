@@ -91,3 +91,25 @@ def test_check_schema_both(test_client):
         nested_schema = {'_id': "text", "chk_vector_":[0, 1, 2]}
     assert len(record) == 0
     assert test_client._check_schema(nested_schema) == (False, False)
+
+def test_search_collections(test_client):
+    """
+        Simple test for searching collections
+    """
+    cn = 'example_collection_123y8io'
+    test_client.create_collection(cn)
+    assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
+    test_client.delete_collection(cn)
+
+def test_search_collections_case_senitive(test_client):
+    """
+        Simple test for searching collections with case-sensitive on.
+    """
+    # This is an arbitrary randomly-generated collection name.
+    cn = 'example_collection_123y8ioHUI'
+    test_client.create_collection(cn)
+    assert len(test_client.search_collections('123y8iohui'), case_sensitive=True) == 0, "Case-sensitive Searching fails"
+    test_client.delete_collection(cn)
+    assert len(test_client.search_collections('123y8ioHUI'), case_sensitive=False)) > 0, "Non case-sensitive searching works"
+    test_client.delete_collection(cn)
+    
