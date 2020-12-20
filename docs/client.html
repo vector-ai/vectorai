@@ -1524,10 +1524,12 @@ e.g. “product_description_vector_”</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;test_collection&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">document</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_document</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_document</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">document</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1567,10 +1569,12 @@ e.g. “product_description_vector_”</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;test_collection&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">document</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_single_document</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_single_document</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">document</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
