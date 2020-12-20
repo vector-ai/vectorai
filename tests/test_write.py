@@ -91,7 +91,7 @@ class TestInsert:
             test_client.delete_collection(test_collection_name)
         sample_documents = test_client.create_sample_documents(10)
         # Create integer IDs strings
-        {x.update({'_id': int(x['_id']}) for x in sample_documents}
+        {x.update({'_id': int(x['_id'])}) for x in sample_documents}
         test_client.insert_documents(test_collection_name, sample_documents)
         time.sleep(10) 
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
