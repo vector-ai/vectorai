@@ -366,10 +366,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 List of documents/jsons/dictionaries.
 
         Example:
+            >>> from vectorai import ViClient
             >>> from vectorai.models.deployed import ViText2Vec
-            >>> text_encoder = ViText2Vec(username, api_key, vectorai_url)
+            >>> vi_client = ViClient()
+            >>> collection_name = 'test_collection'
             >>> document = {'chicken': 'Big chicken'}
-            >>> vi_client.insert_document(document)
+            >>> vi_client.insert_document(collection_name, document)
         """
         response = self.insert(collection_name=collection_name, document=document)
         if response != "inserted":
@@ -389,10 +391,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 List of documents/jsons/dictionaries.
 
         Example:
+            >>> from vectorai import ViClient
             >>> from vectorai.models.deployed import ViText2Vec
-            >>> text_encoder = ViText2Vec(username, api_key, vectorai_url)
+            >>> vi_client = ViClient()
+            >>> collection_name = 'test_collection'
             >>> document = {'chicken': 'Big chicken'}
-            >>> vi_client.insert_single_document(document)
+            >>> vi_client.insert_single_document(collection_name, document)
         """
         return self.insert_document(collection_name=collection_name, document=document)
 
