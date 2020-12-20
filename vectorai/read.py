@@ -396,6 +396,20 @@ Args:
             >>> vi_client._check_schema(doc)
         """
         return sorted(self._list_collections())
+    
+    def search_collections(self, keyword: str) -> List[str]:
+        """
+            Performs keyword matching in collections.
+            Args:
+                keyword: Matches based on keywords
+            Returns: 
+                List of collection names
+            Example: 
+                >>> from vectorai import ViClient 
+                >>> vi_client = ViClient()
+                >>> vi_client.search_collections('example')
+        """
+        return [x for x in self.list_collections() if keyword.lower() in x]
 
     def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """

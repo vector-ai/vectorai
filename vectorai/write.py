@@ -182,8 +182,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> collection_schema = {'image_vector_':2048}
             >>> ViClient.create_collection(collection_name, collection_schema)
         """
+        collection_name_lower_case = collection_name.lower()
+        if collection_name_lower_case != collection_name:
+            warnings.warn("Your collection name is not in lower case. We are automatically converting to lower case for compatibility.")
+        
         response = self._create_collection(
-            collection_name, collection_schema=collection_schema
+            collection_name_lower_case, collection_schema=collection_schema
         )
         self._raise_error(response)
         print(f"Collection {collection_name} created successfully.")
