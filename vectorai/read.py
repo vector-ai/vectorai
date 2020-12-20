@@ -397,12 +397,11 @@ Args:
         """
         return sorted(self._list_collections())
     
-    def search_collections(self, keyword: str, case_sensitive=False) -> List[str]:
+    def search_collections(self, keyword: str) -> List[str]:
         """
-            Performs keyword matching in collections
+            Performs keyword matching in collections.
             Args:
                 keyword: Matches based on keywords
-                case_sensitive: Matches based on case-sensitivity
             Returns: 
                 List of collection names
             Example: 
@@ -410,9 +409,7 @@ Args:
                 >>> vi_client = ViClient()
                 >>> vi_client.search_collections('example')
         """
-        if case_sensitive:
-            return [x for x in self.list_collections() if keyword in x]
-        return [x for x in self.list_collections() if keyword.lower() in x.lower()]
+        return [x for x in self.list_collections() if keyword.lower() in x]
 
     def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """

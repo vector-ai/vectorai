@@ -100,15 +100,4 @@ def test_search_collections(test_client):
     test_client.create_collection(cn)
     assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
     test_client.delete_collection(cn)
-
-def test_search_collections_case_senitive(test_client):
-    """
-        Simple test for searching collections with case-sensitive on.
-    """
-    # This is an arbitrary randomly-generated collection name.
-    cn = 'example_collection_123y8ioHUI'
-    test_client.create_collection(cn)
-    assert len(test_client.search_collections('123y8iohui'), case_sensitive=True) == 0, "Case-sensitive Searching fails"
-    test_client.delete_collection(cn)
-    assert len(test_client.search_collections('123y8ioHUI'), case_sensitive=False) > 0, "Non case-sensitive searching works"
-    test_client.delete_collection(cn)
+    
