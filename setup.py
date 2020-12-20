@@ -8,9 +8,7 @@ core_req = ["requests", "numpy", "pandas", "appdirs>=1.4.4", "tqdm>=4.27.0", "pl
 extras_req = {
     "dev" : ["twine", "black", "pytest", "pytest-cov"],
     "test" : ["pytest", "pytest-cov"],
-    "docs" : ["sphinx-rtd-theme>=0.5.0", "nbsphinx>=0.7.1"],
-    "transformers" : ["transformers>=3.0.2", "scikit-learn>=0.22.0"],
-    "tensorflow" : ["tensorflow>=2.2.0"],
+    "docs" : ["sphinx-rtd-theme>=0.5.0", "nbsphinx>=0.7.1"]
 }
 extras_req["all"] = [p for r in extras_req.values() for p in r]
 
