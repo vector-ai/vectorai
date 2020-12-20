@@ -443,8 +443,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 self.encode_documents_with_models([documents[0]], models)[0],
             )
         failed = []
-        bulk_id_list = self.get_field_across_documents('_id', documents)
-        missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
+        if overwrite:
+            bulk_id_list = self.get_field_across_documents('_id', documents)
+            missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
+        else:
+            missing_ids = []
+        
         iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
         iter_docs = self._chunks(documents, chunksize)
 
