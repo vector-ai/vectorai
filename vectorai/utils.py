@@ -280,10 +280,38 @@ class UtilsMixin:
             df = df[cols]
         try:
             from IPython.core.display import HTML
-            if isinstance(df, pd.DataFrame):
-                return HTML(df.to_html(escape=False ,formatters=formatters))
-            elif isinstance(df, pd.io.formats.style.Styler):
-                return df.format(formatters)
+            return HTML(df.to_html(escape=False ,formatters=formatters))
+        except ImportError:
+            return df
+
+    def show_styler(self, df: pd.io.formats.style.Styler, 
+    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
+        """
+            Shows a dataframe with the images and audio included inside the dataframe.
+            Args:
+                df:
+                    Pandas DataFrame
+                image_fields:
+                    List of fields with the images 
+                audio_fields:
+                    List of fields for the audio
+                nrows:
+                    Number of rows to preview
+                image_width:
+                    The width of the images
+        """
+        def path_to_image_html(path):
+            return '<img src="'+ path + f'" width="{image_width}" >'
+        
+        def show_audio(x):
+            return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
+        
+        formatters = {image:path_to_image_html for image in image_fields}
+        formatters.update({audio: show_audio for audio in audio_fields})
+
+        try:
+            from IPython.core.display import HTML
+            return df.format(formatters)
         except ImportError:
             return df
 
