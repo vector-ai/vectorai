@@ -16,7 +16,7 @@ from typing import List, Dict, Union, Any, Callable
 from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
-from .errors import APIError, MissingFieldError
+from .errors import APIError, MissingFieldError, MissingFieldWarning
 from .read import ViReadClient
 from .api.write import ViWriteAPIClient
 
@@ -416,7 +416,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             able to resume inserting. We recommending adding IDs to your documents.
             You can do this by using set_field_across_documents function with a list of 
             IDs."""
-            warnings.warn(MESSAGE)
+            warnings.warn(MESSAGE, MissingFieldWarning)
 
     def insert_documents(
         self,
