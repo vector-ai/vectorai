@@ -279,7 +279,10 @@ class UtilsMixin:
             df = df[cols]
         try:
             from IPython.core.display import HTML
-            return HTML(df.to_html(escape=False ,formatters=formatters))
+            if isinstance(df, pd.DataFrame):
+                return HTML(df.to_html(escape=False ,formatters=formatters))
+            elif isinstance(df, pd.io.formats.style.Styler):
+                return df.format(formatters)
         except ImportError:
             return df
 
