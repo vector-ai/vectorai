@@ -496,6 +496,32 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed_document_ids": failed,
         }
 
+    def resume_insert_documents(
+        self,
+        collection_name: str,
+        documents: List,
+        models: Dict[str, Callable] = {},
+        chunksize: int = 15,
+        workers: int = 1,
+        verbose: bool=False,
+        use_bulk_encode: bool=False,
+        show_progress_bar: bool=True
+    ):
+        """
+        Resume inserting documents
+        """
+        document_ids = self.get_field_across_documents(documents)
+        missing_ids = set(self.bulk_missing_id(collection_name, document_ids))
+        self.insert_documents(collection_name=collection_name,
+        documents=[doc for doc in documents if doc['_id'] in missing_ids],
+        models=models,
+        chunksize=chunksize,
+        workers=workers,
+        verbose=verbose,
+        use_bulk_encode=use_bulk_encode,
+        overwrite=False,
+        show_progress_bar=show_progress_bar)
+
 
     def insert_df(
         self,
