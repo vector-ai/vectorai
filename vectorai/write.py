@@ -478,7 +478,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
-            missing_ids=missing_ids, overwrite=overwrite)
+            overwrite=overwrite)
             for result in self.progress_bar(
                 pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
