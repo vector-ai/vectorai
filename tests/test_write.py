@@ -414,6 +414,7 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
     time.sleep(5)
     test_client.delete_collection(test_collection_name)
 
+@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
@@ -457,6 +458,7 @@ def test_multiprocess_overwrite_collection_client(test_collection_client, test_c
     time.sleep(5)
     test_collection_client.delete_collection()
 
+@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite_collection_client(test_collection_client, test_collection_name):
     NUM_OF_DOCS = 10
