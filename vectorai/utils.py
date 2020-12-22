@@ -267,14 +267,9 @@ class UtilsMixin:
                 include_vector_fields:
                     If True, includes the vector fields
         """
-        def path_to_image_html(path):
-            return '<img src="'+ path + f'" width="{image_width}" >'
+        formatters = {image:self.render_image_in_html for image in image_fields}
+        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
         
-        def show_audio(x):
-            return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
-        
-        formatters = {image:path_to_image_html for image in image_fields}
-        formatters.update({audio: show_audio for audio in audio_fields})
         if not include_vector_fields:
             cols = [x for x in list(df.columns) if '_vector_' not in x]
             df = df[cols]
@@ -283,6 +278,12 @@ class UtilsMixin:
             return HTML(df.to_html(escape=False ,formatters=formatters))
         except ImportError:
             return df
+
+    def render_image_in_html(self, path, image_width) -> str:
+        return '<img src="'+ path + f'" width="{image_width}" >'
+    
+    def render_audio_in_html(self, path) -> str:
+        return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
     def show_styler(self, df: pd.io.formats.style.Styler, 
     image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
@@ -300,14 +301,8 @@ class UtilsMixin:
                 image_width:
                     The width of the images
         """
-        def path_to_image_html(path):
-            return '<img src="'+ path + f'" width="{image_width}" >'
-        
-        def show_audio(x):
-            return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
-        
-        formatters = {image:path_to_image_html for image in image_fields}
-        formatters.update({audio: show_audio for audio in audio_fields})
+        formatters = {image:self.render_image_in_html for image in image_fields}
+        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
 
         try:
             from IPython.core.display import HTML
