@@ -9,7 +9,7 @@ import random
 import warnings
 from typing import List, Any, Dict, Union
 from functools import wraps, partial
- from pandas.io.formats.style import Styler
+from pandas.io.formats.style import Styler
 
 class UtilsMixin:
     """Various utilties
