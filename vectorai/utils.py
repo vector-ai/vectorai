@@ -3,12 +3,13 @@
 import numpy as np
 import pandas as pd
 import itertools
-from functools import wraps
 import inspect
 import types
 import random
-from typing import List, Any, Dict, Union
 import warnings
+from typing import List, Any, Dict, Union
+from functools import wraps, partial
+ from pandas.io.formats.style import Styler
 
 class UtilsMixin:
     """Various utilties
@@ -30,7 +31,6 @@ class UtilsMixin:
             >>> vi_client.generate_vector(vector_length=20)
         """
         return np.random.rand(vector_length - num_of_constant_values).tolist() + [0.5] * num_of_constant_values
-         
 
     @staticmethod
     def results_to_df(data):
@@ -267,7 +267,8 @@ class UtilsMixin:
                 include_vector_fields:
                     If True, includes the vector fields
         """
-        formatters = {image:self.render_image_in_html for image in image_fields}
+        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+        formatters = {image:render_image_with_width for image in image_fields}
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
         
         if not include_vector_fields:
@@ -285,7 +286,7 @@ class UtilsMixin:
     def render_audio_in_html(self, path) -> str:
         return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
-    def show_styler(self, df: pd.io.formats.style.Styler, 
+    def show_styler(self, df: Styler, 
     image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
@@ -301,7 +302,8 @@ class UtilsMixin:
                 image_width:
                     The width of the images
         """
-        formatters = {image:self.render_image_in_html for image in image_fields}
+        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+        formatters = {image:render_image_with_width for image in image_fields}
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
 
         try:
