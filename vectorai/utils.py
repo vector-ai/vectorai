@@ -9,7 +9,6 @@ import random
 import warnings
 from typing import List, Any, Dict, Union
 from functools import wraps, partial
-from pandas.io.formats.style import Styler
 
 class UtilsMixin:
     """Various utilties
@@ -286,7 +285,7 @@ class UtilsMixin:
     def render_audio_in_html(self, path) -> str:
         return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
-    def show_styler(self, df: Styler, 
+    def show_styler(self, df 
     image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
