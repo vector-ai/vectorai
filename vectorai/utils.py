@@ -3,12 +3,13 @@
 import numpy as np
 import pandas as pd
 import itertools
-from functools import wraps
 import inspect
 import types
 import random
-from typing import List, Any, Dict, Union
 import warnings
+from typing import List, Any, Dict, Union
+from functools import wraps, partial
+from pandas.io.formats.style import Styler
 
 class UtilsMixin:
     """Various utilties
@@ -30,7 +31,6 @@ class UtilsMixin:
             >>> vi_client.generate_vector(vector_length=20)
         """
         return np.random.rand(vector_length - num_of_constant_values).tolist() + [0.5] * num_of_constant_values
-         
 
     @staticmethod
     def results_to_df(data):
@@ -248,7 +248,9 @@ class UtilsMixin:
         """
         return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
-    def show_df(self, df: pd.DataFrame, image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
+    def show_df(self, df: pd.DataFrame, 
+    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, 
+    include_vector: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -262,19 +264,51 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
-
+                include_vector:
+                    If True, includes the vector fields
         """
-        def path_to_image_html(path):
-            return '<img src="'+ path + f'" width="{image_width}" >'
+        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+        formatters = {image:render_image_with_width for image in image_fields}
+        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
         
-        def show_audio(x):
-            return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
-        
-        formatters = {image:path_to_image_html for image in image_fields}
-        formatters.update({audio: show_audio for audio in audio_fields})
+        if not include_vector:
+            cols = [x for x in list(df.columns) if '_vector_' not in x]
+            df = df[cols]
         try:
             from IPython.core.display import HTML
             return HTML(df.to_html(escape=False ,formatters=formatters))
+        except ImportError:
+            return df
+
+    def render_image_in_html(self, path, image_width) -> str:
+        return '<img src="'+ path + f'" width="{image_width}" >'
+    
+    def render_audio_in_html(self, path) -> str:
+        return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
+
+    def show_styler(self, df: Styler, 
+    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
+        """
+            Shows a dataframe with the images and audio included inside the dataframe.
+            Args:
+                df:
+                    Pandas DataFrame
+                image_fields:
+                    List of fields with the images 
+                audio_fields:
+                    List of fields for the audio
+                nrows:
+                    Number of rows to preview
+                image_width:
+                    The width of the images
+        """
+        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+        formatters = {image:render_image_with_width for image in image_fields}
+        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+
+        try:
+            from IPython.core.display import HTML
+            return df.format(formatters)
         except ImportError:
             return df
 
@@ -288,8 +322,8 @@ class UtilsMixin:
         warnings.warn("Unable to detect audio format. Must be either wav/mpeg/ogg.")
         return ''
 
-    def show_json(self, json: dict, selected_fields: List[str]=[], image_fields: List[str]=[], 
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60):
+    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
+    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
             Args:
@@ -305,12 +339,14 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
+                include_vector:
+                    Include the vector fields when showing JSON
         """
-        if selected_fields == []:
+        if selected_fields is None:
             return self.show_df(self.results_to_df(json).head(nrows), 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
 
 def get_random_int(low=0, high=9999):
     """
