@@ -7,7 +7,7 @@ import time
 import numpy as np
 from vectorai.models.deployed import ViText2Vec
 from vectorai.write import ViWriteClient
-from vectorai.errors import APIError, MissingFieldError
+from vectorai.errors import APIError, MissingFieldError, MissingFieldWarning
 from vectorai.client import ViClient
 
 
@@ -51,7 +51,86 @@ def assert_json_serializable(document, temp_json_file="test.json"):
     os.remove(temp_json_file)
     assert return_document == document
 
-class TestInsert:   
+class TestInsert:
+    @pytest.mark.use_client
+    def test_insert_documents_simple_and_collection_stats_match(self, test_client, test_collection_name):
+        """
+            Testing for simple document insertion
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        test_client.insert_documents(test_collection_name, sample_documents)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_without_id_fields(self, test_client, test_collection_name):
+        """
+            Test inserting documents if they do not have an ID field.
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Remove the ID fields
+        {x.pop('_id') for x in sample_documents}
+        test_client.insert_documents(test_collection_name, sample_documents)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_without_id_fields_with_overwrite(self, test_client, test_collection_name):
+        """
+            Test inserting documents if they do not have an ID field.
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Remove the ID fields
+        {x.pop('_id') for x in sample_documents}
+        with pytest.warns(MissingFieldWarning):
+            test_client.insert_documents(test_collection_name, sample_documents, overwrite=True)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_when_id_is_not_a_string(self, test_client, test_collection_name):
+        """
+            Test inserting documents when ID is not a string
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Create integer IDs strings
+        {x.update({'_id': int(x['_id'])}) for x in sample_documents}
+        test_client.insert_documents(test_collection_name, sample_documents, overwrite=False)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
+    @pytest.mark.use_client
+    def test_inserting_documents_when_id_is_not_a_string_with_overwrite(self, test_client, test_collection_name):
+        """
+            Test inserting documents when ID is not a string
+        """
+        if test_collection_name in test_client.list_collections():
+            test_client.delete_collection(test_collection_name)
+        sample_documents = test_client.create_sample_documents(10)
+        # Create integer IDs strings
+        {x.update({'_id': int(x['_id'])}) for x in sample_documents}
+        test_client.insert_documents(test_collection_name, sample_documents, overwrite=True)
+        time.sleep(10) 
+        assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
+        test_client.delete_collection(test_collection_name)
+        time.sleep(3)
+
     @pytest.mark.use_client
     def test_insert_single_document(self, test_client, test_collection_name):
         if test_collection_name not in test_client.list_collections():
@@ -335,6 +414,7 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
     time.sleep(5)
     test_client.delete_collection(test_collection_name)
 
+@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():    
@@ -378,6 +458,7 @@ def test_multiprocess_overwrite_collection_client(test_collection_client, test_c
     time.sleep(5)
     test_collection_client.delete_collection()
 
+@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite_collection_client(test_collection_client, test_collection_name):
     NUM_OF_DOCS = 10
@@ -443,3 +524,19 @@ def test_encode_documents_With_models_using_encode(test_client):
     test_client.set_name(text_encoder, "vectorai_text")
     test_client.encode_documents_with_models_using_encode(docs, models={'color': [text_encoder]})
     assert 'color_vectorai_text_vector_' in docs[0].keys()
+
+@pytest.mark.use_client
+def test_raises_warning_if_no_id(test_client, test_collection_name):
+    docs = test_client.create_sample_documents(10)
+    {x.pop('_id') for x in docs}
+    with pytest.warns(MissingFieldWarning) as record:
+        test_client.insert_documents(test_collection_name, docs)
+    assert record[1].message.args[0] == test_client.NO_ID_WARNING_MESSAGE
+
+@pytest.mark.use_client
+def test_raises_warning_if_only_one_id_is_present(test_client, test_collection_name):
+    docs = test_client.create_sample_documents(10)
+    {x.pop('_id') for x in docs[1:]}
+    with pytest.warns(MissingFieldWarning) as record:
+        test_client.insert_documents(test_collection_name, docs)
+    assert record[0].message.args[0] == test_client.NO_ID_WARNING_MESSAGE

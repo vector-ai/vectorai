@@ -16,7 +16,7 @@ from typing import List, Dict, Union, Any, Callable
 from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
-from .errors import APIError
+from .errors import APIError, MissingFieldError, MissingFieldWarning
 from .read import ViReadClient
 from .api.write import ViWriteAPIClient
 
@@ -339,18 +339,13 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
 
     def _insert_and_encode(
         self, documents: list, collection_name: str, models: dict, verbose=False, 
-        use_bulk_encode=False, overwrite=False, missing_ids=None
+        use_bulk_encode=False, overwrite=False
     ):
         """
             Insert and encode documents
         """
-        if not overwrite:
-            documents = [doc for i, doc in enumerate(documents) if self.get_field('_id', doc) in missing_ids]
-        
-        if len(documents) == 0:
-            return {
-                'failed_document_ids': []
-            }
+        self._convert_ids_to_string(documents)
+
         return self.bulk_insert(
             collection_name=collection_name,
             documents=self.encode_documents_with_models(documents, models=models, 
@@ -404,6 +399,34 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         return self.insert_document(collection_name=collection_name, document=document)
 
+    def _convert_ids_to_string(self, documents: List[Dict]):
+        """
+        Convert IDs in a document to strings if the first document has a field.
+        """
+        try:
+            id_values = self.get_field_across_documents('_id', documents)
+            # Typecast to string
+            id_values = [str(x) for x in id_values]
+            self.set_field_across_documents('_id', id_values, documents)
+        except MissingFieldError:
+            pass
+    
+    @property
+    def NO_ID_WARNING_MESSAGE(self):
+        return """If inserting documents breaks, you will not be
+        able to resume inserting. We recommending adding IDs to your documents.
+        You can do this by using set_field_across_documents function with a list of 
+        IDs."""
+
+    def _raise_warning_if_no_id(self, documents: List[Dict]):
+        """
+            If no documents have no IDs, raise warnings
+        """
+        try:
+            self.get_field_across_documents('_id', documents)
+        except MissingFieldError:
+            warnings.warn(self.NO_ID_WARNING_MESSAGE, MissingFieldWarning)
+
     def insert_documents(
         self,
         collection_name: str,
@@ -446,17 +469,16 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 collection_name,
                 self.encode_documents_with_models([documents[0]], models)[0],
             )
+        self._raise_warning_if_no_id(documents)
         failed = []
-        bulk_id_list = self.get_field_across_documents('_id', documents)
-        missing_ids = set(self.bulk_missing_id(collection_name, bulk_id_list))
         iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
         iter_docs = self._chunks(documents, chunksize)
-
+        
         if workers == 1:
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
-                    missing_ids=missing_ids, overwrite=overwrite
+                    overwrite=overwrite
                 )
                 self._raise_error(result)
                 if verbose: print(f"Failed: {result['failed_document_ids']}")
@@ -465,7 +487,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
-            missing_ids=missing_ids, overwrite=overwrite)
+            overwrite=overwrite)
             for result in self.progress_bar(
                 pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
@@ -482,6 +504,32 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed": len(failed),
             "failed_document_ids": failed,
         }
+
+    def resume_insert_documents(
+        self,
+        collection_name: str,
+        documents: List,
+        models: Dict[str, Callable] = {},
+        chunksize: int = 15,
+        workers: int = 1,
+        verbose: bool=False,
+        use_bulk_encode: bool=False,
+        show_progress_bar: bool=True
+    ):
+        """
+        Resume inserting documents
+        """
+        document_ids = self.get_field_across_documents(documents)
+        missing_ids = set(self.bulk_missing_id(collection_name, document_ids))
+        self.insert_documents(collection_name=collection_name,
+        documents=[doc for doc in documents if doc['_id'] in missing_ids],
+        models=models,
+        chunksize=chunksize,
+        workers=workers,
+        verbose=verbose,
+        use_bulk_encode=use_bulk_encode,
+        overwrite=False,
+        show_progress_bar=show_progress_bar)
 
 
     def insert_df(
