@@ -250,7 +250,7 @@ class UtilsMixin:
 
     def show_df(self, df: pd.DataFrame, 
     image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, 
-    include_vector_fields: bool=False):
+    include_vector: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -264,14 +264,14 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
-                include_vector_fields:
+                include_vector:
                     If True, includes the vector fields
         """
         render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
         formatters = {image:render_image_with_width for image in image_fields}
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
         
-        if not include_vector_fields:
+        if not include_vector:
             cols = [x for x in list(df.columns) if '_vector_' not in x]
             df = df[cols]
         try:
@@ -323,7 +323,7 @@ class UtilsMixin:
         return ''
 
     def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector_fields=False):
+    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
             Args:
@@ -339,14 +339,14 @@ class UtilsMixin:
                     Number of rows to preview
                 image_width:
                     The width of the images
-                include_vector_fields:
+                include_vector:
                     Include the vector fields when showing JSON
         """
         if selected_fields is None:
             return self.show_df(self.results_to_df(json).head(nrows), 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector_fields=include_vector_fields)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector_fields=include_vector_fields)
+            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
 
 def get_random_int(low=0, high=9999):
     """
