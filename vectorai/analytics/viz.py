@@ -3,10 +3,11 @@ Plotting functions of Vi go here.
 """
 import plotly.express as px
 import plotly.graph_objects as go
+import copy
+import random
+from typing import Union, List, Dict, Any
 from plotly.subplots import make_subplots
 from tqdm.notebook import tqdm
-import copy
-from typing import Union, List, Dict, Any
 from .score import ViScore
 from .utils import ViAnalyticsUtils, MeanDict
 from ..read import ViReadClient
@@ -16,7 +17,6 @@ class VizMixin(ViScore, ViAnalyticsUtils):
     """
     Visualisation submodule for the library.
     """
-
     def _scatter_plot_documents(
         self,
         filtered_collection: list,
@@ -447,6 +447,81 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         fig.update_yaxes(title_text=f"Comparing with {anchor_documents[1][label]}")
         fig.update_layout(
             title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
+        )
+        return fig
+
+    def random_colour(self, num_of_colors) -> List:
+        levels = range(32,256,32)
+        return [tuple(random.choice(levels) for _ in range(3)) for _ in range(num_of_colors)]
+
+    def plot_2d_cosine_similarity(self, 
+        vector_fields: List[str], 
+        documents, anchor_documents, label,
+        mode='markers+text', textposition='top center', show_spikes=True,
+        text_label_font_size = 16, text_label_font_family = "Rockwell",
+        marker_colors=['purple', 'aquamarine'], metric='cosine_similarity'
+    ):
+        """
+        Plotting 2D cosine similarity plots 
+        Args:
+            vector_fields: The list of vectors to accept 
+            documents: The documents to 
+            anchor_documents: Documents by which to compare against
+            Label: The document field to label
+        """
+        
+        fig = go.FigureWidget()
+        
+        if len(vector_fields) > len(marker_colors):
+            num_of_extra_fields = len(vector_fields) - len(marker_colors)
+            marker_colors += self.random_colour(num_of_extra_fields)
+
+        for vector_field_counter, vector_field in enumerate(vector_fields):
+            scores_x = self.get_cosine_similarity_scores(
+                documents, anchor_documents[0], vector_field
+            )
+            scores_y = self.get_cosine_similarity_scores(
+                documents, anchor_documents[1], vector_field
+            )
+
+            for i, doc in enumerate(documents):
+                doc["cos_score_x"] = scores_x[i]
+                doc["cos_score_y"] = scores_y[i]
+            x = [round(x["cos_score_x"], 3) for x in documents]
+            y = [round(x["cos_score_y"], 3) for x in documents]
+            labels = self.get_field_across_documents(label, documents)
+            fig.add_trace(go.Scatter(x=x, y=y, 
+                text=labels,
+                mode=mode, 
+                name=vector_field,
+                # customdata=texts,
+                hovertemplate = label +": %{text}<extra></extra><br>" + \
+                "Cosine Similarity With " + anchor_documents[1][label] + ": %{y}<br>" + \
+                "Cosine Similarity With " + anchor_documents[0][label] + ": %{x}"
+                ,
+                marker=dict(
+                    color=marker_colors[vector_field_counter],
+                    size=5,
+                    line=dict(width=0.5, color='DarkSlateGrey')
+                )))
+        fig.update_xaxes(title_text=f"Cosine Similarity With {anchor_documents[0][label]}")
+        fig.update_yaxes(title_text=f"Cosine Similarity WIth {anchor_documents[1][label]}")
+        fig.update_layout(
+            title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
+        )
+
+        fig.update_traces(textposition=textposition)
+        if show_spikes:
+            fig.update_xaxes(showspikes=True, spikedash='dot', spikethickness=1.5)
+            fig.update_yaxes(showspikes=True, spikedash='dot', spikethickness=1.5)
+        
+        fig.update_layout(plot_bgcolor='#e6e6fa')  
+        fig.update_layout(
+            hoverlabel=dict(
+                bgcolor="white",
+                font_size=16,
+                font_family=text_label_font_family
+            )
         )
         return fig
 
