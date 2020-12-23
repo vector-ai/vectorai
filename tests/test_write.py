@@ -524,3 +524,19 @@ def test_encode_documents_With_models_using_encode(test_client):
     test_client.set_name(text_encoder, "vectorai_text")
     test_client.encode_documents_with_models_using_encode(docs, models={'color': [text_encoder]})
     assert 'color_vectorai_text_vector_' in docs[0].keys()
+
+@pytest.mark.use_client
+def test_raises_warning_if_no_id(test_client, test_collection_name):
+    docs = test_client.create_sample_documents(10)
+    {x.pop('_id') for x in docs}
+    with pytest.warns(MissingFieldWarning) as record:
+        test_client.insert_documents(test_collection_name, docs)
+    assert record[0].message.args[0] == test_client.NO_ID_WARNING_MESSAGE
+
+@pytest.mark.use_client 
+def test_raises_warning_if_only_one_id_is_present(test_client, test_collection_name):
+    docs = test_client.create_sample_documents(10)
+    {x.pop('_id') for x in docs[1:]}
+    with pytest.warns(MissingFieldWarning) as record:
+        test_client.insert_documents(test_collection_name, docs)
+    assert record[0].message.args[0] == test_client.NO_ID_WARNING_MESSAGE

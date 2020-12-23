@@ -399,11 +399,20 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         Convert IDs in a document to strings if the first document has a field.
         """
-        if self.is_field('_id', documents[0]):
+        try:
             id_values = self.get_field_across_documents('_id', documents)
             # Typecast to string
             id_values = [str(x) for x in id_values]
             self.set_field_across_documents('_id', id_values, documents)
+        except MissingFieldError:
+            pass
+    
+    @property
+    def NO_ID_WARNING_MESSAGE(self):
+        return """If inserting documents breaks, you will not be
+        able to resume inserting. We recommending adding IDs to your documents.
+        You can do this by using set_field_across_documents function with a list of 
+        IDs."""
 
     def _raise_warning_if_no_id(self, documents: List[Dict]):
         """
@@ -412,11 +421,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         try:
             self.get_field_across_documents('_id', documents)
         except MissingFieldError:
-            MESSAGE = """If inserting documents breaks, you will not be
-            able to resume inserting. We recommending adding IDs to your documents.
-            You can do this by using set_field_across_documents function with a list of 
-            IDs."""
-            warnings.warn(MESSAGE, MissingFieldWarning)
+            warnings.warn(self.NO_ID_WARNING_MESSAGE, MissingFieldWarning)
 
     def insert_documents(
         self,
@@ -460,7 +465,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 collection_name,
                 self.encode_documents_with_models([documents[0]], models)[0],
             )
-        
+        self._raise_warning_if_no_id(documents)
         failed = []
         iter_len = int(len(documents) / chunksize) + (len(documents) % chunksize > 0)
         iter_docs = self._chunks(documents, chunksize)
