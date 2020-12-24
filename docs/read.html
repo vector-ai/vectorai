@@ -483,6 +483,240 @@ The aggregation query is a json body that follows the schema of:</p>
 
 </dd></dl>
 
+<span class="target" id="module-vectorai.read"></span><p>Reads Operations designed for python</p>
+<dl class="py class">
+<dt id="vectorai.read.ViReadClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.read.</code><code class="sig-name descname">ViReadClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://api.vctr.ai'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="vectorai.read.ViReadClient.random_aggregation_query">
+<code class="sig-name descname">random_aggregation_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.random_aggregation_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random filter query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – name of collection</p></li>
+<li><p><strong>groupby</strong> – The number of groupbys to randomly generate</p></li>
+<li><p><strong>metrics</strong> – The number of metrics to randomly generate</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">random_aggregation_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.search">
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">approx</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search</p>
+<p>Enables machine learning search with vector search. Search with a vector for the most similar vectors.</p>
+<p>For example: Search with a person’s characteristics, who are the most similar (querying the “persons_characteristics_vector” field):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Query</span> <span class="n">person</span><span class="s1">&#39;s characteristics as a vector:</span>
+<span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">70</span><span class="p">]</span> <span class="n">representing</span> <span class="p">[</span><span class="n">height</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
+
+<span class="n">Search</span> <span class="n">Results</span><span class="p">:</span>
+<span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">Adam</span> <span class="n">Levine</span><span class="p">,</span> <span class="s2">&quot;persons_characteristics_vector&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">71</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">Brad</span> <span class="n">Pitt</span><span class="p">,</span> <span class="s2">&quot;persons_characteristics_vector&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">65</span><span class="p">]},</span>
+<span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> – Vector, a list/array of floats that represents a piece of data.</p></li>
+<li><p><strong>collection_name</strong> – Name of Collection</p></li>
+<li><p><strong>search_fields</strong> – Vector fields to search through</p></li>
+<li><p><strong>approx</strong> – Used for approximate search</p></li>
+<li><p><strong>sum_fields</strong> – Whether to sum the multiple vectors similarity search score as 1 or seperate</p></li>
+<li><p><strong>page_size</strong> – Size of each page of results</p></li>
+<li><p><strong>page</strong> – Page of the results</p></li>
+<li><p><strong>metric</strong> – Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p></li>
+<li><p><strong>min_score</strong> – Minimum score for similarity metric</p></li>
+<li><p><strong>include_vector</strong> – Include vectors in the search results</p></li>
+<li><p><strong>include_count</strong> – <p>Include count in the search results</p>
+<dl class="simple">
+<dt>asc:</dt><dd><p>Whether to sort the score by ascending order (default is false, for getting most similar results)</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.random_filter_query">
+<code class="sig-name descname">random_filter_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">text_filters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">numeric_filters</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.random_filter_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a random filter query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – name of collection</p></li>
+<li><p><strong>text_filters</strong> – The number of text filters to randomly generate</p></li>
+<li><p><strong>numeric_filters</strong> – The number of numeric filters to randomly generate</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">random_filter_query</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">text_filters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numeric_filters</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.head">
+<code class="sig-name descname">head</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">return_as_pandas_df</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main Vi client with most of the available read and write methods available to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – The name of your collection</p></li>
+<li><p><strong>page_size</strong> – The number of results to return</p></li>
+<li><p><strong>return_as_pandas_df</strong> – If True, return as a pandas DataFrame rather than a JSON.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.retrieve_all_documents">
+<code class="sig-name descname">retrieve_all_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sort_by</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">include_fields</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">retrieve_chunk_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.retrieve_all_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all documents in a given collection. We recommend specifying specific fields to extract
+as otherwise this function may take a long time to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection.</p></li>
+<li><p><strong>sort_by</strong> – Select the fields by which to sort by.</p></li>
+<li><p><strong>asc</strong> – If true, returns in ascending order of what is sort.</p></li>
+<li><p><strong>include_vector</strong> – If true, includes _vector_ fields to return them.</p></li>
+<li><p><strong>include_fields</strong> – Adjust which fields are returned.</p></li>
+<li><p><strong>retrieve_chunk_size</strong> – The number of documents to retrieve per request.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_documents</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">retrieve_all_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.wait_till_jobs_complete">
+<code class="sig-name descname">wait_till_jobs_complete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">job_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.wait_till_jobs_complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until a specific job is complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection.</p></li>
+<li><p><strong>job_id</strong> – ID of the job.</p></li>
+<li><p><strong>job_name</strong> – Name of the job.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">job</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">dimensionality_reduction_job</span><span class="p">(</span><span class="s1">&#39;nba_season_per_36_stats_demo&#39;</span><span class="p">,</span> <span class="n">vector_field</span><span class="o">=</span><span class="s1">&#39;season_vector_&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">wait_till_jobs_complete</span><span class="p">(</span><span class="s1">&#39;nba_season_per_36_stats_demo&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">job</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.check_schema">
+<code class="sig-name descname">check_schema</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.check_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the schema of a given collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of collection.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">check_schema</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.list_collections">
+<code class="sig-name descname">list_collections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#vectorai.read.ViReadClient.list_collections" title="Permalink to this definition">¶</a></dt>
+<dd><p>List Collections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> – <p>Username
+api_key:</p>
+<blockquote>
+<div><p>Api Key, you can request it from request_api_key</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of collections</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;fried&#39;</span><span class="p">},</span> <span class="s1">&#39;food_vector_&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">_check_schema</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.search_collections">
+<code class="sig-name descname">search_collections</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keyword</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#vectorai.read.ViReadClient.search_collections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs keyword matching in collections.
+:param keyword: Matches based on keywords</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of collection names</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">search_collections</span><span class="p">(</span><span class="s1">&#39;example&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.read.ViReadClient.create_filter_query">
+<code class="sig-name descname">create_filter_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_type</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_values</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.create_filter_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
+Filter types can be one of:
+contains: Field must contain this specific string. Not case sensitive.
+exact_match: Field must have an exact match
+categories: Matches entire field
+exists: If field exists in document
+&gt;= / &gt; / &lt; / &lt;= : Larger than or equal to / Larger than / Smaller than / Smaller than or equal to
+These, however, can only be applied on numeric/date values. Check collection_schema.</p>
+<p>Args:
+collection_name: The name of the collection
+field: The field to filter on
+filter_type: One of contains/exact_match/categories/&gt;=/&gt;/&lt;=/&lt;.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 

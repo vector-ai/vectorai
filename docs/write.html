@@ -222,6 +222,329 @@
 <h2>Write<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Write</p>
 <p>This is documentation for the Write API for Vector AI.</p>
+<span class="target" id="module-vectorai.write"></span><p>Write Operations for Vi that involves inserting documents, editing or deleting documents.</p>
+<dl class="py class">
+<dt id="vectorai.write.ViWriteClient">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.write.</code><code class="sig-name descname">ViWriteClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">'https://api.vctr.ai'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="read.html#vectorai.read.ViReadClient" title="vectorai.read.ViReadClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.read.ViReadClient</span></code></a>, <a class="reference internal" href="#vectorai.api.write.ViWriteAPIClient" title="vectorai.api.write.ViWriteAPIClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.api.write.ViWriteAPIClient</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">vectorai.utils.UtilsMixin</span></code></p>
+<p>Class to write to database.</p>
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.chunk">
+<em class="property">static </em><code class="sig-name descname">chunk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pandas.core.frame.DataFrame<span class="p">, </span>List<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">20</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.chunk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chunk an iterable object in Python.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – List of dictionaries/Pandas dataframe</p></li>
+<li><p><strong>chunk_size</strong> – The chunk size of an object.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="o">...</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ViClient</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.dummy_vector">
+<em class="property">static </em><code class="sig-name descname">dummy_vector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.dummy_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy vector for missing vector fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>edits</strong> – What edits to make in a collection.</p></li>
+<li><p><strong>document_id</strong> – Id of the document</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_vector</span> <span class="o">=</span> <span class="n">ViClient</span><span class="o">.</span><span class="n">dummy_vector</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.set_field">
+<em class="property">static </em><code class="sig-name descname">set_field</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">handle_if_missing</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.set_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>For nested dictionaries, tries to write to the respective field.
+If you toggle off handle_if_misisng, then it will output errors if the field is
+not found.
+e.g.
+field = kfc.item
+value = “fried wings”
+This should then create the following entries if they dont exist:
+{</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“kfc”: {</dt><dd><p>“item”: “fried wings”</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> – Field of the document to write.</p></li>
+<li><p><strong>doc</strong> – Python dictionary</p></li>
+<li><p><strong>value</strong> – Value to write</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_document</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kfc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;item&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">set_field</span><span class="p">(</span><span class="s1">&#39;kfc.item&#39;</span><span class="p">,</span> <span class="n">sample_document</span><span class="p">,</span> <span class="s1">&#39;chickens&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.create_collection">
+<code class="sig-name descname">create_collection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">collection_schema</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.create_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a collection</p>
+<p>A collection can store documents to be searched, retrieved, filtered and aggregated (similar to Collections in MongoDB, Tables in SQL, Indexes in ElasticSearch).</p>
+<p>If you are inserting your own vector use the suffix (ends with) “_vector_” for the field name. and specify the length of the vector in colletion_schema like below example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;collection_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;celebrity_image_vector_&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+        <span class="s2">&quot;celebrity_audio_vector&quot;</span> <span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+        <span class="s2">&quot;product_description_vector&quot;</span> <span class="p">:</span> <span class="mi">128</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of a collection</p></li>
+<li><p><strong>collection_schema</strong> – A collection schema. This is necessary if the first document is not representative of the overall schema collection. This should be specified if the items need to be edited. The schema needs to look like this : { vector_field_name: vector_length }</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">collection_schema</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;image_vector_&#39;</span><span class="p">:</span><span class="mi">2048</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ViClient</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">collection_schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.delete_collection">
+<code class="sig-name descname">delete_collection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.delete_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the collection via the colleciton name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>collection_name</strong> – Name of collection to delete.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models_using_encode">
+<code class="sig-name descname">encode_documents_with_models_using_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models_using_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with appropriate models without a bulk_encode function.
+:param documents: List of documents/JSONs/dictionaries.
+:param models: A dictionary of fields and models to determine the type of encoding for each field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models">
+<code class="sig-name descname">encode_documents_with_models</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Dict<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with appropriate models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p></li>
+<li><p><strong>models</strong> – A dictionary of fields and models to determine the type of encoding for each field.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;small_chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;cow&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">encode_documents_with_models</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.encode_documents_with_models_in_bulk">
+<code class="sig-name descname">encode_documents_with_models_in_bulk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.encode_documents_with_models_in_bulk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with models to allow for bulk_encode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p></li>
+<li><p><strong>models</strong> – A dictionary of fields and models to determine the type of encoding for each field.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.insert_document">
+<code class="sig-name descname">insert_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a document into a collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;test_collection&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">document</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_document</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">document</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.insert_single_document">
+<code class="sig-name descname">insert_single_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_single_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode documents with models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>documents</strong> – List of documents/jsons/dictionaries.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;test_collection&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">document</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_single_document</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">document</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.insert_documents">
+<code class="sig-name descname">insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show_progress_bar</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert documents into a collection with an option to encode with models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>documents</strong> – All documents.</p></li>
+<li><p><strong>models</strong> – Models with an encode method</p></li>
+<li><p><strong>use_bulk_encode</strong> – Use the bulk_encode method in models</p></li>
+<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
+<li><p><strong>overwrite</strong> – If True, overwrites document based on _id field.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;small_chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;cow&#39;</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.resume_insert_documents">
+<code class="sig-name descname">resume_insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show_progress_bar</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.resume_insert_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resume inserting documents</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.insert_df">
+<code class="sig-name descname">insert_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.insert_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert dataframe into a collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>df</strong> – Pandas DataFrame</p></li>
+<li><p><strong>models</strong> – Models with an encode method</p></li>
+<li><p><strong>verbose</strong> – Whether to print document ids that have failed when inserting.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.models.deployed</span> <span class="kn">import</span> <span class="n">ViText2Vec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text_encoder</span> <span class="o">=</span> <span class="n">ViText2Vec</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">documents_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">([{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;small_chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;cow&#39;</span><span class="p">}])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">insert_df</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents_df</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.edit_document">
+<code class="sig-name descname">edit_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">edits</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.edit_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit a document ina collection based on ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>edits</strong> – What edits to make in a collection.</p></li>
+<li><p><strong>document_id</strong> – Id of the document</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Example:            Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">edit_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">edits</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">documents_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">([{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;Big chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;small_chicken&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="s1">&#39;cow&#39;</span><span class="p">}])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">edit_document</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents_df</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;chicken&#39;</span><span class="p">:</span> <span class="n">text_encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.edit_documents">
+<code class="sig-name descname">edit_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">edits</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.edit_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit documents in a collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection_name</strong> – Name of collection</p></li>
+<li><p><strong>edits</strong> – What edits to make in a collection. Ensure that _id is stored in the document.</p></li>
+<li><p><strong>workers</strong> – Number of parallel processes to run.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vectorai.client</span> <span class="kn">import</span> <span class="n">ViClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">vectorai_url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">edit_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="n">edits</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 <span class="target" id="module-vectorai.api.write"></span><dl class="py class">
 <dt id="vectorai.api.write.ViWriteAPIClient">
 <em class="property">class </em><code class="sig-prename descclassname">vectorai.api.write.</code><code class="sig-name descname">ViWriteAPIClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.write.ViWriteAPIClient" title="Permalink to this definition">¶</a></dt>

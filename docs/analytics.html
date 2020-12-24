@@ -220,6 +220,146 @@
 <div class="section" id="id1">
 <h2>Visualisations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Visualisations</p>
+<span class="target" id="module-vectorai.analytics.viz"></span><p>Plotting functions of Vi go here.</p>
+<dl class="py class">
+<dt id="vectorai.analytics.viz.VizMixin">
+<em class="property">class </em><code class="sig-prename descclassname">vectorai.analytics.viz.</code><code class="sig-name descname">VizMixin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://api.vctr.ai'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualisation submodule for the library.</p>
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_dimensionality_reduced_vectors">
+<code class="sig-name descname">plot_dimensionality_reduced_vectors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>Dict<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">point_label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">dim_reduction_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">cluster_field</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cluster_label</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">include_centroids</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">color</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'markers'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_dimensionality_reduced_vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a 2D plot of vectors that have been dimensionally reduced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection</strong> – A collection or the name of a collection</p></li>
+<li><p><strong>point_label</strong> – The label of every point. This should be found in the document.</p></li>
+<li><p><strong>dim_reduction_field</strong> – The dimensionally-reduced vectors.</p></li>
+<li><p><strong>cluster_field</strong> – The field by which it is clustered.</p></li>
+<li><p><strong>cluster_label</strong> – The name of the clusters</p></li>
+<li><p><strong>include_centroids</strong> – Whether to include the centroids of every cluster</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Plotly figure object</p>
+</dd>
+</dl>
+<p>See example from: <a class="reference external" href="https://colab.research.google.com/drive/10u7b3lkIVJ-lceCmr34ywscOGueIFd0I?usp=sharing">https://colab.research.google.com/drive/10u7b3lkIVJ-lceCmr34ywscOGueIFd0I?usp=sharing</a></p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;nlp-qa&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_field</span> <span class="o">=</span> <span class="s1">&#39;question_vector_&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_label</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alias</span> <span class="o">=</span> <span class="s1">&#39;1st_cluster&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dim_reduction_field</span> <span class="o">=</span> <span class="s1">&#39;_dr_.default.2.question_vectors_&#39;</span> <span class="c1"># the &#39;.&#39; in names implies nested dictionaries in Vi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_dimensionality_reduced_vectors</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+<span class="go">        cluster_field=cluster_field,</span>
+<span class="go">        cluster_label=cluster_label,</span>
+<span class="go">        point_label=&#39;question_title&#39;,</span>
+<span class="go">        dim_reduction_field=dim_reduction_field,</span>
+<span class="go">        include_centroids=True,</span>
+<span class="go">        alias=alias)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity">
+<code class="sig-name descname">plot_1d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">anchor_document</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">anchor_index</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">'h'</span></em>, <em class="sig-param"><span class="n">barmode</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">'group'</span></em>, <em class="sig-param"><span class="n">num_cols</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_axis_tickangle</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 15</span></em>, <em class="sig-param"><span class="n">x_axis_tickangle</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_1d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare 1 document against other documents.
+Ensure that the name is unique, otherwise the plot will simply take the mean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – list of documents (dictionaries) to feed in</p></li>
+<li><p><strong>vector_fields</strong> – vector field to calculate cosine similarity on</p></li>
+<li><p><strong>label</strong> – the x label for the bar plot</p></li>
+<li><p><strong>anchor_document</strong> – the document to compare it on</p></li>
+<li><p><strong>anchor_index</strong> – the anchor index to compare it on</p></li>
+<li><p><strong>orientation</strong> – The orientation of the bar chart. Can be ‘v’ (vertical) or ‘h’ (horizontal)</p></li>
+<li><p><strong>num_cols</strong> – The number of columns. The default will put everything into 1 row. If you want to</p></li>
+<li><p><strong>things into multiple rows</strong> (<em>put</em>) – </p></li>
+<li><p><strong>please reduce the number of columns.</strong> (<em>then</em>) – </p></li>
+<li><p><strong>y_axis_tickangle</strong> – This will change the tick angles of the y axis in the vertical chart.</p></li>
+<li><p><strong>x_axis_tickangle</strong> – This will change the tick angels of the x axis in the vertical chart.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a horizontal barplot showing cosine similarity scores.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Plotly Figure</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_field</span> <span class="o">=</span> <span class="s1">&#39;question_vector_&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_label</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alias</span> <span class="o">=</span> <span class="s1">&#39;1st_cluster&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dim_reduction_field</span> <span class="o">=</span> <span class="s1">&#39;_dr_.default.2.question_vectors_&#39;</span> <span class="c1"># the &#39;.&#39; in names implies nested dictionaries in Vi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_1d_cosine_similarity</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+<span class="go">        cluster_field=cluster_field,</span>
+<span class="go">        cluster_label=cluster_label,</span>
+<span class="go">        point_label=&#39;question_title&#39;,</span>
+<span class="go">        dim_reduction_field=dim_reduction_field,</span>
+<span class="go">        include_centroids=True,</span>
+<span class="go">        alias=alias)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity">
+<code class="sig-name descname">plot_2d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'markers+text'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot cosine similarity with 2 anchor documents to compare with against other documents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> – list of documents (dictionaries) to feed in</p></li>
+<li><p><strong>vector_field</strong> – vector field to calculate cosine similarity on</p></li>
+<li><p><strong>label</strong> – the x label for the bar plot</p></li>
+<li><p><strong>anchor_document</strong> – the document to compare it on</p></li>
+<li><p><strong>anchor_index</strong> – the anchor index to compare it on</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A scatterplot showing cosine similarity scores with each axes being a specific document.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_field</span> <span class="o">=</span> <span class="s1">&#39;question_vector_&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_label</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alias</span> <span class="o">=</span> <span class="s1">&#39;1st_cluster&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dim_reduction_field</span> <span class="o">=</span> <span class="s1">&#39;_dr_.default.2.question_vectors_&#39;</span> <span class="c1"># the &#39;.&#39; in names implies nested dictionaries in Vi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_2d_cosine_similarity</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+<span class="go">        anchor_documents=documents[:2],</span>
+<span class="go">        vector_fields=vector_field,</span>
+<span class="go">        label=label</span>
+<span class="go">        )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_radar_across_documents">
+<code class="sig-name descname">plot_radar_across_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vector_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">label_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">range</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[0, 1]</span></em>, <em class="sig-param"><span class="n">fill</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring_metric</span><span class="o">=</span><span class="default_value">'cosine'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_radar_across_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radar plot for 1D cosine similarity across documents.
+:param docs: A list of documents
+:param anchor_document: The document to compare against
+:param vector_field: The vector vector field
+:param label_field: The field of the documents to get labels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.analytics.viz.VizMixin.plot_radar_across_vector_fields">
+<code class="sig-name descname">plot_radar_across_vector_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_document</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label_field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">range</span><span class="o">=</span><span class="default_value">[0, 1]</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring_metric</span><span class="o">=</span><span class="default_value">'cosine'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_radar_across_vector_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Radar plot for 1D cosine similarity across different vector spaces.
+:param docs: A list of documents
+:param anchor_document: The document to compare against
+:param vector_fields: the different vector fields
+:param label_field: The field of the documents to get labels.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
