@@ -286,7 +286,8 @@ class UtilsMixin:
         return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
     def show_styler(self, df,
-    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60):
+    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60,
+    return_as_html=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -306,7 +307,8 @@ class UtilsMixin:
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
 
         try:
-            from IPython.core.display import HTML
+            if return_as_html:
+                return df.format(formatters).render()
             return df.format(formatters)
         except ImportError:
             return df
