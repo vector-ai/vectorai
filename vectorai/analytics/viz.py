@@ -388,67 +388,67 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     name=vector_field
                 )
         
-    def plot_2d_cosine_similarity(
-        self,
-        documents: List[Dict[str, Any]],
-        anchor_documents: List[Dict[str, Any]],
-        vector_fields: Union[str, List[str]],
-        label: str,
-        mode: str='markers+text'
-    ):
-        """
-        Plot cosine similarity with 2 anchor documents to compare with against other documents.
+    # def plot_2d_cosine_similarity(
+    #     self,
+    #     documents: List[Dict[str, Any]],
+    #     anchor_documents: List[Dict[str, Any]],
+    #     vector_fields: Union[str, List[str]],
+    #     label: str,
+    #     mode: str='markers+text'
+    # ):
+    #     """
+    #     Plot cosine similarity with 2 anchor documents to compare with against other documents.
 
-        Args:
-            documents: list of documents (dictionaries) to feed in
-            vector_field: vector field to calculate cosine similarity on 
-            label: the x label for the bar plot 
-            anchor_document: the document to compare it on
-            anchor_index: the anchor index to compare it on
-        Returns:
-            A scatterplot showing cosine similarity scores with each axes being a specific document.
+    #     Args:
+    #         documents: list of documents (dictionaries) to feed in
+    #         vector_field: vector field to calculate cosine similarity on 
+    #         label: the x label for the bar plot 
+    #         anchor_document: the document to compare it on
+    #         anchor_index: the anchor index to compare it on
+    #     Returns:
+    #         A scatterplot showing cosine similarity scores with each axes being a specific document.
         
-        Example:
-            >>> cluster_field = 'question_vector_'
-            >>> cluster_label = 'category'
-            >>> alias = '1st_cluster'
-            >>> dim_reduction_field = '_dr_.default.2.question_vectors_' # the '.' in names implies nested dictionaries in Vi
-            >>> vi_client.plot_2d_cosine_similarity(documents=documents[2:],
-                    anchor_documents=documents[:2],
-                    vector_fields=vector_field,
-                    label=label
-                    )
+    #     Example:
+    #         >>> cluster_field = 'question_vector_'
+    #         >>> cluster_label = 'category'
+    #         >>> alias = '1st_cluster'
+    #         >>> dim_reduction_field = '_dr_.default.2.question_vectors_' # the '.' in names implies nested dictionaries in Vi
+    #         >>> vi_client.plot_2d_cosine_similarity(documents=documents[2:],
+    #                 anchor_documents=documents[:2],
+    #                 vector_fields=vector_field,
+    #                 label=label
+    #                 )
 
-        """
-        assert (
-            len(anchor_documents) == 2
-        ), "You need 2 anchor documents for a 2d cosine similarity plot."
-        fig = go.Figure()
-        if isinstance(vector_fields, str):
-            vector_fields = [vector_fields]
-        for vector_field in vector_fields:
+    #     """
+    #     assert (
+    #         len(anchor_documents) == 2
+    #     ), "You need 2 anchor documents for a 2d cosine similarity plot."
+    #     fig = go.Figure()
+    #     if isinstance(vector_fields, str):
+    #         vector_fields = [vector_fields]
+    #     for vector_field in vector_fields:
             
-            scores_x = self.get_cosine_similarity_scores(
-                documents, anchor_documents[0], vector_field
-            )
-            scores_y = self.get_cosine_similarity_scores(
-                documents, anchor_documents[1], vector_field
-            )
+    #         scores_x = self.get_cosine_similarity_scores(
+    #             documents, anchor_documents[0], vector_field
+    #         )
+    #         scores_y = self.get_cosine_similarity_scores(
+    #             documents, anchor_documents[1], vector_field
+    #         )
 
-            for i, doc in enumerate(documents):
-                doc["cos_score_x"] = scores_x[i]
-                doc["cos_score_y"] = scores_y[i]
+    #         for i, doc in enumerate(documents):
+    #             doc["cos_score_x"] = scores_x[i]
+    #             doc["cos_score_y"] = scores_y[i]
 
-            x = [round(x["cos_score_x"], 3) for x in documents]
-            y = [round(x["cos_score_y"], 3) for x in documents]
-            labels = [x[label] for x in documents]
-            fig.add_trace(go.Scatter(x=x, y=y, text=labels, mode=mode, name=vector_field))
-        fig.update_xaxes(title_text=f"Comparing with {anchor_documents[0][label]}")
-        fig.update_yaxes(title_text=f"Comparing with {anchor_documents[1][label]}")
-        fig.update_layout(
-            title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
-        )
-        return fig
+    #         x = [round(x["cos_score_x"], 3) for x in documents]
+    #         y = [round(x["cos_score_y"], 3) for x in documents]
+    #         labels = [x[label] for x in documents]
+    #         fig.add_trace(go.Scatter(x=x, y=y, text=labels, mode=mode, name=vector_field))
+    #     fig.update_xaxes(title_text=f"Comparing with {anchor_documents[0][label]}")
+    #     fig.update_yaxes(title_text=f"Comparing with {anchor_documents[1][label]}")
+    #     fig.update_layout(
+    #         title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
+    #     )
+    #     return fig
 
     def random_colour(self, num_of_colors) -> List:
         levels = range(32,256,32)
@@ -458,8 +458,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         vector_fields: List[str], 
         documents, anchor_documents, label,
         mode='markers+text', textposition='top center', show_spikes=True,
-        text_label_font_size = 16, text_label_font_family = "Rockwell",
-        marker_colors=['purple', 'aquamarine'], metric='cosine_similarity'
+        text_label_font_size: int=12, text_label_font_family = "Rockwell",
+        text_label_bgcolor="white",
+        marker_colors=['purple', 'aquamarine'], metric='cosine',
+        plot_bgcolor="#e6e6fa", spikedash='dot', spikethickness=1.5
     ):
         """
         Plotting 2D cosine similarity plots 
@@ -468,8 +470,21 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             documents: The documents to 
             anchor_documents: Documents by which to compare against
             Label: The document field to label
+            Mode: Whether to include markers or text (view Plotly documentation for more information)
+            textposition: where the text labels should be in relation to the marker
+            show_spikes: show the spikes in comparison to the x and y labels
+            text_label_font_family: The font of the text
+            text_label_font_size: The font size of the text
+            marker_colors: The color of the markers If the number of colors do not
+            match then we it randomly generates.
+            metric: The metric to use. Currently only supports cosine similarity
+            plot_bgcolor: The background color of the plot
+            spikethickness: The thickness of the spikes
+            spikedash: Type of line the spikes should be.
         """
-        
+        if metric != 'cosine':
+            raise NotImplementedError("Cosine similarity score is currently not implemented.")
+
         fig = go.FigureWidget()
         
         if len(vector_fields) > len(marker_colors):
@@ -490,40 +505,50 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             x = [round(x["cos_score_x"], 3) for x in documents]
             y = [round(x["cos_score_y"], 3) for x in documents]
             labels = self.get_field_across_documents(label, documents)
+            comparisons = [x_i > y[i] for i, x_i in enumerate(x)]
+            text_comparisons = ["has <b>lower</b> cosine similarity with" if c == True 
+            else "has <b>higher</b> cosine similarity with" for c in comparisons]
             fig.add_trace(go.Scatter(x=x, y=y, 
                 text=labels,
                 mode=mode, 
                 name=vector_field,
-                # customdata=texts,
-                hovertemplate = label +": %{text}<extra></extra><br>" + \
-                "Cosine Similarity With " + anchor_documents[1][label] + ": %{y}<br>" + \
-                "Cosine Similarity With " + anchor_documents[0][label] + ": %{x}"
-                ,
+                customdata=text_comparisons,
+                hovertemplate = label +": <b>%{text}<extra></extra><br></b>" + \
+                "%{customdata} <br>" + \
+                "<b>" + anchor_documents[1][label] + "</b> (%{y})<br>" + \
+                "compared to <br>" + \
+                "<b>" + anchor_documents[0][label] + "</b> (%{x})</b>",
                 marker=dict(
                     color=marker_colors[vector_field_counter],
                     size=5,
                     line=dict(width=0.5, color='DarkSlateGrey')
                 )))
-        fig.update_xaxes(title_text=f"Cosine Similarity With {anchor_documents[0][label]}")
-        fig.update_yaxes(title_text=f"Cosine Similarity WIth {anchor_documents[1][label]}")
-        fig.update_layout(
-            title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}"
-        )
+
+        self.add_labels_to_figure(fig, x_axis_label=f"Cosine Similarity With {anchor_documents[0][label]}",
+        y_axis_label=f"Cosine Similarity WIth {anchor_documents[1][label]}",
+        title_text=f"2D Cosine Similarity Comparison With {anchor_documents[0][label]} and {anchor_documents[1][label]}")
 
         fig.update_traces(textposition=textposition)
-        if show_spikes:
-            fig.update_xaxes(showspikes=True, spikedash='dot', spikethickness=1.5)
-            fig.update_yaxes(showspikes=True, spikedash='dot', spikethickness=1.5)
+
+        fig.update_xaxes(showspikes=show_spikes, 
+        spikedash=spikedash, spikethickness=spikethickness)
+        fig.update_yaxes(showspikes=show_spikes, 
+        spikedash=spikedash, spikethickness=spikethickness)
         
-        fig.update_layout(plot_bgcolor='#e6e6fa')  
+        fig.update_layout(plot_bgcolor=plot_bgcolor)
         fig.update_layout(
             hoverlabel=dict(
-                bgcolor="white",
-                font_size=16,
+                bgcolor=text_label_bgcolor,
+                font_size=text_label_font_size,
                 font_family=text_label_font_family
             )
         )
         return fig
+    
+    def add_labels_to_figure(self, fig, title_text: str, x_axis_label: str, y_axis_label: str):
+        fig.update_xaxes(title_text=x_axis_label)
+        fig.update_yaxes(title_text=y_axis_label)
+        fig.update_layout(title_text=title_text)
 
     def _plot_radar(self, scores: list, spokes: list, name: str, fill=None):
         """
