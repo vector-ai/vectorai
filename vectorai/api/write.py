@@ -169,6 +169,12 @@ Args:
 
     @retry()
     def bulk_edit_document(self, collection_name: str, documents: List[Dict]):
+        """
+        Edits documents by providing a key value pair of fields you are adding or changing, make sure to include the "_id" in the documents.
+        Args:
+            collection_name: Name of collection
+            documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '_id', for specifying vector field use the suffix of '_vector_'
+        """
         return requests.post(
             url="{}/collection/bulk_edit_document".format(self.url),
             json={
