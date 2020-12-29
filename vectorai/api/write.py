@@ -48,10 +48,10 @@ Args:
         """
         # For each of the field values in the models, check that the deployed models
         # are in the list below.
-        for k, v in models:
+        for k, v in models.items():
             assert v in ['text', 'audio', 'image']
         return requests.post(
-            url='{}/collection/bulk_insert_and_encode'.format(url), 
+            url='{}/collection/bulk_insert_and_encode'.format(self.url), 
             json={
             'username' : self.username,
             'api_key' : self.api_key,

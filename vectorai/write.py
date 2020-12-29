@@ -606,14 +606,14 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
 
         VERBOSE_MESSAGE_DICT = {
             'updated': f"Edited item with id {document_id} successfully.",
-            'no changes detected': f"{document_id} has no changes."
+            'no_changes_detected': f"{document_id} has no changes."
         }
 
-        if response not in VERBOSE_MESSAGE_DICT.keys():
+        if response.get('message') not in VERBOSE_MESSAGE_DICT.keys():
             raise APIError("Failed to edit item.")
         
         if verbose:
-            print(VERBOSE_MESSAGE_DICT[response])
+            print(VERBOSE_MESSAGE_DICT[response.get('message')])
             
 
     def _edit_document_return_id(
