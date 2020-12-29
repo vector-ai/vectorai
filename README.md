@@ -118,7 +118,7 @@ vi_client.plot_1d_cosine_similarity(
 ```
 
 Compare vectors and their search performance on your documents easily!
-![1D plot cosine simlarity](https://getvectorai.com/assets/gif/1d_cosine_similarity.gif)
+![1D plot cosine simlarity](https://getvectorai.com/assets/gif/2d_cosine_similarity.gif)
 
 ## Why Vector AI compared to other Nearest Neighbor implementations?
 
