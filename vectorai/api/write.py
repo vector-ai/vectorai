@@ -168,6 +168,18 @@ Args:
         ).json()
 
     @retry()
+    def bulk_edit_document(self, collection_name: str, documents: List[Dict]):
+        return requests.post(
+            url="{}/collection/bulk_edit_document".format(self.url),
+            json={
+                "username": self.username,
+                "api_key": self.api_key,
+                "collection_name": collection_name,
+                "documents": documents
+            }
+        )
+
+    @retry()
     def delete_by_id(self, collection_name: str, document_id: str):
         """
 Delete a document in a Collection by its id
