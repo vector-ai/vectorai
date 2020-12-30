@@ -9,6 +9,7 @@ from vectorai.models.deployed import ViText2Vec
 from vectorai.write import ViWriteClient
 from vectorai.errors import APIError, MissingFieldError, MissingFieldWarning
 from vectorai.client import ViClient
+from .utils import TempClientWithDocs
 
 
 class TestCollectionBasics:
@@ -194,18 +195,17 @@ class TestEdit:
 
     @pytest.mark.use_client
     def test_edit_document(self, test_client, test_collection_name):
-        test_client.insert_documents(test_collection_name, 
-        test_client.create_sample_documents(10))
-        edits = {
-            "_id": "1",
-            "location": "Paris"
-        }
-        test_client.edit_document(
-            collection_name=test_collection_name, edits=edits
-        )
-        time.sleep(5)
-        doc = test_client.id(test_collection_name, document_id="1")
-        assert doc["location"] == "Paris"
+        with TempClientWithDocs(test_client, test_collection_name) as client:
+            edits = {
+                "_id": "1",
+                "location": "Paris"
+            }
+            client.edit_document(
+                collection_name=test_collection_name, edits=edits
+            )
+            time.sleep(2)
+            doc = client.id(test_collection_name, document_id="1")
+            assert doc["location"] == "Paris"
 
     @pytest.mark.use_client
     def test_create_filter(self, test_client, test_collection_name):
