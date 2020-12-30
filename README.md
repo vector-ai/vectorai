@@ -110,11 +110,13 @@ vi_client.plot_dimensionality_reduced_vectors(documents,
 ![View Dimensionality-Reduced Vectors](https://getvectorai.com/assets/gif/dr_example.gif)
 
 ```
-vi_client.plot_1d_cosine_similarity(
-    documents, 
-    vector_fields='use_vector_',
-    label='name', 
-    anchor_document=documents[0])
+vi_client.plot_2d_cosine_similarity(
+    documents,
+    documents[0:2],
+    vector_fields=['use_vector_'],
+    label='name',
+    anchor_document=documents[0]
+)
 ```
 
 Compare vectors and their search performance on your documents easily!
