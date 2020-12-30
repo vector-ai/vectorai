@@ -1,3 +1,4 @@
+import time
 from vectorai import ViClient, ViCollectionClient
 
 class TempClient:
