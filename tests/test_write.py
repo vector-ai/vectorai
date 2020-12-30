@@ -234,34 +234,33 @@ class TestEdit:
 
     @pytest.mark.use_client
     def test_create_filter_3(self, test_client, test_collection_name):
-        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'size.feet', '<=', '31'))
-        assert len(results) > 0
+        with TempClientWithDocs(test_client, test_collection_name) as client:
+            results = test_client.filters(test_collection_name, 
+            test_client.create_filter_query(test_collection_name, 'size.feet', '<=', '31'))
+            assert len(results) > 0
 
     @pytest.mark.use_client
     def test_create_filter_4(self, test_client, test_collection_name):
-        results = test_client.filters(test_collection_name, test_client.create_filter_query(test_collection_name, 'insert_date_', '>=', '2020-01-01'))
-        assert len(results) > 0
+        with TempClientWithDocs(test_client, test_collection_name):
+            results = test_client.filters(test_collection_name, 
+            test_client.create_filter_query(test_collection_name, 'insert_date_', '>=', '2020-01-01'))
+            assert len(results) > 0
 
     @pytest.mark.use_client
     def test_edit_documents(self, test_client, test_collection_name):
         """Test adding of an attribute
         """
-        edits = [
-            {"_id": "2", "location": "Sydney",},
-            {"_id": "1", "location": "New York",},
-        ]
-        test_client.edit_documents(test_collection_name, edits, workers=2)
-        doc = test_client.id(test_collection_name, document_id="2")
-        assert doc["location"] == "Sydney"
-        doc = test_client.id(test_collection_name, document_id="1")
-        assert doc['location'] == 'New York'
+        with TempClientWithDocs(test_client, test_collection_name):
+            edits = [
+                {"_id": "2", "location": "Sydney",},
+                {"_id": "1", "location": "New York",},
+            ]
+            test_client.edit_documents(test_collection_name, edits, workers=2)
+            doc = test_client.id(test_collection_name, document_id="2")
+            assert doc["location"] == "Sydney"
+            doc = test_client.id(test_collection_name, document_id="1")
+            assert doc['location'] == 'New York'
     
-    @pytest.mark.use_client
-    def test_cleanup(self, test_client, test_collection_name):
-        if test_collection_name in test_client.list_collections():
-            test_client.delete_collection(test_collection_name)
-
-
 def test__write_document_nested_field():
     sample = {"this": {}}
     ViWriteClient.set_field("this.is", doc=sample, value=[0, 2])
