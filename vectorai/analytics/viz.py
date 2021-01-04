@@ -455,9 +455,8 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         return [tuple(random.choice(levels) for _ in range(3)) for _ in range(num_of_colors)]
 
     def plot_2d_cosine_similarity(self, 
-        vector_fields: List[str], 
-        documents, anchor_documents, label,
-        mode='markers+text', textposition='top center', show_spikes=True,
+        documents: List[Dict], anchor_documents: List[Dict], vector_fields: List[str], 
+        label: str, mode='markers+text', textposition='top center', show_spikes=True,
         text_label_font_size: int=12, text_label_font_family = "Rockwell",
         text_label_bgcolor="white",
         marker_colors=['purple', 'aquamarine'], metric='cosine',
@@ -466,9 +465,9 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         """
         Plotting 2D cosine similarity plots 
         Args:
-            vector_fields: The list of vectors to accept 
             documents: The documents to 
             anchor_documents: Documents by which to compare against
+            vector_fields: The list of vectors to accept 
             Label: The document field to label
             Mode: Whether to include markers or text (view Plotly documentation for more information)
             textposition: where the text labels should be in relation to the marker
@@ -484,6 +483,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         """
         if metric != 'cosine':
             raise NotImplementedError("Cosine similarity score is currently not implemented.")
+
+        assert (
+            len(anchor_documents) == 2
+        ), "You need 2 anchor documents for a 2d cosine similarity plot."
 
         fig = go.FigureWidget()
         
