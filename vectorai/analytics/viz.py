@@ -480,6 +480,12 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             plot_bgcolor: The background color of the plot
             spikethickness: The thickness of the spikes
             spikedash: Type of line the spikes should be.
+        Example:
+            >>> vi_client = ViClient()
+            >>> collection_name = 'ecommerce'
+            >>> docs = vi_client.random_documents(collection_name)['documents']
+            >>> vi_client.plot_2d_cosine_similarity(docs, docs[0:2], 
+            vector_fields=['use_vector_'], label='name')
         """
         if metric != 'cosine':
             raise NotImplementedError("Cosine similarity score is currently not implemented.")
