@@ -687,3 +687,34 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed": len(failed),
             "failed_document_ids": failed,
         }
+
+    def retrieve_and_encode(
+        self, 
+        collection_name: str,
+        models: Dict[str, Callable] = {},
+        chunksize: int = 15,
+        workers: int = 1,
+        verbose: bool=False,
+        use_bulk_encode: bool=False,
+        overwrite: bool=True,
+        show_progress_bar: bool=True):
+        docs = self.retrieve_documents(collection_name, page_size=chunksize)
+        docs['cursor'] = None
+        failed_all = {
+            "inserted_successfully": 0,
+            "failed": 0,
+            "failed_document_ids": [] 
+        }
+
+        while len(docs['documents']) > 0:
+            docs = self.retrieve_documents(collection_name, cursor=docs['cursor'],
+            page_size=chunksize)
+            failed = self.insert_documents(collection_name=collection_name, 
+            documents=docs['documents'], models=models, chunksize=chunksize,
+            workers=workers, verbose=verbose, use_bulk_encode=use_bulk_encode,
+            overwrite=True)
+            for k in failed_all.keys():
+                failed_all[k] += failed[k]
+
+        return failed_all
+        
