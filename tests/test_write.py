@@ -554,3 +554,17 @@ def test_raises_warning_if_only_one_id_is_present(test_client, test_collection_n
     with pytest.warns(MissingFieldWarning) as record:
         test_client.insert_documents(test_collection_name, docs)
     assert record[0].message.args[0] == test_client.NO_ID_WARNING_MESSAGE
+
+@pytest.mark.use_client
+def test_retrieve_and_encode(test_client, test_collection_name):
+    """Test retrieving documents and encoding them with vectors.
+    """
+    VECTOR_LENGTH = 100
+    def fake_encode(x):
+        return test_client.generate_vector(VECTOR_LENGTH)
+    with TempClientWithDocs(test_client, test_collection_name, 100) as client:
+        client.retrieve_and_encode(test_collection_name, 
+        models={'country': fake_encode}
+        assert 'country_vector_' in client.collection_schema(test_collection_name)
+        docs = client.retrieve_documents(test_collection_name)['documents']
+        assert len(docs[0]['country_vector_']) == VECTOR_LENGTH
