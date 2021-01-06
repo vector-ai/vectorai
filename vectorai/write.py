@@ -706,8 +706,6 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         docs = self.retrieve_documents(collection_name, page_size=chunksize)
         docs['cursor'] = None
         failed_all = {
-            "edited_successfully": 0,
-            "failed": 0,
             "failed_document_ids": [] 
         }
 
