@@ -719,7 +719,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             failed = self.bulk_edit_document(
                 collection_name=collection_name,
                 documents=self.encode_documents_with_models(docs['documents'], 
-                models=models, use_bulk_encode=use_bulk_encode )
+                models=models, use_bulk_encode=use_bulk_encode))
             for k in failed_all.keys():
                 failed_all[k] += failed[k]
         return failed_all
