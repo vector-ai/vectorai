@@ -693,28 +693,34 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         collection_name: str,
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
-        workers: int = 1,
-        verbose: bool=False,
-        use_bulk_encode: bool=False,
-        overwrite: bool=True,
-        show_progress_bar: bool=True):
+        use_bulk_encode: bool=False):
+        """
+        Retrieve all documents and re-encode with new models.
+        Args:
+            collection_name: Name of collection
+            models: Models as a dictionary
+            chunksize: the number of results to 
+            retrieve and then encode and then edit in one go 
+            use_bulk_encode: Whether to use bulk_encode on the models.
+        """
         docs = self.retrieve_documents(collection_name, page_size=chunksize)
         docs['cursor'] = None
         failed_all = {
-            "inserted_successfully": 0,
+            "edited_successfully": 0,
             "failed": 0,
             "failed_document_ids": [] 
         }
 
         while len(docs['documents']) > 0:
-            docs = self.retrieve_documents(collection_name, cursor=docs['cursor'],
-            page_size=chunksize)
-            failed = self.insert_documents(collection_name=collection_name, 
-            documents=docs['documents'], models=models, chunksize=chunksize,
-            workers=workers, verbose=verbose, use_bulk_encode=use_bulk_encode,
-            overwrite=True)
+            docs = self.retrieve_documents(
+                collection_name, cursor=docs['cursor'],
+                include_fields=list(models.keys()),
+                page_size=chunksize)
+            failed = self.bulk_edit_document(
+                collection_name=collection_name,
+                documents=self.encode_documents_with_models(docs['documents'], 
+                models=models, use_bulk_encode=use_bulk_encode )
             for k in failed_all.keys():
                 failed_all[k] += failed[k]
-
         return failed_all
         
