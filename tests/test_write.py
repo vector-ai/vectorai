@@ -565,7 +565,7 @@ def test_retrieve_and_encode_simple(test_client, test_collection_name):
     with TempClientWithDocs(test_client, test_collection_name, 100) as client:
         results = client.retrieve_and_encode(test_collection_name, 
         models={'country': fake_encode})
-        assert results['inserted_successfully'] == 100
+        assert results['edited_successfully'] == 100
         assert results['failed'] == 0
         assert len(results['failed_document_ids']) == 0
         assert 'country_vector_' in client.collection_schema(test_collection_name)
