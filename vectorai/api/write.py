@@ -1,7 +1,7 @@
 import requests
 from typing import Dict, List
 from .read import ViReadAPIClient
-from .utils import retry
+from .utils import retry, return_response
 from ..errors import APIError
 
 class ViWriteAPIClient(ViReadAPIClient):
@@ -176,7 +176,8 @@ Args:
             collection_name: Name of collection
             documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '_id', for specifying vector field use the suffix of '_vector_'
         """
-        response = requests.post(
+        return return_response(
+            requests.post(
             url="{}/collection/bulk_edit_document".format(self.url),
             json={
                 "username": self.username,
@@ -184,10 +185,7 @@ Args:
                 "collection_name": collection_name,
                 "documents": documents
             }
-        )
-        if response.status_code != 200:
-            raise APIError(response.content)
-        return response.json()
+        ))
 
     @retry()
     def delete_by_id(self, collection_name: str, document_id: str):

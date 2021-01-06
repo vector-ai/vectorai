@@ -3,6 +3,7 @@
 """
 import time
 from functools import wraps
+from ..errors import APIError
 
 def retry(num_of_retries=3, timeout=2):
     """
@@ -27,3 +28,11 @@ def retry(num_of_retries=3, timeout=2):
                 break
         return function_wrapper
     return _retry
+
+def return_response(response):
+    """
+    Return error response if the status code != 200.
+    """
+    if response.status_code != 200:
+        raise APIError(response.content)
+    return response.json()
