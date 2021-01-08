@@ -288,7 +288,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         if hasattr(model, 'urls') and hasattr(model, 'url'):
             return model.urls[model.url]['vector_length']
         
-        if hasattr(model, 'urls') and hasattr(model, 'model_url')
+        if hasattr(model, 'urls') and hasattr(model, 'model_url'):
             return model.urls[model.model_url]
 
         raise APIError("Please set the vector length of the model as an attribute.")    
