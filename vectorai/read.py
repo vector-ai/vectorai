@@ -430,7 +430,7 @@ Args:
             ID of a document
         collection_name:
             Name of Collection
-        search_field:
+        field:
             Vector fields to search through
         approx:
             Used for approximate search
@@ -454,7 +454,10 @@ Args:
             Whether to sort the score by ascending order (default is false, for getting most similar results)
         """
         random_id = self.random_documents(collection_name, page_size=1, seed=seed)['documents']['_id']
-        return self.search_by_id(collection_name, document_id=random_id, field=field)
+        return self.search_by_id(collection_name, document_id=random_id, field=field,
+        approx=approx, sum_fields=sum_fields, page_size=page_size, page=page, metric=metric, min_score=min_score,
+        include_vector=include_vector, include_count=include_count, hundred_scale=hundred_scale,
+        asc=asc)
 
     def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """
