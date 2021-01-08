@@ -94,10 +94,17 @@ def test_check_schema_both(test_client):
 
 def test_search_collections(test_client):
     """
-        Simple test for searching collections
+        Smoke test for searching collections
     """
     cn = 'example_collection_123y8io'
     test_client.create_collection(cn)
     assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
     test_client.delete_collection(cn)
-    
+
+def test_recommend_random_smoke_test(test_client, test_collection_name):
+    """
+        Smoke test for recommending random ID.
+    """
+    with TempClientWithDocs(test_client, test_collection_name):
+        results = test_client.random_recommendation(test_collection_name)
+        assert len(results['results']) > 0, "Random recommendation fails."
