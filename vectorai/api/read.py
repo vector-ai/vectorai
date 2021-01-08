@@ -207,7 +207,7 @@ Args:
 		Name of Collection
 """
         if seed is None:
-            seed = random.randint(0, 100)
+            seed = random.randint(0, 9999)
         q_params = {
             "username": self.username,
             "api_key": self.api_key,

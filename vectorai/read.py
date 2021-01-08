@@ -411,6 +411,56 @@ Args:
         """
         return [x for x in self.list_collections() if keyword.lower() in x]
 
+
+    def random_recommendation(self,
+        collection_name: str, 
+        field: str,
+        seed=None,
+        sum_fields: bool = True,
+        metric: str = "cosine",
+        min_score=0,
+        page: int = 1,
+        page_size: int = 10,
+        include_vector:bool=False,
+        include_count:bool=True,
+        approx: int=0,
+        hundred_scale=True,
+        asc:bool=False):
+        """
+        Recommend by random ID using vector search
+        document_id:
+            ID of a document
+        collection_name:
+            Name of Collection
+        field:
+            Vector fields to search through
+        approx:
+            Used for approximate search
+        sum_fields:
+            Whether to sum the multiple vectors similarity search score as 1 or seperate
+        page_size:
+            Size of each page of results
+        page:
+            Page of the results
+        metric:
+            Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+        min_score:
+            Minimum score for similarity metric
+        include_vector:
+            Include vectors in the search results
+        include_count:
+            Include count in the search results
+        hundred_scale:
+            Whether to scale up the metric by 100
+        asc:
+            Whether to sort the score by ascending order (default is false, for getting most similar results)
+        """
+        random_id = self.random_documents(collection_name, page_size=1, seed=seed)['documents'][0]['_id']
+        return self.search_by_id(collection_name, document_id=random_id, field=field,
+        approx=approx, sum_fields=sum_fields, page_size=page_size, page=page, metric=metric, min_score=min_score,
+        include_vector=include_vector, include_count=include_count, hundred_scale=hundred_scale,
+        asc=asc)
+
     def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """
             Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range

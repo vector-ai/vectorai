@@ -191,6 +191,8 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        approx: int=0,
+        hundred_scale: bool=False
     ):
         """
 Single Product Recommendations (Search by an id)
@@ -241,6 +243,8 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "asc": asc,
+                "approx": approx,
+                "hundred_scale": hundred_scale
             },
         ).json()
 
