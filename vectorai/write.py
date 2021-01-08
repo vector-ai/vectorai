@@ -481,7 +481,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     overwrite=overwrite
                 )
                 self._raise_error(result)
-                if verbose: print(f"Failed: {result['failed_document_ids']}")
+                if verbose and len(result['failed_document_ids']) > 0: print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
         else:
             pool = Pool(processes=workers)
