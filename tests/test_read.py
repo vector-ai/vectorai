@@ -92,6 +92,7 @@ def test_check_schema_both(test_client):
     assert len(record) == 0
     assert test_client._check_schema(nested_schema) == (False, False)
 
+@pytest.mark.use_client
 def test_search_collections(test_client):
     """
         Simple test for searching collections
