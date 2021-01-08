@@ -264,23 +264,41 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 # Typecast callable to a list to easily pass through for-loop.
                 if not isinstance(model_list, list):
                     model_list = [model_list]
+
                 for model in model_list:
                     vector_field = self._get_vector_name_for_encoding(f, model, model_list)
+
                     if not self.is_field(f, d):
-                        warnings.warn(f"""Missing {f} in a document. We will fill the missing with empty vectors.""")
-                        try:
-                            self.set_field(vector_field, d, self.dummy_vector(vector_length))
-                        except:
-                            raise APIError("Need to ensure at least one passthrough is made to get vector length.")
+                        warnings.warn(f"""Missing {f} in a document. Filling the missing with empty vectors.""")
+                        self.set_field(vector_field, d, self.dummy_vector(self._get_vector_length_from_model(model)))
+
                     if isinstance(model, (types.FunctionType, types.MethodType)):
                         vector = model(self.get_field(f, d))
-                        vector_length = len(vector)
+                        self._set_vector_length_from_model(model, vector)
                         self.set_field(vector_field, d, vector)
                     else:
-                        if not hasattr(model, "encode"):
-                            raise APIError("Not sure how to encode. Please sure the model class has an encode method.")
                         self.set_field(vector_field, d, model.encode(self.get_field(f, d)))
+
         return documents
+    
+    def _get_vector_length_from_model(self, model):
+        if hasattr(model, 'vector_length'):
+            return model.vector_length
+
+        if hasattr(model, 'urls') and hasattr(model, 'url'):
+            return model.urls[model.url]['vector_length']
+        
+        if hasattr(model, 'urls') and hasattr(model, 'model_url')
+            return model.urls[model.model_url]
+
+        raise APIError("Please set the vector length of the model as an attribute.")    
+    
+    def _set_vector_length_from_model(self, model, vector):
+        """
+        Set the vector length for the model
+        """
+        if not hasattr(model, 'vector_length'):
+            setattr(model, 'vector_length', vector_length)
     
     def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
