@@ -298,7 +298,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         Set the vector length for the model
         """
         if not hasattr(model, 'vector_length'):
-            setattr(model, 'vector_length', len(vector_length))
+            setattr(model, 'vector_length', len(vector))
     
     def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
