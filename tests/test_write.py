@@ -570,3 +570,16 @@ def test_retrieve_and_encode_simple(test_client, test_collection_name):
         assert 'country_vector_' in client.collection_schema(test_collection_name)
         docs = client.retrieve_documents(test_collection_name)['documents']
         assert len(docs[0]['country_vector_']) == VECTOR_LENGTH
+
+@pytest.mark.use_client
+def test_bulk_edit_documents(test_client, test_collection_name):
+    with TempClientWithDocs(test_client, test_collection_name, 100) as client:
+        edits = test_client.create_sample_documents(100)
+        {x.update({'favorite_singer': 'billie eilish'}) for x in edits}
+        response = client.bulk_edit_documents(test_collection_name, edits)
+        assert response['edited_successfully'] == len(edits)
+        # Retrieve the documents 
+        docs = client.retrieve_documents(test_collection_name, 
+        include_fields=['favorite_singer'], page_size=1)['documents']
+        for doc in docs:
+            assert doc['favorite_singer'] == 'billie eilish' 

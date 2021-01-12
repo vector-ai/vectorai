@@ -705,6 +705,29 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed": len(failed),
             "failed_document_ids": failed,
         }
+    
+    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15):
+        """
+        Bulk edit documents.
+        Args:
+            collection_name: Name of collection
+            edits: A list of documents to edit 
+            chunk_size: The size of the chunk
+        Returns:
+            Dictionary with the keys 'edited_successfully' (the number of documents
+            successfully edited), 'failed' (the number of documents that failed to edit),
+            'failed_document_ids' (documents which failed to edit)
+        """
+        failed = []
+        for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size), 
+        total=int(len(edits)/chunk_size)):
+            response = self.bulk_edit_document(collection_name, c)
+            failed += response['failed_document_ids']
+        return {
+            "edited_successfully": len(edits) - len(failed),
+            "failed": len(failed),
+            "failed_document_ids": failed,
+        }
 
     def retrieve_and_encode(
         self, 
