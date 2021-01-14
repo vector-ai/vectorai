@@ -62,7 +62,7 @@ class TestInsert:
             test_client.delete_collection(test_collection_name)
         sample_documents = test_client.create_sample_documents(10)
         test_client.insert_documents(test_collection_name, sample_documents)
-        time.sleep(10) 
+        time.sleep(10)
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
         test_client.delete_collection(test_collection_name)
         time.sleep(3)
@@ -78,7 +78,7 @@ class TestInsert:
         # Remove the ID fields
         {x.pop('_id') for x in sample_documents}
         test_client.insert_documents(test_collection_name, sample_documents)
-        time.sleep(10) 
+        time.sleep(10)
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
         test_client.delete_collection(test_collection_name)
         time.sleep(3)
@@ -95,7 +95,7 @@ class TestInsert:
         {x.pop('_id') for x in sample_documents}
         with pytest.warns(MissingFieldWarning):
             test_client.insert_documents(test_collection_name, sample_documents, overwrite=True)
-        time.sleep(10) 
+        time.sleep(10)
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
         test_client.delete_collection(test_collection_name)
         time.sleep(3)
@@ -111,7 +111,7 @@ class TestInsert:
         # Create integer IDs strings
         {x.update({'_id': int(x['_id'])}) for x in sample_documents}
         test_client.insert_documents(test_collection_name, sample_documents, overwrite=False)
-        time.sleep(10) 
+        time.sleep(10)
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
         test_client.delete_collection(test_collection_name)
         time.sleep(3)
@@ -127,7 +127,7 @@ class TestInsert:
         # Create integer IDs strings
         {x.update({'_id': int(x['_id'])}) for x in sample_documents}
         test_client.insert_documents(test_collection_name, sample_documents, overwrite=True)
-        time.sleep(10) 
+        time.sleep(10)
         assert test_client.collection_stats(test_collection_name)['number_of_documents'] == 10
         test_client.delete_collection(test_collection_name)
         time.sleep(3)
@@ -185,7 +185,7 @@ class TestEdit:
                 "attribute": "blue",
             },
         ]
-        
+
         test_client.insert_documents(
             collection_name=test_collection_name, documents=documents
         )
@@ -215,7 +215,7 @@ class TestEdit:
             }
             client.insert_document(test_collection_name, doc)
             results = test_client.filters(
-                test_collection_name, 
+                test_collection_name,
                 test_client.create_filter_query(test_collection_name, 'location', 'contains', 'paris'))
             assert len(results) > 0
 
@@ -227,7 +227,7 @@ class TestEdit:
             }
             client.insert_document(test_collection_name, doc)
             results = test_client.filters(
-                test_collection_name, 
+                test_collection_name,
                 test_client.create_filter_query(
                     test_collection_name, 'location', 'exact_match', 'Paris'))
             assert len(results) > 0
@@ -235,14 +235,14 @@ class TestEdit:
     @pytest.mark.use_client
     def test_create_filter_3(self, test_client, test_collection_name):
         with TempClientWithDocs(test_client, test_collection_name) as client:
-            results = test_client.filters(test_collection_name, 
+            results = test_client.filters(test_collection_name,
             test_client.create_filter_query(test_collection_name, 'size.feet', '<=', '31'))
             assert len(results) > 0
 
     @pytest.mark.use_client
     def test_create_filter_4(self, test_client, test_collection_name):
         with TempClientWithDocs(test_client, test_collection_name):
-            results = test_client.filters(test_collection_name, 
+            results = test_client.filters(test_collection_name,
             test_client.create_filter_query(test_collection_name, 'insert_date_', '>=', '2020-01-01'))
             assert len(results) > 0
 
@@ -260,7 +260,7 @@ class TestEdit:
             assert doc["location"] == "Sydney"
             doc = test_client.id(test_collection_name, document_id="1")
             assert doc['location'] == 'New York'
-    
+
 def test__write_document_nested_field():
     sample = {"this": {}}
     ViWriteClient.set_field("this.is", doc=sample, value=[0, 2])
@@ -300,7 +300,7 @@ def test_bulk_encode_documents_with_deployed_model(test_client, test_text_encode
 @pytest.mark.use_client
 def test_multiprocess_insert(test_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 10
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
         time.sleep(10)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
@@ -314,14 +314,14 @@ def test_multiprocess_insert(test_client, test_collection_name):
 @pytest.mark.use_client
 def test_multiprocess_insert_with_error(test_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 100
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
     documents.append({
         '_id': '9993',
         'color': np.nan
     })
-    
+
     # This should result in 1 failure
     results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=False)
     time.sleep(10)
@@ -333,7 +333,7 @@ def test_multiprocess_insert_with_error(test_client, test_collection_name):
 @pytest.mark.use_client
 def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 100
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
         time.sleep(5)
     documents = test_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
@@ -341,7 +341,7 @@ def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collect
         '_id': '9993',
         'color': np.nan
     })
-    
+
     # This should result in 1 failure
     results = test_client.insert_documents(test_collection_name, documents, workers=5, overwrite=True)
     time.sleep(10)
@@ -353,7 +353,7 @@ def test_multiprocess_insert_with_error_with_overwrite(test_client, test_collect
 @pytest.mark.use_client
 def test_multiprocess_with_collection_client(test_collection_client, test_collection_name):
     NUM_OF_DOCUMENTS_INSERTED = 100
-    if test_collection_client.collection_name in test_collection_client.list_collections():    
+    if test_collection_client.collection_name in test_collection_client.list_collections():
         test_collection_client.delete_collection()
         time.sleep(5)
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
@@ -367,7 +367,7 @@ def test_multiprocess_with_collection_client(test_collection_client, test_collec
 @pytest.mark.use_client
 def test_multiprocess__with_error_with_collection_client(test_collection_client):
     NUM_OF_DOCUMENTS_INSERTED = 100
-    if test_collection_client.collection_name in test_collection_client.list_collections():    
+    if test_collection_client.collection_name in test_collection_client.list_collections():
         test_collection_client.delete_collection()
         time.sleep(5)
     documents = test_collection_client.create_sample_documents(NUM_OF_DOCUMENTS_INSERTED)
@@ -380,35 +380,35 @@ def test_multiprocess__with_error_with_collection_client(test_collection_client)
     time.sleep(10)
     assert len(results['failed_document_ids']) == 1
     assert test_collection_client.collection_name in test_collection_client.list_collections()
-    assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED 
+    assert test_collection_client.collection_stats()['number_of_documents'] == NUM_OF_DOCUMENTS_INSERTED
 
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite(test_client, test_collection_name):
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 10
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
-    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=True)
     assert response['inserted_successfully'] == 2
 
 @pytest.mark.use_client
 def test_multiprocess_with_overwrite_insert(test_client, test_collection_name):
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 10
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
-    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=True)
     assert response['inserted_successfully'] == 2
 
 @pytest.mark.use_client
 def test_multiprocess_overwrite(test_client, test_collection_name):
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection()
         time.sleep(5)
     NUM_OF_DOCS = 100
@@ -421,17 +421,16 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
     docs[3] = id_document
     print(docs[3])
     docs[3].update({'_id': '3'})
-    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=True)
     id_document = test_client.id(test_collection_name, TEST_ID)
     assert test_client.get_field('test.field', id_document) == 'stranger'
     time.sleep(5)
     test_client.delete_collection(test_collection_name)
 
-@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite(test_client, test_collection_name):
-    if test_collection_name in test_client.list_collections():    
+    if test_collection_name in test_client.list_collections():
         test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 100
@@ -443,7 +442,7 @@ def test_multiprocess_not_overwrite(test_client, test_collection_name):
     test_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
-    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1, 
+    response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=False)
     id_document = test_client.id(test_collection_name, TEST_ID)
     with pytest.raises(MissingFieldError):
@@ -453,7 +452,7 @@ def test_multiprocess_not_overwrite(test_client, test_collection_name):
 
 @pytest.mark.use_client
 def test_multiprocess_overwrite_collection_client(test_collection_client, test_collection_name):
-    if test_collection_client.collection_name in test_collection_client.list_collections():    
+    if test_collection_client.collection_name in test_collection_client.list_collections():
         test_collection_client.delete_collection()
         time.sleep(5)
     NUM_OF_DOCS = 10
@@ -465,14 +464,13 @@ def test_multiprocess_overwrite_collection_client(test_collection_client, test_c
     test_collection_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
-    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    response = test_collection_client.insert_documents(docs[3:5], workers=1,
     overwrite=True)
     id_document = test_collection_client.id(TEST_ID)
     assert test_collection_client.get_field('test.field', id_document) == 'stranger'
     time.sleep(5)
     test_collection_client.delete_collection()
 
-@pytest.mark.skip(reason="Overwrite currently does not work on API side.")
 @pytest.mark.use_client
 def test_multiprocess_not_overwrite_collection_client(test_collection_client, test_collection_name):
     NUM_OF_DOCS = 10
@@ -484,7 +482,7 @@ def test_multiprocess_not_overwrite_collection_client(test_collection_client, te
     test_collection_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
-    response = test_collection_client.insert_documents(docs[3:5], workers=1, 
+    response = test_collection_client.insert_documents(docs[3:5], workers=1,
     overwrite=False)
     id_document = test_collection_client.id(TEST_ID)
     with pytest.raises(MissingFieldError):
@@ -520,8 +518,8 @@ def test_vector_name(test_client):
 def test_vector_name_2(test_client):
     text_encoder = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
     text_encoder_2 = ViText2Vec(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
-    test_client.set_name(text_encoder, "vectorai") 
-    test_client.set_name(text_encoder_2, "vectorai_2") 
+    test_client.set_name(text_encoder, "vectorai")
+    test_client.set_name(text_encoder_2, "vectorai_2")
     vector_name = test_client._get_vector_name_for_encoding("color", text_encoder, model_list=[text_encoder, text_encoder_2])
     assert vector_name == "color_vectorai_vector_"
     vector_name = test_client._get_vector_name_for_encoding("color", text_encoder_2, model_list=[text_encoder, text_encoder_2])
@@ -563,7 +561,7 @@ def test_retrieve_and_encode_simple(test_client, test_collection_name):
     def fake_encode(x):
         return test_client.generate_vector(VECTOR_LENGTH)
     with TempClientWithDocs(test_client, test_collection_name, 100) as client:
-        results = client.retrieve_and_encode(test_collection_name, 
+        results = client.retrieve_and_encode(test_collection_name,
         models={'country': fake_encode})
         assert list(client.collection_schema(test_collection_name)['country_vector_'].keys())[0] == 'vector'
         assert len(results['failed_document_ids']) == 0

@@ -324,8 +324,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         self._check_if_multiple_models_have_same_name(models)
         if use_bulk_encode:
             return self.encode_documents_with_models_in_bulk(documents=documents, models=models)
-        else:
-            return self.encode_documents_with_models_using_encode(documents=documents, models=models)
+        return self.encode_documents_with_models_using_encode(documents=documents, models=models)
                                 
     def encode_documents_with_models_in_bulk(self, documents: List[Dict], models: Dict):
         """
