@@ -15,10 +15,10 @@ extras_req["all"] = [p for r in extras_req.values() for p in r]
 if 'IS_VECTORAI_NIGHTLY' in os.environ.keys():
     from datetime import datetime
     name = 'vectorai-nightly'
-    version = '0.2.2' + '.' + datetime.today().date().__str__().replace('-', '.') 
+    version = '0.2.5' + '.' + datetime.today().date().__str__().replace('-', '.') 
 else:
     name = 'vectorai'
-    version = '0.2.2'
+    version = '0.2.5'
 
 setup(
     name=name,

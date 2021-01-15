@@ -77,9 +77,9 @@ Args:
 """
         if type(audio) == str:
             if "http" in audio:
-                return requests.get(
+                return requests.post(
                     url="{}/collection/search_with_audio".format(self.url),
-                    params={
+                    json={
                         "username": self.username,
                         "api_key": self.api_key,
                         "collection_name": collection_name,
