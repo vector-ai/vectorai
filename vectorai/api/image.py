@@ -79,9 +79,9 @@ Args:
 """
         if type(image) == str:
             if "http" in image:
-                return requests.get(
+                return requests.post(
                     url="{}/collection/search_with_image".format(self.url),
-                    params={
+                    json={
                         "username": self.username,
                         "api_key": self.api_key,
                         "collection_name": collection_name,

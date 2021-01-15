@@ -29,6 +29,7 @@ class ViReadAPIClient(
             self.url = url
         else:
             self.url = "https://api.vctr.ai"
+            
     @retry()
     def _list_collections(self):
         """

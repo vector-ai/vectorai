@@ -73,9 +73,9 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+        return requests.post(
             url="{}/collection/search_with_text".format(self.url),
-            params={
+            json={
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
