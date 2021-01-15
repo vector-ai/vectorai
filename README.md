@@ -19,6 +19,15 @@
     </a>
 </p>
 
+<div align="center">
+
+![TotalDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=total&units=international_system&left_color=black&right_color=purple&left_text=Total%20Downloads)
+![WeeklyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=week&units=international_system&left_color=black&right_color=purple&left_text=Weekly%20Downloads)
+![MonthlyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=month&units=international_system&left_color=black&right_color=purple&left_text=Monthly%20Downloads)
+
+</div>
+
+
 <h3 align="center">
 Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, semantic search, personalised recommendations recommendations etc.
 </h3>
