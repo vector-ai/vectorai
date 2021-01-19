@@ -6,6 +6,11 @@ def test_set_field(test_client):
     test_client.set_field("simple", doc=sample, value=[0, 2])
     assert test_client.get_field("simple", sample) == [0, 2]
 
+def test_get_field_chunk(test_client):
+    sample = {
+        'kfc': [{'food': 'chicken'}, {'food': 'prawns'}]}
+    assert test_client.get_field('kfc.0.food', sample) == 'chicken'
+
 def test_get_fields(test_client):
     doc = test_client.create_sample_documents(1)[0]
     assert len(test_client.get_fields(['size.cm', 'size.feet'], doc)) == 2

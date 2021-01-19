@@ -33,12 +33,29 @@ class DocUtilsMixin:
         for f in field.split("."):
             try:
                 d = d[f]
-            except:
+            except KeyError:
                 try:
                     return doc[field]
-                except:
+                except KeyError:
                     raise MissingFieldError("Document is missing " + field)
+            except TypeError:
+                if self._is_string_integer(f):
+                    # Get the Get the chunk document out.
+                    d = d[int(f)]
+                else:
+                    raise MissingFieldError("Document is missing " + f + ' of ' + field)
         return d
+    
+    @classmethod
+    def _is_string_integer(cls, x):
+        """Test if a string is numeric
+        """
+        try:
+            int(x)
+            return True
+        except:
+            return False
+
 
     @classmethod
     def get_fields(self, fields: List[str], doc: Dict) -> List[Any]:
