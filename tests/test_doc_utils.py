@@ -15,7 +15,7 @@ def test_get_field_chunk(test_client):
 def test_get_field_chunk_error(test_client):
     sample = {
         'kfc': [{'food': 'chicken'}, {'food': 'prawns'}]}
-    with pytest.raises(MissingFieldError)
+    with pytest.raises(MissingFieldError):
         test_client.get_field('kfc.food', sample)
 
 def test_get_fields(test_client):
