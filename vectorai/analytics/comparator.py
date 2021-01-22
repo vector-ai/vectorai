@@ -1,6 +1,7 @@
+from typing import List, Dict
+from ..utils import UtilsMixin
 from ..read import ViReadClient
 from .api.comparator import ComparatorAPI
-from ..utils import UtilsMixin
 
 class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
     def write_to_html(self, content, file_name):
