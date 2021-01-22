@@ -4,7 +4,7 @@ from ..read import ViReadClient
 from .api.comparator import ComparatorAPI
 
 class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
-    def write_to_html(self, content, file_name):
+    def write_to_html(self, content, file_name: str):
         with open(file_name, 'w') as f:
             f.write(content)
     
@@ -87,7 +87,7 @@ class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
         random_id = random_document['_id']
         results_1 = self.search_by_id(collection_name, random_id, field=vector_fields[0])['results']
         results_2 = self.search_by_id(collection_name, random_id, field=vector_fields[1])['results']
-        self.compare_topk_vectors(results_1, results_2, vector_fields=vector_fields,
+        return self.compare_topk_vectors(results_1, results_2, vector_fields=vector_fields,
         fields_to_display=fields_to_display, image_fields=image_fields, audio_fields=audio_fields, 
         html_file=html_file)
 
@@ -124,12 +124,12 @@ class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
         return self.output(content)
 
     def random_compare_topk_documents_by_ids(
-        collection_name,
-        vector_field=vector_field,
-        fields_to_display=fields_to_display,
-        image_fields=image_fields,
-        audio_fields=audio_fields,
-        page_size=page_size,
+        collection_name: str,
+        vector_field: str,
+        fields_to_display: List[str]=[],
+        image_fields: List[str]=[],
+        audio_fields: List[str]=[],
+        page_size: int=15,
         seed=None
     ):
         """Randomly compare Top K Documents by IDs
