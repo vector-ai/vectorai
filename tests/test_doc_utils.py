@@ -1,10 +1,24 @@
 """Testing for document utilities.
 """
+import pytest
+from vectorai.errors import MissingFieldError
 
 def test_set_field(test_client):
     sample = {}
     test_client.set_field("simple", doc=sample, value=[0, 2])
     assert test_client.get_field("simple", sample) == [0, 2]
+
+def test_get_field_chunk(test_client):
+    sample = {
+        'kfc': [{'food': 'chicken'}, {'food': 'prawns'}]}
+    assert test_client.get_field('kfc.0.food', sample) == 'chicken'
+    assert test_client.get_field('kfc.1.food', sample) == 'prawns'
+
+def test_get_field_chunk_error(test_client):
+    sample = {
+        'kfc': [{'food': 'chicken'}, {'food': 'prawns'}]}
+    with pytest.raises(MissingFieldError):
+        test_client.get_field('kfc.food', sample)
 
 def test_get_fields(test_client):
     doc = test_client.create_sample_documents(1)[0]
