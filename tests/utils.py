@@ -1,4 +1,6 @@
 import time
+import random
+import string
 from vectorai import ViClient, ViCollectionClient
 
 class TempClient:
@@ -29,12 +31,21 @@ class TempClientWithDocs(TempClient):
         Temporary Client With Documents already inserted.
     """
     def __init__(self, client, collection_name: str=None, num_of_docs: int=10):
+        if collection_name is None: 
+            collection_name = self.generate_random_collection_name()
         self.client = client
         if isinstance(client, ViClient):
             self.collection_name = collection_name
         elif isinstance(client, ViCollectionClient):
             self.collection_name = self.client.collection_name
         self.num_of_docs = num_of_docs
+    
+    def generate_random_collection_name(self):
+        return self.generate_random_string(20)
+    
+    def generate_random_string(self, num_of_letters):
+        letters = string.ascii_lowercase
+        return ''.join(random.choice(letters) for i in range(num_of_letters))
 
     def __enter__(self):
         self.teardown_collection()

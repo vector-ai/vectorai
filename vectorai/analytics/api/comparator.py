@@ -8,11 +8,11 @@ class ComparatorAPI:
         self.url = url
 
     @retry()
-    def compare_topk(
+    def _compare_topk(
         self, 
         results_list_1: List[Dict], 
         results_list_2: List[Dict], 
-        vector_fields: List[str], 
+        vector_fields: List[str]=[], 
         fields_to_display: List[str]=None,
         image_fields: List[str]=[], 
         audio_fields: List[str]=[]
@@ -43,7 +43,7 @@ class ComparatorAPI:
         return return_response(response, return_response='content')
 
     @retry()
-    def compare_topk_vectors(
+    def _compare_topk_vectors(
         self, 
         results_list_1: List[Dict], 
         results_list_2: List[Dict], 
@@ -81,7 +81,7 @@ class ComparatorAPI:
 
 
     @retry()
-    def compare_topk_documents_by_ids(
+    def _compare_topk_documents_by_ids(
         self, 
         collection_name: str,
         vector_field: str,
