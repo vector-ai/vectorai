@@ -21,9 +21,9 @@
 
 <div align="center">
 
-![TotalDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=total&units=none&left_color=black&right_color=red&left_text=Total%20Downloads&?)
-![WeeklyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=week&units=none&left_color=black&right_color=red&left_text=Weekly%20Downloads&?)
-![MonthlyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=month&units=none&left_color=black&right_color=red&left_text=Monthly%20Downloads&?)
+![TotalDownloads](assets/total_downloads.svg)
+![WeeklyDownloads](assets/weekly_downloads.svg)
+![MonthlyDownloads](assets/monthly_downloads.svg)
 
 </div>
 <hr>
