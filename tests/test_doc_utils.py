@@ -1,6 +1,7 @@
 """Testing for document utilities.
 """
 import pytest
+from vectorai.errors import MissingFieldError
 
 def test_set_field(test_client):
     sample = {}
