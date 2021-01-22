@@ -152,9 +152,9 @@ Compare vectors and their search performance on your documents easily!
 
 <hr>
 
-### Bring your own Model or Vector
+### Using VectorHub Models
 
-You can bring your own model or vectors and enjoy all the rich vector functionality that Vector AI provides.
+[VectorHub](hub.vctr.ai) is Vector AI's main model repository. Models from VectorHub are built with scikit-learn interfaces and all have examples of Vector AI integration. If you are looking to experiment with new off-the-shelf models, we recommend giving VectorHub models a go - all of them have been tested on Colab and are able to be used in as little as 3 lines of code! 
 
 ### Schema Rules for documents (BYO Vectors and IDs)
 
