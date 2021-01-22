@@ -38,6 +38,7 @@ class TempClientWithDocs(TempClient):
             if collection_name is None: 
                 collection_name = self.generate_random_collection_name()
             self.collection_name = collection_name
+            self.client.collection_name = collection_name
         self.num_of_docs = num_of_docs
     
     def generate_random_collection_name(self):

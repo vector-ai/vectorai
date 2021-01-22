@@ -1,3 +1,4 @@
+import requests
 from typing import List, Dict
 from ...api.utils import retry, return_response
 
@@ -6,7 +7,7 @@ class ComparatorAPI:
     url: str = "https://api.vctr.ai", analytics_url="https://vector-analytics.vctr.ai"):
         self.username = username
         self.api_key = api_key
-        self.analytics_url = url
+        self.url = url
         self.analytics_url = analytics_url
 
     @retry()
@@ -42,13 +43,12 @@ class ComparatorAPI:
                 "audio_fields": audio_fields
             }
         )
-        return return_response(response, return_response='content')
+        return return_response(response, return_type='content')
 
     @retry()
     def _compare_topk_vectors(
         self, 
-        results_list_1: List[Dict], 
-        results_list_2: List[Dict], 
+        collection_name: str,
         vector_fields: List[str], 
         fields_to_display: List[str]=None,
         image_fields: List[str]=[], 
@@ -58,20 +58,18 @@ class ComparatorAPI:
         """
         Compare Top-K Lists.
         Args:
-            results_list_1: A list of results as a dictionary containing the required fields.
-            results_list_2: Another list of results
+            collection_name
             vector_fields: The vector field/s used to compare.
             fields_to_display: The fields required for displaying the object
             image_fields: The fields which are images 
             audio_fields: The fields which are audio
         """
-        response = eequests.post(
+        response = requests.post(
             url= f"{self.analytics_url}/comparator/compare_topk_vectors/",
             json={
                 "username": self.username,
                 "api_key": self.api_key,
-                "results_list_1": results_list_1,
-                "results_list_2": results_list_2,
+                "collection_name": collection_name,
                 "vector_fields": vector_fields,
                 "fields_to_display": fields_to_display,
                 "image_fields": image_fields,
@@ -79,7 +77,7 @@ class ComparatorAPI:
                 "page_size": page_size
             }
         )
-        return return_response(content, return_response='content')
+        return return_response(response, return_type='content')
 
 
     @retry()
@@ -108,13 +106,13 @@ class ComparatorAPI:
             json={
                 "username": self.username,
                 "api_key": self.api_key,
-                "results_list_1": results_list_1,
-                "results_list_2": results_list_2,
+                "collection_name": collection_name,
                 "vector_field": vector_field, 
+                "document_ids": document_ids,
                 "fields_to_display": fields_to_display,
                 "image_fields": image_fields, 
                 "audio_fields": audio_fields,
                 "page_size": page_size
             }
         )
-        return return_response(response, return_response='content')
+        return return_response(response, return_type='content')

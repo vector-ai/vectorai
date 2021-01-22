@@ -53,8 +53,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
 
     def compare_topk_vectors(
         self, 
-        results_list_1: List[Dict], 
-        results_list_2: List[Dict], 
+        collection_name: str,
         vector_fields: List[str], 
         fields_to_display: List[str]=None,
         image_fields: List[str]=[], 
@@ -64,8 +63,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         """
         Compare Top-K Lists.
         Args:
-            results_list_1: A list of results as a dictionary containing the required fields.
-            results_list_2: Another list of results
+            collection_name
             vector_fields: The vector field/s used to compare.
             fields_to_display: The fields required for displaying the object
             image_fields: The fields which are images 
@@ -73,7 +71,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
             html_file: the HTML file
         """
         content = self._compare_topk_vectors(
-            results_list_1, results_list_2, 
+            collection_name=collection_name,
             vector_fields=vector_fields, 
             fields_to_display=fields_to_display,
             image_fields=image_fields, 
@@ -89,14 +87,14 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         audio_fields: List[str]=None,
         html_file: str=None
     ):
-        assert len(vector_fields) == 2, ""
+        assert len(vector_fields) == 2, "Require 2 vector fields"
         random_document = self.random_documents(collection_name, page_size=1, include_fields=['_id'])['documents'][0]
         random_id = random_document['_id']
         results_1 = self.search_by_id(collection_name, random_id, field=vector_fields[0])['results']
         results_2 = self.search_by_id(collection_name, random_id, field=vector_fields[1])['results']
-        return self.compare_topk_vectors(results_1, results_2, vector_fields=vector_fields,
-        fields_to_display=fields_to_display, image_fields=image_fields, audio_fields=audio_fields, 
-        html_file=html_file)
+        return self.compare_topk_vectors(collection_name=collection_name, 
+        vector_fields=vector_fields, fields_to_display=fields_to_display, 
+        image_fields=image_fields, audio_fields=audio_fields, html_file=html_file)
 
     
     def compare_topk_documents_by_ids(
@@ -131,6 +129,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         return self.output(content)
 
     def random_compare_topk_documents_by_ids(
+        self,
         collection_name: str,
         vector_field: str,
         fields_to_display: List[str]=[],
@@ -144,7 +143,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         random_docs = self.random_documents(collection_name, 
         include_fields=['_id'] , page_size=2, seed=seed)['documents']
         random_ids = self.get_field_across_documents('_id', random_docs)
-        return self.random_compare_topk_documents_by_ids(
+        return self.compare_topk_documents_by_ids(
             collection_name=collection_name, 
             vector_field=vector_field,
             document_ids=random_ids,
