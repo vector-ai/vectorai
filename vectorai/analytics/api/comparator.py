@@ -49,6 +49,7 @@ class ComparatorAPI:
     def _compare_topk_vectors(
         self, 
         collection_name: str,
+        document_id: str,
         vector_fields: List[str], 
         fields_to_display: List[str]=None,
         image_fields: List[str]=[], 
@@ -70,6 +71,7 @@ class ComparatorAPI:
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
+                "document_id": document_id,
                 "vector_fields": vector_fields,
                 "fields_to_display": fields_to_display,
                 "image_fields": image_fields,

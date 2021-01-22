@@ -54,6 +54,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
     def compare_topk_vectors(
         self, 
         collection_name: str,
+        document_id: str,
         vector_fields: List[str], 
         fields_to_display: List[str]=None,
         image_fields: List[str]=[], 
@@ -64,6 +65,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         Compare Top-K Lists.
         Args:
             collection_name
+            document_id: Id of the document found in the _id field
             vector_fields: The vector field/s used to compare.
             fields_to_display: The fields required for displaying the object
             image_fields: The fields which are images 
@@ -72,6 +74,7 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         """
         content = self._compare_topk_vectors(
             collection_name=collection_name,
+            document_id=document_id,
             vector_fields=vector_fields, 
             fields_to_display=fields_to_display,
             image_fields=image_fields, 
@@ -90,10 +93,10 @@ class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
         assert len(vector_fields) == 2, "Require 2 vector fields"
         random_document = self.random_documents(collection_name, page_size=1, include_fields=['_id'])['documents'][0]
         random_id = random_document['_id']
-        results_1 = self.search_by_id(collection_name, random_id, field=vector_fields[0])['results']
-        results_2 = self.search_by_id(collection_name, random_id, field=vector_fields[1])['results']
-        return self.compare_topk_vectors(collection_name=collection_name, 
-        vector_fields=vector_fields, fields_to_display=fields_to_display, 
+        return self.compare_topk_vectors(
+            collection_name=collection_name, 
+            document_id='1',
+            vector_fields=vector_fields, fields_to_display=fields_to_display, 
         image_fields=image_fields, audio_fields=audio_fields, html_file=html_file)
 
     
