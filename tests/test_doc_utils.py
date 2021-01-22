@@ -1,5 +1,6 @@
 """Testing for document utilities.
 """
+import pytest
 
 def test_set_field(test_client):
     sample = {}
