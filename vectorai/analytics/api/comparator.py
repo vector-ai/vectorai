@@ -1,10 +1,13 @@
 from typing import List, Dict
+from ...api.utils import retry, return_response
+
 class ComparatorAPI:
     def __init__(self, username: str=None, api_key: str=None, url="https://vector-analytics.vctr.ai"):
-        self.url = url
         self.username = username
         self.api_key = api_key
+        self.url = url
 
+    @retry()
     def compare_topk(
         self, 
         results_list_1: List[Dict], 
@@ -24,7 +27,7 @@ class ComparatorAPI:
             image_fields: The fields which are images 
             audio_fields: The fields which are audio
         """
-        return requests.post(
+        response = requests.post(
             url= f"{self.url}/comparator/compare_topk/",
             json={
                 "username": self.username,
@@ -37,7 +40,9 @@ class ComparatorAPI:
                 "audio_fields": audio_fields
             }
         )
+        return return_response(response).content
 
+    @retry()
     def compare_topk_vectors(
         self, 
         results_list_1: List[Dict], 
@@ -58,7 +63,7 @@ class ComparatorAPI:
             image_fields: The fields which are images 
             audio_fields: The fields which are audio
         """
-        return requests.post(
+        response = eequests.post(
             url= f"{self.url}/comparator/compare_topk_vectors/",
             json={
                 "username": self.username,
@@ -72,8 +77,10 @@ class ComparatorAPI:
                 "page_size": page_size
             }
         )
+        return return_response(content).content
 
 
+    @retry()
     def compare_topk_documents_by_ids(
         self, 
         collection_name: str,
@@ -94,7 +101,7 @@ class ComparatorAPI:
             image_fields: The fields which are images 
             audio_fields: The fields which are audio
         """
-        return requests.post(
+        response = requests.post(
             url= f"{self.url}/comparator/compare_topk_documents_by_ids/",
             json={
                 "username": self.username,
@@ -108,3 +115,4 @@ class ComparatorAPI:
                 "page_size": page_size
             }
         )
+        return return_response(response).content
