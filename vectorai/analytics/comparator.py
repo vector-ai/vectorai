@@ -2,7 +2,7 @@ from ..read import ViReadClient
 from .api.comparator import ComparatorAPI
 from ..utils import UtilsMixin
 
-class ComparatorMixin(ComparatorAPI, ViReadClient, UtilsMixin):
+class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
     def write_to_html(self, content, file_name):
         with open(file_name, 'w') as f:
             f.write(content)
