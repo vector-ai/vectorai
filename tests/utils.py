@@ -31,13 +31,13 @@ class TempClientWithDocs(TempClient):
         Temporary Client With Documents already inserted.
     """
     def __init__(self, client, collection_name: str=None, num_of_docs: int=10):
-        if collection_name is None: 
-            collection_name = self.generate_random_collection_name()
         self.client = client
-        if isinstance(client, ViClient):
+        if hasattr(self.client, 'collection_name'):
             self.collection_name = collection_name
-        elif isinstance(client, ViCollectionClient):
-            self.collection_name = self.client.collection_name
+        else:
+            if collection_name is None: 
+                collection_name = self.generate_random_collection_name()
+            self.collection_name = collection_name
         self.num_of_docs = num_of_docs
     
     def generate_random_collection_name(self):
