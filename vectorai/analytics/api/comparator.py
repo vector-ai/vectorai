@@ -40,7 +40,7 @@ class ComparatorAPI:
                 "audio_fields": audio_fields
             }
         )
-        return return_response(response).content
+        return return_response(response, return_response='content')
 
     @retry()
     def compare_topk_vectors(
@@ -77,7 +77,7 @@ class ComparatorAPI:
                 "page_size": page_size
             }
         )
-        return return_response(content).content
+        return return_response(content, return_response='content')
 
 
     @retry()
@@ -115,4 +115,4 @@ class ComparatorAPI:
                 "page_size": page_size
             }
         )
-        return return_response(response).content
+        return return_response(response, return_response='content')
