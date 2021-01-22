@@ -2,10 +2,12 @@ from typing import List, Dict
 from ...api.utils import retry, return_response
 
 class ComparatorAPI:
-    def __init__(self, username: str=None, api_key: str=None, url="https://vector-analytics.vctr.ai"):
+    def __init__(self, username: str=None, api_key: str=None, 
+    url: str = "https://api.vctr.ai", analytics_url="https://vector-analytics.vctr.ai"):
         self.username = username
         self.api_key = api_key
-        self.url = url
+        self.analytics_url = url
+        self.analytics_url = analytics_url
 
     @retry()
     def _compare_topk(
@@ -28,7 +30,7 @@ class ComparatorAPI:
             audio_fields: The fields which are audio
         """
         response = requests.post(
-            url= f"{self.url}/comparator/compare_topk/",
+            url= f"{self.analytics_url}/comparator/compare_topk/",
             json={
                 "username": self.username,
                 "api_key": self.api_key,
@@ -64,7 +66,7 @@ class ComparatorAPI:
             audio_fields: The fields which are audio
         """
         response = eequests.post(
-            url= f"{self.url}/comparator/compare_topk_vectors/",
+            url= f"{self.analytics_url}/comparator/compare_topk_vectors/",
             json={
                 "username": self.username,
                 "api_key": self.api_key,
@@ -102,7 +104,7 @@ class ComparatorAPI:
             audio_fields: The fields which are audio
         """
         response = requests.post(
-            url= f"{self.url}/comparator/compare_topk_documents_by_ids/",
+            url= f"{self.analytics_url}/comparator/compare_topk_documents_by_ids/",
             json={
                 "username": self.username,
                 "api_key": self.api_key,

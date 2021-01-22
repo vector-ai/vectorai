@@ -5,6 +5,12 @@ from ..write import ViWriteClient
 from .api.comparator import ComparatorAPI
 
 class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
+    def __init__(self, username: str=None, api_key: str=None, 
+    url: str = "https://api.vctr.ai", analytics_url="https://vector-analytics.vctr.ai"):
+        self.username = username
+        self.api_key = api_key
+        self.url = url
+        self.analytics_url = analytics_url
     def write_to_html(self, content, file_name: str):
         with open(file_name, 'w') as f:
             f.write(content)
