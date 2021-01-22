@@ -1,9 +1,10 @@
 from typing import List, Dict
 from ..utils import UtilsMixin
 from ..read import ViReadClient
+from ..write import ViWriteClient
 from .api.comparator import ComparatorAPI
 
-class ComparatorClient(ComparatorAPI, ViReadClient, UtilsMixin):
+class ComparatorClient(ComparatorAPI, ViWriteClient, ViReadClient, UtilsMixin):
     def write_to_html(self, content, file_name: str):
         with open(file_name, 'w') as f:
             f.write(content)
