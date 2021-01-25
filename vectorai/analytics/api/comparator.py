@@ -1,5 +1,5 @@
 import requests
-from typing import List, Dict
+from typing import List, Dict, Optional
 from ...api.utils import retry, return_response
 
 class ComparatorAPI:
@@ -11,110 +11,50 @@ class ComparatorAPI:
         self.analytics_url = analytics_url
 
     @retry()
-    def _compare_topk(
+    def _compare_ranks(
         self, 
-        results_list_1: List[Dict], 
-        results_list_2: List[Dict], 
-        vector_fields: List[str]=[], 
+        ranked_list_1: List[Dict],
+        ranked_list_2: List[Dict],
         fields_to_display: List[str]=None,
-        image_fields: List[str]=[], 
-        audio_fields: List[str]=[]
-        ):
-        """
-        Compare Top-K Lists.
-        Args:
-            results_list_1: A list of results as a dictionary containing the required fields.
-            results_list_2: Another list of results
-            vector_fields: The vector field/s used to compare.
-            fields_to_display: The fields required for displaying the object
-            image_fields: The fields which are images 
-            audio_fields: The fields which are audio
-        """
-        response = requests.post(
-            url= f"{self.analytics_url}/comparator/compare_topk/",
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "results_list_1": results_list_1,
-                "results_list_2": results_list_2,
-                "vector_fields": vector_fields,
-                "fields_to_display": fields_to_display,
-                "image_fields": image_fields,
-                "audio_fields": audio_fields
-            }
-        )
-        return return_response(response, return_type='content')
-
-    @retry()
-    def _compare_topk_vectors(
-        self, 
-        collection_name: str,
-        document_id: str,
-        vector_fields: List[str], 
-        fields_to_display: List[str]=None,
-        image_fields: List[str]=[], 
+        image_fields: List[str]=[],
         audio_fields: List[str]=[],
-        page_size: int=15
+        column_titles: Optional[List[str]] = None,
+        x_axis_title: str = 'Fields',
+        y_axis_title: str = 'Comparing: ',
+        header: str = "<h1>Top-K Ranking Comparator</h1>",
+        subheader: str = "<h2>Compare ranks in the different lists.</h2>",
+        colors: List[str]=['#ccff99', 'powderblue', '#ffc2b3']
         ):
         """
         Compare Top-K Lists.
         Args:
-            collection_name
-            vector_fields: The vector field/s used to compare.
+            ranked_list_1: A list of results as a dictionary containing the required fields.
+            ranked_list_2: Another list of results
             fields_to_display: The fields required for displaying the object
             image_fields: The fields which are images 
             audio_fields: The fields which are audio
+            column_titles: The name of the columns for the differnt rank fields
+            x_axis_title: The title of the x axis 
+            y_axis_title: The title of the y axis
+            header: The name of the graph 
+            subheader: The sub-header of the graph
         """
         response = requests.post(
-            url= f"{self.analytics_url}/comparator/compare_topk_vectors/",
+            url= f"{self.analytics_url}/comparator/compare_ranks/",
             json={
                 "username": self.username,
                 "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_id": document_id,
-                "vector_fields": vector_fields,
+                "ranked_list_1": ranked_list_1,
+                "ranked_list_2": ranked_list_2,
                 "fields_to_display": fields_to_display,
                 "image_fields": image_fields,
                 "audio_fields": audio_fields,
-                "page_size": page_size
-            }
-        )
-        return return_response(response, return_type='content')
-
-
-    @retry()
-    def _compare_topk_documents_by_ids(
-        self, 
-        collection_name: str,
-        vector_field: str,
-        document_ids: List[str],
-        fields_to_display: List[str]=None,
-        image_fields: List[str]=[], 
-        audio_fields: List[str]=[],
-        page_size: int=15
-        ):
-        """
-        Compare Top-K Lists.
-        Args:
-            results_list_1: A list of results as a dictionary containing the required fields.
-            results_list_2: Another list of results
-            vector_fields: The vector field/s used to compare.
-            fields_to_display: The fields required for displaying the object
-            image_fields: The fields which are images 
-            audio_fields: The fields which are audio
-        """
-        response = requests.post(
-            url= f"{self.analytics_url}/comparator/compare_topk_documents_by_ids/",
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vector_field": vector_field, 
-                "document_ids": document_ids,
-                "fields_to_display": fields_to_display,
-                "image_fields": image_fields, 
-                "audio_fields": audio_fields,
-                "page_size": page_size
+                "column_titles": column_titles,
+                "x_axis_title": x_axis_title,
+                "y_axis_title": y_axis_title,
+                "header": header,
+                "subheader": subheader,
+                "colors": colors,
             }
         )
         return return_response(response, return_type='content')
