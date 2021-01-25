@@ -115,3 +115,15 @@ def test_random_recommendation_smoke_test(test_client, test_collection_name):
             test_collection_name, 
             field='color_vector_')
         assert len(results['results']) > 0, "Random recommendation fails."
+
+@pytest.mark.use_client
+def test_random_documents_with_filters(test_client, test_collection_name):
+    """
+        Random documents with filters.
+    """
+    with TempClientWithDocs(test_client, test_collection_name):
+        time.sleep(2)
+        filter_query = test_client.random_filter_query(test_collection_name)
+        docs = test_client.random_documents_with_filters(
+            test_collection_name, filters=filter_query, page_size=20)
+        assert len(docs['documents']) == 20
