@@ -313,32 +313,29 @@ Ensure that the name is unique, otherwise the plot will simply take the mean.</p
 
 <dl class="py method">
 <dt id="vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity">
-<code class="sig-name descname">plot_2d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'markers+text'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot cosine similarity with 2 anchor documents to compare with against other documents.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> – list of documents (dictionaries) to feed in</p></li>
-<li><p><strong>vector_field</strong> – vector field to calculate cosine similarity on</p></li>
-<li><p><strong>label</strong> – the x label for the bar plot</p></li>
-<li><p><strong>anchor_document</strong> – the document to compare it on</p></li>
-<li><p><strong>anchor_index</strong> – the anchor index to compare it on</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A scatterplot showing cosine similarity scores with each axes being a specific document.</p>
-</dd>
-</dl>
+<code class="sig-name descname">plot_2d_cosine_similarity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anchor_documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">vector_fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'markers+text'</span></em>, <em class="sig-param"><span class="n">textposition</span><span class="o">=</span><span class="default_value">'top center'</span></em>, <em class="sig-param"><span class="n">show_spikes</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">text_label_font_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">12</span></em>, <em class="sig-param"><span class="n">text_label_font_family</span><span class="o">=</span><span class="default_value">'Rockwell'</span></em>, <em class="sig-param"><span class="n">text_label_bgcolor</span><span class="o">=</span><span class="default_value">'white'</span></em>, <em class="sig-param"><span class="n">marker_colors</span><span class="o">=</span><span class="default_value">['purple', 'aquamarine']</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">plot_bgcolor</span><span class="o">=</span><span class="default_value">'#e6e6fa'</span></em>, <em class="sig-param"><span class="n">spikedash</span><span class="o">=</span><span class="default_value">'dot'</span></em>, <em class="sig-param"><span class="n">spikethickness</span><span class="o">=</span><span class="default_value">1.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.analytics.viz.VizMixin.plot_2d_cosine_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plotting 2D cosine similarity plots
+:param documents: The documents to
+:param anchor_documents: Documents by which to compare against
+:param vector_fields: The list of vectors to accept
+:param Label: The document field to label
+:param Mode: Whether to include markers or text (view Plotly documentation for more information)
+:param textposition: where the text labels should be in relation to the marker
+:param show_spikes: show the spikes in comparison to the x and y labels
+:param text_label_font_family: The font of the text
+:param text_label_font_size: The font size of the text
+:param marker_colors: The color of the markers If the number of colors do not
+:param match then we it randomly generates.:
+:param metric: The metric to use. Currently only supports cosine similarity
+:param plot_bgcolor: The background color of the plot
+:param spikethickness: The thickness of the spikes
+:param spikedash: Type of line the spikes should be.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_field</span> <span class="o">=</span> <span class="s1">&#39;question_vector_&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cluster_label</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">alias</span> <span class="o">=</span> <span class="s1">&#39;1st_cluster&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dim_reduction_field</span> <span class="o">=</span> <span class="s1">&#39;_dr_.default.2.question_vectors_&#39;</span> <span class="c1"># the &#39;.&#39; in names implies nested dictionaries in Vi</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_2d_cosine_similarity</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
-<span class="go">        anchor_documents=documents[:2],</span>
-<span class="go">        vector_fields=vector_field,</span>
-<span class="go">        label=label</span>
-<span class="go">        )</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span> <span class="o">=</span> <span class="n">ViClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;ecommerce&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">docs</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">random_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)[</span><span class="s1">&#39;documents&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vi_client</span><span class="o">.</span><span class="n">plot_2d_cosine_similarity</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span>
+<span class="go">vector_fields=[&#39;use_vector_&#39;], label=&#39;name&#39;)</span>
 </pre></div>
 </div>
 </dd></dl>

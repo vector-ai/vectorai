@@ -704,6 +704,42 @@ api_key:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.read.ViReadClient.random_recommendation">
+<code class="sig-name descname">random_recommendation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">approx</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">hundred_scale</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.random_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recommend by random ID using vector search
+document_id:</p>
+<blockquote>
+<div><p>ID of a document</p>
+</div></blockquote>
+<dl class="simple">
+<dt>collection_name:</dt><dd><p>Name of Collection</p>
+</dd>
+<dt>field:</dt><dd><p>Vector fields to search through</p>
+</dd>
+<dt>approx:</dt><dd><p>Used for approximate search</p>
+</dd>
+<dt>sum_fields:</dt><dd><p>Whether to sum the multiple vectors similarity search score as 1 or seperate</p>
+</dd>
+<dt>page_size:</dt><dd><p>Size of each page of results</p>
+</dd>
+<dt>page:</dt><dd><p>Page of the results</p>
+</dd>
+<dt>metric:</dt><dd><p>Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p>
+</dd>
+<dt>min_score:</dt><dd><p>Minimum score for similarity metric</p>
+</dd>
+<dt>include_vector:</dt><dd><p>Include vectors in the search results</p>
+</dd>
+<dt>include_count:</dt><dd><p>Include count in the search results</p>
+</dd>
+<dt>hundred_scale:</dt><dd><p>Whether to scale up the metric by 100</p>
+</dd>
+<dt>asc:</dt><dd><p>Whether to sort the score by ascending order (default is false, for getting most similar results)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.read.ViReadClient.create_filter_query">
 <code class="sig-name descname">create_filter_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_type</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">filter_values</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.read.ViReadClient.create_filter_query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
