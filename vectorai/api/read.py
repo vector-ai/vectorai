@@ -489,4 +489,4 @@ Args:
             "page_size": page_size,
             "include_vector": include_vector,
             "filters": filters
-        })
+        }).json()
