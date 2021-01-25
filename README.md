@@ -32,7 +32,7 @@
 Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, semantic search, personalised recommendations recommendations etc.
 </h3>
 
-- Visit our website at: https://getvectorai.com
+- Visit our website and sign up for an api-key: https://getvectorai.com
 - For Python Documentation: https://vector-ai.github.io/vectorai
 - For REST API Documentation: https://api.vctr.ai/documentation
 - Join our discord: https://discord.gg/CbwUxyD
