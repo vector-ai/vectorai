@@ -1,0 +1,48 @@
+name: Run Parallelized Pytest
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - 'vectorai/**'
+      - 'tests/**'
+      - 'setup.py'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'vectorai/**'
+      - 'tests/**'
+      - 'setup.py'
+
+jobs:
+  run_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7]
+        test-path: 
+          - tests/test_client.py
+          - tests/test_doc_utils.py
+          - tests/test_error.py
+          - tests/test_models.py
+          - tests/test_read.py
+          - tests/test_search.py
+          - tests/test_write.py
+          - tests/core/test_read.py
+          - tests/core/test_write.py
+    steps:
+    - uses: actions/checkout@v2
+    - name: Pytest
+      uses: actions/setup-python@v2
+    - name: Install dependencies
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        API_KEY: ${{ secrets.API_KEY }}
+        VI_USERNAME: ${{ secrets.VI_USERNAME }}
+        VI_API_KEY: ${{ secrets.VI_API_KEY }}
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -e .['all']
+        pytest ${{ matrix.test-path }}
