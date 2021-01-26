@@ -272,7 +272,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                         warnings.warn(f"""Missing {f} in a document. Filling the missing with empty vectors.""")
                         self.set_field(vector_field, d, self.dummy_vector(self._get_vector_length_from_model(model)))
 
-                    if isinstance(model, (types.FunctionType, types.MethodType)):
+                    if isinstance(model, (types.FunctionType, types.MethodType, partial)):
                         vector = model(self.get_field(f, d))
                         self._set_vector_length_from_model(model, vector)
                         self.set_field(vector_field, d, vector)
@@ -282,6 +282,10 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         return documents
     
     def _get_vector_length_from_model(self, model):
+        if isinstance(model, (types.FunctionType, types.MethodType, partial)):
+            self.vector_length = len(vector)
+            return
+
         if hasattr(model, 'vector_length'):
             return model.vector_length
 
@@ -297,8 +301,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         Set the vector length for the model
         """
+        if isinstance(model, (types.FunctionType, types.MethodType, partial)):
+            self.vector_length = len(vector)
+            return
         if not hasattr(model, 'vector_length'):
             setattr(model, 'vector_length', len(vector))
+            return
     
     def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
@@ -748,17 +756,19 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         failed_all = {
             "failed_document_ids": [] 
         }
-
-        while len(docs['documents']) > 0:
-            docs = self.retrieve_documents(
-                collection_name, cursor=docs['cursor'],
-                include_fields=list(models.keys()),
-                page_size=chunksize)
-            failed = self.bulk_edit_document(
-                collection_name=collection_name,
-                documents=self.encode_documents_with_models(docs['documents'], 
-                models=models, use_bulk_encode=use_bulk_encode))
-            for k in failed_all.keys():
-                failed_all[k] += failed[k]
+        num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
+            while len(docs['documents']) > 0:
+                docs = self.retrieve_documents(
+                    collection_name, cursor=docs['cursor'],
+                    include_fields=list(models.keys()),
+                    page_size=chunksize)
+                failed = self.bulk_edit_document(
+                    collection_name=collection_name,
+                    documents=self.encode_documents_with_models(docs['documents'], 
+                    models=models, use_bulk_encode=use_bulk_encode))
+                for k in failed_all.keys():
+                    failed_all[k] += failed[k]
+            pbar.update(1)
         return failed_all
         
