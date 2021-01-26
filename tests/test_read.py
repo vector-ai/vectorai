@@ -121,9 +121,14 @@ def test_random_documents_with_filters(test_client, test_collection_name):
     """
         Random documents with filters.
     """
-    with TempClientWithDocs(test_client, test_collection_name):
+    with TempClientWithDocs(test_client, test_collection_name, num_of_docs=20):
         time.sleep(2)
-        filter_query = test_client.random_filter_query(test_collection_name)
+        filter_query = [{'field': 'country', 
+        'filter_type': 'category',
+        'condition_value': 'Italy', 
+        'condition': '=='}]
         docs = test_client.random_documents_with_filters(
             test_collection_name, filters=filter_query, page_size=20)
-        assert len(docs['documents']) == 20
+        print(filter_query)
+        assert len(docs['documents']) < 20
+        assert False
