@@ -15,6 +15,7 @@ on:
       - 'vectorai/**'
       - 'tests/**'
       - 'setup.py'
+      - '.github/workflows/python-pytest.yml'
 
 jobs:
   run_test:
