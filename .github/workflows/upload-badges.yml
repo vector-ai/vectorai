@@ -23,7 +23,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git commit -m "ci: Automated build push" -a | exit 0
     - name: Push changes
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/master'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.SECRET_TOKEN }}
