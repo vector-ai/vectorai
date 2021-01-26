@@ -469,3 +469,24 @@ Args:
             "collection_name": collection_name,
             "document_ids" : document_ids
         }).json()
+    
+    @retry()
+    def random_documents_with_filters(self, collection_name: str,
+    seed: int=None, include_fields: List[str]=[], page_size: int=20,
+    include_vector: bool=False, filters: List[Dict]=[]):
+        """
+            Random documents with filters.
+        """
+        if seed is None:
+            seed = random.randint(0, 9999)
+        return requests.post('{}/collection/random_documents_with_filters'.format(self.url),
+        json={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "seed": seed,
+            "include_fields": include_fields,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "filters": filters
+        }).json()
