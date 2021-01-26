@@ -34,8 +34,10 @@ jobs:
           - tests/core/test_write.py
     steps:
     - uses: actions/checkout@v2
-    - name: Pytest
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       env:
         USERNAME: ${{ secrets.USERNAME }}
@@ -45,4 +47,5 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -e .['all']
-        pytest ${{ matrix.test-path }}
+    - name: Run Tests
+        python -m pytest ${{ matrix.test-path }}
