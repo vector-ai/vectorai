@@ -5,7 +5,7 @@ import time
 from functools import wraps
 from ..errors import APIError
 
-def retry(num_of_retries=3, timeout=2):
+def retry(num_of_retries=3, timeout=5):
     """
     Allows the function to retry upon failure. 
     Args:
