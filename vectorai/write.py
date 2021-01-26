@@ -748,17 +748,19 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         failed_all = {
             "failed_document_ids": [] 
         }
-
-        while len(docs['documents']) > 0:
-            docs = self.retrieve_documents(
-                collection_name, cursor=docs['cursor'],
-                include_fields=list(models.keys()),
-                page_size=chunksize)
-            failed = self.bulk_edit_document(
-                collection_name=collection_name,
-                documents=self.encode_documents_with_models(docs['documents'], 
-                models=models, use_bulk_encode=use_bulk_encode))
-            for k in failed_all.keys():
-                failed_all[k] += failed[k]
+        num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
+            while len(docs['documents']) > 0:
+                docs = self.retrieve_documents(
+                    collection_name, cursor=docs['cursor'],
+                    include_fields=list(models.keys()),
+                    page_size=chunksize)
+                failed = self.bulk_edit_document(
+                    collection_name=collection_name,
+                    documents=self.encode_documents_with_models(docs['documents'], 
+                    models=models, use_bulk_encode=use_bulk_encode))
+                for k in failed_all.keys():
+                    failed_all[k] += failed[k]
+            pbar.update(1)
         return failed_all
         
