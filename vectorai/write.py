@@ -769,6 +769,6 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     models=models, use_bulk_encode=use_bulk_encode))
                 for k in failed_all.keys():
                     failed_all[k] += failed[k]
-            pbar.update(1)
+                pbar.update(1)
         return failed_all
         
