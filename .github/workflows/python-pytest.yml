@@ -49,4 +49,4 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -e .['all']
     - name: Run Tests
-        python -m pytest ${{ matrix.test-path }}
+      run: python -m pytest ${{ matrix.test-path }}
