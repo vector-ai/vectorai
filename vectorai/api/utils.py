@@ -5,7 +5,7 @@ import time
 from functools import wraps
 from ..errors import APIError
 
-def retry(num_of_retries=3, timeout=2):
+def retry(num_of_retries=3, timeout=5):
     """
     Allows the function to retry upon failure. 
     Args:
@@ -19,7 +19,7 @@ def retry(num_of_retries=3, timeout=2):
                 try:
                     return func(*args, **kwargs)
                 # Using general error to avoid any possible error dependencies.
-                except Exception as error:
+                except ConnectionError as error:
                     time.sleep(timeout)
                     print("Retrying...")
                     if i == num_of_retries - 1:
