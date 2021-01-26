@@ -130,5 +130,5 @@ def test_random_documents_with_filters(test_client, test_collection_name):
         docs = test_client.random_documents_with_filters(
             test_collection_name, filters=filter_query, page_size=20)
         print(filter_query)
-        assert len(docs['documents']) < 20
-        assert False
+        for doc in docs['documents']:
+            assert doc['country'] == 'Italy'
