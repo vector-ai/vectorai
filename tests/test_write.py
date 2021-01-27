@@ -7,7 +7,7 @@ import time
 import numpy as np
 from vectorai.models.deployed import ViText2Vec
 from vectorai.write import ViWriteClient
-from vectorai.errors import APIError, MissingFieldError, MissingFieldWarning
+from vectorai.errors import APIError, MissingFieldError, MissingFieldWarning, CollectionNameError
 from vectorai.client import ViClient
 from .utils import TempClientWithDocs
 
@@ -581,3 +581,13 @@ def test_bulk_edit_documents(test_client, test_collection_name):
         include_fields=['favorite_singer'], page_size=1)['documents']
         for doc in docs:
             assert doc['favorite_singer'] == 'billie eilish' 
+
+@pytest.mark.parametrize('collection_name',['HIUFE', 'HUIF_;', 'fheuwiHF'])
+def test_collection_name_error(test_client, collection_name):
+    with pytest.raises(CollectionNameError):
+        test_client._typecheck_collection_name(collection_name)
+
+@pytest.mark.parametrize('collection_name', ['fehwu'])
+def test_collection_name_not_error(test_client):
+    test_client._typecheck_collection_name(collection_name)
+    assert True
