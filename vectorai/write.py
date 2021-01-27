@@ -718,7 +718,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed_document_ids": failed,
         }
     
-    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15):
+    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15, verbose=False):
         """
         Bulk edit documents.
         Args:
@@ -734,6 +734,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size), 
         total=int(len(edits)/chunk_size)):
             response = self.bulk_edit_document(collection_name, c)
+            if verbose: print(response)
             failed += response['failed_document_ids']
         return {
             "edited_successfully": len(edits) - len(failed),
