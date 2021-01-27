@@ -364,7 +364,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
 
     def _insert_and_encode(
         self, documents: list, collection_name: str, models: dict, verbose=False, 
-        use_bulk_encode=False, overwrite=False
+        use_bulk_encode: bool=False, overwrite: bool=False, quick: bool=False
     ):
         """
             Insert and encode documents
@@ -375,7 +375,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             collection_name=collection_name,
             documents=self.encode_documents_with_models(documents, models=models, 
             use_bulk_encode=use_bulk_encode), 
-            overwrite=overwrite
+            overwrite=overwrite,
+            quick=quick
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -462,7 +463,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         verbose: bool=False,
         use_bulk_encode: bool=False,
         overwrite: bool=False,
-        show_progress_bar: bool=True
+        show_progress_bar: bool=True,
+        quick: bool=False
     ):
         """
         Insert documents into a collection with an option to encode with models.        
@@ -480,6 +482,9 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Whether to print document ids that have failed when inserting.
             overwrite:
                 If True, overwrites document based on _id field.
+            quick:
+                If True, skip the collection schema checks. Not advised if this is 
+                your first time using the API until you are used to using Vector AI.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -503,7 +508,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
-                    overwrite=overwrite
+                    overwrite=overwrite, quick=quick
                 )
                 self._raise_error(result)
                 if verbose and len(result['failed_document_ids']) > 0: print(f"Failed: {result['failed_document_ids']}")
@@ -512,7 +517,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
-            overwrite=overwrite)
+            overwrite=overwrite, quick=quick)
             for result in self.progress_bar(
                 pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)

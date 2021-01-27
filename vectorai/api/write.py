@@ -96,7 +96,8 @@ Args:
     #     ).json()
 
     @retry()
-    def bulk_insert(self, collection_name: str, documents: List, insert_date: bool=True, overwrite: bool=True):
+    def bulk_insert(self, collection_name: str, documents: List, insert_date: bool=True, overwrite: bool=True, 
+    quick: bool=False):
         """
 Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
@@ -112,6 +113,8 @@ Args:
 		Whether to include insert date as a field 'insert_date_'.
 	overwrite:
 		Whether to overwrite document if it exists.
+    quick:
+        If True, skips collection schema checks
 """
         return requests.post(
             url="{}/collection/bulk_insert".format(self.url),
@@ -121,7 +124,8 @@ Args:
                 "collection_name": collection_name,
                 "documents": documents,
                 "insert_date": insert_date,
-                "overwrite" : overwrite
+                "overwrite" : overwrite,
+                "quick": quick
             },
         ).json()
     
