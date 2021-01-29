@@ -672,7 +672,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             return edits["_id"]
         return
 
-    def edit_documents(self, collection_name: str, edits: Dict, workers: int = 1):
+    def edit_documents(self, collection_name: str, edits: Dict, chunk_size=15):
         """
             Edit documents in a collection
         
@@ -693,25 +693,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 >>> vi_client.edit_documents(collection_name, edits=documents, workers=10)
         """
         failed = []
-        if workers == 1:
-            for c in self.progress_bar(edits):
-                result = self._edit_document_return_id(collection_name=collection_name, edits=c)
-                if result is not None:
-                    failed.append([result])
-        else:
-            pool = Pool(processes=workers)
-            for result in self.progress_bar(
-                pool.imap_unordered(
-                    func=partial(self._edit_document_return_id, collection_name=collection_name),
-                    iterable=edits
-                ),
-                total=int(len(edits) / workers)
-            ):
-                if result is not None:
-                    failed.append([result])
-            pool.close()
-            pool.join()
-        failed = self.flatten_list(failed)
+        for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size), 
+        total=int(len(edits)/chunk_size)):
+            response = self.bulk_edit_document(collection_name, c)
+            if verbose: print(response)
+            failed += response['failed_document_ids']
         return {
             "edited_successfully": len(edits) - len(failed),
             "failed": len(failed),
