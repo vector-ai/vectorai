@@ -548,6 +548,33 @@ This should then create the following entries if they dont exist:
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.bulk_edit_documents">
+<code class="sig-name descname">bulk_edit_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span></em>, <em class="sig-param"><span class="n">edits</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">15</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.bulk_edit_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bulk edit documents.
+:param collection_name: Name of collection
+:param edits: A list of documents to edit
+:param chunk_size: The size of the chunk</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the keys ‘edited_successfully’ (the number of documents
+successfully edited), ‘failed’ (the number of documents that failed to edit),
+‘failed_document_ids’ (documents which failed to edit)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.write.ViWriteClient.retrieve_and_encode">
+<code class="sig-name descname">retrieve_and_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.write.ViWriteClient.retrieve_and_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all documents and re-encode with new models.
+:param collection_name: Name of collection
+:param models: Models as a dictionary
+:param chunksize: the number of results to
+:param retrieve and then encode and then edit in one go:
+:param use_bulk_encode: Whether to use bulk_encode on the models.</p>
+</dd></dl>
+
 </dd></dl>
 
 <span class="target" id="module-vectorai.api.write"></span><dl class="py class">
@@ -615,6 +642,14 @@ e.g. “product_description_vector_”</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.api.write.ViWriteAPIClient.bulk_edit_document">
+<code class="sig-name descname">bulk_edit_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.api.write.ViWriteAPIClient.bulk_edit_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits documents by providing a key value pair of fields you are adding or changing, make sure to include the “_id” in the documents.
+:param collection_name: Name of collection
+:param documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field ‘_id’, for specifying vector field use the suffix of ‘_vector_’</p>
 </dd></dl>
 
 <dl class="py method">

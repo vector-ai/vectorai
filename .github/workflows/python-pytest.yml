@@ -1,4 +1,4 @@
-name: Run Pytest 3.7
+name: Run Parallelized Pytest
 
 on:
   push:
@@ -15,30 +15,36 @@ on:
       - 'vectorai/**'
       - 'tests/**'
       - 'setup.py'
-      
+      - '.github/workflows/python-pytest.yml'
+
 jobs:
   run_test:
-
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7]
+        test-path: 
+          - tests/test_client.py
+          - tests/test_doc_utils.py
+          - tests/test_error.py
+          - tests/test_models.py
+          - tests/test_read.py
+          - tests/test_search.py
+          - tests/test_write.py
     steps:
     - uses: actions/checkout@v2
-    - name: Pytest 3.7
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e .['all']
-    - name: Run Pytest
+        python -m pip install -e .['all']
+    - name: Run Tests
       env:
         USERNAME: ${{ secrets.USERNAME }}
         API_KEY: ${{ secrets.API_KEY }}
         VI_USERNAME: ${{ secrets.VI_USERNAME }}
         VI_API_KEY: ${{ secrets.VI_API_KEY }}
-      run: |
-        pip install pytest
-        pip install tensorflow==2.2.0
-        pip install transformers==3.0.2
-        pytest --use_client
+      run: python -m pytest ${{ matrix.test-path }}

@@ -97,7 +97,8 @@ Args:
         ).json()
 
     @retry()
-    def cluster_facets(self, collection_name: str, fields: List = [], asc: bool = True):
+    def cluster_facets(self, collection_name: str, facets_fields: List = [], asc: bool = True,
+    page_size: int=1000, page: int=1, date_interval: str="monthly"):
         """
 Get Facets in each cluster in a collection
 
@@ -118,6 +119,8 @@ Args:
 		Interval for date facets
 	collection_name:
 		Name of Collection
+    date_interval:
+        Defaults "monthly". Interval for date facets
 """
         return requests.get(
             url="{}/collection/cluster_facets".format(self.url),
@@ -125,6 +128,11 @@ Args:
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
+                "facets_fields": facets_fields,
+                "page_size": page_size,
+                "page": page,
+                "asc": asc,
+                "date_interval": date_interval
             },
         ).json()
 

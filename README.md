@@ -21,9 +21,9 @@
 
 <div align="center">
 
-![TotalDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=total&units=none&left_color=black&right_color=red&left_text=Total%20Downloads&?)
-![WeeklyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=week&units=none&left_color=black&right_color=red&left_text=Weekly%20Downloads&?)
-![MonthlyDownloads](https://static.pepy.tech/personalized-badge/vectorai-nightly?period=month&units=none&left_color=black&right_color=red&left_text=Monthly%20Downloads&?)
+![TotalDownloads](assets/total_downloads.svg)
+![WeeklyDownloads](assets/weekly_downloads.svg)
+![MonthlyDownloads](assets/monthly_downloads.svg)
 
 </div>
 <hr>
@@ -32,7 +32,7 @@
 Vector AI is a framework designed to make the process of building production grade vector based applications as quickly and easily as possible. Create, store, manipulate, search and analyse vectors alongside json documents to power applications such as neural search, semantic search, personalised recommendations recommendations etc.
 </h3>
 
-- Visit our website at: https://getvectorai.com
+- Visit our website and sign up for an api-key: https://getvectorai.com
 - For Python Documentation: https://vector-ai.github.io/vectorai
 - For REST API Documentation: https://api.vctr.ai/documentation
 - Join our discord: https://discord.gg/CbwUxyD
@@ -152,9 +152,9 @@ Compare vectors and their search performance on your documents easily!
 
 <hr>
 
-### Bring your own Model or Vector
+### Using VectorHub Models
 
-You can bring your own model or vectors and enjoy all the rich vector functionality that Vector AI provides.
+[VectorHub](https://hub.vctr.ai) is Vector AI's main model repository. Models from VectorHub are built with scikit-learn interfaces and all have examples of Vector AI integration. If you are looking to experiment with new off-the-shelf models, we recommend giving VectorHub models a go - all of them have been tested on Colab and are able to be used in as little as 3 lines of code! 
 
 ### Schema Rules for documents (BYO Vectors and IDs)
 

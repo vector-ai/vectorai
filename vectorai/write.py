@@ -272,7 +272,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                         warnings.warn(f"""Missing {f} in a document. Filling the missing with empty vectors.""")
                         self.set_field(vector_field, d, self.dummy_vector(self._get_vector_length_from_model(model)))
 
-                    if isinstance(model, (types.FunctionType, types.MethodType)):
+                    if isinstance(model, (types.FunctionType, types.MethodType, partial)):
                         vector = model(self.get_field(f, d))
                         self._set_vector_length_from_model(model, vector)
                         self.set_field(vector_field, d, vector)
@@ -282,6 +282,10 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         return documents
     
     def _get_vector_length_from_model(self, model):
+        if isinstance(model, (types.FunctionType, types.MethodType, partial)):
+            self.vector_length = len(vector)
+            return
+
         if hasattr(model, 'vector_length'):
             return model.vector_length
 
@@ -297,8 +301,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         """
         Set the vector length for the model
         """
+        if isinstance(model, (types.FunctionType, types.MethodType, partial)):
+            self.vector_length = len(vector)
+            return
         if not hasattr(model, 'vector_length'):
             setattr(model, 'vector_length', len(vector))
+            return
     
     def encode_documents_with_models(
         self, documents: List[Dict], models: Union[Dict[str, Callable], List[Dict]] = {}, use_bulk_encode=False
@@ -356,7 +364,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
 
     def _insert_and_encode(
         self, documents: list, collection_name: str, models: dict, verbose=False, 
-        use_bulk_encode=False, overwrite=False
+        use_bulk_encode: bool=False, overwrite: bool=False, quick: bool=False
     ):
         """
             Insert and encode documents
@@ -367,7 +375,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             collection_name=collection_name,
             documents=self.encode_documents_with_models(documents, models=models, 
             use_bulk_encode=use_bulk_encode), 
-            overwrite=overwrite
+            overwrite=overwrite,
+            quick=quick
         )
         
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -454,7 +463,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         verbose: bool=False,
         use_bulk_encode: bool=False,
         overwrite: bool=False,
-        show_progress_bar: bool=True
+        show_progress_bar: bool=True,
+        quick: bool=False
     ):
         """
         Insert documents into a collection with an option to encode with models.        
@@ -472,6 +482,9 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 Whether to print document ids that have failed when inserting.
             overwrite:
                 If True, overwrites document based on _id field.
+            quick:
+                If True, skip the collection schema checks. Not advised if this is 
+                your first time using the API until you are used to using Vector AI.
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -495,7 +508,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
-                    overwrite=overwrite
+                    overwrite=overwrite, quick=quick
                 )
                 self._raise_error(result)
                 if verbose and len(result['failed_document_ids']) > 0: print(f"Failed: {result['failed_document_ids']}")
@@ -504,7 +517,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
-            overwrite=overwrite)
+            overwrite=overwrite, quick=quick)
             for result in self.progress_bar(
                 pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
@@ -705,7 +718,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             "failed_document_ids": failed,
         }
     
-    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15):
+    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15, verbose=False):
         """
         Bulk edit documents.
         Args:
@@ -721,6 +734,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size), 
         total=int(len(edits)/chunk_size)):
             response = self.bulk_edit_document(collection_name, c)
+            if verbose: print(response)
             failed += response['failed_document_ids']
         return {
             "edited_successfully": len(edits) - len(failed),
@@ -748,17 +762,19 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         failed_all = {
             "failed_document_ids": [] 
         }
-
-        while len(docs['documents']) > 0:
-            docs = self.retrieve_documents(
-                collection_name, cursor=docs['cursor'],
-                include_fields=list(models.keys()),
-                page_size=chunksize)
-            failed = self.bulk_edit_document(
-                collection_name=collection_name,
-                documents=self.encode_documents_with_models(docs['documents'], 
-                models=models, use_bulk_encode=use_bulk_encode))
-            for k in failed_all.keys():
-                failed_all[k] += failed[k]
+        num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
+            while len(docs['documents']) > 0:
+                docs = self.retrieve_documents(
+                    collection_name, cursor=docs['cursor'],
+                    include_fields=list(models.keys()),
+                    page_size=chunksize)
+                failed = self.bulk_edit_document(
+                    collection_name=collection_name,
+                    documents=self.encode_documents_with_models(docs['documents'], 
+                    models=models, use_bulk_encode=use_bulk_encode))
+                for k in failed_all.keys():
+                    failed_all[k] += failed[k]
+                pbar.update(1)
         return failed_all
         

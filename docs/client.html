@@ -681,6 +681,30 @@ The aggregation query is a json body that follows the schema of:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.bulk_edit_document">
+<code class="sig-name descname">bulk_edit_document</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.bulk_edit_document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits documents by providing a key value pair of fields you are adding or changing, make sure to include the “_id” in the documents.
+:param collection_name: Name of collection
+:param documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field ‘_id’, for specifying vector field use the suffix of ‘_vector_’</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.bulk_edit_documents">
+<code class="sig-name descname">bulk_edit_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span></em>, <em class="sig-param"><span class="n">edits</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">15</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.bulk_edit_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bulk edit documents.
+:param collection_name: Name of collection
+:param edits: A list of documents to edit
+:param chunk_size: The size of the chunk</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the keys ‘edited_successfully’ (the number of documents
+successfully edited), ‘failed’ (the number of documents that failed to edit),
+‘failed_document_ids’ (documents which failed to edit)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.bulk_id">
 <code class="sig-name descname">bulk_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.bulk_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Look up multiple document by their ids</p>
@@ -1694,6 +1718,42 @@ This new collection is just like any other collection and you can read, filter a
 </dd></dl>
 
 <dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.random_recommendation">
+<code class="sig-name descname">random_recommendation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">approx</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">hundred_scale</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.random_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recommend by random ID using vector search
+document_id:</p>
+<blockquote>
+<div><p>ID of a document</p>
+</div></blockquote>
+<dl class="simple">
+<dt>collection_name:</dt><dd><p>Name of Collection</p>
+</dd>
+<dt>field:</dt><dd><p>Vector fields to search through</p>
+</dd>
+<dt>approx:</dt><dd><p>Used for approximate search</p>
+</dd>
+<dt>sum_fields:</dt><dd><p>Whether to sum the multiple vectors similarity search score as 1 or seperate</p>
+</dd>
+<dt>page_size:</dt><dd><p>Size of each page of results</p>
+</dd>
+<dt>page:</dt><dd><p>Page of the results</p>
+</dd>
+<dt>metric:</dt><dd><p>Similarity Metric, choose from [‘cosine’, ‘l1’, ‘l2’, ‘dp’]</p>
+</dd>
+<dt>min_score:</dt><dd><p>Minimum score for similarity metric</p>
+</dd>
+<dt>include_vector:</dt><dd><p>Include vectors in the search results</p>
+</dd>
+<dt>include_count:</dt><dd><p>Include count in the search results</p>
+</dd>
+<dt>hundred_scale:</dt><dd><p>Whether to scale up the metric by 100</p>
+</dd>
+<dt>asc:</dt><dd><p>Whether to sort the score by ascending order (default is false, for getting most similar results)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.resume_insert_documents">
 <code class="sig-name descname">resume_insert_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">documents</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">workers</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">show_progress_bar</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.resume_insert_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resume inserting documents</p>
@@ -1722,6 +1782,17 @@ as otherwise this function may take a long time to run.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">all_documents</span> <span class="o">=</span> <span class="n">vi_client</span><span class="o">.</span><span class="n">retrieve_all_documents</span><span class="p">(</span><span class="n">collection_name</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="vectorai.client.ViCollectionClient.retrieve_and_encode">
+<code class="sig-name descname">retrieve_and_encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunksize</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">use_bulk_encode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.retrieve_and_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all documents and re-encode with new models.
+:param collection_name: Name of collection
+:param models: Models as a dictionary
+:param chunksize: the number of results to
+:param retrieve and then encode and then edit in one go:
+:param use_bulk_encode: Whether to use bulk_encode on the models.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1859,7 +1930,7 @@ Vector similarity search with an audio directly.</p>
 
 <dl class="py method">
 <dt id="vectorai.client.ViCollectionClient.search_by_id">
-<code class="sig-name descname">search_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.search_by_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">document_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">field</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">sum_fields</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cosine'</span></em>, <em class="sig-param"><span class="n">min_score</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">include_vector</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_count</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">asc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">approx</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">hundred_scale</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#vectorai.client.ViCollectionClient.search_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Single Product Recommendations (Search by an id)</p>
 <p>Recommendation by retrieving the vector from the specified id’s document. Then performing a search with that vector.</p>
 <dl class="field-list simple">

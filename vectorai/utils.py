@@ -348,6 +348,15 @@ class UtilsMixin:
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
         return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
+    
+    def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
+    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
+        """Show results if the documents are chunked.
+        For images, concatenates the chunk images into the same numpy array
+        For text, puts them one after the other with smaller index.
+        No Audio chunking for now. 
+        """
+        raise NotImplementedError
 
 def get_random_int(low=0, high=9999):
     """

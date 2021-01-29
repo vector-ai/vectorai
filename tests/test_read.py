@@ -115,3 +115,20 @@ def test_random_recommendation_smoke_test(test_client, test_collection_name):
             test_collection_name, 
             field='color_vector_')
         assert len(results['results']) > 0, "Random recommendation fails."
+
+@pytest.mark.use_client
+def test_random_documents_with_filters(test_client, test_collection_name):
+    """
+        Random documents with filters.
+    """
+    with TempClientWithDocs(test_client, test_collection_name, num_of_docs=20):
+        time.sleep(2)
+        filter_query = [{'field': 'country', 
+        'filter_type': 'category',
+        'condition_value': 'Italy', 
+        'condition': '=='}]
+        docs = test_client.random_documents_with_filters(
+            test_collection_name, filters=filter_query, page_size=20)
+        print(filter_query)
+        for doc in docs['documents']:
+            assert doc['country'] == 'Italy'
