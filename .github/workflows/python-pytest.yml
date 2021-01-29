@@ -31,7 +31,7 @@ jobs:
           - tests/test_read.py
           - tests/test_search.py
           - tests/test_write.py
-          - tests/api/test_comparator.py
+          - tests/analytics/api/test_comparator.py
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
