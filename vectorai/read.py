@@ -455,7 +455,8 @@ Args:
         asc:
             Whether to sort the score by ascending order (default is false, for getting most similar results)
         """
-        random_id = self.random_documents(collection_name, page_size=1, seed=seed)['documents'][0]['_id']
+        random_id = self.random_documents(collection_name, page_size=1, seed=seed, 
+        include_fields=['_id'])['documents'][0]['_id']
         return self.search_by_id(collection_name, document_id=random_id, field=field,
         approx=approx, sum_fields=sum_fields, page_size=page_size, page=page, metric=metric, min_score=min_score,
         include_vector=include_vector, include_count=include_count, hundred_scale=hundred_scale,

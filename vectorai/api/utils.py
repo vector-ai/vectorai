@@ -29,10 +29,13 @@ def retry(num_of_retries=3, timeout=5):
         return function_wrapper
     return _retry
 
-def return_response(response):
+def return_response(response, return_type='json'):
     """
     Return error response if the status code != 200.
     """
     if response.status_code != 200:
         raise APIError(response.content)
-    return response.json()
+    if return_type == 'json':
+        return response.json()
+    elif return_type == 'content':
+        return response.content
