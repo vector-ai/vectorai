@@ -2,6 +2,7 @@
     Add default retry to inserting
 """
 import time
+import os
 from functools import wraps
 from ..errors import APIError
 
@@ -12,6 +13,11 @@ def retry(num_of_retries=3, timeout=5):
         num_of_retries: The number of times the function should retry
         timeout: The number of seconds to wait between each retry
     """
+    if 'VI_MAX_RETRY' in os.environ.keys():
+        num_of_retries = int(os.environ['VI_MAX_RETRY'])
+    if 'VI_TIMEOUT' in os.environ.keys():
+        timeout = float(os.environ['VI_TIMEOUT'])
+
     def _retry(func):
         @wraps(func)
         def function_wrapper(*args, **kwargs):
