@@ -490,7 +490,7 @@ Args:
             if filter_values is None or filter_values == '==':
                 return [{'field' : field, 'filter_type' : 'exists', "condition":">=", "condition_value":" "}]
             elif filter_values == '!=':
-                return [{'field' : field, 'filter_type' : 'exists', "condition":">=", "condition_value":" "}]
+                return [{'field' : field, 'filter_type' : 'exists', "condition":"!=", "condition_value":" "}]
         if filter_type == '<=' or filter_type == '>=' or filter_type == '>' or filter_type == '<' or filter_type == '==':
             if self.collection_schema(collection_name)[field] == 'date':
                 return [{'field' : field, 'filter_type' : 'date', "condition":filter_type, "condition_value": filter_values}]
