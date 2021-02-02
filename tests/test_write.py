@@ -588,6 +588,6 @@ def test_collection_name_error(test_client, collection_name):
         test_client._typecheck_collection_name(collection_name)
 
 @pytest.mark.parametrize('collection_name', ['fehwu'])
-def test_collection_name_not_error(test_client):
+def test_collection_name_not_error(test_client, collection_name):
     test_client._typecheck_collection_name(collection_name)
     assert True
