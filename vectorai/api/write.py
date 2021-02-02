@@ -2,7 +2,7 @@ import requests
 from typing import Dict, List
 from .read import ViReadAPIClient
 from .utils import retry, return_response
-from ..errors import APIError
+from ..errors import APIError, CollectionNameError
 
 class ViWriteAPIClient(ViReadAPIClient):
     """
@@ -16,6 +16,14 @@ class ViWriteAPIClient(ViReadAPIClient):
         else:
             self.url = "https://api.vctr.ai"
 
+    def _typecheck_collection_name(self, collection_name: str):
+        LOWER_CASE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+        for letter in collection_name: 
+            if letter not in LOWER_CASE_LETTERS:
+                raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+        if len(collection_name) > 240:
+            raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+    
     @retry()
     def create_collection_from_document(self, collection_name: str, document: dict):
         """
@@ -29,6 +37,7 @@ Args:
 	document:
 		A Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
 """
+        self._typecheck_collection_name(collection_name)
         return requests.post(
             url="{}/project/create_collection_from_document".format(self.url),
             json={

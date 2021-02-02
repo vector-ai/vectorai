@@ -1,7 +1,5 @@
 """Errors
 """
-
-
 class APIError(Exception):
     """Base error class for all errors in library
     """
@@ -35,5 +33,11 @@ class MissingFieldError(APIError):
 class LoginError(APIError):
     """
     Login Error
+    """
+    pass
+
+class CollectionNameError(APIError):
+    """
+    Collection Name Error
     """
     pass
