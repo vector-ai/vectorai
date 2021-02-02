@@ -498,3 +498,84 @@ Args:
                 return [{'field' : field, 'filter_type' : 'numeric', "condition":filter_type, "condition_value":filter_values}]
         else:
             raise ValueError(f"{filter_type} has not been defined. Please choose one of contains/exact_match/exists/categories/>=/<=/>/<.")
+
+    def search_with_filters(self,
+        collection_name: str, 
+        vector: List,
+        field: List,
+        filters: List=[],
+        approx: int = 0,
+        sum_fields: bool = True,
+        metric: str = "cosine",
+        min_score=None,
+        page: int = 1,
+        page_size: int = 10,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False,
+    ):
+        """
+Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
+
+Enables machine learning search with vector search. Search with a vector for the most similar vectors.
+
+For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field)::
+
+    Query person's characteristics as a vector: 
+    [180, 40, 70] representing [height, age, weight]
+
+    Search Results:
+    [
+        {"name": Adam Levine, "persons_characteristics_vector" : [180, 56, 71]},
+        {"name": Brad Pitt, "persons_characteristics_vector" : [180, 56, 65]},
+    ...]
+
+Args:
+	vector:
+		Vector, a list/array of floats that represents a piece of data.
+	collection_name:
+		Name of Collection
+	search_fields:
+		Vector fields to search through
+	approx:
+		Used for approximate search
+	sum_fields:
+		Whether to sum the multiple vectors similarity search score as 1 or seperate
+	page_size:
+		Size of each page of results
+	page:
+		Page of the results
+	metric:
+		Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+	min_score:
+		Minimum score for similarity metric
+	include_vector:
+		Include vectors in the search results
+	include_count:
+		Include count in the search results
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
+"""
+        search_fields ={}
+        if isinstance(field, str):
+            advanced_search_query = {
+                field.replace('_vector_', ''): {'vector': vector, 'fields': [field]}
+            }
+        else:
+            advanced_search_query = {
+                field[0].replace('_vector_', ''): {'vector': vector, 'fields': field}
+            }
+        return self.advanced_search(
+            collection_name=collection_name,
+            multivector_query=advanced_search_query,
+            approx=approx,
+            sum_fields=sum_fields,
+            filters=filters,
+            metric=metric,
+            min_score=min_score,
+            page=page,
+            page_size=page_size,
+            include_vector=include_vector,
+            include_count=include_count,
+            asc=asc
+        )

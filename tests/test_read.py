@@ -132,3 +132,16 @@ def test_random_documents_with_filters(test_client, test_collection_name):
         print(filter_query)
         for doc in docs['documents']:
             assert doc['country'] == 'Italy'
+
+@pytest.mark.use_client
+def test_search_with_filters(test_client, test_collection_name):
+    with TempClientWithDocs(test_client, test_collection_name, num_of_docs=100):
+        time.sleep(2)
+        filter_query = [{'field': 'country', 
+        'filter_type': 'category',
+        'condition_value': 'Italy', 
+        'condition': '=='}]
+        docs = test_client.search_with_filters(
+            test_collection_name, filters=filter_query, page_size=20)
+        for doc in docs['documents']:
+            assert doc['country'] == 'Italy'
