@@ -579,3 +579,92 @@ Args:
             include_count=include_count,
             asc=asc
         )
+    
+    def hybrid_search_with_filters(
+        self,
+        collection_name: str,
+        text: str,
+        vector: List,
+        fields: List,
+        text_fields: List,
+        filters: List=[],
+        sum_fields: bool = True,
+        metric: str = "cosine",
+        min_score=None,
+        traditional_weight=0.075,
+        page: int = 1,
+        page_size: int = 10,
+        include_vector:bool=False,
+        include_count:bool=True,
+        asc:bool=False
+    ):
+        """
+Search a text field with vector and text using Vector Search and Traditional Search
+
+Vector similarity search + Traditional Fuzzy Search with text and vector.
+
+You can also give weightings of each vector field towards the search, e.g. image\_vector\_ weights 100%, whilst description\_vector\_ 50%.
+
+Hybrid search with filters also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.
+
+    
+Args:
+	collection_name:
+		Name of Collection
+	page:
+		Page of the results
+	page_size:
+		Size of each page of results
+	approx:
+		Used for approximate search
+	sum_fields:
+		Whether to sum the multiple vectors similarity search score as 1 or seperate
+	metric:
+		Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+	filters:
+		Query for filtering the search results
+	min_score:
+		Minimum score for similarity metric
+	include_vector:
+		Include vectors in the search results
+	include_count:
+		Include count in the search results
+	include_facets:
+		Include facets in the search results
+	hundred_scale:
+		Whether to scale up the metric by 100
+	multivector_query:
+		Query for advance search that allows for multiple vector and field querying
+	text:
+		Text Search Query (not encoded as vector)
+	text_fields:
+		Text fields to search against
+	traditional_weight:
+		Multiplier of traditional search. A value of 0.025~0.1 is good.
+	fuzzy:
+		Fuzziness of the search. A value of 1-3 is good.
+	join:
+		Whether to consider cases where there is a space in the word. E.g. Go Pro vs GoPro.
+    asc:
+        Whether to sort the score by ascending order (default is false, for getting most similar results)
+"""
+        query = {
+            fields[0]: {'vector': vector, 'fields': fields}
+        }
+        return self.advanced_hybrid_search(
+            collection_name=collection_name,
+            text=text,
+            multivector_query=query,
+            text_fields=text_fields,
+            sum_fields=sum_fields,
+            facets=[],
+            filters=filters,
+            metric=metric,
+            min_score=min_score,
+            page=page,
+            page_size=page_size,
+            include_vector=False,
+            include_count=True,
+            include_facets=False,
+            asc=False
+        )
