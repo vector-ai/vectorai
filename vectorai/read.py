@@ -479,7 +479,6 @@ Args:
             filter_type: One of contains/exact_match/categories/>=/>/<=/<.
 
         """
-        print("After creating query, you can now apply this to filters.")
         if filter_type == 'contains':
             return [{'field' : field, 'filter_type' : 'contains', "condition":"==", "condition_value": filter_values}]
         if filter_type == 'exact_match':
