@@ -17,9 +17,9 @@ class ViWriteAPIClient(ViReadAPIClient):
             self.url = "https://api.vctr.ai"
 
     def _typecheck_collection_name(self, collection_name: str):
-        LOWER_CASE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_.'
         for letter in collection_name: 
-            if letter not in LOWER_CASE_LETTERS:
+            if letter not in ACCEPTABLE_LETTERS:
                 raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
         if len(collection_name) > 240:
             raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")

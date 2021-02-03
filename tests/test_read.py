@@ -142,6 +142,26 @@ def test_search_with_filters(test_client, test_collection_name):
         'condition_value': 'Italy', 
         'condition': '=='}]
         docs = test_client.search_with_filters(
-            test_collection_name, filters=filter_query, page_size=20)
-        for doc in docs['documents']:
+            test_collection_name, vector=test_client.generate_vector(30),
+            fields=['color_vector_'],
+            filters=filter_query, page_size=20)
+        for doc in docs['results']:
+            assert doc['country'] == 'Italy'
+
+@pytest.mark.use_client
+def test_hybrid_search_with_filters(test_client, test_collection_name):
+    with TempClientWithDocs(test_client, test_collection_name, num_of_docs=100):
+        time.sleep(2)
+        filter_query = [{'field': 'country', 
+        'filter_type': 'category',
+        'condition_value': 'Italy', 
+        'condition': '=='}]
+        docs = test_client.hybrid_search_with_filters(
+            test_collection_name, 
+            vector=test_client.generate_vector(30),
+            text="red", 
+            text_fields=['color'],
+            fields=['color_vector_'],
+            filters=filter_query, page_size=20)
+        for doc in docs['results']:
             assert doc['country'] == 'Italy'
