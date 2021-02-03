@@ -57,6 +57,7 @@ class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
         collection_name: str, 
         vector: List,
         field: List,
+	filters: List=[],
         approx: int = 0,
         sum_fields: bool = True,
         metric: str = "cosine",
@@ -96,6 +97,8 @@ Args:
 		Whether to sum the multiple vectors similarity search score as 1 or seperate
 	page_size:
 		Size of each page of results
+	filters:
+		Filters for search
 	page:
 		Page of the results
 	metric:
@@ -122,6 +125,7 @@ Args:
         return self.advanced_search(
             collection_name=collection_name,
             multivector_query=advanced_search_query,
+	    filters=filters,
             approx=approx,
             sum_fields=sum_fields,
             metric=metric,
