@@ -1,5 +1,5 @@
 """
-Plotting functions of Vi go here. 
+Plotting functions of Vi go here.
 """
 import plotly.express as px
 import plotly.graph_objects as go
@@ -91,10 +91,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 What to color the centroid the cluster label/title
             size:
                 The size of the markers for the centroid documents
-        
+
         Returns:
             go.Scatter: Scatter plot of the documents
-        
+
         """
         x = [
             self.get_field(dim_reduction_field, x)[0]
@@ -150,12 +150,12 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 The name of the clusters
             include_centroids:
                 Whether to include the centroids of every cluster
-        
+
         Returns:
             Plotly figure object
-        
+
         See example from: https://colab.research.google.com/drive/10u7b3lkIVJ-lceCmr34ywscOGueIFd0I?usp=sharing
-        
+
         Example:
             >>> collection_name = 'nlp-qa'
             >>> cluster_field = 'question_vector_'
@@ -166,10 +166,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     cluster_field=cluster_field,
                     cluster_label=cluster_label,
                     point_label='question_title',
-                    dim_reduction_field=dim_reduction_field, 
-                    include_centroids=True, 
+                    dim_reduction_field=dim_reduction_field,
+                    include_centroids=True,
                     alias=alias)
-        
+
         """
         fig = go.Figure()
         if include_centroids:
@@ -207,7 +207,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             cluster_titles = list(set(cluster_titles))
             cluster_titles_color_map = dict(enumerate(cluster_titles))
             color_dict = {v: k + 5 for k, v in cluster_titles_color_map.items()}
-        
+
         if cluster_label is None:
             fig.add_trace(
                 self._scatter_plot_documents(
@@ -253,21 +253,21 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         """
         Compare 1 document against other documents.
         Ensure that the name is unique, otherwise the plot will simply take the mean.
-        
+
         Args:
             documents: list of documents (dictionaries) to feed in
-            vector_fields: vector field to calculate cosine similarity on 
-            label: the x label for the bar plot 
+            vector_fields: vector field to calculate cosine similarity on
+            label: the x label for the bar plot
             anchor_document: the document to compare it on
             anchor_index: the anchor index to compare it on
             orientation: The orientation of the bar chart. Can be 'v' (vertical) or 'h' (horizontal)
-            num_cols: The number of columns. The default will put everything into 1 row. If you want to 
-            put things into multiple rows, then please reduce the number of columns. 
+            num_cols: The number of columns. The default will put everything into 1 row. If you want to
+            put things into multiple rows, then please reduce the number of columns.
             y_axis_tickangle: This will change the tick angles of the y axis in the vertical chart.
             x_axis_tickangle: This will change the tick angels of the x axis in the vertical chart.
         Returns:
             Plotly Figure: returns a horizontal barplot showing cosine similarity scores.
-        
+
         Example:
             >>> cluster_field = 'question_vector_'
             >>> cluster_label = 'category'
@@ -277,10 +277,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     cluster_field=cluster_field,
                     cluster_label=cluster_label,
                     point_label='question_title',
-                    dim_reduction_field=dim_reduction_field, 
-                    include_centroids=True, 
+                    dim_reduction_field=dim_reduction_field,
+                    include_centroids=True,
                     alias=alias)
-        
+
         """
         if isinstance(vector_fields, str):
             vector_fields = [vector_fields]
@@ -297,7 +297,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         import math
         if num_cols is None:
             num_cols = len(vector_fields)
-        fig = make_subplots(rows=int(len(vector_fields) / num_cols) + 1, cols=num_cols, 
+        fig = make_subplots(rows=int(len(vector_fields) / num_cols) + 1, cols=num_cols,
         subplot_titles=vector_fields)
         row_num = 1
         col_num = 1
@@ -306,7 +306,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 documents=documents,
                 vector_field=vector_field,
                 label=label,
-                anchor_document=anchor_document, 
+                anchor_document=anchor_document,
                 anchor_index=anchor_index,
                 orientation=orientation),
                 row=row_num, col=col_num)
@@ -319,10 +319,10 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             fig.update_yaxes(tickangle=y_axis_tickangle)
         if orientation == 'v':
             fig.update_xaxes(tickangle=x_axis_tickangle)
-        
+
         return fig
-    
-    def _plot_1d_cosine_similarity_for_1_vector_field(self, 
+
+    def _plot_1d_cosine_similarity_for_1_vector_field(self,
         documents: list,
         vector_field: str,
         label: str,
@@ -334,8 +334,8 @@ class VizMixin(ViScore, ViAnalyticsUtils):
 
             Args:
                 documents: list of documents (dictionaries) to feed in
-                vector_fields: vector field to calculate cosine similarity on 
-                label: the x label for the bar plot 
+                vector_fields: vector field to calculate cosine similarity on
+                label: the x label for the bar plot
                 anchor_document: the document to compare it on
                 anchor_index: the anchor index to compare it on
                 orientation: The orientation of the bar chart
@@ -351,12 +351,12 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                         cluster_field=cluster_field,
                         cluster_label=cluster_label,
                         point_label='question_title',
-                        dim_reduction_field=dim_reduction_field, 
-                        include_centroids=True, 
+                        dim_reduction_field=dim_reduction_field,
+                        include_centroids=True,
                         alias=alias)
-            
+
             """
-            
+
             try:
                 scores = self.get_cosine_similarity_scores(
                     documents, anchor_document, vector_field=vector_field
@@ -370,7 +370,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             mean_dict = MeanDict()
             for i, doc in enumerate(documents):
                 mean_dict[doc[label]] = doc["cos_score"]
-            
+
             x, y = mean_dict.get_x_y()
             if orientation == 'h':
                 return go.Bar(
@@ -387,7 +387,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                     orientation=orientation,
                     name=vector_field
                 )
-        
+
     # def plot_2d_cosine_similarity(
     #     self,
     #     documents: List[Dict[str, Any]],
@@ -401,13 +401,13 @@ class VizMixin(ViScore, ViAnalyticsUtils):
 
     #     Args:
     #         documents: list of documents (dictionaries) to feed in
-    #         vector_field: vector field to calculate cosine similarity on 
-    #         label: the x label for the bar plot 
+    #         vector_field: vector field to calculate cosine similarity on
+    #         label: the x label for the bar plot
     #         anchor_document: the document to compare it on
     #         anchor_index: the anchor index to compare it on
     #     Returns:
     #         A scatterplot showing cosine similarity scores with each axes being a specific document.
-        
+
     #     Example:
     #         >>> cluster_field = 'question_vector_'
     #         >>> cluster_label = 'category'
@@ -427,7 +427,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
     #     if isinstance(vector_fields, str):
     #         vector_fields = [vector_fields]
     #     for vector_field in vector_fields:
-            
+
     #         scores_x = self.get_cosine_similarity_scores(
     #             documents, anchor_documents[0], vector_field
     #         )
@@ -454,8 +454,8 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         levels = range(32,256,32)
         return [tuple(random.choice(levels) for _ in range(3)) for _ in range(num_of_colors)]
 
-    def plot_2d_cosine_similarity(self, 
-        documents: List[Dict], anchor_documents: List[Dict], vector_fields: List[str], 
+    def plot_2d_cosine_similarity(self,
+        documents: List[Dict], anchor_documents: List[Dict], vector_fields: List[str],
         label: str, mode='markers+text', textposition='top center', show_spikes=True,
         text_label_font_size: int=12, text_label_font_family = "Rockwell",
         text_label_bgcolor="white",
@@ -463,11 +463,11 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         plot_bgcolor="#e6e6fa", spikedash='dot', spikethickness=1.5
     ):
         """
-        Plotting 2D cosine similarity plots 
+        Plotting 2D cosine similarity plots
         Args:
-            documents: The documents to 
+            documents: The documents to
             anchor_documents: Documents by which to compare against
-            vector_fields: The list of vectors to accept 
+            vector_fields: The list of vectors to accept
             Label: The document field to label
             Mode: Whether to include markers or text (view Plotly documentation for more information)
             textposition: where the text labels should be in relation to the marker
@@ -484,7 +484,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             >>> vi_client = ViClient()
             >>> collection_name = 'ecommerce'
             >>> docs = vi_client.random_documents(collection_name)['documents']
-            >>> vi_client.plot_2d_cosine_similarity(docs, docs[0:2], 
+            >>> vi_client.plot_2d_cosine_similarity(docs, docs[0:2],
             vector_fields=['use_vector_'], label='name')
         """
         if metric != 'cosine':
@@ -495,7 +495,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         ), "You need 2 anchor documents for a 2d cosine similarity plot."
 
         fig = go.FigureWidget()
-        
+
         if len(vector_fields) > len(marker_colors):
             num_of_extra_fields = len(vector_fields) - len(marker_colors)
             marker_colors += self.random_colour(num_of_extra_fields)
@@ -515,11 +515,11 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             y = [round(x["cos_score_y"], 3) for x in documents]
             labels = self.get_field_across_documents(label, documents)
             comparisons = [x_i > y[i] for i, x_i in enumerate(x)]
-            text_comparisons = ["has <b>lower</b> cosine similarity with" if c == True 
+            text_comparisons = ["has <b>lower</b> cosine similarity with" if c == True
             else "has <b>higher</b> cosine similarity with" for c in comparisons]
-            fig.add_trace(go.Scatter(x=x, y=y, 
+            fig.add_trace(go.Scatter(x=x, y=y,
                 text=labels,
-                mode=mode, 
+                mode=mode,
                 name=vector_field,
                 customdata=text_comparisons,
                 hovertemplate = label +": <b>%{text}<extra></extra><br></b>" + \
@@ -539,11 +539,11 @@ class VizMixin(ViScore, ViAnalyticsUtils):
 
         fig.update_traces(textposition=textposition)
 
-        fig.update_xaxes(showspikes=show_spikes, 
+        fig.update_xaxes(showspikes=show_spikes,
         spikedash=spikedash, spikethickness=spikethickness)
-        fig.update_yaxes(showspikes=show_spikes, 
+        fig.update_yaxes(showspikes=show_spikes,
         spikedash=spikedash, spikethickness=spikethickness)
-        
+
         fig.update_layout(plot_bgcolor=plot_bgcolor)
         fig.update_layout(
             hoverlabel=dict(
@@ -553,7 +553,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             )
         )
         return fig
-    
+
     def add_labels_to_figure(self, fig, title_text: str, x_axis_label: str, y_axis_label: str):
         fig.update_xaxes(title_text=x_axis_label)
         fig.update_yaxes(title_text=y_axis_label)
@@ -563,23 +563,23 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         """
             Args:
                 Scores: The list of scores for cosine similarity
-                spokes: The outside labels 
+                spokes: The outside labels
                 name: The name of the plot
         """
         return go.Scatterpolar(
-            # Get the cosine similarity scores here 
+            # Get the cosine similarity scores here
             r=scores + [scores[0]],
             theta=spokes + [spokes[0]],
             fill=fill,
             name=name,
         )
 
-    def plot_radar_across_documents(self, docs: List[Dict], anchor_documents: List[Dict], vector_field: str, 
+    def plot_radar_across_documents(self, docs: List[Dict], anchor_documents: List[Dict], vector_field: str,
     label_field: str, range: List=[0, 1], fill: str=None, scoring_metric ='cosine'):
         """
             Radar plot for 1D cosine similarity across documents.
             Args:
-                docs: A list of documents 
+                docs: A list of documents
                 anchor_document: The document to compare against
                 vector_field: The vector vector field
                 label_field: The field of the documents to get labels.
@@ -592,7 +592,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             else:
                 scores = scoring_metric(docs, anchor_document, vector_field=vector_field)
             fig.add_trace(self._plot_radar(scores=scores, spokes=categories, name=vector_field, fill=fill))
-        
+
         fig.update_layout(
             polar=dict(
             radialaxis=dict(
@@ -603,12 +603,12 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         )
         return fig
 
-    def plot_radar_across_vector_fields(self, docs: List[Dict], anchor_document: Dict, 
+    def plot_radar_across_vector_fields(self, docs: List[Dict], anchor_document: Dict,
     vector_fields: List[str], label_field: str, range=[0, 1], fill=None, scoring_metric='cosine'):
         """
             Radar plot for 1D cosine similarity across different vector spaces.
             Args:
-                docs: A list of documents 
+                docs: A list of documents
                 anchor_document: The document to compare against
                 vector_fields: the different vector fields
                 label_field: The field of the documents to get labels.
@@ -620,7 +620,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 scores = self.get_cosine_similarity_scores(docs, anchor_document, vector_field=vector)
             else:
                 scores = scoring_metric(docs, anchor_document, vector_field=vector)
-            
+
             fig.add_trace(self._plot_radar(scores=scores, spokes=categories, name=vector, fill=fill))
 
         fig.update_layout(
@@ -629,6 +629,6 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 visible=True,
                 range=range
             )),
-            showlegend=True 
+            showlegend=True
         )
         return fig
