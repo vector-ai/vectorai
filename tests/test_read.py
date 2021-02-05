@@ -100,7 +100,8 @@ def test_search_collections(test_client):
         Smoke test for searching collections
     """
     cn = 'example_collection_123y8io'
-    test_client.create_collection(cn)
+    if cn not in test_client.list_collections():
+        test_client.create_collection(cn)
     assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
     test_client.delete_collection(cn)
 
