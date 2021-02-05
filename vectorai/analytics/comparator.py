@@ -3,7 +3,7 @@ from typing import List, Dict, Optional
 # from ..client import ViClient
 from .api.comparator import ComparatorAPI
 
-class ComparatorClient(ComparatorAPI, ViClient):
+class ComparatorClient(ComparatorAPI):
     def __init__(self, username: str=None, api_key: str=None,
     url: str = "https://api.vctr.ai",
     analytics_url="https://vector-analytics.vctr.ai"):
