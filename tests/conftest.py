@@ -63,7 +63,7 @@ def test_collection_client(test_username, test_api_key, test_collection_name):
 
 @pytest.fixture
 def test_analytics_client(test_username, test_api_key):
-    return ViAnalyticsClient(username=test_username, api_key=test_api_key)
+    return ViClient(username=test_username, api_key=test_api_key)
 
 @pytest.fixture
 def test_vector_field():
