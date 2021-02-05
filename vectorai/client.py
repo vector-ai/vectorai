@@ -4,10 +4,11 @@ import requests
 import pandas as pd
 import os
 from .write import ViWriteClient
+from .analytics.viz import VizMixin
 from .utils import decorate_functions_by_argument, set_default_collection
 from .errors import LoginError, APIError
 
-class ViClient(ViWriteClient):
+class ViClient(ViWriteClient, VizMixin):
     """
         The main Vi client with most of the available read and write methods available to it.
 
@@ -31,12 +32,12 @@ class ViClient(ViWriteClient):
             if 'VI_USERNAME' not in os.environ.keys():
                 raise APIError("Specify username of set VI_USERNAME as an environment variable.")
             username = os.environ['VI_USERNAME']
-        
+
         if api_key is None:
             if 'VI_API_KEY' not in os.environ.keys():
                 raise APIError("Specify VectorAI API key VI_API_KEY as an environment variable.")
             api_key = os.environ['VI_API_KEY']
-        
+
         self.username = username
         self.api_key = api_key
         self.url = url
@@ -46,7 +47,7 @@ class ViClient(ViWriteClient):
             print(
                 f"Logged in. Welcome {self.username}. To view list of available collections, call list_collections() method."
             )
-        
+
     def check_login_details(self):
         try:
             self.list_collections()
@@ -58,7 +59,7 @@ def request_api_key(username: str, email:str, description:str="I'd like to try i
     """
         Request an api key
         Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
-            
+
         Args:
             username:
                 Username you'd like to create, lowercase only
@@ -104,12 +105,12 @@ class ViCollectionClient(ViClient):
             if 'VI_USERNAME' not in os.environ.keys():
                 raise APIError("Specify username of set VI_USERNAME as an environment variable.")
             username = os.environ['VI_USERNAME']
-        
+
         if api_key is None:
             if 'VI_API_KEY' not in os.environ.keys():
                 raise APIError("Specify VectorAI API key VI_API_KEY as an environment variable.")
             api_key = os.environ['VI_API_KEY']
-        
+
         self.username = username
         self.api_key = api_key
         self._collection_name = collection_name
@@ -124,11 +125,11 @@ class ViCollectionClient(ViClient):
     @property
     def collection_name(self) -> str:
         return self._collection_name
-    
+
     @collection_name.setter
     def collection_name(self, value: str) -> None:
         self._collection_name = value
-        
+
     @collection_name.getter
     def collection_name(self) -> str:
         return self._collection_name
