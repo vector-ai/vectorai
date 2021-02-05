@@ -1,7 +1,8 @@
 import os
 from .comparator import ComparatorClient
+from .viz import VizMixin
 
-class ViAnalyticsClient(ComparatorClient):
+class ViAnalyticsClient(ComparatorClient, VizMixin):
     def __init__(self, username: str=None, api_key: str=None,
     url: str = "https://api.vctr.ai", analytics_url="https://vector-analytics.vctr.ai"):
         self.username = username if username is not None else os.environ['VI_USERNAME']
