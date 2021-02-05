@@ -4,11 +4,11 @@ import requests
 import pandas as pd
 import os
 from .write import ViWriteClient
-from .analytics.client import AnalyticsClient
+from .analytics.client import ViAnalyticsClient
 from .utils import decorate_functions_by_argument, set_default_collection
 from .errors import LoginError, APIError
 
-class ViClient(ViWriteClient, AnalyticsClient):
+class ViClient(ViWriteClient, ViAnalyticsClient):
     """
         The main Vi client with most of the available read and write methods available to it.
 
