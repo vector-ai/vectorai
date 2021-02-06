@@ -255,7 +255,7 @@ class TestEdit:
                 {"_id": "2", "location": "Sydney",},
                 {"_id": "1", "location": "New York",},
             ]
-            test_client.edit_documents(test_collection_name, edits, workers=2)
+            test_client.edit_documents(test_collection_name, edits)
             doc = test_client.id(test_collection_name, document_id="2")
             assert doc["location"] == "Sydney"
             doc = test_client.id(test_collection_name, document_id="1")
