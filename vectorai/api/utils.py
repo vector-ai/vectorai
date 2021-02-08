@@ -45,3 +45,22 @@ def return_response(response, return_type='json'):
         return response.json()
     elif return_type == 'content':
         return response.content
+
+def dict_to_params(data_dict):
+    data_request = ''
+    for i, (k, v) in enumerate(a.items()):
+        data_request += str(k) + '=' + str(v)
+        if i != len(a.items()) - 1:
+            data_request += '&'
+    return data_request
+
+def _return_curl(response):
+    if response.request.method == 'GET':
+        curl_command = f"curl -i -H 'Accept: application/json' -H 'Content-Type: application/json' -X GET {url}"
+    if response.request.method == 'POST':
+        curl_command = f"curl --data '{dict_to_params(data_dict)}' {url}"
+    return curl_command
+
+def return_curl_or_response(response, return_type='json', return_curl=False):
+    if return_curl: _return_curl(response)
+    return return_response(response, return_type=return_type)
