@@ -344,15 +344,7 @@ Args:
         params.update(kwargs)
         return requests.get(
             url="{}/collection/advanced_cluster_facets".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vector_field": vector_field,
-                "facets_fields": facets_fields,
-                "page_size": page_size,
-                "alias": alias,
-            },
+            params=params,
         ).json()
 
     @retry()
