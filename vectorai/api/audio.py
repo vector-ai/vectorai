@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViAudioClient:
     """
@@ -28,7 +28,9 @@ class ViAudioClient:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search an audio field with audio using Vector Search
@@ -78,31 +80,11 @@ Args:
 """
         if type(audio) == str:
             if "http" in audio:
-                return requests.post(
-                    url="{}/collection/search_with_audio".format(self.url),
-                    json={
-                        "username": self.username,
-                        "api_key": self.api_key,
-                        "collection_name": collection_name,
-                        "audio_url": audio,
-                        "search_fields": fields,
-                        "metric": metric,
-                        "min_score": min_score,
-                        "page": page,
-                        "page_size": page_size,
-                        "include_vector": include_vector,
-                        "include_count": include_count,
-                        "asc": asc
-                    },
-                ).json()
-        elif type(audio) == bytes:
-            return requests.post(
-                url="{}/collection/search_with_audio_upload".format(self.url),
-                json={
+                params = {
                     "username": self.username,
                     "api_key": self.api_key,
                     "collection_name": collection_name,
-                    "audio": audio.decode(),
+                    "audio_url": audio,
                     "search_fields": fields,
                     "metric": metric,
                     "min_score": min_score,
@@ -111,8 +93,34 @@ Args:
                     "include_vector": include_vector,
                     "include_count": include_count,
                     "asc": asc
-                },
-            ).json()
+                }
+                params.update(kwargs)
+                response = requests.post(
+                    url="{}/collection/search_with_audio".format(self.url),
+                    json=params
+                )
+                return return_curl_or_response(response, 'json', return_curl=return_curl)
+        elif type(audio) == bytes:
+            params = {
+                "username": self.username,
+                "api_key": self.api_key,
+                "collection_name": collection_name,
+                "audio": audio.decode(),
+                "search_fields": fields,
+                "metric": metric,
+                "min_score": min_score,
+                "page": page,
+                "page_size": page_size,
+                "include_vector": include_vector,
+                "include_count": include_count,
+                "asc": asc
+            }
+            params.update(kwargs)
+            response = requests.post(
+                url="{}/collection/search_with_audio_upload".format(self.url),
+                json=params
+            )
+            return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_audio_by_upload(
@@ -126,7 +134,9 @@ Args:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search an audio field with uploaded audio using Vector Search with an uploaded audio directly.
@@ -172,11 +182,13 @@ Args:
             page_size,
             include_vector,
             include_count,
-            asc
+            asc,
+            return_curl=return_curl,
+            **kwargs
         )
     
     @retry()
-    def encode_audio(self, collection_name: str, audio):
+    def encode_audio(self, collection_name: str, audio, return_curl: bool=False, **kwargs):
         """
 Encode encode into a vector
 
@@ -196,19 +208,22 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "audio_url": audio,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/encode_audio".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "audio_url": audio,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def encode_audio_job(
-        self, collection_name: str, audio_field: str, refresh: bool = False
+        self, collection_name: str, audio_field: str, refresh: bool = False, return_curl: bool=False, **kwargs
     ):
         """
 Encode all audios in a field into vectors
@@ -237,13 +252,17 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "audio_field": audio_field,
+            "refresh": refresh,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/jobs/encode_audio_field".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "audio_field": audio_field,
-                "refresh": refresh,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
