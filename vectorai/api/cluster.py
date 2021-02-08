@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViClusterClient:
     """
@@ -23,6 +23,8 @@ class ViClusterClient:
         vector_field: str,
         n_clusters: int = 0,
         refresh: bool = True,
+        return_curl=False,
+        **kwargs
     ):
         """
 Clusters a collection by a vector field
@@ -39,7 +41,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/jobs/cluster".format(self.url),
             params={
                 "username": self.username,
@@ -49,7 +51,8 @@ Args:
                 "n_clusters": n_clusters,
                 "refresh": refresh,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def cluster_aggregate(
@@ -60,6 +63,8 @@ Args:
         page_size: int = 10,
         asc: bool = False,
         flatten: bool = True,
+        return_curl=False,
+        **kwargs
     ):
         """
 Aggregate every cluster in a collection
@@ -82,9 +87,7 @@ Args:
     flatten:
         Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
-        return requests.post(
-            url="{}/collection/cluster_aggregate".format(self.url),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
@@ -93,12 +96,17 @@ Args:
                 "page_size": page_size,
                 "asc": asc,
                 "flatten" : flatten
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/cluster_aggregate".format(self.url),
+            json=params,
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=False)
 
     @retry()
     def cluster_facets(self, collection_name: str, facets_fields: List = [], asc: bool = True,
-    page_size: int=1000, page: int=1, date_interval: str="monthly"):
+    page_size: int=1000, page: int=1, date_interval: str="monthly", return_curl: bool=False):
         """
 Get Facets in each cluster in a collection
 
@@ -122,7 +130,7 @@ Args:
     date_interval:
         Defaults "monthly". Interval for date facets
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/cluster_facets".format(self.url),
             params={
                 "username": self.username,
@@ -134,10 +142,11 @@ Args:
                 "asc": asc,
                 "date_interval": date_interval
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
-    def cluster_centroids(self, collection_name: str, vector_field: str):
+    def cluster_centroids(self, collection_name: str, vector_field: str, return_curl: bool=False):
         """
 Returns the cluster centers of a collection by a vector field
 
@@ -149,7 +158,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/cluster_centroids".format(self.url),
             params={
                 "username": self.username,
@@ -157,7 +166,8 @@ Args:
                 "collection_name": collection_name,
                 "vector_field": vector_field,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def cluster_centroid_documents(
@@ -166,6 +176,7 @@ Args:
         vector_field: str,
         metric: str = "cosine",
         include_vector: bool = True,
+        return_curl: bool=False
     ):
         """
 Returns the document closest to each cluster center of a collection
@@ -182,7 +193,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/cluster_centroid_documents".format(self.url),
             params={
                 "username": self.username,
@@ -192,7 +203,8 @@ Args:
                 "metric": metric,
                 "include_vector": include_vector,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def advanced_clustering_job(
@@ -204,6 +216,7 @@ Args:
         n_init: int = 5,
         n_iter: int = 10,
         refresh: bool = True,
+        return_curl: bool=False
     ):
         """
 Clusters a collection by a vector field
@@ -227,7 +240,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/jobs/advanced_cluster".format(self.url),
             params={
                 "username": self.username,
@@ -240,7 +253,8 @@ Args:
                 "n_iter": n_iter,
                 "refresh": refresh,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def advanced_cluster_aggregate(
@@ -254,6 +268,7 @@ Args:
         asc: bool = False,
         filters: list = [],
         flatten:bool=True,
+        return_curl=False
     ):
         """
 Aggregate every cluster in a collection
@@ -280,7 +295,7 @@ Args:
     flatten:
         Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
-        return requests.post(
+        response = requests.post(
             url="{}/collection/advanced_cluster_aggregate".format(self.url),
             json={
                 "username": self.username,
@@ -295,7 +310,8 @@ Args:
                 "filters" : filters,
                 "flatten" : flatten
             },
-        ).json()
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def advanced_cluster_facets(
@@ -305,6 +321,9 @@ Args:
         alias: str = "default",
         facets_fields: List = [],
         asc: bool = True,
+        page_size: int=1000,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Get Facets in each cluster in a collection
@@ -331,17 +350,20 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
-            url="{}/collection/advanced_cluster_facets".format(self.url),
-            params={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
                 "vector_field": vector_field,
                 "facets_fields": facets_fields,
                 "alias": alias,
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.get(
+            url="{}/collection/advanced_cluster_facets".format(self.url),
+            params=params,
+        )
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def advanced_cluster_centroids(
@@ -360,7 +382,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/advanced_cluster_centroids".format(self.url),
             params={
                 "username": self.username,
@@ -369,7 +391,8 @@ Args:
                 "vector_field": vector_field,
                 "alias": alias,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, 'json', return_curl)
 
     @retry()
     def advanced_cluster_centroid_documents(
@@ -379,6 +402,7 @@ Args:
         alias: str = "default",
         metric: str = "cosine",
         include_vector: bool = True,
+        return_curl: bool=False
     ):
         """
 Returns the document closest to each cluster center of a collection
@@ -397,7 +421,7 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        response = requests.get(
             url="{}/collection/advanced_cluster_centroid_documents".format(self.url),
             params={
                 "username": self.username,
@@ -408,4 +432,5 @@ Args:
                 "include_vector": include_vector,
                 "alias": alias,
             },
-        ).json()
+        )
+        return return_curl_or_response(response, 'json', return_curl)
