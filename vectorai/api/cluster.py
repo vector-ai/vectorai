@@ -305,6 +305,7 @@ Args:
         alias: str = "default",
         facets_fields: List = [],
         asc: bool = True,
+        page_size: int=1000
     ):
         """
 Get Facets in each cluster in a collection
@@ -339,6 +340,7 @@ Args:
                 "collection_name": collection_name,
                 "vector_field": vector_field,
                 "facets_fields": facets_fields,
+                "page_size": page_size,
                 "alias": alias,
             },
         ).json()
