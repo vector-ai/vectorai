@@ -156,6 +156,7 @@ class DocUtilsMixin:
                     d = d[f]
                 else:
                     d.update({f: {}})
+                    d = d[f]
     
     def set_field_across_documents(
         self, field: str, values: List[Any], docs: List[Dict]

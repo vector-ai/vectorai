@@ -64,6 +64,7 @@ Args:
         asc: bool = False,
         flatten: bool = True,
         return_curl=False,
+        **kwargs
     ):
         """
 Aggregate every cluster in a collection
@@ -86,9 +87,7 @@ Args:
     flatten:
         Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
 """
-        response = requests.post(
-            url="{}/collection/cluster_aggregate".format(self.url),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
@@ -97,7 +96,11 @@ Args:
                 "page_size": page_size,
                 "asc": asc,
                 "flatten" : flatten
-            },
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/cluster_aggregate".format(self.url),
+            json=params,
         )
         return return_curl_or_response(response, return_type='json', return_curl=False)
 
