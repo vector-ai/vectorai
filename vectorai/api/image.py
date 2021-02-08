@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViImageClient:
     """
@@ -28,7 +28,9 @@ class ViImageClient:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search an image field with image using Vector Search
@@ -79,31 +81,11 @@ Args:
 """
         if type(image) == str:
             if "http" in image:
-                return requests.post(
-                    url="{}/collection/search_with_image".format(self.url),
-                    json={
-                        "username": self.username,
-                        "api_key": self.api_key,
-                        "collection_name": collection_name,
-                        "image_url": image,
-                        "search_fields": fields,
-                        "metric": metric,
-                        "min_score": min_score,
-                        "page": page,
-                        "page_size": page_size,
-                        "include_vector": include_vector,
-                        "include_count": include_count,
-                        "asc": asc
-                    },
-                ).json()
-        elif type(image) == bytes:
-            return requests.post(
-                url="{}/collection/search_with_image_upload".format(self.url),
-                json={
+                params = {
                     "username": self.username,
                     "api_key": self.api_key,
                     "collection_name": collection_name,
-                    "image": image.decode(),
+                    "image_url": image,
                     "search_fields": fields,
                     "metric": metric,
                     "min_score": min_score,
@@ -112,8 +94,34 @@ Args:
                     "include_vector": include_vector,
                     "include_count": include_count,
                     "asc": asc
-                },
-            ).json()
+                }
+                params.update(kwargs)
+                response = requests.post(
+                    url="{}/collection/search_with_image".format(self.url),
+                    json=parms
+                )
+                return return_curl_or_response(response, 'json', return_curl=return_curl)
+        elif type(image) == bytes:
+            params = {
+                "username": self.username,
+                "api_key": self.api_key,
+                "collection_name": collection_name,
+                "image": image.decode(),
+                "search_fields": fields,
+                "metric": metric,
+                "min_score": min_score,
+                "page": page,
+                "page_size": page_size,
+                "include_vector": include_vector,
+                "include_count": include_count,
+                "asc": asc
+            }
+            params.update(kwargs)
+            response = requests.post(
+                url="{}/collection/search_with_image_upload".format(self.url),
+                json=params
+            )
+            return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_image_by_upload(
@@ -127,7 +135,9 @@ Args:
         page_size: int = 10,
         include_vector=False,
         include_count=True,
-        asc=False
+        asc=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search an image field with uploaded image using Vector Search
@@ -175,11 +185,13 @@ Args:
             page_size,
             include_vector,
             include_count,
-            asc
+            asc,
+            return_curl=return_curl,
+            **kwargs
         )
 
     @retry()
-    def encode_image(self, collection_name: str, image):
+    def encode_image(self, collection_name: str, image, return_curl: bool=False, **kwargs):
         """
 Encode image into a vector
 
@@ -199,19 +211,22 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "image_url": image,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/encode_image".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "image_url": image,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def encode_image_job(
-        self, collection_name: str, image_field: str, refresh: bool = False
+        self, collection_name: str, image_field: str, refresh: bool = False, return_curl: bool=False, **kwargs
     ):
         """
 Encode all images in a field into vectors
@@ -240,13 +255,16 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
-            url="{}/collection/jobs/encode_image_field".format(self.url),
-            params={
+        params= {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
                 "image_field": image_field,
                 "refresh": refresh,
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.get(
+            url="{}/collection/jobs/encode_image_field".format(self.url),
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
