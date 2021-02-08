@@ -102,7 +102,7 @@ Args:
             url="{}/collection/cluster_aggregate".format(self.url),
             json=params,
         )
-        return return_curl_or_response(response, return_type='json', return_curl=False)
+        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
     @retry()
     def cluster_facets(self, collection_name: str, facets_fields: List = [], asc: bool = True,
