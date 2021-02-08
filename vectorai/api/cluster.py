@@ -305,7 +305,8 @@ Args:
         alias: str = "default",
         facets_fields: List = [],
         asc: bool = True,
-        page_size: int=1000
+        page_size: int=1000,
+        **kwargs
     ):
         """
 Get Facets in each cluster in a collection
@@ -332,6 +333,15 @@ Args:
 	collection_name:
 		Name of Collection
 """
+        params = {
+                "username": self.username,
+                "api_key": self.api_key,
+                "collection_name": collection_name,
+                "vector_field": vector_field,
+                "facets_fields": facets_fields,
+                "alias": alias,
+        }
+        params.update(kwargs)
         return requests.get(
             url="{}/collection/advanced_cluster_facets".format(self.url),
             params={
