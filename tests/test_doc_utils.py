@@ -10,8 +10,8 @@ def test_set_field(test_client):
 
 def test_set_field_nested(test_client):
     sample = {}
-    test_client.set_field('simple.weird.strange', doc=sample, value=3)
-    assert test_client.get_field('simple.weird.strange', doc) == 3
+    test_client.set_field('simple.weird.strange', sample, value=3)
+    assert test_client.get_field('simple.weird.strange', sample) == 3
     assert sample['simple']['weird']['strange'] == 3
 
 def test_get_field_chunk(test_client):
