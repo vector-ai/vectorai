@@ -185,24 +185,7 @@ Args:
         params.update(kwargs)
         response = requests.get(
             url="{}/collection/hybrid_search".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "text": text,
-                "vector": vector,
-                "search_fields": fields,
-                "text_fields": text_fields,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "traditional_weight": traditional_weight,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc,
-            },
+            params=params
         )
         return return_curl_or_response(response, 'json', return_curl=return_curl)
 
@@ -222,7 +205,8 @@ Args:
         asc:bool=False,
         approx: int=0,
         hundred_scale: bool=False,
-        return_curl: bool=False
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Single Product Recommendations (Search by an id)
@@ -518,6 +502,7 @@ Args:
             "include_count": include_count,
             "asc": asc,
         }
+        params.update(kwargs)
         response = requests.get(
             url="{}/collection/search_with_positive_negative_ids_as_history".format(self.url),
             params=params
@@ -638,7 +623,9 @@ Example:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=True,
+        **kwargs
     ):
         """
 Advanced Search a text field with vector and text using Vector Search and Traditional Search
@@ -692,28 +679,32 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
+
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "text": text,
+            "multivector_query": multivector_query,
+            "text_fields": text_fields,
+            "sum_fields": sum_fields,
+            "facets": facets,
+            "filters": filters,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "include_facets": include_facets,
+            "asc": asc,
+        }
+        response = requests.post(
             url="{}/collection/advanced_hybrid_search".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "text": text,
-                "multivector_query": multivector_query,
-                "text_fields": text_fields,
-                "sum_fields": sum_fields,
-                "facets": facets,
-                "filters": filters,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "include_facets": include_facets,
-                "asc": asc,
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl)
 
     @retry()
     def advanced_search_by_id(

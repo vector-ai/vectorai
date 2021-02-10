@@ -96,7 +96,7 @@ Args:
         return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def encode_text(self, collection_name: str, text):
+    def encode_text(self, collection_name: str, text, return_curl: bool=False, **kwargs):
         """
 Encode text into a vector
 
@@ -125,11 +125,11 @@ Args:
             url="{}/collection/encode_text".format(self.url),
             params=params
         )
-        return return_curl_or_response(response)
+        return return_curl_or_response(response, 'json', return_curl)
 
     @retry()
     def encode_text_job(
-        self, collection_name: str, text_field: str, refresh: bool = False
+        self, collection_name: str, text_field: str, refresh: bool = False, **kwargs
     ):
         """
 Encode all texts in a field into vectors
