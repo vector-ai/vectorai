@@ -61,4 +61,4 @@ class ComparatorAPI:
         response = requests.post(
             url= f"{self.analytics_url}/comparator/compare_ranks/",
             json=params)
-        return return_curl_or_response(response, 'json', return_curl=return_curl)
+        return return_curl_or_response(response, 'content', return_curl=return_curl)
