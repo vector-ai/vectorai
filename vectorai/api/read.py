@@ -76,7 +76,7 @@ Args:
             url="{}/project/collection_stats".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, None, return_curl=return_curl)
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def collection_schema(self, collection_name: str, return_curl: bool=False, **kwargs):
