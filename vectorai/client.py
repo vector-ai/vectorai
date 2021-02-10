@@ -3,6 +3,7 @@ import base64
 import requests
 import pandas as pd
 import os
+from .api.utils import return_curl_or_response
 from .write import ViWriteClient
 from .analytics.client import ViAnalyticsClient
 from .utils import decorate_functions_by_argument, set_default_collection
@@ -56,7 +57,8 @@ class ViClient(ViWriteClient, ViAnalyticsClient):
             raise LoginError("Username, api key or url is incorrect.")
 
 
-def request_api_key(username: str, email:str, description:str="I'd like to try it out.", referral_code: str="github_referred"):
+def request_api_key(username: str, email:str, description:str="I'd like to try it out.", referral_code: str="github_referred", 
+return_curl: bool=False **kwargs):
     """
         Request an api key
         Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
@@ -71,15 +73,18 @@ def request_api_key(username: str, email:str, description:str="I'd like to try i
             referral_code:
                 The referral code you've been given to allow you to register for an api key before others
     """
-    return requests.post(
+    params = {
+        "username": username,
+        "email": email,
+        "referral_code": referral_code,
+        "description": description,
+    }
+    params.update(kwargs)
+    response = requests.post.json()(
         url="{}/project/request_api_key".format("https://api.vctr.ai"),
-        json={
-            "username": username,
-            "email": email,
-            "referral_code": referral_code,
-            "description": description,
-        },
-    ).json()
+        json=params
+    )
+    return return_curl_or_response(response, 'json', return_curl)
 
 @decorate_functions_by_argument(set_default_collection, 'collection_name')
 class ViCollectionClient(ViClient):

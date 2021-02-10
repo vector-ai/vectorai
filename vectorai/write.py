@@ -156,7 +156,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                     d.update({f: {}})
                     d = d[f]
 
-    def create_collection(self, collection_name: str, collection_schema: Dict = {}):
+    def create_collection(self, collection_name: str, collection_schema: Dict = {}, **kwargs):
         """
         Create a collection
 
@@ -187,12 +187,12 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             warnings.warn("Your collection name is not in lower case. We are automatically converting to lower case for compatibility.")
 
         response = self._create_collection(
-            collection_name_lower_case, collection_schema=collection_schema
+            collection_name_lower_case, collection_schema=collection_schema, **kwargs
         )
         self._raise_error(response)
         print(f"Collection {collection_name} created successfully.")
 
-    def delete_collection(self, collection_name: str):
+    def delete_collection(self, collection_name: str, **kwargs):
         """
         Delete the collection via the colleciton name.
 
@@ -205,7 +205,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             >>> vi_client = ViClient(username, api_key, vectorai_url)
             >>> vi_client.delete_collection(collection_name)
         """
-        return self._delete_collection(collection_name)
+        return self._delete_collection(collection_name, **kwargs)
 
     def _get_vector_name_for_encoding(self, f: str, model: Callable, model_list: List[Callable]):
         """
@@ -364,7 +364,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
 
     def _insert_and_encode(
         self, documents: list, collection_name: str, models: dict, verbose=False,
-        use_bulk_encode: bool=False, overwrite: bool=False, quick: bool=False
+        use_bulk_encode: bool=False, overwrite: bool=False, quick: bool=False, **kwargs
     ):
         """
             Insert and encode documents
@@ -376,7 +376,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             documents=self.encode_documents_with_models(documents, models=models,
             use_bulk_encode=use_bulk_encode),
             overwrite=overwrite,
-            quick=quick
+            quick=quick,
+            **kwargs
         )
 
     def insert_document(self, collection_name: str, document: Dict, verbose=False):
@@ -464,7 +465,8 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         use_bulk_encode: bool=False,
         overwrite: bool=False,
         show_progress_bar: bool=True,
-        quick: bool=False
+        quick: bool=False,
+        **kwargs
     ):
         """
         Insert documents into a collection with an option to encode with models.
@@ -508,7 +510,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
-                    overwrite=overwrite, quick=quick
+                    overwrite=overwrite, quick=quick, **kwargs
                 )
                 self._raise_error(result)
                 if verbose and len(result['failed_document_ids']) > 0: print(f"Failed: {result['failed_document_ids']}")
@@ -517,7 +519,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
-            overwrite=overwrite, quick=quick)
+            overwrite=overwrite, quick=quick, **kwargs)
             for result in self.progress_bar(
                 pool.imap_unordered(func=partial_insert, iterable=iter_docs), total=iter_len):
                 self._raise_error(result)
@@ -571,6 +573,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         workers: int = 1,
         verbose: bool = True,
         use_bulk_encode: bool = False,
+        **kwargs
     ):
         """
         Insert dataframe into a collection
@@ -598,10 +601,11 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             chunksize=chunksize,
             workers=workers,
             verbose=verbose,
-            use_bulk_encode=use_bulk_encode
+            use_bulk_encode=use_bulk_encode,
+            **kwargs
         )
 
-    def edit_document(self, collection_name: str, edits: Dict[str, str], verbose=True):
+    def edit_document(self, collection_name: str, edits: Dict[str, str], verbose=True, **kwargs):
         """
         Edit a document ina collection based on ID
 
@@ -631,7 +635,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         copy_doc.pop('_id')
         document_id = edits['_id']
         response = self._edit_document(
-            collection_name, edits=copy_doc, document_id=document_id
+            collection_name, edits=copy_doc, document_id=document_id, **kwargs
         )
 
         VERBOSE_MESSAGE_DICT = {
@@ -672,7 +676,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
             return edits["_id"]
         return
 
-    def edit_documents(self, collection_name: str, edits: Dict, chunk_size: int=15, verbose: bool=False):
+    def edit_documents(self, collection_name: str, edits: Dict, chunk_size: int=15, verbose: bool=False, **kwargs):
         """
             Edit documents in a collection
 
@@ -695,31 +699,7 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
         failed = []
         for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size),
         total=int(len(edits)/chunk_size)):
-            response = self.bulk_edit_document(collection_name, c)
-            if verbose: print(response)
-            failed += response['failed_document_ids']
-        return {
-            "edited_successfully": len(edits) - len(failed),
-            "failed": len(failed),
-            "failed_document_ids": failed,
-        }
-
-    def bulk_edit_documents(self, collection_name, edits: List[Dict], chunk_size=15, verbose=False):
-        """
-        Bulk edit documents.
-        Args:
-            collection_name: Name of collection
-            edits: A list of documents to edit
-            chunk_size: The size of the chunk
-        Returns:
-            Dictionary with the keys 'edited_successfully' (the number of documents
-            successfully edited), 'failed' (the number of documents that failed to edit),
-            'failed_document_ids' (documents which failed to edit)
-        """
-        failed = []
-        for c in self.progress_bar(self.chunk(edits, chunk_size=chunk_size),
-        total=int(len(edits)/chunk_size)):
-            response = self.bulk_edit_document(collection_name, c)
+            response = self.bulk_edit_document(collection_name, c, **kwargs)
             if verbose: print(response)
             failed += response['failed_document_ids']
         return {
