@@ -624,7 +624,7 @@ Example:
         include_count:bool=True,
         include_facets:bool=False,
         asc:bool=False,
-        return_curl: bool=True,
+        return_curl: bool=False,
         **kwargs
     ):
         """
@@ -700,6 +700,7 @@ Args:
             "include_facets": include_facets,
             "asc": asc,
         }
+        params.update(kwargs)
         response = requests.post(
             url="{}/collection/advanced_hybrid_search".format(self.url),
             json=params
