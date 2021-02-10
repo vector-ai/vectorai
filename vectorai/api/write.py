@@ -105,6 +105,7 @@ Args:
         params.update(kwargs)
         response = requests.get(
             url="{}/project/delete_collection".format(self.url),
+            params=params
         )
         return return_curl_or_response(response, 'json', return_curl)
 
