@@ -1166,6 +1166,7 @@ Args:
             "include_facets": include_facets,
             "asc": asc
         }
+        params.update(kwargs)
         response = requests.post(
             url="{}/collection/chunk_search".format(
                 self.url
