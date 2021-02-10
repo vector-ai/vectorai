@@ -1,6 +1,6 @@
 import requests
 from typing import List, Dict, Optional
-from ...api.utils import retry, return_response
+from ...api.utils import retry, return_curl_or_response
 
 class ComparatorAPI:
     def __init__(self, username: str=None, api_key: str=None, 
