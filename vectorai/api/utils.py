@@ -41,7 +41,9 @@ def return_response(response, return_type='json'):
     """
     if response.status_code != 200:
         raise APIError(response.content)
-    if return_type == 'json':
+    if return_type is None:
+        return response
+    elif return_type == 'json':
         return response.json()
     elif return_type == 'content':
         return response.content

@@ -8,7 +8,7 @@ from .cluster import ViClusterClient
 from .search import ViSearchClient
 from .dimensionality_reduction import ViDimensionalityReductionClient
 from .array_dict_vectorizer import ViArrayDictClient
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViReadAPIClient(
     ViSearchClient,
@@ -31,7 +31,7 @@ class ViReadAPIClient(
             self.url = "https://api.vctr.ai"
             
     @retry()
-    def _list_collections(self):
+    def _list_collections(self, return_curl: bool=False, **kwargs):
         """
 Lists all the collections in a project
 
@@ -43,13 +43,19 @@ Args:
 	api_key:
 		Api Key, you can request it from request_api_key
 """
-        return requests.get(    
+        params = {
+            "username": self.username, 
+            "api_key": self.api_key
+        }
+        params.update(kwargs)
+        response = requests.get(    
             url="{}/project/list_collections".format(self.url),
-            params={"username": self.username, "api_key": self.api_key},
-        ).json()
+            params=params,
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def collection_stats(self, collection_name: str):
+    def collection_stats(self, collection_name: str, return_curl: bool=False, **kwargs):
         """
 Retrieves stats about a collection
 
@@ -59,17 +65,21 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/project/collection_stats".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, None, return_curl=return_curl)
 
     @retry()
-    def collection_schema(self, collection_name: str):
+    def collection_schema(self, collection_name: str, return_curl: bool=False, **kwargs):
         """
 Retrieves the schema of a collection
 
@@ -79,17 +89,21 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name
+        }
+        params.update(kwargs)
+
+        response = requests.get(
             url="{}/project/collection_schema".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def id(self, collection_name: str, document_id: str, include_vector: bool = True):
+    def id(self, collection_name: str, document_id: str, include_vector: bool = True, return_curl: bool=False, **kwargs):
         """
 Look up a document by its id
     
@@ -101,19 +115,23 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "document_id": document_id,
+            "include_vector": include_vector,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/id".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_id": document_id,
-                "include_vector": include_vector,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def bulk_id(self, collection_name: str, document_ids: List[str]):
+    def bulk_id(self, collection_name: str, document_ids: List[str], return_curl: bool=False, **kwargs):
         """
 Look up multiple document by their ids
     
@@ -125,15 +143,19 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "document_ids": document_ids,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/bulk_id".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_ids": document_ids,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def retrieve_documents(
@@ -144,7 +166,9 @@ Args:
         sort: List = [],
         asc: bool = True,
         include_vector: bool = True,
-        include_fields: List = []
+        include_fields: List = [],
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Retrieve some documents
@@ -179,9 +203,11 @@ Args:
         }
         if sort:
             q_params["sort"] = sort
-        return requests.get(
+        q_params.update(kwargs)
+        response = requests.get(
             url="{}/collection/retrieve_documents".format(self.url), params=q_params
-        ).json()
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def random_documents(
@@ -190,7 +216,9 @@ Args:
         page_size: int = 20,
         seed: int = None,
         include_vector: bool = True,
-        include_fields: list = []
+        include_fields: list = [],
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Retrieve some documents randomly
@@ -206,6 +234,8 @@ Args:
 		Include vectors in the search results
 	collection_name:
 		Name of Collection
+    return_curl:
+        Return CURL statement
 """
         if seed is None:
             seed = random.randint(0, 9999)
@@ -218,13 +248,15 @@ Args:
             "include_vector": include_vector,
             "include_fields": include_fields
         }
+        q_params.update(kwargs)
 
-        return requests.get(
+        response = requests.get(
             url="{}/collection/random_documents".format(self.url), params=q_params
-        ).json()
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def id_lookup_joined(self, join_query: dict, doc_id:str):
+    def id_lookup_joined(self, join_query: dict, doc_id:str, return_curl: bool=False, **kwargs):
         """
 Look up a document by its id with joins
     
@@ -234,15 +266,18 @@ Args:
 	doc_id:
 		ID of a Document
 """
-        return requests.post(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "join_query": join_query,
+            "doc_id" : doc_id,
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/id_lookup_joined".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "join_query": join_query,
-                "doc_id" : doc_id,
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
         
     @retry()
     def aggregate(
@@ -253,6 +288,8 @@ Args:
         page_size:int=10,
         asc:bool=False,
         flatten:bool=True,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Aggregate a collection
@@ -290,20 +327,25 @@ Args:
 		Whether to sort results by ascending or descending order
     flatten:
         Whether to flatten the aggregated results into a list of dictionarys or dictionary of lists.
+    return_curl:
+        Return the CURL statement
 """
-        return requests.post(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "aggregation_query": aggregation_query,
+            "page": page,
+            "page_size": page_size,
+            "asc": asc,
+            "flatten" : flatten
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/aggregate".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "aggregation_query": aggregation_query,
-                "page": page,
-                "page_size": page_size,
-                "asc": asc,
-                "flatten" : flatten
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def facets(
@@ -313,6 +355,8 @@ Args:
         page: int = 1,
         page_size: int = 20,
         asc: bool = False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Retrieve the facets of a collection
@@ -333,18 +377,22 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "facets_fields" : fields,
+            "collection_name": collection_name,
+            "page": page,
+            "page_size": page_size,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/facets".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "facets_fields" : fields,
-                "collection_name": collection_name,
-                "page": page,
-                "page_size": page_size,
-                "asc": asc,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def filters(
@@ -354,6 +402,8 @@ Args:
         page=1,
         page_size=10,
         include_vector: bool = False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Filters a collection
@@ -399,22 +449,27 @@ Args:
 		Whether to sort results by ascending or descending order
 	include_vector:
 		Include vectors in the search results
+    return_curl:
+        Returns Curl statement for debugging
 """
-        return requests.post(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "filters": filters,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/filters".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "filters": filters,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def job_status(self, collection_name: str, job_id: str, job_name: str):
+    def job_status(self, collection_name: str, job_id: str, job_name: str, return_curl: bool=False, **kwargs):
         """
 Get status of a job. Whether its starting, running, failed or finished.
     
@@ -426,19 +481,22 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "job_id": job_id,
+            "job_name": job_name,
+        }
+        response = requests.get(
             url="{}/collection/jobs/job_status".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "job_id": job_id,
-                "job_name": job_name,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def list_jobs(self, collection_name: str):
+    def list_jobs(self, collection_name: str, return_curl: bool=False, **kwargs):
         """
 Get history of jobs
 
@@ -448,39 +506,47 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/jobs/list_jobs".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
-    def bulk_missing_id(self, collection_name: str, document_ids: List[str]):
+    def bulk_missing_id(self, collection_name: str, document_ids: List[str], return_curl: bool=False, **kwargs):
         """
             Return IDs that are not in a collection.
         """
-        return requests.post('{}/collection/bulk_missing_id'.format(self.url), 
-        json={
+        params = {
             "username" : self.username,
             "api_key" : self.api_key,
             "collection_name": collection_name,
             "document_ids" : document_ids
-        }).json()
+        }
+        params.update(kwargs)
+        response = requests.post('{}/collection/bulk_missing_id'.format(self.url), 
+        json=params})
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
     
     @retry()
     def random_documents_with_filters(self, collection_name: str,
     seed: int=None, include_fields: List[str]=[], page_size: int=20,
-    include_vector: bool=False, filters: List[Dict]=[]):
+    include_vector: bool=False, filters: List[Dict]=[], return_curl: bool=False, **kwargs):
         """
             Random documents with filters.
         """
+
         if seed is None:
             seed = random.randint(0, 9999)
-        return requests.post('{}/collection/random_documents_with_filters'.format(self.url),
-        json={
+
+        params = {
             "username": self.username,
             "api_key": self.api_key,
             "collection_name": collection_name,
@@ -489,4 +555,7 @@ Args:
             "page_size": page_size,
             "include_vector": include_vector,
             "filters": filters
-        }).json()
+        }
+
+        response = requests.post('{}/collection/random_documents_with_filters'.format(self.url), json=params)
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
