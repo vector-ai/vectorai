@@ -194,7 +194,7 @@ Args:
         return return_curl_or_response(response, 'json', return_curl)
     
     @retry()
-    def _edit_document(self, collection_name: str, edits: Dict, document_id: str, return_curls: bool=False, **kwargs):
+    def _edit_document(self, collection_name: str, edits: Dict, document_id: str, return_curl: bool=False, **kwargs):
 
         params={
             "username": self.username,
