@@ -28,7 +28,9 @@ class ViTextClient:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search a text field with text using Vector Search with text directly.
@@ -73,9 +75,7 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
-            url="{}/collection/search_with_text".format(self.url),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
@@ -87,8 +87,13 @@ Args:
                 "include_vector": include_vector,
                 "include_count": include_count,
                 "asc": asc
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/search_with_text".format(self.url),
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def encode_text(self, collection_name: str, text):
@@ -109,15 +114,18 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "text": text,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/encode_text".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "text": text,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response)
 
     @retry()
     def encode_text_job(
@@ -148,13 +156,16 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
-            url="{}/collection/jobs/encode_text_field".format(self.url),
-            params={
+        params={
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
                 "text_field": text_field,
                 "refresh": refresh,
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.get(
+            url="{}/collection/jobs/encode_text_field".format(self.url),
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
