@@ -543,6 +543,7 @@ def test_raises_warning_if_no_id(test_client, test_collection_name):
     {x.pop('_id') for x in docs}
     with pytest.warns(MissingFieldWarning) as record:
         test_client.insert_documents(test_collection_name, docs)
+    assert len(record) > 1
     assert record[1].message.args[0] == test_client.NO_ID_WARNING_MESSAGE
 
 @pytest.mark.use_client
