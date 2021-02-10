@@ -1172,5 +1172,5 @@ Args:
                 self.url
             ),
             json=params
-        })
+        )
         return return_curl_or_response(response, 'json', return_curl=return_curl)
