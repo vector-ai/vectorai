@@ -48,7 +48,7 @@ Args:
             "api_key": self.api_key
         }
         params.update(kwargs)
-        response = requests.get(    
+        response = requests.get(
             url="{}/project/list_collections".format(self.url),
             params=params,
         )
