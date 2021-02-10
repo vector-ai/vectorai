@@ -805,7 +805,7 @@ Example:
             url="{}/collection/advanced_search_by_id".format(self.url),
             json=params
         )
-        return return_curl_or_response(resopnse, 'json', return_curl=return_curl)
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_search_by_ids(
