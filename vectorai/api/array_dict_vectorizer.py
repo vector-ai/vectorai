@@ -17,7 +17,7 @@ class ViArrayDictClient:
             self.url = "https://api.vctr.ai"
 
     @retry()
-    def encode_dictionary_field(self, collection_name: str, dictionary_fields: List, **kwargs, return_curl: bool=False):
+    def encode_dictionary_field(self, collection_name: str, dictionary_fields: List, return_curl: bool=False, **kwargs):
         """
 Encode all dictionaries in a field for collection into vectors
 

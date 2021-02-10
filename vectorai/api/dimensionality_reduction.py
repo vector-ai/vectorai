@@ -54,7 +54,7 @@ Args:
         params.update(kwargs)
         response = requests.get(
             url="{}/collection/dimensionality_reduce".format(self.url),
-            params=params}
+            params=params
         )
         return return_curl_or_response(response, 'json', return_curl=return_curl)
 
@@ -99,6 +99,5 @@ Args:
         response = requests.get(
             url="{}/collection/jobs/dimensionality_reduction".format(self.url),
             params=params
-            }
         )
         return return_curl_or_response(response, 'json', return_curl=return_curl)

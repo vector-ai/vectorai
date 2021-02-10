@@ -485,7 +485,7 @@ Args:
         """
         if filter_type == 'contains':
             # return [{'field' : field, 'filter_type' : 'contains', "condition":"==", "condition_value": filter_values}]
-            return [{'field': field, 'filter_type': 'regexp', 'condition': '==', 'condition_value': '.*' + str(filter_values) + '.*'}])
+            return [{'field': field, 'filter_type': 'regexp', 'condition': '==', 'condition_value': '.*' + str(filter_values) + '.*'}]
         if filter_type == 'exact_match':
             return [{'field' : field, 'filter_type' : 'exact_match', "condition":"==", "condition_value": filter_values}]
         if filter_type == 'categories':

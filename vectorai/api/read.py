@@ -532,7 +532,7 @@ Args:
         }
         params.update(kwargs)
         response = requests.post('{}/collection/bulk_missing_id'.format(self.url), 
-        json=params})
+        json=params)
         return return_curl_or_response(response, 'json', return_curl=return_curl)
     
     @retry()
