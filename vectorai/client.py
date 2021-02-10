@@ -58,7 +58,7 @@ class ViClient(ViWriteClient, ViAnalyticsClient):
 
 
 def request_api_key(username: str, email:str, description:str="I'd like to try it out.", referral_code: str="github_referred", 
-return_curl: bool=False **kwargs):
+return_curl: bool=False, **kwargs):
     """
         Request an api key
         Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
