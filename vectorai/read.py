@@ -67,6 +67,7 @@ class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        **kwargs
     ):
         """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
@@ -134,7 +135,8 @@ Args:
             page_size=page_size,
             include_vector=include_vector,
             include_count=include_count,
-            asc=asc
+            asc=asc,
+            **kwargs
         )
 
     def random_filter_query(
@@ -227,7 +229,8 @@ Args:
         asc: bool = True,
         include_vector: bool = True,
         include_fields: List = [],
-        retrieve_chunk_size: int=1000
+        retrieve_chunk_size: int=1000,
+        **kwargs
     ):
         """
         Retrieve all documents in a given collection. We recommend specifying specific fields to extract
@@ -256,7 +259,7 @@ Args:
         with self.progress_bar(list(range(int(num_of_docs/ retrieve_chunk_size)))) as pbar:
             d = self.retrieve_documents(
                 collection_name, retrieve_chunk_size, sort=sort_by, asc=asc, include_vector=include_vector, 
-                include_fields=include_fields
+                include_fields=include_fields, **kwargs
             )
             all_docs = d["documents"]
             pbar.update(1)
@@ -429,7 +432,7 @@ Args:
         include_count:bool=True,
         approx: int=0,
         hundred_scale=True,
-        asc:bool=False):
+        asc:bool=False, **kwargs):
         """
         Recommend by random ID using vector search
         document_id:
@@ -464,7 +467,7 @@ Args:
         return self.search_by_id(collection_name, document_id=random_id, field=field,
         approx=approx, sum_fields=sum_fields, page_size=page_size, page=page, metric=metric, min_score=min_score,
         include_vector=include_vector, include_count=include_count, hundred_scale=hundred_scale,
-        asc=asc)
+        asc=asc, **kwargs)
 
     def create_filter_query(self, collection_name: str, field: str, filter_type: str, filter_values: Union[List[str], str]=None):
         """
@@ -484,7 +487,8 @@ Args:
 
         """
         if filter_type == 'contains':
-            return [{'field' : field, 'filter_type' : 'contains', "condition":"==", "condition_value": filter_values}]
+            # return [{'field' : field, 'filter_type' : 'contains', "condition":"==", "condition_value": filter_values}]
+            return [{'field': field, 'filter_type': 'regexp', 'condition': '==', 'condition_value': '.*' + str(filter_values) + '.*'}]
         if filter_type == 'exact_match':
             return [{'field' : field, 'filter_type' : 'exact_match', "condition":"==", "condition_value": filter_values}]
         if filter_type == 'categories':
@@ -516,6 +520,7 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        **kwargs
     ):
         """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
@@ -580,7 +585,8 @@ Args:
             page_size=page_size,
             include_vector=include_vector,
             include_count=include_count,
-            asc=asc
+            asc=asc,
+            **kwargs
         )
     
     def hybrid_search_with_filters(
@@ -599,7 +605,8 @@ Args:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        **kwargs
     ):
         """
 Search a text field with vector and text using Vector Search and Traditional Search
@@ -669,5 +676,6 @@ Args:
             include_vector=False,
             include_count=True,
             include_facets=False,
-            asc=False
+            asc=False,
+            **kwargs
         )

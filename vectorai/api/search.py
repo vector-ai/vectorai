@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViSearchClient:
     """
@@ -31,6 +31,8 @@ class ViSearchClient:
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Vector Similarity Search. Search a vector field with a vector, a.k.a Nearest Neighbors Search
@@ -74,25 +76,29 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "vector": vector,
+            "search_fields": fields,
+            "approx" : approx,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/search".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vector": vector,
-                "search_fields": fields,
-                "approx" : approx,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def hybrid_search(
@@ -110,7 +116,9 @@ Args:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Search a text field with vector and text using Vector Search and Traditional Search
@@ -155,27 +163,31 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "text": text,
+            "vector": vector,
+            "search_fields": fields,
+            "text_fields": text_fields,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "traditional_weight": traditional_weight,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/hybrid_search".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "text": text,
-                "vector": vector,
-                "search_fields": fields,
-                "text_fields": text_fields,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "traditional_weight": traditional_weight,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_by_id(
@@ -192,7 +204,9 @@ Args:
         include_count:bool=True,
         asc:bool=False,
         approx: int=0,
-        hundred_scale: bool=False
+        hundred_scale: bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Single Product Recommendations (Search by an id)
@@ -226,27 +240,33 @@ Args:
 		Whether to scale up the metric by 100
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
+    return_curl:
+        Return the CURL statement relevant to the Python requests
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "document_id": document_id,
+            "search_field": field,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc,
+            "approx": approx,
+            "hundred_scale": hundred_scale
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/search_by_id".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_id": document_id,
-                "search_field": field,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc,
-                "approx": approx,
-                "hundred_scale": hundred_scale
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_by_ids(
@@ -263,6 +283,8 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Multi Product Recommendations (Search by ids)
@@ -299,25 +321,28 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "document_ids": document_ids,
+            "search_field": field,
+            "vector_operation": vector_operation,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc
+        }
+        response = requests.get(
             url="{}/collection/search_by_ids".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_ids": document_ids,
-                "search_field": field,
-                "vector_operation": vector_operation,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_by_positive_negative_ids(
@@ -334,7 +359,9 @@ Args:
         page_size: int = 10,
         include_vector:bool=False,
         include_count:bool=True,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Multi Product Recommendations with Likes and Dislikes (Search by ids)
@@ -373,26 +400,29 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "positive_document_ids": positive_document_ids,
+            "negative_document_ids": negative_document_ids,
+            "search_field": field,
+            "vector_operation": vector_operation,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/search_by_positive_negative_ids".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "positive_document_ids": positive_document_ids,
-                "negative_document_ids": negative_document_ids,
-                "search_field": field,
-                "vector_operation": vector_operation,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_with_positive_negative_ids_as_history(
@@ -411,6 +441,8 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Multi Product Recommendations with Likes and Dislikes (Search by ids)
@@ -451,27 +483,31 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.get(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "vector": vector,
+            "positive_document_ids": positive_document_ids,
+            "negative_document_ids": negative_document_ids,
+            "search_field": field,
+            "vector_operation": vector_operation,
+            "sum_fields": sum_fields,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/search_with_positive_negative_ids_as_history".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vector": vector,
-                "positive_document_ids": positive_document_ids,
-                "negative_document_ids": negative_document_ids,
-                "search_field": field,
-                "vector_operation": vector_operation,
-                "sum_fields": sum_fields,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "asc": asc,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_search(
@@ -490,6 +526,8 @@ Args:
         include_facets:bool=False,
         asc:bool=False,
         approx:int=0,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
@@ -542,27 +580,31 @@ Example:
         }
     >>> vi_client.advanced_search(advanced_search_query)
 """
-        return requests.post(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "multivector_query": multivector_query,
+            "facets": facets,
+            "filters": filters,
+            "sum_fields": sum_fields,
+            "approx" : approx,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "include_facets": include_facets,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/advanced_search".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "multivector_query": multivector_query,
-                "facets": facets,
-                "filters": filters,
-                "sum_fields": sum_fields,
-                "approx" : approx,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "include_facets": include_facets,
-                "asc": asc,
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_hybrid_search(
@@ -581,7 +623,9 @@ Example:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Search a text field with vector and text using Vector Search and Traditional Search
@@ -635,28 +679,33 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
+
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "text": text,
+            "multivector_query": multivector_query,
+            "text_fields": text_fields,
+            "sum_fields": sum_fields,
+            "facets": facets,
+            "filters": filters,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "include_facets": include_facets,
+            "asc": asc,
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/advanced_hybrid_search".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "text": text,
-                "multivector_query": multivector_query,
-                "text_fields": text_fields,
-                "sum_fields": sum_fields,
-                "facets": facets,
-                "filters": filters,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "include_facets": include_facets,
-                "asc": asc,
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl)
 
     @retry()
     def advanced_search_by_id(
@@ -674,7 +723,9 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Single Product Recommendations (Search by an id).
@@ -731,27 +782,31 @@ Example:
     fields={'image_url_field_flattened_vector_':1}, filters=filter_query)
 
 """
-        return requests.post(
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "document_id": document_id,
+            "search_fields": fields,
+            "sum_fields": sum_fields,
+            "facets": facets,
+            "filters": filters,
+            "metric": metric,
+            "min_score": min_score,
+            "page": page,
+            "page_size": page_size,
+            "include_vector": include_vector,
+            "include_count": include_count,
+            "include_facets": include_facets,
+            "asc": asc
+        }
+        params.update(kwargs)
+        response = requests.post(
             url="{}/collection/advanced_search_by_id".format(self.url),
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "document_id": document_id,
-                "search_fields": fields,
-                "sum_fields": sum_fields,
-                "facets": facets,
-                "filters": filters,
-                "metric": metric,
-                "min_score": min_score,
-                "page": page,
-                "page_size": page_size,
-                "include_vector": include_vector,
-                "include_count": include_count,
-                "include_facets": include_facets,
-                "asc": asc
-            },
-        ).json()
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_search_by_ids(
@@ -771,6 +826,8 @@ Example:
         include_count:bool=True,
         include_facets:bool=False,
         asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Multi Product Recommendations (Search by ids).
@@ -820,9 +877,7 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
-            url="{}/collection/advanced_search_by_ids".format(self.url),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
@@ -840,8 +895,13 @@ Args:
                 "include_count": include_count,
                 "include_facets": include_facets,
                 "asc": asc
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/advanced_search_by_ids".format(self.url),
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_search_by_positive_negative_ids(
@@ -861,7 +921,9 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Multi Product Recommendations with likes and dislikes (Search by ids).
@@ -913,11 +975,7 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
-            url="{}/collection/advanced_search_by_positive_negative_ids".format(
-                self.url
-            ),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "collection_name": collection_name,
@@ -936,8 +994,15 @@ Args:
                 "include_count": include_count,
                 "include_facets": include_facets,
                 "asc": asc,
-            },
-        ).json()
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/advanced_search_by_positive_negative_ids".format(
+                self.url
+            ),
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def advanced_search_with_positive_negative_ids_as_history(
@@ -958,7 +1023,9 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Advanced Search with Likes and Dislikes as history
@@ -1012,11 +1079,7 @@ Args:
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
 """
-        return requests.post(
-            url="{}/collection/advanced_search_with_positive_negative_ids_as_history".format(
-                self.url
-            ),
-            json={
+        params = {
                 "username": self.username,
                 "api_key": self.api_key,
                 "vector": vector,
@@ -1036,8 +1099,15 @@ Args:
                 "include_count": include_count,
                 "include_facets": include_facets,
                 "asc": asc,
-            },
-        ).json()
+        } 
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/advanced_search_with_positive_negative_ids_as_history".format(
+                self.url
+            ),
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def chunk_search(self, 
@@ -1056,7 +1126,9 @@ Args:
         include_vector:bool=False,
         include_count:bool=True,
         include_facets:bool=False,
-        asc:bool=False):
+        asc:bool=False,
+        return_curl: bool=False,
+        **kwargs):
         """
             Chunk search functionality
             Args:
@@ -1066,11 +1138,7 @@ Args:
                 chunk_scoring: How each chunk should be scored
                 approx: How many approximate neighbors to go through
         """
-        return requests.post(
-            url="{}/collection/chunk_search".format(
-                self.url
-            ),
-            json={
+        params = {
             "username" : self.username,
             "api_key" : self.api_key,
             "collection_name": collection_name,
@@ -1089,4 +1157,12 @@ Args:
             "include_count": include_count,
             "include_facets": include_facets,
             "asc": asc
-        }).json()
+        }
+        params.update(kwargs)
+        response = requests.post(
+            url="{}/collection/chunk_search".format(
+                self.url
+            ),
+            json=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)

@@ -3,6 +3,11 @@
 """
 import time
 import os
+import sys
+if sys.version_info.major >= 3:
+    from shlex import quote
+else:
+    from pipes import quote 
 from functools import wraps
 from ..errors import APIError
 
@@ -41,7 +46,9 @@ def return_response(response, return_type='json'):
     """
     if response.status_code != 200:
         raise APIError(response.content)
-    if return_type == 'json':
+    if return_type is None:
+        return response
+    elif return_type == 'json':
         return response.json()
     elif return_type == 'content':
         return response.content
@@ -55,12 +62,15 @@ def dict_to_params(data_dict):
     return data_request
 
 def _return_curl(response):
-    if response.request.method == 'GET':
-        curl_command = f"curl -i -H 'Accept: application/json' -H 'Content-Type: application/json' -X GET {url}"
-    if response.request.method == 'POST':
-        curl_command = f"curl --data '{dict_to_params(data_dict)}' {url}"
-    return curl_command
+    req = response.request
+    command = "curl -X {method} -H {headers} -d '{data}' '{uri}'"
+    method = req.method
+    uri = req.url
+    data = req.body
+    headers = ['"{0}: {1}"'.format(k, v) for k, v in req.headers.items()]
+    headers = " -H ".join(headers)
+    return command.format(method=method, headers=headers, data=data, uri=uri).replace('-H "Accept-Encoding: gzip, deflate"', '')
 
 def return_curl_or_response(response, return_type='json', return_curl=False):
-    if return_curl: _return_curl(response)
+    if return_curl: return _return_curl(response)
     return return_response(response, return_type=return_type)

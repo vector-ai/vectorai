@@ -1,6 +1,6 @@
 import requests
 from typing import List, Dict, Optional
-from ...api.utils import retry, return_response
+from ...api.utils import retry, return_curl_or_response
 
 class ComparatorAPI:
     def __init__(self, username: str=None, api_key: str=None, 
@@ -23,7 +23,9 @@ class ComparatorAPI:
         y_axis_title: str = 'Comparing: ',
         header: str = "<h1>Top-K Ranking Comparator</h1>",
         subheader: str = "<h2>Compare ranks in the different lists.</h2>",
-        colors: List[str]=['#ccff99', 'powderblue', '#ffc2b3']
+        colors: List[str]=['#ccff99', 'powderblue', '#ffc2b3'],
+        return_curl: bool=False,
+        **kwargs
         ):
         """
         Compare Top-K Lists.
@@ -39,22 +41,24 @@ class ComparatorAPI:
             header: The name of the graph 
             subheader: The sub-header of the graph
         """
+
+        params={
+            "username": self.username,
+            "api_key": self.api_key,
+            "ranked_list_1": ranked_list_1,
+            "ranked_list_2": ranked_list_2,
+            "fields_to_display": fields_to_display,
+            "image_fields": image_fields,
+            "audio_fields": audio_fields,
+            "column_titles": column_titles,
+            "x_axis_title": x_axis_title,
+            "y_axis_title": y_axis_title,
+            "header": header,
+            "subheader": subheader,
+            "colors": colors,
+        }
+        params.update(kwargs)
         response = requests.post(
             url= f"{self.analytics_url}/comparator/compare_ranks/",
-            json={
-                "username": self.username,
-                "api_key": self.api_key,
-                "ranked_list_1": ranked_list_1,
-                "ranked_list_2": ranked_list_2,
-                "fields_to_display": fields_to_display,
-                "image_fields": image_fields,
-                "audio_fields": audio_fields,
-                "column_titles": column_titles,
-                "x_axis_title": x_axis_title,
-                "y_axis_title": y_axis_title,
-                "header": header,
-                "subheader": subheader,
-                "colors": colors,
-            }
-        )
-        return return_response(response, return_type='content')
+            json=params)
+        return return_curl_or_response(response, 'content', return_curl=return_curl)

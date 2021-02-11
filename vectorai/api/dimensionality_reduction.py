@@ -1,6 +1,6 @@
 import requests
 from typing import List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViDimensionalityReductionClient:
     """
@@ -22,6 +22,8 @@ class ViDimensionalityReductionClient:
         vector_field: str,
         n_components: int,
         alias: str = "default",
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Trains a Dimensionality Reduction model on the collection
@@ -40,18 +42,21 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "vectors": vectors,
+            "vector_field": vector_field,
+            "alias": alias,
+            "n_components": n_components,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/dimensionality_reduce".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vectors": vectors,
-                "vector_field": vector_field,
-                "alias": alias,
-                "n_components": n_components,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def dimensionality_reduction_job(
@@ -61,6 +66,8 @@ Args:
         n_components: int = 0,
         alias: str = "default",
         refresh: bool = True,
+        return_curl: bool=False,
+        **kwargs
     ):
         """
 Trains a Dimensionality Reduction model on the collection
@@ -79,15 +86,18 @@ Args:
 	collection_name:
 		Name of Collection
 """
-        return requests.get(
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name,
+            "vector_field": vector_field,
+            "alias": alias,
+            "n_components": n_components,
+            "refresh": refresh,
+        }
+        params.update(kwargs)
+        response = requests.get(
             url="{}/collection/jobs/dimensionality_reduction".format(self.url),
-            params={
-                "username": self.username,
-                "api_key": self.api_key,
-                "collection_name": collection_name,
-                "vector_field": vector_field,
-                "alias": alias,
-                "n_components": n_components,
-                "refresh": refresh,
-            },
-        ).json()
+            params=params
+        )
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
