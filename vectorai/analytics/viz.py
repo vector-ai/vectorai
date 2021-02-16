@@ -454,13 +454,24 @@ class VizMixin(ViScore, ViAnalyticsUtils):
         levels = range(32,256,32)
         return [tuple(random.choice(levels) for _ in range(3)) for _ in range(num_of_colors)]
 
+    def add_line_to_fig(self, fig, x0: float=0, y0: float=0, x1: float=1, y1: float=1, color: str='LightSeaGreen', width: float=1, dash: str="dashdot"):
+        fig.add_shape(type="line",
+            x0=x0, y0=y0, x1=x1, y1=y1,
+            line=dict(
+                color=color,
+                width=width,
+                dash=dash,
+            )
+        )
+        return fig
+
     def plot_2d_cosine_similarity(self, 
         documents: List[Dict], anchor_documents: List[Dict], vector_fields: List[str], 
         label: str, mode='markers+text', textposition='top center', show_spikes=True,
         text_label_font_size: int=12, text_label_font_family = "Rockwell",
         text_label_bgcolor="white",
         marker_colors=['purple', 'aquamarine'], metric='cosine',
-        plot_bgcolor="#e6e6fa", spikedash='dot', spikethickness=1.5
+        plot_bgcolor="#e6e6fa", spikedash='dot', spikethickness=1.5, include_diagonal_line: bool=True
     ):
         """
         Plotting 2D cosine similarity plots 
@@ -480,6 +491,7 @@ class VizMixin(ViScore, ViAnalyticsUtils):
             plot_bgcolor: The background color of the plot
             spikethickness: The thickness of the spikes
             spikedash: Type of line the spikes should be.
+            include_diagonal_line: Include the diagonal line.
         Example:
             >>> vi_client = ViClient()
             >>> collection_name = 'ecommerce'
@@ -552,6 +564,8 @@ class VizMixin(ViScore, ViAnalyticsUtils):
                 font_family=text_label_font_family
             )
         )
+        if include_diagonal_line:
+            fig = self.add_line_to_fig(fig, x0=0, y0=0, x1=1, y1=1)
         return fig
     
     def add_labels_to_figure(self, fig, title_text: str, x_axis_label: str, y_axis_label: str):
