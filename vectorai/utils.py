@@ -324,7 +324,7 @@ class UtilsMixin:
         return ''
 
     def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
+    audio_fields: List[str]=[], nrows: int=None, image_width: int=60, include_vector=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
             Args:
@@ -343,10 +343,15 @@ class UtilsMixin:
                 include_vector:
                     Include the vector fields when showing JSON
         """
-        if selected_fields is None:
+        df = self.results_to_df(json)
+        if nrows is None:
+            nrows = len(df)
+        if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
             return self.show_df(self.results_to_df(json).head(nrows), 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
-        return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
+        elif selected_fields is None:
+            selected_fields = []
+        return self.show_df(df.head(nrows)[image_fields + audio_fields + selected_fields], 
             image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
     
     def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
