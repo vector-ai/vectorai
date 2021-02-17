@@ -110,7 +110,7 @@ Args:
         text_fields: List,
         sum_fields: bool = True,
         metric: str = "cosine",
-        min_score=None,
+        min_score: float=None,
         traditional_weight=0.075,
         page: int = 1,
         page_size: int = 10,
