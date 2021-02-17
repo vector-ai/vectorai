@@ -247,9 +247,28 @@ class UtilsMixin:
         """
         return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
+    @staticmethod
+    def convert_concat_list_to_html(list_input):
+        string = ''
+        for x in list_input:
+            string += '<div class="column">' + x + '</div>'
+        return string
+
+    def render_chunk(self, row, render_func):
+        concat_images = [render_func(x) for x in row]
+        return UtilsMixin.convert_concat_list_to_html(concat_images)
+
+    def render_image_chunk(self, row, image_width=120):
+        render_image_chunks = partial(self.render_image_in_html, image_width=image_width)
+        return self.render_chunk(row, render_image_chunks)
+
+    def render_audio_chunk(self, row):
+        return self.render_chunk(row, self.render_audio_in_html)
+
     def show_df(self, df: pd.DataFrame, 
-    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60, 
-    include_vector: bool=False):
+    image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
+    chunk_audio_fields: List[str]=[], image_width: int=60, 
+    include_vector: bool=False, return_html: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
             Args:
@@ -269,11 +288,14 @@ class UtilsMixin:
         render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
         formatters = {image:render_image_with_width for image in image_fields}
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
-        
+        formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
+        formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
         if not include_vector:
             cols = [x for x in list(df.columns) if '_vector_' not in x]
             df = df[cols]
         try:
+            if return_html:
+                return df.to_html(escape=False, formatters=formatters)
             from IPython.core.display import HTML
             return HTML(df.to_html(escape=False ,formatters=formatters))
         except ImportError:
@@ -324,7 +346,8 @@ class UtilsMixin:
         return ''
 
     def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
+    audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
+    nrows: int=None, image_width: int=60, include_vector=False):
         """
             Shows the JSON with the audio and images inside a dataframe for quicker analysis.
             Args:
@@ -336,6 +359,10 @@ class UtilsMixin:
                     List of fields with the images 
                 audio_fields:
                     List of fields for the audio
+                chunk_image_fields: 
+                    List of image fields that should be chunked 
+                chunk_audio_fields:
+                    List of audio fields that should be chunked
                 nrows:
                     Number of rows to preview
                 image_width:
@@ -343,11 +370,20 @@ class UtilsMixin:
                 include_vector:
                     Include the vector fields when showing JSON
         """
-        if selected_fields is None:
+        df = self.results_to_df(json)
+        if nrows is None:
+            nrows = len(df)
+        if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
             return self.show_df(self.results_to_df(json).head(nrows), 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
-        return self.show_df(self.results_to_df(json).head(nrows)[image_fields + audio_fields + selected_fields], 
-            image_fields=image_fields, audio_fields=audio_fields, image_width=image_width, include_vector=include_vector)
+            image_fields=image_fields, audio_fields=audio_fields, 
+            chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+            image_width=image_width, include_vector=include_vector)
+        elif selected_fields is None:
+            selected_fields = []
+        return self.show_df(df.head(nrows)[image_fields + audio_fields + selected_fields], 
+            image_fields=image_fields, audio_fields=audio_fields, 
+            chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+            image_width=image_width, include_vector=include_vector)
     
     def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
     audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):

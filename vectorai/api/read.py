@@ -559,3 +559,17 @@ Args:
 
         response = requests.post('{}/collection/random_documents_with_filters'.format(self.url), json=params)
         return return_curl_or_response(response, 'json', return_curl=return_curl)
+
+    @retry()
+    def vector_health(self, collection_name: str, return_curl: bool=False, **kwargs):
+        """Return vector health of a collection
+        """
+        params = {
+            "username": self.username,
+            "api_key": self.api_key,
+            "collection_name": collection_name
+        }
+        params.update(kwargs)
+        response = requests.get("{}/collection/vector_health".format(self.url), params=params)
+        return return_curl_or_response(response, 'json', return_curl=return_curl)
+        
