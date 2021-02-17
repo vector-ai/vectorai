@@ -569,6 +569,7 @@ Args:
             "api_key": self.api_key,
             "collection_name": collection_name
         }
-        response = requests.get("{}/collection/vector_health".format(self.url), json=params)
+        params.update(kwargs)
+        response = requests.get("{}/collection/vector_health".format(self.url), params=params)
         return return_curl_or_response(response, 'json', return_curl=return_curl)
         
