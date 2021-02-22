@@ -8,11 +8,11 @@ import pandas as pd
 import time
 import warnings
 from typing import List, Dict, Union, Any
-from .api.read import ViReadAPIClient
+from .api import ViAPIClient
 from .utils import UtilsMixin
 from .doc_utils import DocUtilsMixin
 from .errors import MissingFieldWarning
-class ViReadClient(ViReadAPIClient, UtilsMixin, DocUtilsMixin):
+class ViReadClient(ViAPIClient, UtilsMixin, DocUtilsMixin):
     def __init__(self, username: str, api_key: str, url: str="https://api.vctr.ai"):
         self.username = username
         self.api_key = api_key

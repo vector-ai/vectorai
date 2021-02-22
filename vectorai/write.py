@@ -17,11 +17,10 @@ from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
 from .errors import APIError, MissingFieldError, MissingFieldWarning
-from .read import ViReadClient
-from .api.write import ViWriteAPIClient
+from .api import ViAPIClient
 
 
-class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
+class ViWriteClient(ViAPIClient, UtilsMixin):
     """Class to write to database."""
 
     def __init__(self, username, api_key, url="https://api.vctr.ai" ):
