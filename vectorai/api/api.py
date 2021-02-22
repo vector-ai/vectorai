@@ -1,7 +1,7 @@
 # This python file is auto-generated. Please do not edit.
 import requests
 import requests
-from vectorai.api.utils import retry
+from vectorai.api.utils import retry, return_curl_or_response
 
 
 class ViAPIClient:
@@ -10,7 +10,8 @@ class ViAPIClient:
 		self.api_key = api_key		
 
 	@retry()
-	def request_api_key(self,email, description, referral_code="api_referred", ):
+	@return_curl_or_response('json')
+	def request_api_key(self,email, description, referral_code="api_referred", **kwargs):
 		"""Request an api key
 Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
     
@@ -28,10 +29,11 @@ referral_code: The referral code you've been given to allow you to register for 
 				username=self.username,
 				email=email, 
 				description=description, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def request_read_api_key(self,read_username, ):
+	@return_curl_or_response('json')
+	def request_read_api_key(self,read_username, **kwargs):
 		"""Request a read api key for your collections
 Creates a read only key for your collections. Make sure to save the api key somewhere safe. When doing a search the admin username should still be used.
     
@@ -48,10 +50,11 @@ read_username: Username for read only key
 				username=self.username,
 				api_key=self.api_key,
 				read_username=read_username, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def create_collection(self,collection_name, collection_schema={}, ):
+	@return_curl_or_response('json')
+	def create_collection(self,collection_name, collection_schema={}, **kwargs):
 		"""Creates a collection
 A collection can store documents to be **searched, retrieved, filtered and aggregated** _(similar to Collections in MongoDB, Tables in SQL, Indexes in ElasticSearch)_.
 
@@ -79,10 +82,11 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def create_collection_from_document(self,collection_name, document={}, ):
+	@return_curl_or_response('json')
+	def create_collection_from_document(self,collection_name, document={}, **kwargs):
 		"""Creates a collection by infering the schema from a document
 If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
     
@@ -100,9 +104,10 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def delete_collection(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/delete_collection',
@@ -110,18 +115,20 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def _list_collections(self,**kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/list_collections',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def collection_stats(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/collection_stats',
@@ -129,9 +136,10 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def collection_schema(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/collection_schema',
@@ -139,9 +147,10 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def collection_vector_health(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/collection_vector_health',
@@ -149,10 +158,11 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def add_collection_metadata(self,collection_name, metadata, ):
+	@return_curl_or_response('json')
+	def add_collection_metadata(self,collection_name, metadata, **kwargs):
 		"""Add metadata about a collection
 Add metadata about a collection. notably description, data source, etc
     
@@ -171,9 +181,10 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				metadata=metadata, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def collection_metadata(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/collection_metadata',
@@ -181,10 +192,11 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def copy_collection_from_another_user(self,collection_name, source_collection_name, source_username, source_api_key, ):
+	@return_curl_or_response('json')
+	def copy_collection_from_another_user(self,collection_name, source_collection_name, source_username, source_api_key, **kwargs):
 		"""Copy a collection from another user's projects into your project
 Copy a collection from another user's projects into your project. This is considered a project job
 Args
@@ -206,9 +218,10 @@ source_api_key: Api key to access the source username
 				source_collection_name=source_collection_name, 
 				source_username=source_username, 
 				source_api_key=source_api_key, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def job_status(self,job_id, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/job_status',
@@ -216,9 +229,10 @@ source_api_key: Api key to access the source username
 				job_id=job_id, 
 				username=self.username, 
 				api_key=self.api_key, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def _search(self,vector, collection_name, search_fields, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search',
@@ -239,9 +253,10 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def search_by_id(self,document_id, collection_name, search_field, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_id',
@@ -262,9 +277,10 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def search_by_ids(self,document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_ids',
@@ -286,9 +302,10 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_positive_negative_ids',
@@ -311,9 +328,10 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_with_positive_negative_ids_as_history',
@@ -337,9 +355,10 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def hybrid_search(self,text, vector, collection_name, search_fields, min_score, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/hybrid_search',
@@ -365,10 +384,11 @@ source_api_key: Api key to access the source username
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
-	def insert(self,collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, ):
+	@return_curl_or_response('json')
+	def insert(self,collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, **kwargs):
 		"""Insert a document into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -391,10 +411,11 @@ update_schema: Whether the api should check the documents for vector datatype to
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def bulk_insert(self,collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, ):
+	@return_curl_or_response('json')
+	def bulk_insert(self,collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
 		"""Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -418,9 +439,10 @@ quick: This will run the quickest insertion possible, which means there will be 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def delete_by_id(self,document_id, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/delete_by_id',
@@ -429,10 +451,11 @@ quick: This will run the quickest insertion possible, which means there will be 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def bulk_delete_by_id(self,collection_name, document_ids, ):
+	@return_curl_or_response('json')
+	def bulk_delete_by_id(self,collection_name, document_ids, **kwargs):
 		"""Delete multiple documents in a Collection by ids
 Delete a document by its id.
     
@@ -451,10 +474,11 @@ document_ids: IDs of documents
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				document_ids=document_ids, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def edit_document(self,collection_name, document_id, edits, insert_date=True, ):
+	@return_curl_or_response('json')
+	def edit_document(self,collection_name, document_id, edits, insert_date=True, **kwargs):
 		"""Edit a document in a Collection by its id
 Edit by providing a key value pair of fields you are adding or changing.
     
@@ -476,10 +500,11 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				collection_name=collection_name, 
 				document_id=document_id, 
 				edits=edits, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def bulk_edit_document(self,collection_name, documents={}, insert_date=True, ):
+	@return_curl_or_response('json')
+	def bulk_edit_document(self,collection_name, documents={}, insert_date=True, **kwargs):
 		"""Edits multiple documents in a Collection by its ids
 Edits documents by providing a key value pair of fields you are adding or changing, make sure to include the "_id" in the documents.
     
@@ -498,9 +523,10 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def delete_document_fields(self,document_id, fields_to_delete, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/delete_document_fields',
@@ -510,9 +536,10 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def id(self,document_id, collection_name, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/id',
@@ -522,9 +549,10 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def bulk_id(self,document_ids, collection_name, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/bulk_id',
@@ -534,10 +562,11 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def bulk_missing_id(self,collection_name, document_ids, ):
+	@return_curl_or_response('json')
+	def bulk_missing_id(self,collection_name, document_ids, **kwargs):
 		"""Look up in bulk if the ids exists in the collection, returns all the missing one as a list
 Look up in bulk if the ids exists in the collection, returns all the missing one as a list.
     
@@ -556,9 +585,10 @@ document_ids: IDs of documents
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				document_ids=document_ids, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def retrieve_documents(self,cursor, collection_name, include_fields=[], page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/retrieve_documents',
@@ -572,9 +602,10 @@ document_ids: IDs of documents
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def random_documents(self,collection_name, seed=10, include_fields=[], page_size=20, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/random_documents',
@@ -586,10 +617,11 @@ document_ids: IDs of documents
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def retrieve_documents_with_filters(self,collection_name, cursor, include_fields=[], page_size=20, sort=[], asc=False, include_vector=False, filters=[], ):
+	@return_curl_or_response('json')
+	def retrieve_documents_with_filters(self,collection_name, cursor, include_fields=[], page_size=20, sort=[], asc=False, include_vector=False, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
@@ -614,10 +646,11 @@ filters: Query for filtering the search results
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				cursor=cursor, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def random_documents_with_filters(self,collection_name, seed=10, include_fields=[], page_size=20, include_vector=False, filters=[], ):
+	@return_curl_or_response('json')
+	def random_documents_with_filters(self,collection_name, seed=10, include_fields=[], page_size=20, include_vector=False, filters=[], **kwargs):
 		"""Retrieve some documents randomly with filters
 Mainly for testing purposes.
     
@@ -639,9 +672,10 @@ filters: Query for filtering the search results
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def facets(self,collection_name, facets_fields=[], date_interval="monthly", page_size=1000, page=1, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/facets',
@@ -654,10 +688,11 @@ filters: Query for filtering the search results
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def filters(self,collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], ):
+	@return_curl_or_response('json')
+	def filters(self,collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], **kwargs):
 		"""Filters a collection
 Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.
 
@@ -708,10 +743,11 @@ sort: Fields to sort by
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_search(self,collection_name, min_score, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def advanced_search(self,collection_name, min_score, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -752,10 +788,11 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				collection_name=collection_name, 
 				min_score=min_score, 
 				multivector_query=multivector_query, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_search_by_id(self,collection_name, min_score, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def advanced_search_by_id(self,collection_name, min_score, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Single Product Recommendations
 Single Product Recommendations (Search by an id).
 
@@ -798,10 +835,11 @@ search_fields: Vector fields to search against, and the weightings for them.
 				min_score=min_score, 
 				document_id=document_id, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_search_by_ids(self,collection_name, min_score, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", ):
+	@return_curl_or_response('json')
+	def advanced_search_by_ids(self,collection_name, min_score, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations
 Advanced Multi Product Recommendations (Search by ids).
 
@@ -847,10 +885,11 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				min_score=min_score, 
 				document_ids=document_ids, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_search_by_positive_negative_ids(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", ):
+	@return_curl_or_response('json')
+	def advanced_search_by_positive_negative_ids(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations with likes and dislikes
 Advanced Multi Product Recommendations with Likes and Dislikes (Search by ids).
 
@@ -898,10 +937,11 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_search_with_positive_negative_ids_as_history(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", ):
+	@return_curl_or_response('json')
+	def advanced_search_with_positive_negative_ids_as_history(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -949,10 +989,11 @@ vector: Vector, a list/array of floats that represents a piece of data
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
 				vector=vector, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_hybrid_search(self,collection_name, min_score, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, ):
+	@return_curl_or_response('json')
+	def advanced_hybrid_search(self,collection_name, min_score, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, **kwargs):
 		"""Advanced Search a text field with vector and text using Vector Search and Traditional Search
 Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.
 
@@ -997,10 +1038,11 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 				min_score=min_score, 
 				multivector_query=multivector_query, 
 				text=text, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, ):
+	@return_curl_or_response('json')
+	def aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate a collection
 Aggregation/Groupby of a collection using an aggregation query.
 The aggregation query is a json body that follows the schema of:
@@ -1038,10 +1080,11 @@ flatten:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def publish_aggregation(self,source_collection, dest_collection, aggregation_name, description, aggregation_query, date_field="insert_date_", refresh_time="160s", start_immediately=True, ):
+	@return_curl_or_response('json')
+	def publish_aggregation(self,source_collection, dest_collection, aggregation_name, description, aggregation_query, date_field="insert_date_", refresh_time="160s", start_immediately=True, **kwargs):
 		"""Publishes your aggregation query to a new collection
 Publish and schedules your aggregation query and saves it to a new collection.
 This new collection is just like any other collection and you can read, filter and aggregate it.
@@ -1070,9 +1113,10 @@ start_immediately: Whether to start the published aggregation immediately
 				aggregation_name=aggregation_name, 
 				description=description, 
 				aggregation_query=aggregation_query, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def delete_published_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/delete_published_aggregation',
@@ -1080,9 +1124,10 @@ start_immediately: Whether to start the published aggregation immediately
 				aggregation_name=aggregation_name, 
 				username=self.username, 
 				api_key=self.api_key, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def start_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/start_aggregation',
@@ -1090,9 +1135,10 @@ start_immediately: Whether to start the published aggregation immediately
 				aggregation_name=aggregation_name, 
 				username=self.username, 
 				api_key=self.api_key, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def stop_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/stop_aggregation',
@@ -1100,10 +1146,11 @@ start_immediately: Whether to start the published aggregation immediately
 				aggregation_name=aggregation_name, 
 				username=self.username, 
 				api_key=self.api_key, 
-				)).json()
+				))
 
 	@retry()
-	def vector_aggregation(self,source_collection, dest_collection, source_to_dest_fields_mapping, vector_fields, aggregation_type="mean", refresh=True, ):
+	@return_curl_or_response('json')
+	def vector_aggregation(self,source_collection, dest_collection, source_to_dest_fields_mapping, vector_fields, aggregation_type="mean", refresh=True, **kwargs):
 		"""Aggregate vectors from one collection into another published aggregation collection
 This is useful for getting vectors of a category. e.g. You have "product\_description\_vector\_" and you want the vector for a brand samsung. The "samsung" brand's vector can be the aggregate of all the samsung "product\_description\_vector\_".
     
@@ -1128,10 +1175,11 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 				dest_collection=dest_collection, 
 				source_to_dest_fields_mapping=source_to_dest_fields_mapping, 
 				vector_fields=vector_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def id_lookup_joined(self,join_query, doc_id, ):
+	@return_curl_or_response('json')
+	def id_lookup_joined(self,join_query, doc_id, **kwargs):
 		"""Look up a document by its id with joins
 Look up a document by its id with joins.
     
@@ -1150,10 +1198,11 @@ doc_id: ID of a Document
 				api_key=self.api_key,
 				join_query=join_query, 
 				doc_id=doc_id, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def join_collections(self,join_query, joined_collection_name, ):
+	@return_curl_or_response('json')
+	def join_collections(self,join_query, joined_collection_name, **kwargs):
 		"""Join collections with a query
 Perform a join query on a whole collection and write the results to a new collection. We currently only support left joins.
     
@@ -1172,10 +1221,11 @@ joined_collection_name: Name of the new collection that contains the joined resu
 				api_key=self.api_key,
 				join_query=join_query, 
 				joined_collection_name=joined_collection_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def chunk_search(self,collection_name, chunk_field, min_score, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def chunk_search(self,collection_name, chunk_field, min_score, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Vector Similarity Search on Chunks.
 Vector Similarity Search on chunks.
 
@@ -1224,10 +1274,11 @@ search_fields: Vector fields to search against
 				min_score=min_score, 
 				vector=vector, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def advanced_chunk_search(self,collection_name, chunk_field, min_score, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def advanced_chunk_search(self,collection_name, chunk_field, min_score, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search on Chunks. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -1270,10 +1321,11 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				chunk_field=chunk_field, 
 				min_score=min_score, 
 				multivector_query=multivector_query, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def cluster_aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, ):
+	@return_curl_or_response('json')
+	def cluster_aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate every cluster in a collection
 Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
 
@@ -1298,9 +1350,10 @@ flatten:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def cluster_facets(self,collection_name, facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/cluster_facets',
@@ -1313,9 +1366,10 @@ flatten:
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def cluster_centroids(self,vector_field, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/cluster_centroids',
@@ -1324,9 +1378,10 @@ flatten:
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def cluster_centroid_documents(self,vector_field, collection_name, metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/cluster_centroid_documents',
@@ -1339,9 +1394,10 @@ flatten:
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def advanced_cluster(self,vector_field, collection_name, alias="default", n_clusters=0, n_iter=10, n_init=5, gpu=True, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/advanced_cluster',
@@ -1356,10 +1412,11 @@ flatten:
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def advanced_cluster_aggregate(self,collection_name, aggregation_query, vector_field, alias, page_size=20, page=1, asc=False, flatten=True, filters=[], ):
+	@return_curl_or_response('json')
+	def advanced_cluster_aggregate(self,collection_name, aggregation_query, vector_field, alias, page_size=20, page=1, asc=False, flatten=True, filters=[], **kwargs):
 		"""Aggregate every cluster in a collection
 Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
 
@@ -1389,9 +1446,10 @@ filters: Query for filtering the search results
 				aggregation_query=aggregation_query, 
 				vector_field=vector_field, 
 				alias=alias, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def advanced_cluster_facets(self,vector_field, collection_name, alias="default", facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/advanced_cluster_facets',
@@ -1406,9 +1464,10 @@ filters: Query for filtering the search results
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def advanced_cluster_centroids(self,vector_field, collection_name, alias="default", **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/advanced_cluster_centroids',
@@ -1418,9 +1477,10 @@ filters: Query for filtering the search results
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def advanced_cluster_centroid_documents(self,vector_field, collection_name, alias="default", metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/advanced_cluster_centroid_documents',
@@ -1434,10 +1494,11 @@ filters: Query for filtering the search results
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def insert_cluster_centroids(self,collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", ):
+	@return_curl_or_response('json')
+	def insert_cluster_centroids(self,collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", **kwargs):
 		"""Insert cluster centroids
 Insert your own cluster centroids for it to be used in approximate search settings and cluster aggregations.
     
@@ -1461,9 +1522,10 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 				collection_name=collection_name, 
 				cluster_centers=cluster_centers, 
 				vector_field=vector_field, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def dimensionality_reduction(self,vector_field, collection_name, alias="default", n_components=0, gpu=True, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/dimensionality_reduction',
@@ -1476,10 +1538,11 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def dimensionality_reduce(self,collection_name, vectors, vector_field, alias="default", n_components=1, ):
+	@return_curl_or_response('json')
+	def dimensionality_reduce(self,collection_name, vectors, vector_field, alias="default", n_components=1, **kwargs):
 		"""Reduces the dimension of a list of vectors
 Reduce the dimensions of a list of vectors you input into a desired dimension. 
 
@@ -1504,9 +1567,10 @@ n_components: The size/length to reduce the vector down to.
 				collection_name=collection_name, 
 				vectors=vectors, 
 				vector_field=vector_field, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_array_field(self,array_fields, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_array_field',
@@ -1515,9 +1579,10 @@ n_components: The size/length to reduce the vector down to.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_array(self,array_field, array, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_array',
@@ -1527,9 +1592,10 @@ n_components: The size/length to reduce the vector down to.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def search_with_array(self,array_field, array, collection_name, search_fields, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_with_array',
@@ -1551,9 +1617,10 @@ n_components: The size/length to reduce the vector down to.
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_dictionary_field(self,dictionary_fields, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_dictionary_field',
@@ -1562,10 +1629,11 @@ n_components: The size/length to reduce the vector down to.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def encode_dictionary(self,collection_name, dictionary, dictionary_field, ):
+	@return_curl_or_response('json')
+	def encode_dictionary(self,collection_name, dictionary, dictionary_field, **kwargs):
 		"""Encode an dictionary into a vector
 For example: a dictionary that represents a **person's characteristics visiting a store, field "person_characteristics"**:
 
@@ -1596,10 +1664,11 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				collection_name=collection_name, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def search_with_dictionary(self,collection_name, search_fields, min_score, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_dictionary(self,collection_name, search_fields, min_score, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search a dictionary field with a dictionary using Vector Search
 Vector similarity search with a dictionary directly.
 
@@ -1650,9 +1719,10 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				min_score=min_score, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_text(self,text, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_text',
@@ -1661,9 +1731,10 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def bulk_encode_text(self,texts, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/bulk_encode_text',
@@ -1672,10 +1743,11 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def search_with_text(self,collection_name, min_score, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_text(self,collection_name, min_score, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search text fields with text using Vector Search
 Vector similarity search with text directly.
 
@@ -1723,9 +1795,10 @@ search_fields: Vector fields to search against
 				min_score=min_score, 
 				text=text, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_image(self,image_url, model_url, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_image',
@@ -1735,9 +1808,10 @@ search_fields: Vector fields to search against
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def bulk_encode_image(self,image_urls, model_url, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/bulk_encode_image',
@@ -1747,10 +1821,11 @@ search_fields: Vector fields to search against
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def search_with_image(self,collection_name, min_score, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_image(self,collection_name, min_score, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with image using Vector Search
 Vector similarity search with an image directly.
 
@@ -1802,10 +1877,11 @@ search_fields: Vector fields to search against
 				image_url=image_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def search_with_image_upload(self,collection_name, min_score, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_image_upload(self,collection_name, min_score, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with uploaded image using Vector Search
 Vector similarity search with an uploaded image directly.
 
@@ -1857,9 +1933,10 @@ search_fields: Vector fields to search against
 				image=image, 
 				model_url=model_url, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_audio(self,audio_url, model_url, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/encode_audio',
@@ -1869,9 +1946,10 @@ search_fields: Vector fields to search against
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def bulk_encode_audio(self,audio_urls, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/bulk_encode_audio',
@@ -1880,10 +1958,11 @@ search_fields: Vector fields to search against
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def search_with_audio(self,collection_name, min_score, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_audio(self,collection_name, min_score, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an audio field with audio using Vector Search
 Vector similarity search with an audio directly.
 
@@ -1935,10 +2014,11 @@ search_fields: Vector fields to search against
 				audio_url=audio_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def search_with_audio_upload(self,collection_name, min_score, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_audio_upload(self,collection_name, min_score, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search audio fields with uploaded audio using Vector Search
 Vector similarity search with an uploaded audio directly.
 
@@ -1989,10 +2069,11 @@ search_fields: Vector fields to search against
 				audio=audio, 
 				model_url=model_url, 
 				search_fields=search_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def encode_fields_to_vector(self,collection_name, vector_name, selected_fields, ):
+	@return_curl_or_response('json')
+	def encode_fields_to_vector(self,collection_name, vector_name, selected_fields, **kwargs):
 		"""Encode all selected fields for a collection into vectors
 Within a collection encode the specified fields in every document into vectors.
 
@@ -2029,10 +2110,11 @@ selected_fields: The fields to turn into vectors
 				collection_name=collection_name, 
 				vector_name=vector_name, 
 				selected_fields=selected_fields, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def encode_fields(self,collection_name, document, vector_name, ):
+	@return_curl_or_response('json')
+	def encode_fields(self,collection_name, document, vector_name, **kwargs):
 		"""Encode fields into a vector
 For example: we choose the fields ["height", "age", "weight"]
     document field: {"height":180, "age":40, "weight":70, "purchases":20, "visits": 12}
@@ -2063,10 +2145,11 @@ vector_name: The name of the vector that the fields turn into
 				collection_name=collection_name, 
 				document=document, 
 				vector_name=vector_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def search_with_fields(self,collection_name, search_fields, min_score, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, ):
+	@return_curl_or_response('json')
+	def search_with_fields(self,collection_name, search_fields, min_score, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search with fields with a document using Vector Search
 Vector similarity search with fields directly.
 
@@ -2118,9 +2201,10 @@ vector_name: A name to call the vector that the fields turn into
 				document=document, 
 				selected_fields=selected_fields, 
 				vector_name=vector_name, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def combine_vectors(self,vector_fields, vector_name, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/combine_vectors',
@@ -2130,9 +2214,10 @@ vector_name: A name to call the vector that the fields turn into
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def collection_vector_mappings(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/collection_vector_mappings',
@@ -2140,10 +2225,11 @@ vector_name: A name to call the vector that the fields turn into
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
-	def insert_and_encode(self,collection_name, models, document={}, insert_date=True, overwrite=True, ):
+	@return_curl_or_response('json')
+	def insert_and_encode(self,collection_name, models, document={}, insert_date=True, overwrite=True, **kwargs):
 		"""Insert a document into a Collection and encode it as well
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -2168,10 +2254,11 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				models=models, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
-	def bulk_insert_and_encode(self,collection_name, models, documents={}, insert_date=True, overwrite=True, ):
+	@return_curl_or_response('json')
+	def bulk_insert_and_encode(self,collection_name, models, documents={}, insert_date=True, overwrite=True, **kwargs):
 		"""Insert multiple documents into a Collection and encode it as well
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -2196,9 +2283,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				models=models, 
-				**kwargs)).json()
+				**kwargs))
 
 	@retry()
+	@return_curl_or_response('json')
 	def job_status(self,job_id, job_name, collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/job_status',
@@ -2208,9 +2296,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def list_jobs(self,collection_name, show_active_only=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/list_jobs',
@@ -2219,9 +2308,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def cluster(self,vector_field, collection_name, n_clusters=0, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/cluster',
@@ -2232,9 +2322,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def advanced_cluster(self,vector_field, collection_name, alias="default", n_clusters=0, n_iter=10, n_init=5, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/advanced_cluster',
@@ -2248,9 +2339,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def dimensionality_reduction(self,vector_field, collection_name, alias="default", n_components=0, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/dimensionality_reduction',
@@ -2262,9 +2354,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_text_field(self,text_field, collection_name, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/encode_text_field',
@@ -2274,9 +2367,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_audio_field(self,audio_field, collection_name, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/encode_audio_field',
@@ -2286,9 +2380,10 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
 	@retry()
+	@return_curl_or_response('json')
 	def encode_image_field(self,image_field, collection_name, refresh=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/jobs/encode_image_field',
@@ -2298,5 +2393,5 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
-				)).json()
+				))
 
