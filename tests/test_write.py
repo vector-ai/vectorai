@@ -409,7 +409,7 @@ def test_multiprocess_with_overwrite_insert(test_client, test_collection_name):
 @pytest.mark.use_client
 def test_multiprocess_overwrite(test_client, test_collection_name):
     if test_collection_name in test_client.list_collections():
-        test_client.delete_collection()
+        test_client.delete_collection(test_collection_name)
         time.sleep(5)
     NUM_OF_DOCS = 100
     docs = test_client.create_sample_documents(NUM_OF_DOCS)
