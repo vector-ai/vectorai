@@ -16,7 +16,8 @@ if __name__=="__main__":
         internal_functions=[
             "list_collections",
             "create_collection",
-            "search"
+            "search",
+            "delete_collection"
         ],
         include_response_parsing=False
     )
