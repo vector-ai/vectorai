@@ -5,7 +5,7 @@ sdk = PythonSDKBuilder(
     decorators=['retry()'],
 )
 sdk.to_python_file(
-    class_name="_ViAPIClient", 
+    class_name="ViAPIClient", 
     filename='vectorai/api/api.py',
     import_strings=['import requests', 'from vectorai.api.utils import retry'], 
     internal_functions=[
