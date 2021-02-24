@@ -34,7 +34,7 @@ class TestRead:
         ]
         results = test_client.advanced_search_by_id(test_collection_name, 
         document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'],
-        fields={'color_vector_':1}, filters=filter_query)
+        search_fields={'color_vector_':1}, filters=filter_query)
         assert len(results) > 0
 
     @pytest.mark.use_client
@@ -102,6 +102,7 @@ def test_search_collections(test_client):
     cn = 'example_collection_123y8io'
     if cn not in test_client.list_collections():
         test_client.create_collection(cn)
+        time.sleep(2)
     assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
     test_client.delete_collection(cn)
 
@@ -114,7 +115,7 @@ def test_random_recommendation_smoke_test(test_client, test_collection_name):
         time.sleep(2)
         results = test_client.random_recommendation(
             test_collection_name, 
-            field='color_vector_')
+            search_field='color_vector_')
         assert len(results['results']) > 0, "Random recommendation fails."
 
 @pytest.mark.use_client

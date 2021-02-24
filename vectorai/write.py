@@ -16,12 +16,11 @@ from typing import List, Dict, Union, Any, Callable
 from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
-from .errors import APIError, MissingFieldError, MissingFieldWarning
-from .read import ViReadClient
-from .api.write import ViWriteAPIClient
+from .errors import APIError, MissingFieldError, MissingFieldWarning, CollectionNameError
+from .api import ViAPIClient
 
 
-class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
+class ViWriteClient(ViAPIClient, UtilsMixin):
     """Class to write to database."""
 
     def __init__(self, username, api_key, url="https://api.vctr.ai" ):
@@ -744,3 +743,29 @@ class ViWriteClient(ViReadClient, ViWriteAPIClient, UtilsMixin):
                 pbar.update(1)
         return failed_all
 
+    def _typecheck_collection_name(self, collection_name: str):
+        """
+        Typecheck collection name
+        """
+        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_.'
+        for letter in collection_name: 
+            if letter not in ACCEPTABLE_LETTERS:
+                raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+        if len(collection_name) > 240:
+            raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+
+    def create_collection_from_document(self, collection_name: str, document: dict, **kwargs):
+        """
+Creates a collection by infering the schema from a document
+
+If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
+    
+Args:
+	collection_name:
+		Name of Collection
+	document:
+		A Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
+"""
+        self._typecheck_collection_name(collection_name)
+        return self._create_collection_from_document(
+            collection_name=collection_name, document=document)

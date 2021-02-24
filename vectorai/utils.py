@@ -464,7 +464,10 @@ def set_default_collection(func, collection_name):
                 # new_func = partial(func, collection_name=collection_name)
                 # print(args)
                 # res = new_func(*args, **kw)
-                res = func(args[0], collection_name, *args[1:], **kw)
+                # try:
+                res = func(args[0], collection_name=collection_name, *args[1:], **kw)
+                # except TypeError:
+                #     res = func(args[0], collection_name=collection_name, *args[1:], **kw)
             # res = func(args[0], collection_name, *args[1:], **kw)
             # res = func(args[0], kw['collection_name'], *args[1:])
             # except:

@@ -82,11 +82,11 @@ class ComparatorClient(ComparatorAPI):
         ranked_list_1 = self.search(
             collection_name,
             vector=vector,
-            field=vector_fields[0])
+            search_field=vector_fields[0])
         ranked_list_2 = self.search_by_id(
             collection_name,
             vector=vector,
-            field=vector_fields[1])
+            search_field=vector_fields[1])
         return self.compare_ranks(
             ranked_list_1,
             ranked_list_2,
@@ -120,14 +120,14 @@ class ComparatorClient(ComparatorAPI):
         include_fields=fields_to_include)['documents']
         random_id = random_docs[0]['_id']
         ranked_list_1 = self.search_by_id(
-            collection_name,
-            random_id,
-            field=vector_fields[0],
+            document_id=random_id,
+            collection_name=collection_name,
+            search_field=vector_fields[0],
             page_size=page_size)['results']
         ranked_list_2 = self.search_by_id(
-            collection_name,
-            random_id,
-            field=vector_fields[1],
+            document_id=random_id,
+            collection_name=collection_name,
+            search_field=vector_fields[1],
             page_size=page_size)['results']
         return self.compare_ranks(
             ranked_list_1,
@@ -163,11 +163,11 @@ class ComparatorClient(ComparatorAPI):
         ranked_list_1 = self.search_by_id(
             collection_name,
             document_id,
-            field=vector_fields[0])
+            search_field=vector_fields[0])
         ranked_list_2 = self.search_by_id(
             collection_name,
             document_id,
-            field=vector_fields[1])
+            search_field=vector_fields[1])
         return self.compare_ranks(
             ranked_list_1,
             ranked_list_2,

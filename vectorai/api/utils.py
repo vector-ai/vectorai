@@ -71,6 +71,22 @@ def _return_curl(response):
     headers = " -H ".join(headers)
     return command.format(method=method, headers=headers, data=data, uri=uri).replace('-H "Accept-Encoding: gzip, deflate"', '')
 
-def return_curl_or_response(response, return_type='json', return_curl=False):
+def _return_curl_or_response(response, return_type='json', return_curl=False):
     if return_curl: return _return_curl(response)
     return return_response(response, return_type=return_type)
+
+def return_curl_or_response(return_type):
+    """
+    Return a curl or response once the request is received
+    Args:
+        num_of_retries: The number of times the function should retry
+        timeout: The number of seconds to wait between each retry
+    """
+    RETURN_CURL = bool(os.getenv("VI_RETURN_CURL"))
+    def _return_api_call(func):
+        @wraps(func)
+        def function_wrapper(*args, **kwargs):
+            return _return_curl_or_response(func(*args, **kwargs), 
+            return_type=return_type, return_curl=RETURN_CURL)
+        return function_wrapper
+    return _return_api_call

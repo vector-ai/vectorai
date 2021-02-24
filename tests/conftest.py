@@ -3,7 +3,7 @@ Global testing variables.
 """
 import pytest
 import os
-from vectorai.client import ViClient, ViCollectionClient
+from vectorai.client import ViClient
 from vectorai.analytics.client import ViAnalyticsClient
 from vectorai.models.deployed import ViText2Vec
 import random
@@ -54,12 +54,12 @@ def test_client(test_username, test_api_key):
 def test_collection_name():
     return "test_colour_col_" + str(get_random_string(3))
 
-@pytest.fixture
-def test_collection_client(test_username, test_api_key, test_collection_name):
-    """Testing for the client login.
-    """
-    client = ViCollectionClient(username=test_username, api_key=test_api_key, collection_name=test_collection_name)
-    return client
+# @pytest.fixture
+# def test_collection_client(test_username, test_api_key, test_collection_name):
+#     """Testing for the client login.
+#     """
+#     client = ViCollectionClient(username=test_username, api_key=test_api_key, collection_name=test_collection_name)
+#     return client
 
 @pytest.fixture
 def test_analytics_client(test_username, test_api_key):
