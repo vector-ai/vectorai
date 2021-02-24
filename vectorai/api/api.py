@@ -779,7 +779,7 @@ sort: Fields to sort by
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search(self,collection_name, min_score, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search(self,collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -837,7 +837,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_id(self,collection_name, min_score, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search_by_id(self,collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Single Product Recommendations
 Single Product Recommendations (Search by an id).
 
@@ -897,7 +897,7 @@ search_fields: Vector fields to search against, and the weightings for them.
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_ids(self,collection_name, min_score, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_ids(self,collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations
 Advanced Multi Product Recommendations (Search by ids).
 
@@ -961,7 +961,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_positive_negative_ids(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_positive_negative_ids(self,collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations with likes and dislikes
 Advanced Multi Product Recommendations with Likes and Dislikes (Search by ids).
 
@@ -1027,7 +1027,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_with_positive_negative_ids_as_history(self,collection_name, min_score, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_with_positive_negative_ids_as_history(self,collection_name, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -1093,7 +1093,7 @@ vector: Vector, a list/array of floats that represents a piece of data
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_hybrid_search(self,collection_name, min_score, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, **kwargs):
+	def advanced_hybrid_search(self,collection_name, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, **kwargs):
 		"""Advanced Search a text field with vector and text using Vector Search and Traditional Search
 Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.
 
@@ -1351,7 +1351,7 @@ joined_collection_name: Name of the new collection that contains the joined resu
 
 	@retry()
 	@return_curl_or_response('json')
-	def chunk_search(self,collection_name, chunk_field, min_score, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def chunk_search(self,collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Vector Similarity Search on Chunks.
 Vector Similarity Search on chunks.
 
@@ -1417,7 +1417,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_chunk_search(self,collection_name, chunk_field, min_score, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_chunk_search(self,collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search on Chunks. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -1834,7 +1834,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_dictionary(self,collection_name, search_fields, min_score, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_dictionary(self,collection_name, search_fields, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search a dictionary field with a dictionary using Vector Search
 Vector similarity search with a dictionary directly.
 
@@ -1923,7 +1923,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_text(self,collection_name, min_score, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_text(self,collection_name, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search text fields with text using Vector Search
 Vector similarity search with text directly.
 
@@ -2014,7 +2014,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image(self,collection_name, min_score, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_image(self,collection_name, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with image using Vector Search
 Vector similarity search with an image directly.
 
@@ -2083,7 +2083,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image_upload(self,collection_name, min_score, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_image_upload(self,collection_name, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with uploaded image using Vector Search
 Vector similarity search with an uploaded image directly.
 
@@ -2177,7 +2177,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio(self,collection_name, min_score, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_audio(self,collection_name, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an audio field with audio using Vector Search
 Vector similarity search with an audio directly.
 
@@ -2246,7 +2246,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio_upload(self,collection_name, min_score, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_audio_upload(self,collection_name, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search audio fields with uploaded audio using Vector Search
 Vector similarity search with an uploaded audio directly.
 
@@ -2390,7 +2390,7 @@ vector_name: The name of the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_fields(self,collection_name, search_fields, min_score, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_fields(self,collection_name, search_fields, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search with fields with a document using Vector Search
 Vector similarity search with fields directly.
 
