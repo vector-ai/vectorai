@@ -6,7 +6,7 @@ import os
 
 core_req = ["requests", "numpy", "pandas", "appdirs>=1.4.4", "tqdm>=4.27.0", "plotly>=4.0.0"]
 extras_req = {
-    "dev" : ["twine", "black", "pytest", "pytest-cov", "vectorai"],
+    "dev" : ["twine", "black", "pytest", "pytest-cov", "vectorai", "pytest-rerunfailures"],
     "test" : ["pytest", "pytest-cov"],
     "docs" : ["sphinx-rtd-theme>=0.5.0", "nbsphinx>=0.7.1"]
 }
