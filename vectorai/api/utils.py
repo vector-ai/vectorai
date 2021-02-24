@@ -82,12 +82,11 @@ def return_curl_or_response(return_type):
         num_of_retries: The number of times the function should retry
         timeout: The number of seconds to wait between each retry
     """
-    return_curl = bool(os.getenv("VI_RETURN_CURL"))
-
+    RETURN_CURL = bool(os.getenv("VI_RETURN_CURL"))
     def _return_api_call(func):
         @wraps(func)
         def function_wrapper(*args, **kwargs):
             return _return_curl_or_response(func(*args, **kwargs), 
-            return_type=return_type, return_curl=return_curl)
+            return_type=return_type, return_curl=RETURN_CURL)
         return function_wrapper
     return _return_api_call
