@@ -102,6 +102,7 @@ def test_search_collections(test_client):
     cn = 'example_collection_123y8io'
     if cn not in test_client.list_collections():
         test_client.create_collection(cn)
+        time.sleep(2)
     assert len(test_client.search_collections('123y8io')) > 0, "Not searching collections properly."
     test_client.delete_collection(cn)
 

@@ -88,7 +88,7 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 
 	@retry()
 	@return_curl_or_response('json')
-	def create_collection_from_document(self, collection_name, document={}, **kwargs):
+	def _create_collection_from_document(self, collection_name, document={}, **kwargs):
 		"""Creates a collection by infering the schema from a document
 If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
     
