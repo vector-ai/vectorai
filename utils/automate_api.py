@@ -8,6 +8,7 @@ if __name__=="__main__":
         decorators=[
             'retry()', 
             "return_curl_or_response('json')"],
+        override_param_defaults={'min_score': None}
     )
     sdk.to_python_file(
         class_name="ViAPIClient", 
@@ -19,7 +20,7 @@ if __name__=="__main__":
             "search",
             "delete_collection"
         ],
-        include_response_parsing=False
+        include_response_parsing=False,
     )
     vi = ViAPIClient(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
     print(vi._list_collections())
