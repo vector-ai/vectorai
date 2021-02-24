@@ -103,9 +103,15 @@ try to re-run the notebooks to ensure that your submission is not causing errors
 
 ### Style guide
 
-For documentation strings, `Vector AI` follows the [google style](https://google.github.io/styleguide/pyguide.html).
+For documentation strings, `Vector AI` aims to follows the [google style](https://google.github.io/styleguide/pyguide.html) as closely as possible.
 For internal attributes, we use _ in front of the name of the attribute. 
-We also prefer being as explicit as possible and try to avoid args and kwargs as much as we can.
+However, we will not reject PRs if they do not follow this style.
 
+### Running Automated API creation
+
+To run the automated APi creation, simply run:
+```
+python utils/automate_api.py
+```
 
 #### This guide was inspired by Transformers [transformers guide to contributing](https://github.com/huggingface/transformers/blob/master/CONTRIBUTING.md) which was influenced by Scikit-learn [scikit-learn guide to contributing](https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md).
