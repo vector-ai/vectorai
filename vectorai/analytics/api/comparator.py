@@ -10,6 +10,8 @@ class ComparatorAPI:
         self.url = url
         self.analytics_url = analytics_url
 
+
+    @return_curl_or_response('content')
     @retry()
     def _compare_ranks(
         self, 
@@ -58,7 +60,6 @@ class ComparatorAPI:
             "colors": colors,
         }
         params.update(kwargs)
-        response = requests.post(
+        return requests.post(
             url= f"{self.analytics_url}/comparator/compare_ranks/",
             json=params)
-        return return_curl_or_response(response, 'content', return_curl=return_curl)
