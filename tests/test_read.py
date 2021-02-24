@@ -34,7 +34,7 @@ class TestRead:
         ]
         results = test_client.advanced_search_by_id(test_collection_name, 
         document_id=test_client.random_documents(test_collection_name)['documents'][0]['_id'],
-        fields={'color_vector_':1}, filters=filter_query)
+        search_fields={'color_vector_':1}, filters=filter_query)
         assert len(results) > 0
 
     @pytest.mark.use_client
