@@ -604,7 +604,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents(self,cursor, collection_name, include_fields=[], page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
+	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/retrieve_documents',
 			params=dict(
@@ -636,7 +636,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents_with_filters(self, collection_name, cursor, include_fields=[], page_size=20, sort=[], asc=False, include_vector=False, filters=[], **kwargs):
+	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=False, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     

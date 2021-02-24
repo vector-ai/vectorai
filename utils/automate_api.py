@@ -8,7 +8,7 @@ if __name__=="__main__":
         decorators=[
             'retry()', 
             "return_curl_or_response('json')"],
-        override_param_defaults={'min_score': None},
+        override_param_defaults={'min_score': None, 'cursor': None},
         internal_functions=[
             "list_collections",
             "create_collection",
