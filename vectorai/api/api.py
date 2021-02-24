@@ -108,7 +108,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def delete_collection(self,collection_name, **kwargs):
+	def _delete_collection(self,collection_name, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/project/delete_collection',
 			params=dict(
