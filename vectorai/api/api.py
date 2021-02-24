@@ -11,7 +11,7 @@ class ViAPIClient:
 
 	@retry()
 	@return_curl_or_response('json')
-	def request_api_key(self,email, description, referral_code="api_referred", **kwargs):
+	def request_api_key(self, email, description, referral_code="api_referred", **kwargs):
 		"""Request an api key
 Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
     
@@ -34,7 +34,7 @@ referral_code: The referral code you've been given to allow you to register for 
 
 	@retry()
 	@return_curl_or_response('json')
-	def request_read_api_key(self,read_username, **kwargs):
+	def request_read_api_key(self, read_username, **kwargs):
 		"""Request a read api key for your collections
 Creates a read only key for your collections. Make sure to save the api key somewhere safe. When doing a search the admin username should still be used.
     
@@ -55,7 +55,7 @@ read_username: Username for read only key
 
 	@retry()
 	@return_curl_or_response('json')
-	def create_collection(self,collection_name, collection_schema={}, **kwargs):
+	def _create_collection(self, collection_name, collection_schema={}, **kwargs):
 		"""Creates a collection
 A collection can store documents to be **searched, retrieved, filtered and aggregated** _(similar to Collections in MongoDB, Tables in SQL, Indexes in ElasticSearch)_.
 
@@ -88,7 +88,7 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 
 	@retry()
 	@return_curl_or_response('json')
-	def create_collection_from_document(self,collection_name, document={}, **kwargs):
+	def create_collection_from_document(self, collection_name, document={}, **kwargs):
 		"""Creates a collection by infering the schema from a document
 If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
     
@@ -165,7 +165,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def add_collection_metadata(self,collection_name, metadata, **kwargs):
+	def add_collection_metadata(self, collection_name, metadata, **kwargs):
 		"""Add metadata about a collection
 Add metadata about a collection. notably description, data source, etc
     
@@ -199,7 +199,7 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 
 	@retry()
 	@return_curl_or_response('json')
-	def copy_collection_from_another_user(self,collection_name, source_collection_name, source_username, source_api_key, **kwargs):
+	def copy_collection_from_another_user(self, collection_name, source_collection_name, source_username, source_api_key, **kwargs):
 		"""Copy a collection from another user's projects into your project
 Copy a collection from another user's projects into your project. This is considered a project job
 Args
@@ -391,7 +391,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert(self,collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, **kwargs):
+	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, **kwargs):
 		"""Insert a document into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -422,7 +422,7 @@ update_schema: Whether the api should check the documents for vector datatype to
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_insert(self,collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
 		"""Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -467,7 +467,7 @@ quick: This will run the quickest insertion possible, which means there will be 
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_delete_by_id(self,collection_name, document_ids, **kwargs):
+	def bulk_delete_by_id(self, collection_name, document_ids, **kwargs):
 		"""Delete multiple documents in a Collection by ids
 Delete a document by its id.
     
@@ -490,7 +490,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def edit_document(self,collection_name, document_id, edits, insert_date=True, **kwargs):
+	def edit_document(self, collection_name, document_id, edits, insert_date=True, **kwargs):
 		"""Edit a document in a Collection by its id
 Edit by providing a key value pair of fields you are adding or changing.
     
@@ -517,7 +517,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_edit_document(self,collection_name, documents={}, insert_date=True, **kwargs):
+	def bulk_edit_document(self, collection_name, documents={}, insert_date=True, **kwargs):
 		"""Edits multiple documents in a Collection by its ids
 Edits documents by providing a key value pair of fields you are adding or changing, make sure to include the "_id" in the documents.
     
@@ -581,7 +581,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_missing_id(self,collection_name, document_ids, **kwargs):
+	def bulk_missing_id(self, collection_name, document_ids, **kwargs):
 		"""Look up in bulk if the ids exists in the collection, returns all the missing one as a list
 Look up in bulk if the ids exists in the collection, returns all the missing one as a list.
     
@@ -636,7 +636,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents_with_filters(self,collection_name, cursor, include_fields=[], page_size=20, sort=[], asc=False, include_vector=False, filters=[], **kwargs):
+	def retrieve_documents_with_filters(self, collection_name, cursor, include_fields=[], page_size=20, sort=[], asc=False, include_vector=False, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
@@ -671,7 +671,7 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def random_documents_with_filters(self,collection_name, seed=10, include_fields=[], page_size=20, include_vector=False, filters=[], **kwargs):
+	def random_documents_with_filters(self, collection_name, seed=10, include_fields=[], page_size=20, include_vector=False, filters=[], **kwargs):
 		"""Retrieve some documents randomly with filters
 Mainly for testing purposes.
     
@@ -718,7 +718,7 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def filters(self,collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], **kwargs):
+	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], **kwargs):
 		"""Filters a collection
 Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.
 
@@ -779,7 +779,7 @@ sort: Fields to sort by
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search(self,collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search(self, collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -837,7 +837,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_id(self,collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search_by_id(self, collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Single Product Recommendations
 Single Product Recommendations (Search by an id).
 
@@ -897,7 +897,7 @@ search_fields: Vector fields to search against, and the weightings for them.
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_ids(self,collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_ids(self, collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations
 Advanced Multi Product Recommendations (Search by ids).
 
@@ -961,7 +961,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_positive_negative_ids(self,collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_positive_negative_ids(self, collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations with likes and dislikes
 Advanced Multi Product Recommendations with Likes and Dislikes (Search by ids).
 
@@ -1027,7 +1027,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_with_positive_negative_ids_as_history(self,collection_name, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -1093,7 +1093,7 @@ vector: Vector, a list/array of floats that represents a piece of data
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_hybrid_search(self,collection_name, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, **kwargs):
+	def advanced_hybrid_search(self, collection_name, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, **kwargs):
 		"""Advanced Search a text field with vector and text using Vector Search and Traditional Search
 Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.
 
@@ -1159,7 +1159,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
+	def aggregate(self, collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate a collection
 Aggregation/Groupby of a collection using an aggregation query.
 The aggregation query is a json body that follows the schema of:
@@ -1205,7 +1205,7 @@ flatten:
 
 	@retry()
 	@return_curl_or_response('json')
-	def publish_aggregation(self,source_collection, dest_collection, aggregation_name, description, aggregation_query, date_field="insert_date_", refresh_time="160s", start_immediately=True, **kwargs):
+	def publish_aggregation(self, source_collection, dest_collection, aggregation_name, description, aggregation_query, date_field="insert_date_", refresh_time="160s", start_immediately=True, **kwargs):
 		"""Publishes your aggregation query to a new collection
 Publish and schedules your aggregation query and saves it to a new collection.
 This new collection is just like any other collection and you can read, filter and aggregate it.
@@ -1274,7 +1274,7 @@ start_immediately: Whether to start the published aggregation immediately
 
 	@retry()
 	@return_curl_or_response('json')
-	def vector_aggregation(self,source_collection, dest_collection, source_to_dest_fields_mapping, vector_fields, aggregation_type="mean", refresh=True, **kwargs):
+	def vector_aggregation(self, source_collection, dest_collection, source_to_dest_fields_mapping, vector_fields, aggregation_type="mean", refresh=True, **kwargs):
 		"""Aggregate vectors from one collection into another published aggregation collection
 This is useful for getting vectors of a category. e.g. You have "product\_description\_vector\_" and you want the vector for a brand samsung. The "samsung" brand's vector can be the aggregate of all the samsung "product\_description\_vector\_".
     
@@ -1305,7 +1305,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 
 	@retry()
 	@return_curl_or_response('json')
-	def id_lookup_joined(self,join_query, doc_id, **kwargs):
+	def id_lookup_joined(self, join_query, doc_id, **kwargs):
 		"""Look up a document by its id with joins
 Look up a document by its id with joins.
     
@@ -1328,7 +1328,7 @@ doc_id: ID of a Document
 
 	@retry()
 	@return_curl_or_response('json')
-	def join_collections(self,join_query, joined_collection_name, **kwargs):
+	def join_collections(self, join_query, joined_collection_name, **kwargs):
 		"""Join collections with a query
 Perform a join query on a whole collection and write the results to a new collection. We currently only support left joins.
     
@@ -1351,7 +1351,7 @@ joined_collection_name: Name of the new collection that contains the joined resu
 
 	@retry()
 	@return_curl_or_response('json')
-	def chunk_search(self,collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def chunk_search(self, collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Vector Similarity Search on Chunks.
 Vector Similarity Search on chunks.
 
@@ -1417,7 +1417,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_chunk_search(self,collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_chunk_search(self, collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Vector Similarity Search on Chunks. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -1477,7 +1477,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 
 	@retry()
 	@return_curl_or_response('json')
-	def cluster_aggregate(self,collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
+	def cluster_aggregate(self, collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate every cluster in a collection
 Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
 
@@ -1572,7 +1572,7 @@ flatten:
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_cluster_aggregate(self,collection_name, aggregation_query, vector_field, alias, page_size=20, page=1, asc=False, flatten=True, filters=[], **kwargs):
+	def advanced_cluster_aggregate(self, collection_name, aggregation_query, vector_field, alias, page_size=20, page=1, asc=False, flatten=True, filters=[], **kwargs):
 		"""Aggregate every cluster in a collection
 Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
 
@@ -1659,7 +1659,7 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert_cluster_centroids(self,collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", **kwargs):
+	def insert_cluster_centroids(self, collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", **kwargs):
 		"""Insert cluster centroids
 Insert your own cluster centroids for it to be used in approximate search settings and cluster aggregations.
     
@@ -1706,7 +1706,7 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 
 	@retry()
 	@return_curl_or_response('json')
-	def dimensionality_reduce(self,collection_name, vectors, vector_field, alias="default", n_components=1, **kwargs):
+	def dimensionality_reduce(self, collection_name, vectors, vector_field, alias="default", n_components=1, **kwargs):
 		"""Reduces the dimension of a list of vectors
 Reduce the dimensions of a list of vectors you input into a desired dimension. 
 
@@ -1799,7 +1799,7 @@ n_components: The size/length to reduce the vector down to.
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_dictionary(self,collection_name, dictionary, dictionary_field, **kwargs):
+	def encode_dictionary(self, collection_name, dictionary, dictionary_field, **kwargs):
 		"""Encode an dictionary into a vector
 For example: a dictionary that represents a **person's characteristics visiting a store, field "person_characteristics"**:
 
@@ -1834,7 +1834,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_dictionary(self,collection_name, search_fields, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_dictionary(self, collection_name, search_fields, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search a dictionary field with a dictionary using Vector Search
 Vector similarity search with a dictionary directly.
 
@@ -1923,7 +1923,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_text(self,collection_name, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_text(self, collection_name, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search text fields with text using Vector Search
 Vector similarity search with text directly.
 
@@ -2014,7 +2014,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image(self,collection_name, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_image(self, collection_name, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with image using Vector Search
 Vector similarity search with an image directly.
 
@@ -2083,7 +2083,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image_upload(self,collection_name, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_image_upload(self, collection_name, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an image field with uploaded image using Vector Search
 Vector similarity search with an uploaded image directly.
 
@@ -2177,7 +2177,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio(self,collection_name, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_audio(self, collection_name, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search an audio field with audio using Vector Search
 Vector similarity search with an audio directly.
 
@@ -2246,7 +2246,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio_upload(self,collection_name, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def search_with_audio_upload(self, collection_name, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
 		"""Advanced Search audio fields with uploaded audio using Vector Search
 Vector similarity search with an uploaded audio directly.
 
@@ -2314,7 +2314,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_fields_to_vector(self,collection_name, vector_name, selected_fields, **kwargs):
+	def encode_fields_to_vector(self, collection_name, vector_name, selected_fields, **kwargs):
 		"""Encode all selected fields for a collection into vectors
 Within a collection encode the specified fields in every document into vectors.
 
@@ -2355,7 +2355,7 @@ selected_fields: The fields to turn into vectors
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_fields(self,collection_name, document, vector_name, **kwargs):
+	def encode_fields(self, collection_name, document, vector_name, **kwargs):
 		"""Encode fields into a vector
 For example: we choose the fields ["height", "age", "weight"]
     document field: {"height":180, "age":40, "weight":70, "purchases":20, "visits": 12}
@@ -2390,7 +2390,7 @@ vector_name: The name of the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_fields(self,collection_name, search_fields, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_fields(self, collection_name, search_fields, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		"""Search with fields with a document using Vector Search
 Vector similarity search with fields directly.
 
@@ -2480,7 +2480,7 @@ vector_name: A name to call the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert_and_encode(self,collection_name, models, document={}, insert_date=True, overwrite=True, **kwargs):
+	def insert_and_encode(self, collection_name, models, document={}, insert_date=True, overwrite=True, **kwargs):
 		"""Insert a document into a Collection and encode it as well
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -2512,7 +2512,7 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_insert_and_encode(self,collection_name, models, documents={}, insert_date=True, overwrite=True, **kwargs):
+	def bulk_insert_and_encode(self, collection_name, models, documents={}, insert_date=True, overwrite=True, **kwargs):
 		"""Insert multiple documents into a Collection and encode it as well
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.

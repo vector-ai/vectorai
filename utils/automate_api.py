@@ -8,18 +8,18 @@ if __name__=="__main__":
         decorators=[
             'retry()', 
             "return_curl_or_response('json')"],
-        override_param_defaults={'min_score': None}
-    )
-    sdk.to_python_file(
-        class_name="ViAPIClient", 
-        filename='vectorai/api/api.py',
-        import_strings=['import requests', 'from vectorai.api.utils import retry, return_curl_or_response'], 
+        override_param_defaults={'min_score': None},
         internal_functions=[
             "list_collections",
             "create_collection",
             "search",
             "delete_collection"
         ],
+    )
+    sdk.to_python_file(
+        class_name="ViAPIClient", 
+        filename='vectorai/api/api.py',
+        import_strings=['import requests', 'from vectorai.api.utils import retry, return_curl_or_response'], 
         include_response_parsing=False,
     )
     vi = ViAPIClient(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'])
