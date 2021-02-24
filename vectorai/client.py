@@ -3,6 +3,7 @@ import base64
 import requests
 import pandas as pd
 import os
+import warnings
 from .api.utils import return_curl_or_response
 from .write import ViWriteClient
 from .analytics.client import ViAnalyticsClient
@@ -107,6 +108,8 @@ class ViCollectionClient(ViClient):
             >>> vi_client.insert_documents(documents)
     """
     def __init__(self, collection_name: str, username: str, api_key: str, url: str="https://api.vctr.ai", verbose: bool=True) -> None:
+        warnings.warn("ViCollectionClient is no longer supported and will be deprecated in the near future." + \
+            "Stick to using ViClient in the future.")
         if username is None:
             if 'VI_USERNAME' not in os.environ.keys():
                 raise APIError("Specify username of set VI_USERNAME as an environment variable.")

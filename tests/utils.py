@@ -1,15 +1,15 @@
 import time
 import random
 import string
-from vectorai import ViClient, ViCollectionClient
+from vectorai import ViClient
 
 class TempClient:
     def __init__(self, client, collection_name: str=None):
         self.client = client
         if isinstance(client, ViClient):
             self.collection_name = collection_name
-        elif isinstance(client, ViCollectionClient):
-            self.collection_name = self.client.collection_name
+        # elif isinstance(client, ViCollectionClient):
+        #     self.collection_name = self.client.collection_name
         
     def teardown_collection(self):
         if self.collection_name in self.client.list_collections():
