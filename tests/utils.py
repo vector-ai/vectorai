@@ -40,6 +40,9 @@ class TempClientWithDocs(TempClient):
             self.collection_name = collection_name
             self.client.collection_name = collection_name
         self.num_of_docs = num_of_docs
+        self.teardown_collection()
+        self.client.insert_documents(self.collection_name, 
+        self.client.create_sample_documents(self.num_of_docs))
     
     def generate_random_collection_name(self):
         return self.generate_random_string(20)
@@ -49,7 +52,7 @@ class TempClientWithDocs(TempClient):
         return ''.join(random.choice(letters) for i in range(num_of_letters))
 
     def __enter__(self):
-        self.teardown_collection()
-        self.client.insert_documents(self.collection_name, 
-        self.client.create_sample_documents(self.num_of_docs))
+        # self.teardown_collection()
+        # self.client.insert_documents(self.collection_name, 
+        # self.client.create_sample_documents(self.num_of_docs))
         return self.client
