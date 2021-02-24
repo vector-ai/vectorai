@@ -13,7 +13,8 @@ if __name__=="__main__":
             "list_collections",
             "create_collection",
             "search",
-            "delete_collection"
+            "delete_collection",
+            "edit_document"
         ],
     )
     sdk.to_python_file(

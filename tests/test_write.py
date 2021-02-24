@@ -204,7 +204,7 @@ class TestEdit:
                 collection_name=test_collection_name, edits=edits
             )
             time.sleep(2)
-            doc = client.id(test_collection_name, document_id="1")
+            doc = client.id(collection_name=test_collection_name, document_id="1")
             assert doc["location"] == "Paris"
 
     @pytest.mark.use_client
@@ -256,9 +256,9 @@ class TestEdit:
                 {"_id": "1", "location": "New York",},
             ]
             test_client.edit_documents(test_collection_name, edits)
-            doc = test_client.id(test_collection_name, document_id="2")
+            doc = test_client.id(collection_name=test_collection_name, document_id="2")
             assert doc["location"] == "Sydney"
-            doc = test_client.id(test_collection_name, document_id="1")
+            doc = test_client.id(collection_name=test_collection_name, document_id="1")
             assert doc['location'] == 'New York'
 
 def test__write_document_nested_field():
@@ -416,14 +416,14 @@ def test_multiprocess_overwrite(test_client, test_collection_name):
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
     # For document with id '3'
     TEST_ID = '3'
-    id_document = test_client.id(test_collection_name, TEST_ID)
+    id_document = test_client.id(collection_name=test_collection_name, document_id=TEST_ID)
     test_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     print(docs[3])
     docs[3].update({'_id': '3'})
     response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=True)
-    id_document = test_client.id(test_collection_name, TEST_ID)
+    id_document = test_client.id(collection_name=test_collection_name, document_id=TEST_ID)
     assert test_client.get_field('test.field', id_document) == 'stranger'
     time.sleep(5)
     test_client.delete_collection(test_collection_name)
@@ -438,13 +438,13 @@ def test_multiprocess_not_overwrite(test_client, test_collection_name):
     test_client.insert_documents(test_collection_name, docs[0:5], workers=1, overwrite=False)
     # For document with id '3'
     TEST_ID = '3'
-    id_document = test_client.id(test_collection_name, TEST_ID)
+    id_document = test_client.id(collection_name=test_collection_name, document_id=TEST_ID)
     test_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
     response = test_client.insert_documents(test_collection_name, docs[3:5], workers=1,
     overwrite=False)
-    id_document = test_client.id(test_collection_name, TEST_ID)
+    id_document = test_client.id(collection_name=test_collection_name, document_id=TEST_ID)
     with pytest.raises(MissingFieldError):
         test_client.get_field('test.field', id_document)
     time.sleep(5)
@@ -460,13 +460,13 @@ def test_multiprocess_overwrite_collection_client(test_collection_client, test_c
     test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
     # For document with id '3'
     TEST_ID = '3'
-    id_document = test_collection_client.id(TEST_ID)
+    id_document = test_collection_client.id(document_id=TEST_ID)
     test_collection_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
     response = test_collection_client.insert_documents(docs[3:5], workers=1,
     overwrite=True)
-    id_document = test_collection_client.id(TEST_ID)
+    id_document = test_collection_client.id(document_id=TEST_ID)
     assert test_collection_client.get_field('test.field', id_document) == 'stranger'
     time.sleep(5)
     test_collection_client.delete_collection()
@@ -478,13 +478,13 @@ def test_multiprocess_not_overwrite_collection_client(test_collection_client, te
     test_collection_client.insert_documents(docs[0:5], workers=1, overwrite=False)
     # For document with id '3'
     TEST_ID = '3'
-    id_document = test_collection_client.id(TEST_ID)
+    id_document = test_collection_client.id(document_id=TEST_ID)
     test_collection_client.set_field('test.field', id_document, 'stranger')
     docs[3] = id_document
     docs[3].update({'_id': '3'})
     response = test_collection_client.insert_documents(docs[3:5], workers=1,
     overwrite=False)
-    id_document = test_collection_client.id(TEST_ID)
+    id_document = test_collection_client.id(document_id=TEST_ID)
     with pytest.raises(MissingFieldError):
         test_collection_client.get_field('test.field', id_document)
     time.sleep(5)
