@@ -490,7 +490,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def edit_document(self, collection_name, document_id, edits, insert_date=True, **kwargs):
+	def _edit_document(self, collection_name, document_id, edits, insert_date=True, **kwargs):
 		"""Edit a document in a Collection by its id
 Edit by providing a key value pair of fields you are adding or changing.
     
