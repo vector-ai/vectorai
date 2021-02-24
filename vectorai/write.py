@@ -16,7 +16,7 @@ from typing import List, Dict, Union, Any, Callable
 from functools import partial
 from multiprocessing import Pool
 from .utils import UtilsMixin
-from .errors import APIError, MissingFieldError, MissingFieldWarning
+from .errors import APIError, MissingFieldError, MissingFieldWarning, CollectionNameError
 from .api import ViAPIClient
 
 
