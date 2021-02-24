@@ -29,6 +29,7 @@ referral_code: The referral code you've been given to allow you to register for 
 				username=self.username,
 				email=email, 
 				description=description, 
+				referral_code=referral_code, 
 				**kwargs))
 
 	@retry()
@@ -82,6 +83,7 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				collection_schema=collection_schema, 
 				**kwargs))
 
 	@retry()
@@ -104,6 +106,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				document=document, 
 				**kwargs))
 
 	@retry()
@@ -233,7 +236,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def _search(self,vector, collection_name, search_fields, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def _search(self,vector, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search',
 			params=dict(
@@ -257,7 +260,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_id(self,document_id, collection_name, search_field, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_id(self,document_id, collection_name, search_field, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_id',
 			params=dict(
@@ -281,7 +284,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_ids(self,document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_ids(self,document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_ids',
 			params=dict(
@@ -306,7 +309,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_by_positive_negative_ids',
 			params=dict(
@@ -332,7 +335,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, min_score, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_with_positive_negative_ids_as_history',
 			params=dict(
@@ -359,7 +362,7 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def hybrid_search(self,text, vector, collection_name, search_fields, min_score, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def hybrid_search(self,text, vector, collection_name, search_fields, text_fields=[], traditional_weight=0.075, fuzzy=1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/hybrid_search',
 			params=dict(
@@ -411,6 +414,10 @@ update_schema: Whether the api should check the documents for vector datatype to
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				document=document, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
+				update_schema=update_schema, 
 				**kwargs))
 
 	@retry()
@@ -439,6 +446,11 @@ quick: This will run the quickest insertion possible, which means there will be 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				documents=documents, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
+				update_schema=update_schema, 
+				quick=quick, 
 				**kwargs))
 
 	@retry()
@@ -500,6 +512,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				collection_name=collection_name, 
 				document_id=document_id, 
 				edits=edits, 
+				insert_date=insert_date, 
 				**kwargs))
 
 	@retry()
@@ -523,6 +536,8 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				documents=documents, 
+				insert_date=insert_date, 
 				**kwargs))
 
 	@retry()
@@ -645,7 +660,13 @@ filters: Query for filtering the search results
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				include_fields=include_fields, 
 				cursor=cursor, 
+				page_size=page_size, 
+				sort=sort, 
+				asc=asc, 
+				include_vector=include_vector, 
+				filters=filters, 
 				**kwargs))
 
 	@retry()
@@ -672,6 +693,11 @@ filters: Query for filtering the search results
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				seed=seed, 
+				include_fields=include_fields, 
+				page_size=page_size, 
+				include_vector=include_vector, 
+				filters=filters, 
 				**kwargs))
 
 	@retry()
@@ -743,6 +769,12 @@ sort: Fields to sort by
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				filters=filters, 
+				page=page, 
+				page_size=page_size, 
+				asc=asc, 
+				include_vector=include_vector, 
+				sort=sort, 
 				**kwargs))
 
 	@retry()
@@ -786,7 +818,20 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				multivector_query=multivector_query, 
 				**kwargs))
 
@@ -832,7 +877,20 @@ search_fields: Vector fields to search against, and the weightings for them.
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				document_id=document_id, 
 				search_fields=search_fields, 
 				**kwargs))
@@ -882,9 +940,23 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				document_ids=document_ids, 
 				search_fields=search_fields, 
+				vector_operation=vector_operation, 
 				**kwargs))
 
 	@retry()
@@ -933,10 +1005,24 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
+				vector_operation=vector_operation, 
 				**kwargs))
 
 	@retry()
@@ -984,10 +1070,24 @@ vector: Vector, a list/array of floats that represents a piece of data
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
+				vector_operation=vector_operation, 
 				vector=vector, 
 				**kwargs))
 
@@ -1035,9 +1135,26 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				multivector_query=multivector_query, 
 				text=text, 
+				text_fields=text_fields, 
+				traditional_weight=traditional_weight, 
+				fuzzy=fuzzy, 
+				join=join, 
 				**kwargs))
 
 	@retry()
@@ -1080,6 +1197,10 @@ flatten:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
 				**kwargs))
 
 	@retry()
@@ -1113,6 +1234,9 @@ start_immediately: Whether to start the published aggregation immediately
 				aggregation_name=aggregation_name, 
 				description=description, 
 				aggregation_query=aggregation_query, 
+				date_field=date_field, 
+				refresh_time=refresh_time, 
+				start_immediately=start_immediately, 
 				**kwargs))
 
 	@retry()
@@ -1175,6 +1299,8 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 				dest_collection=dest_collection, 
 				source_to_dest_fields_mapping=source_to_dest_fields_mapping, 
 				vector_fields=vector_fields, 
+				aggregation_type=aggregation_type, 
+				refresh=refresh, 
 				**kwargs))
 
 	@retry()
@@ -1271,7 +1397,20 @@ search_fields: Vector fields to search against
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				chunk_field=chunk_field, 
+				chunk_scoring=chunk_scoring, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				vector=vector, 
 				search_fields=search_fields, 
 				**kwargs))
@@ -1319,7 +1458,20 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				chunk_field=chunk_field, 
+				chunk_scoring=chunk_scoring, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				multivector_query=multivector_query, 
 				**kwargs))
 
@@ -1350,6 +1502,10 @@ flatten:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
 				**kwargs))
 
 	@retry()
@@ -1444,8 +1600,13 @@ filters: Query for filtering the search results
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
 				vector_field=vector_field, 
 				alias=alias, 
+				filters=filters, 
 				**kwargs))
 
 	@retry()
@@ -1522,6 +1683,9 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 				collection_name=collection_name, 
 				cluster_centers=cluster_centers, 
 				vector_field=vector_field, 
+				alias=alias, 
+				job=job, 
+				job_metric=job_metric, 
 				**kwargs))
 
 	@retry()
@@ -1567,6 +1731,8 @@ n_components: The size/length to reduce the vector down to.
 				collection_name=collection_name, 
 				vectors=vectors, 
 				vector_field=vector_field, 
+				alias=alias, 
+				n_components=n_components, 
 				**kwargs))
 
 	@retry()
@@ -1596,7 +1762,7 @@ n_components: The size/length to reduce the vector down to.
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_array(self,array_field, array, collection_name, search_fields, min_score, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_array(self,array_field, array, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
 			url='https://api.vctr.ai/collection/search_with_array',
 			params=dict(
@@ -1716,7 +1882,17 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				search_fields=search_fields, 
+				page_size=page_size, 
+				page=page, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
 				**kwargs))
@@ -1792,7 +1968,20 @@ search_fields: Vector fields to search against
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				text=text, 
 				search_fields=search_fields, 
 				**kwargs))
@@ -1873,7 +2062,20 @@ search_fields: Vector fields to search against
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				image_url=image_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -1929,7 +2131,20 @@ search_fields: Vector fields to search against
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				image=image, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2010,7 +2225,20 @@ search_fields: Vector fields to search against
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				audio_url=audio_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2065,7 +2293,20 @@ search_fields: Vector fields to search against
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				audio=audio, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2197,7 +2438,17 @@ vector_name: A name to call the vector that the fields turn into
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				search_fields=search_fields, 
+				page_size=page_size, 
+				page=page, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
 				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				hundred_scale=hundred_scale, 
+				asc=asc, 
 				document=document, 
 				selected_fields=selected_fields, 
 				vector_name=vector_name, 
@@ -2253,6 +2504,9 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				document=document, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
 				models=models, 
 				**kwargs))
 
@@ -2282,6 +2536,9 @@ models: Field and model to encode it with. e.g.{'image_url':'image', 'audio_url'
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				documents=documents, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
 				models=models, 
 				**kwargs))
 
