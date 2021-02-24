@@ -114,7 +114,7 @@ def test_random_recommendation_smoke_test(test_client, test_collection_name):
         time.sleep(2)
         results = test_client.random_recommendation(
             test_collection_name, 
-            field='color_vector_')
+            search_field='color_vector_')
         assert len(results['results']) > 0, "Random recommendation fails."
 
 @pytest.mark.use_client
