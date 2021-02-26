@@ -747,12 +747,12 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         """
         Typecheck collection name
         """
-        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_.'
+        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_-.1234567890'
         for letter in collection_name: 
             if letter not in ACCEPTABLE_LETTERS:
-                raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+                raise CollectionNameError()
         if len(collection_name) > 240:
-            raise CollectionNameError("Collection names must be lower case A-Z and less than 240 characters")
+            raise CollectionNameError()
 
     def create_collection_from_document(self, collection_name: str, document: dict, **kwargs):
         """
