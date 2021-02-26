@@ -40,4 +40,7 @@ class CollectionNameError(APIError):
     """
     Collection Name Error
     """
-    pass
+    
+    def __init__(self, message="Collection names must contain only lower case A-Z and numbers and less than 240 characters"):
+        self.expression = expression
+        self.message = message
