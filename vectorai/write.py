@@ -747,7 +747,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         """
         Typecheck collection name
         """
-        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_.1234567890'
+        ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_-.1234567890'
         for letter in collection_name: 
             if letter not in ACCEPTABLE_LETTERS:
                 raise CollectionNameError()
