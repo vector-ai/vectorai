@@ -4,7 +4,7 @@ import requests
 from vectorai.api.utils import retry, return_curl_or_response
 
 
-class ViAPIClient:
+class _ViAPIClient:
 	def __init__(self, username, api_key, ):
 		self.username = username		
 		self.api_key = api_key		

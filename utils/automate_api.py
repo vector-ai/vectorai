@@ -19,7 +19,7 @@ if __name__=="__main__":
         ],
     )
     sdk.to_python_file(
-        class_name="ViAPIClient", 
+        class_name="_ViAPIClient", 
         filename='vectorai/api/api.py',
         import_strings=['import requests', 'from vectorai.api.utils import retry, return_curl_or_response'], 
         include_response_parsing=False,
