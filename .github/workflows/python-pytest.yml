@@ -31,7 +31,6 @@ jobs:
           - tests/test_models.py
           - tests/test_read.py
           - tests/test_search.py
-          - tests/test_write.py
           - tests/test_write_collection_basics.py
           - tests/test_write_deployed_models.py
           - tests/test_write_documents.py
