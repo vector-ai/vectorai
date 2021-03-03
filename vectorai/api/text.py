@@ -2,7 +2,7 @@ import io
 import base64
 import requests
 from typing import Dict, List
-from .utils import retry
+from .utils import retry, return_curl_or_response
 
 class ViTextClient:
     """
