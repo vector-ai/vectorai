@@ -240,7 +240,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, **kwargs):
+	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
 		"""Insert a document into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -255,6 +255,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 insert_date: Whether to include insert date as a field 'insert_date_'.
 overwrite: Whether to overwrite document if it exists.
 update_schema: Whether the api should check the documents for vector datatype to update the schema.
+quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
 
 """
 		return requests.post(
@@ -267,6 +268,7 @@ update_schema: Whether the api should check the documents for vector datatype to
 				insert_date=insert_date, 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
+				quick=quick, 
 				))
 
 	@retry()
@@ -453,7 +455,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=True, asc=False, include_vector=True, **kwargs):
+	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=False, asc=False, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://vecdb-aueast-api.azurewebsites.net/collection/retrieve_documents',
 			params=dict(
@@ -485,7 +487,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=True, asc=False, include_vector=True, filters=[], **kwargs):
+	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=False, asc=False, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
@@ -693,7 +695,7 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=True, **kwargs):
+	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=False, **kwargs):
 		"""Filters a collection
 Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.
 
@@ -1252,7 +1254,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_image_field(self, collection_name, image_field, **kwargs):
+	def encode_image_field(self, collection_name, task, field, image_field, **kwargs):
 		"""Start job to encode image field
 Encode image field
     
@@ -1261,6 +1263,8 @@ Args
 username: 
 api_key: 
 collection_name: 
+task: 
+field: 
 image_field: 
 
 """
@@ -1270,6 +1274,35 @@ image_field:
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
+				task=task, 
+				field=field, 
+				image_field=image_field, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_field(self, collection_name, task, field, image_field, **kwargs):
+		"""Start job to encode image field
+Encode image field
+    
+Args
+========
+username: 
+api_key: 
+collection_name: 
+task: 
+field: 
+image_field: 
+
+"""
+		return requests.post(
+			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_field',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				task=task, 
+				field=field, 
 				image_field=image_field, 
 				))
 
