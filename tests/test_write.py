@@ -139,11 +139,12 @@ class TestInsert:
     def test_insert_single_document(self, test_client, test_collection_name):
         if test_collection_name not in test_client.list_collections():
             test_client.create_collection(test_collection_name)
-        document = {"sample_vector_": test_client.generate_vector(20), "sample_name": "hi"}
-        response = test_client.insert_document(
+        # document = {"sample_vector_": test_client.generate_vector(20), "sample_name": "hi"}
+        document = test_client.create_sample_document(1)
+        response = test_client.insert(
             collection_name=test_collection_name, document=document
         )
-        assert response is None
+        assert response['status'] == 'successful'
 
     @pytest.mark.use_client
     def test_insert_single_document_error(self, test_client, test_collection_name):
