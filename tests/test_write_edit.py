@@ -57,7 +57,7 @@ class TestEdit:
             doc = {
                 'location': "Paris"
             }
-            client.insert_document(test_collection_name, doc)
+            client.insert(test_collection_name, doc)
             results = test_client.filters(
                 test_collection_name,
                 test_client.create_filter_query(test_collection_name, 'location', 'contains', 'paris'))
@@ -69,7 +69,7 @@ class TestEdit:
             doc = {
                 'location': "Paris"
             }
-            client.insert_document(test_collection_name, doc)
+            client.insert(test_collection_name, doc)
             results = test_client.filters(
                 test_collection_name,
                 test_client.create_filter_query(
