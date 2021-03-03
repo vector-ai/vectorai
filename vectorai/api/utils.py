@@ -9,6 +9,7 @@ if sys.version_info.major >= 3:
 else:
     from pipes import quote 
 from functools import wraps
+from ..options import get_option
 from ..errors import APIError
 
 def retry(num_of_retries=3, timeout=5):
@@ -18,10 +19,8 @@ def retry(num_of_retries=3, timeout=5):
         num_of_retries: The number of times the function should retry
         timeout: The number of seconds to wait between each retry
     """
-    if 'VI_MAX_RETRY' in os.environ.keys():
-        num_of_retries = int(os.environ['VI_MAX_RETRY'])
-    if 'VI_TIMEOUT' in os.environ.keys():
-        timeout = float(os.environ['VI_TIMEOUT'])
+    num_of_retries = get_option('maximum_num_of_http_retries')
+    timeout = get_option('maximum_http_timeout')
 
     def _retry(func):
         @wraps(func)
@@ -82,7 +81,7 @@ def return_curl_or_response(return_type):
         num_of_retries: The number of times the function should retry
         timeout: The number of seconds to wait between each retry
     """
-    RETURN_CURL = bool(os.getenv("VI_RETURN_CURL"))
+    RETURN_CURL = get_option('return_curl')
     def _return_api_call(func):
         @wraps(func)
         def function_wrapper(*args, **kwargs):
