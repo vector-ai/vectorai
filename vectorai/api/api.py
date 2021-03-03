@@ -30,7 +30,7 @@ referral_code: The referral code you've been given to allow you to register for 
 				email=email, 
 				description=description, 
 				referral_code=referral_code, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -51,7 +51,7 @@ read_username: Username for read only key
 				username=self.username,
 				api_key=self.api_key,
 				read_username=read_username, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -84,7 +84,7 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				collection_schema=collection_schema, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -107,7 +107,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				document=document, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -185,7 +185,7 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				metadata=metadata, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -225,7 +225,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 				collection_schema=collection_schema, 
 				rename_fields=rename_fields, 
 				remove_fields=remove_fields, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -267,7 +267,7 @@ update_schema: Whether the api should check the documents for vector datatype to
 				insert_date=insert_date, 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -300,7 +300,7 @@ quick: This will run the quickest insertion possible, which means there will be 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -335,7 +335,7 @@ document_ids: IDs of documents
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				document_ids=document_ids, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -362,7 +362,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				document_id=document_id, 
 				edits=edits, 
 				insert_date=insert_date, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -387,7 +387,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				collection_name=collection_name, 
 				documents=documents, 
 				insert_date=insert_date, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -449,7 +449,7 @@ document_ids: IDs of documents
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				document_ids=document_ids, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -516,7 +516,7 @@ filters: Query for filtering the search results
 				asc=asc, 
 				include_vector=include_vector, 
 				filters=filters, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -547,7 +547,7 @@ filters: Query for filtering the search results
 				page_size=page_size, 
 				include_vector=include_vector, 
 				filters=filters, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -750,7 +750,7 @@ sort: Fields to sort by
 				asc=asc, 
 				include_vector=include_vector, 
 				sort=sort, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -808,7 +808,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
 				multivector_query=multivector_query, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -868,7 +868,7 @@ search_fields: Vector fields to search against, and the weightings for them.
 				asc=asc, 
 				document_id=document_id, 
 				search_fields=search_fields, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -932,7 +932,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				document_ids=document_ids, 
 				search_fields=search_fields, 
 				vector_operation=vector_operation, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -998,11 +998,11 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
 				vector_operation=vector_operation, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, positive_document_ids, negative_document_ids, search_fields, vector, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, multivector_query, positive_document_ids, negative_document_ids, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -1032,11 +1032,10 @@ include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
 asc: Whether to sort results by ascending or descending order
+multivector_query: Query for advance search that allows for multiple vector and field querying
 positive_document_ids: Positive Document IDs to get recommendations for, and the weightings of each document
 negative_document_ids: Negative Document IDs to get recommendations for, and the weightings of each document
-search_fields: Vector fields to search against, and the weightings for them.
 vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
-vector: Vector, a list/array of floats that represents a piece of data
 
 """
 		return requests.post(
@@ -1059,12 +1058,11 @@ vector: Vector, a list/array of floats that represents a piece of data
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				multivector_query=multivector_query, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
-				search_fields=search_fields, 
 				vector_operation=vector_operation, 
-				vector=vector, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1110,7 +1108,7 @@ flatten:
 				page=page, 
 				asc=asc, 
 				flatten=flatten, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1226,7 +1224,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 				traditional_weight=traditional_weight, 
 				fuzzy=fuzzy, 
 				join=join, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1273,7 +1271,7 @@ image_field:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				image_field=image_field, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1299,7 +1297,7 @@ source_api_key: Api key to access the source username
 				source_collection_name=source_collection_name, 
 				source_username=source_username, 
 				source_api_key=source_api_key, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1365,7 +1363,7 @@ search_fields: Vector fields to search against
 				asc=asc, 
 				vector=vector, 
 				search_fields=search_fields, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1425,7 +1423,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
 				multivector_query=multivector_query, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1495,7 +1493,7 @@ first_step_page_size: Size of each page of results
 				chunk_step_multivector_query=chunk_step_multivector_query, 
 				first_step_page=first_step_page, 
 				first_step_page_size=first_step_page_size, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1518,7 +1516,7 @@ doc_id: ID of a Document
 				api_key=self.api_key,
 				join_query=join_query, 
 				doc_id=doc_id, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1541,7 +1539,7 @@ joined_collection_name: Name of the new collection that contains the joined resu
 				api_key=self.api_key,
 				join_query=join_query, 
 				joined_collection_name=joined_collection_name, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1577,7 +1575,7 @@ start_immediately: Whether to start the published aggregation immediately
 				date_field=date_field, 
 				refresh_time=refresh_time, 
 				start_immediately=start_immediately, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1641,7 +1639,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 				vector_fields=vector_fields, 
 				aggregation_type=aggregation_type, 
 				refresh=refresh, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1738,7 +1736,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				collection_name=collection_name, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1803,7 +1801,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				asc=asc, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1844,7 +1842,7 @@ selected_fields: The fields to turn into vectors
 				collection_name=collection_name, 
 				vector_name=vector_name, 
 				selected_fields=selected_fields, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1879,7 +1877,7 @@ vector_name: The name of the vector that the fields turn into
 				collection_name=collection_name, 
 				document=document, 
 				vector_name=vector_name, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -1945,7 +1943,7 @@ vector_name: A name to call the vector that the fields turn into
 				document=document, 
 				selected_fields=selected_fields, 
 				vector_name=vector_name, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -2017,7 +2015,7 @@ flatten:
 				page=page, 
 				asc=asc, 
 				flatten=flatten, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -2118,7 +2116,7 @@ filters: Query for filtering the search results
 				vector_field=vector_field, 
 				alias=alias, 
 				filters=filters, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -2197,7 +2195,7 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 				alias=alias, 
 				job=job, 
 				job_metric=job_metric, 
-				**kwargs))
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -2228,5 +2226,5 @@ n_components: The size/length to reduce the vector down to.
 				vector_field=vector_field, 
 				alias=alias, 
 				n_components=n_components, 
-				**kwargs))
+				))
 
