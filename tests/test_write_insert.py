@@ -11,47 +11,6 @@ from vectorai.errors import APIError, MissingFieldError, MissingFieldWarning, Co
 from vectorai.client import ViClient
 from .utils import TempClientWithDocs
 
-
-class TestCollectionBasics:
-    @pytest.mark.use_client
-    def test_create_collection(self, test_client, test_collection_name, test_vector_field):
-        collection_name = test_collection_name
-        if collection_name in test_client.list_collections():
-            test_client.delete_collection(collection_name)
-        response = test_client.create_collection(
-            collection_name=collection_name, collection_schema={test_vector_field: 512}
-        )
-        assert response is None
-
-    @pytest.mark.use_client
-    def test_prevent_collection_overwrite(self, test_client, test_collection_name):
-        """
-            Test prevention of the overwriting of the collections.
-        """
-        if test_collection_name not in test_client.list_collections():
-            test_client.create_collection(test_collection_name)
-        with pytest.raises(APIError):
-            response = test_client.create_collection(collection_name=test_collection_name)
-
-    @pytest.mark.use_client
-    def test_list_collections(self, test_collection_name, test_client):
-        response = test_client.list_collections()
-        assert response.count(test_collection_name) == 1
-
-    @pytest.mark.use_client
-    def test_delete_collection(self, test_client, test_collection_name):
-        response = test_client.delete_collection(collection_name=test_collection_name)
-        assert response['status'] == 'complete'
-
-def assert_json_serializable(document, temp_json_file="test.json"):
-    """Assert that an document is json serializable and is the same after loading back into Python.
-    """
-    with open(temp_json_file, "w") as f:
-        json.dump(document, f)
-    return_document = json.load(open(temp_json_file, "r"))
-    os.remove(temp_json_file)
-    assert return_document == document
-
 class TestInsert:
     @pytest.mark.use_client
     def test_insert_documents_simple_and_collection_stats_match(self, test_client, 
