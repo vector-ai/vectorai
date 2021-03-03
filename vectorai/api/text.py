@@ -16,6 +16,7 @@ class ViTextClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @return_curl_or_response('json')
     @retry()
     def search_text(
         self,
@@ -89,12 +90,12 @@ Args:
                 "asc": asc
         }
         params.update(kwargs)
-        response = requests.post(
+        return requests.post(
             url="{}/collection/search_with_text".format(self.url),
             json=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
+    @return_curl_or_response
     @retry()
     def encode_text(self, collection_name: str, text, return_curl: bool=False, **kwargs):
         """
@@ -121,12 +122,12 @@ Args:
             "text": text,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/encode_text".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def encode_text_job(
         self, collection_name: str, text_field: str, refresh: bool = False, **kwargs
@@ -164,8 +165,7 @@ Args:
                 "refresh": refresh,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/jobs/encode_text_field".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)

@@ -4,7 +4,7 @@ import requests
 from vectorai.api.utils import retry, return_curl_or_response
 
 
-class ViAPIClient:
+class _ViAPIClient:
 	def __init__(self, username, api_key, ):
 		self.username = username		
 		self.api_key = api_key		
@@ -453,7 +453,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
+	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=True, asc=False, include_vector=True, **kwargs):
 		return requests.get(
 			url='https://vecdb-aueast-api.azurewebsites.net/collection/retrieve_documents',
 			params=dict(
@@ -485,7 +485,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, filters=[], **kwargs):
+	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=True, asc=False, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
@@ -693,7 +693,7 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], **kwargs):
+	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=True, **kwargs):
 		"""Filters a collection
 Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.
 

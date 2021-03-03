@@ -16,6 +16,7 @@ class ViImageClient:
         else:
             self.url = "https://api.vctr.ai"
 
+    @return_curl_or_response('json')
     @retry()
     def search_image(
         self,
@@ -96,11 +97,10 @@ Args:
                     "asc": asc
                 }
                 params.update(kwargs)
-                response = requests.post(
+                return requests.post(
                     url="{}/collection/search_with_image".format(self.url),
                     json=parms
                 )
-                return return_curl_or_response(response, 'json', return_curl=return_curl)
         elif type(image) == bytes:
             params = {
                 "username": self.username,
@@ -117,11 +117,10 @@ Args:
                 "asc": asc
             }
             params.update(kwargs)
-            response = requests.post(
+            return requests.post(
                 url="{}/collection/search_with_image_upload".format(self.url),
                 json=params
             )
-            return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_image_by_upload(
@@ -190,6 +189,7 @@ Args:
             **kwargs
         )
 
+    @return_curl_or_response('json')
     @retry()
     def encode_image(self, collection_name: str, image, return_curl: bool=False, **kwargs):
         """
@@ -222,8 +222,8 @@ Args:
             url="{}/collection/encode_image".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def encode_image_job(
         self, collection_name: str, image_field: str, refresh: bool = False, return_curl: bool=False, **kwargs
@@ -263,8 +263,7 @@ Args:
                 "refresh": refresh,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/jobs/encode_image_field".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)

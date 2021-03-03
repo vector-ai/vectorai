@@ -214,6 +214,7 @@ Args:
         )
         return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
+    @return_curl_or_response
     @retry()
     def advanced_clustering_job(
         self,
@@ -259,12 +260,12 @@ Args:
             "n_iter": n_iter,
             "refresh": refresh,
         }
-        response = requests.get(
+        return requests.get(
             url="{}/collection/jobs/advanced_cluster".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def advanced_cluster_aggregate(
         self,
@@ -318,12 +319,12 @@ Args:
                 "filters" : filters,
                 "flatten" : flatten
         }
-        response = requests.post(
+        return requests.post(
             url="{}/collection/advanced_cluster_aggregate".format(self.url),
             json=params
         )
-        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def advanced_cluster_facets(
         self,
@@ -370,12 +371,12 @@ Args:
                 "alias": alias,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/advanced_cluster_facets".format(self.url),
             params=params,
         )
-        return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def advanced_cluster_centroids(
         self, collection_name: str, vector_field: str, alias: str = "default", **kwargs
@@ -401,12 +402,12 @@ Args:
             "alias": alias,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/advanced_cluster_centroids".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def advanced_cluster_centroid_documents(
         self,
@@ -445,8 +446,7 @@ Args:
             "alias": alias,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/advanced_cluster_centroid_documents".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl)
