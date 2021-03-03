@@ -1,4 +1,4 @@
-from .api import *
+from .api import _ViAPIClient
 from .cluster import *
 from .text import *
 from .audio import *
