@@ -18,11 +18,12 @@ def test_retrieve_and_encode_simple(test_client, test_collection_name):
     VECTOR_LENGTH = 100
     def fake_encode(x):
         return test_client.generate_vector(VECTOR_LENGTH)
-    with TempClientWithDocs(test_client, test_collection_name, 100) as client:
-        results = client.retrieve_and_encode(test_collection_name,
-        models={'country': fake_encode})
-        assert list(client.collection_schema(test_collection_name)['country_vector_'].keys())[0] == 'vector'
-        assert len(results['failed_document_ids']) == 0
-        assert 'country_vector_' in client.collection_schema(test_collection_name)
-        docs = client.retrieve_documents(test_collection_name)['documents']
-        assert len(docs[0]['country_vector_']) == VECTOR_LENGTH
+    # with TempClientWithDocs(test_client, test_collection_name, 100) as client:
+    test_client.insert_documents(test_collection_name, test_client.create_sample_documents(100))
+    results = test_client.retrieve_and_encode(test_collection_name,
+    models={'country': fake_encode})
+    assert list(test_client.collection_schema(test_collection_name)['country_vector_'].keys())[0] == 'vector'
+    assert len(results['failed_document_ids']) == 0
+    assert 'country_vector_' in test_client.collection_schema(test_collection_name)
+    docs = test_client.retrieve_documents(test_collection_name)['documents']
+    assert len(docs[0]['country_vector_']) == VECTOR_LENGTH
