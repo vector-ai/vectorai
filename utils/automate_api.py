@@ -14,7 +14,6 @@ if __name__=="__main__":
             "create_collection",
             "search",
             "delete_collection",
-            "edit_document",
             "create_collection_from_document"
         ],
     )

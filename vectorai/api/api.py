@@ -341,7 +341,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def _edit_document(self, collection_name, document_id, edits, insert_date=True, **kwargs):
+	def edit_document(self, collection_name, document_id, edits, insert_date=True, **kwargs):
 		"""Edit a document in a Collection by its id
 Edit by providing a key value pair of fields you are adding or changing.
     
@@ -719,7 +719,7 @@ These are the available filter_type types:
 5. "date": for filtering date by date range.
         {'field' : 'insert_date_', 'filter_type' : 'date', "condition":">=", "condition_value":"2020-01-01"}
 6. "numeric": for filtering by numeric range. 
-        {'field' : 'price', 'filter_type' : 'date', "condition":">=", "condition_value":90}
+        {'field' : 'price', 'filter_type' : 'numeric', "condition":">=", "condition_value":90}
 7. "ids": for filtering by document ids. 
         {'field' : 'ids', 'filter_type' : 'ids', "condition":"==", "condition_value":["1", "10"]}
 

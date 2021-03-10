@@ -45,7 +45,7 @@ class TestEdit:
                 "location": "Paris"
             }
             client.edit_document(
-                collection_name=test_collection_name, edits=edits
+                collection_name=test_collection_name, edits=edits, document_id=edits['_id']
             )
             time.sleep(2)
             doc = client.id(collection_name=test_collection_name, document_id="1")
@@ -60,7 +60,7 @@ class TestEdit:
             client.insert(test_collection_name, doc)
             results = test_client.filters(
                 test_collection_name,
-                test_client.create_filter_query(test_collection_name, 'location', 'contains', 'paris'))
+                test_client.create_filter_query(test_collection_name, 'location', 'contains', 'Paris'))
             assert len(results) > 0
 
     @pytest.mark.use_client
