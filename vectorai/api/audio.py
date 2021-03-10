@@ -16,6 +16,7 @@ class ViAudioClient:
         else:
             self.url = "https://api.vctr.ai"
             
+    @return_curl_or_response('json')
     @retry()
     def search_audio(
         self,
@@ -95,11 +96,11 @@ Args:
                     "asc": asc
                 }
                 params.update(kwargs)
-                response = requests.post(
+                return requests.post(
                     url="{}/collection/search_with_audio".format(self.url),
                     json=params
                 )
-                return return_curl_or_response(response, 'json', return_curl=return_curl)
+                
         elif type(audio) == bytes:
             params = {
                 "username": self.username,
@@ -116,11 +117,10 @@ Args:
                 "asc": asc
             }
             params.update(kwargs)
-            response = requests.post(
+            return requests.post(
                 url="{}/collection/search_with_audio_upload".format(self.url),
                 json=params
             )
-            return return_curl_or_response(response, 'json', return_curl=return_curl)
 
     @retry()
     def search_audio_by_upload(
@@ -187,6 +187,7 @@ Args:
             **kwargs
         )
     
+    @return_curl_or_response('json')
     @retry()
     def encode_audio(self, collection_name: str, audio, return_curl: bool=False, **kwargs):
         """
@@ -215,12 +216,12 @@ Args:
             "audio_url": audio,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/encode_audio".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)
 
+    @return_curl_or_response('json')
     @retry()
     def encode_audio_job(
         self, collection_name: str, audio_field: str, refresh: bool = False, return_curl: bool=False, **kwargs
@@ -261,8 +262,7 @@ Args:
             "refresh": refresh,
         }
         params.update(kwargs)
-        response = requests.get(
+        return requests.get(
             url="{}/collection/jobs/encode_audio_field".format(self.url),
             params=params
         )
-        return return_curl_or_response(response, 'json', return_curl=return_curl)

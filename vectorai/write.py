@@ -604,51 +604,6 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             **kwargs
         )
 
-    def edit_document(self, collection_name: str, edits: Dict[str, str], verbose=True, **kwargs):
-        """
-        Edit a document ina collection based on ID
-
-
-        Args:
-            collection_name:
-                Name of collection
-
-            edits:
-                What edits to make in a collection.
-
-            document_id:
-                Id of the document
-
-        Example:            Example:
-                >>> from vectorai.client import ViClient
-                >>> vi_client = ViClient(username, api_key, vectorai_url)
-                >>> vi_client.edit_documents(collection_name, edits=documents, workers=10)
-            >>> from vectorai.client import ViClient
-            >>> vi_client = ViClient(username, api_key, vectorai_url)
-            >>> documents_df = pd.DataFrame.from_records([{'chicken': 'Big chicken'}, {'chicken': 'small_chicken'}, {'chicken': 'cow'}])
-            >>> vi_client.edit_document(documents=documents_df, models={'chicken': text_encoder.encode})
-        """
-        if "_id" not in edits.keys():
-            raise ValueError("Missing _id in the document. Please include that field.")
-        copy_doc = edits.copy()
-        copy_doc.pop('_id')
-        document_id = edits['_id']
-        response = self._edit_document(
-            collection_name, edits=copy_doc, document_id=document_id, **kwargs
-        )
-
-        VERBOSE_MESSAGE_DICT = {
-            'updated': f"Edited item with id {document_id} successfully.",
-            'no changes detected': f"{document_id} has no changes."
-        }
-
-        if response not in VERBOSE_MESSAGE_DICT.keys():
-            raise APIError("Failed to edit item.")
-
-        if verbose:
-            print(VERBOSE_MESSAGE_DICT[response])
-
-
     def _edit_document_return_id(
         self, edits: Dict[str, str], collection_name: str
     ):

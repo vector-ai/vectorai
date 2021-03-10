@@ -31,7 +31,14 @@ jobs:
           - tests/test_models.py
           - tests/test_read.py
           - tests/test_search.py
-          - tests/test_write.py
+          - tests/test_write_collection_basics.py
+          - tests/test_write_deployed_models.py
+          - tests/test_write_documents.py
+          - tests/test_write_edit.py
+          - tests/test_write_insert.py
+          - tests/test_write_misc.py
+          - tests/test_write_multiprocessing.py
+          - tests/test_write_retrieve_and_encode.py
           - tests/analytics/api/test_comparator.py
     steps:
     - uses: actions/checkout@v2
