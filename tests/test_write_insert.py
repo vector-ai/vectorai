@@ -103,7 +103,7 @@ class TestInsert:
         response = test_client.insert(
             collection_name=test_collection_name, document=document
         )
-        assert response['status'] == 'successful'
+        assert response['status'] == 'success'
 
     @pytest.mark.use_client
     def test_insert_single_document_error(self, test_client, test_collection_name):
