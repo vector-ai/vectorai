@@ -5,9 +5,10 @@ from vectorai.api.utils import retry, return_curl_or_response
 
 
 class _ViAPIClient:
-	def __init__(self, username, api_key, ):
+	def __init__(self, username, api_key, url, ):
 		self.username = username		
 		self.api_key = api_key		
+		self.url = url		
 
 	@retry()
 	@return_curl_or_response('json')
@@ -24,7 +25,7 @@ referral_code: The referral code you've been given to allow you to register for 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/request_api_key',
+			url=self.url+'/project/request_api_key',
 			json=dict(
 				username=self.username,
 				email=email, 
@@ -46,7 +47,7 @@ read_username: Username for read only key
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/request_read_api_key',
+			url=self.url+'/project/request_read_api_key',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -78,7 +79,7 @@ collection_schema: Schema for specifying the field that are vectors and its leng
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/create_collection',
+			url=self.url+'/project/create_collection',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -101,7 +102,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/create_collection_from_document',
+			url=self.url+'/project/create_collection_from_document',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -113,7 +114,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	@return_curl_or_response('json')
 	def _delete_collection(self,collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/delete_collection',
+			url=self.url+'/project/delete_collection',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -124,7 +125,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	@return_curl_or_response('json')
 	def _list_collections(self,**kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/list_collections',
+			url=self.url+'/project/list_collections',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -134,7 +135,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	@return_curl_or_response('json')
 	def collection_stats(self,collection_name, seperate_chunks=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/collection_stats',
+			url=self.url+'/project/collection_stats',
 			params=dict(
 				seperate_chunks=seperate_chunks, 
 				username=self.username, 
@@ -146,7 +147,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	@return_curl_or_response('json')
 	def collection_schema(self,collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/collection_schema',
+			url=self.url+'/project/collection_schema',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -157,7 +158,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	@return_curl_or_response('json')
 	def collection_vector_health(self,collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/collection_vector_health',
+			url=self.url+'/project/collection_vector_health',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -179,7 +180,7 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/add_collection_metadata',
+			url=self.url+'/project/add_collection_metadata',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -191,7 +192,7 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 	@return_curl_or_response('json')
 	def collection_metadata(self,collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/collection_metadata',
+			url=self.url+'/project/collection_metadata',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -216,7 +217,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/copy_collection',
+			url=self.url+'/project/copy_collection',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -231,7 +232,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 	@return_curl_or_response('json')
 	def job_status(self,job_id, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/job_status',
+			url=self.url+'/project/job_status',
 			params=dict(
 				job_id=job_id, 
 				username=self.username, 
@@ -259,7 +260,7 @@ quick: This will run the quickest insertion possible, which means there will be 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/insert',
+			url=self.url+'/collection/insert',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -292,7 +293,7 @@ quick: This will run the quickest insertion possible, which means there will be 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/bulk_insert',
+			url=self.url+'/collection/bulk_insert',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -308,7 +309,7 @@ quick: This will run the quickest insertion possible, which means there will be 
 	@return_curl_or_response('json')
 	def delete_by_id(self,document_id, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/delete_by_id',
+			url=self.url+'/collection/delete_by_id',
 			params=dict(
 				document_id=document_id, 
 				username=self.username, 
@@ -331,7 +332,7 @@ document_ids: IDs of documents
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/bulk_delete_by_id',
+			url=self.url+'/collection/bulk_delete_by_id',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -356,7 +357,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/edit_document',
+			url=self.url+'/collection/edit_document',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -382,7 +383,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/bulk_edit_document',
+			url=self.url+'/collection/bulk_edit_document',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -395,7 +396,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 	@return_curl_or_response('json')
 	def delete_document_fields(self,document_id, fields_to_delete, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/delete_document_fields',
+			url=self.url+'/collection/delete_document_fields',
 			params=dict(
 				document_id=document_id, 
 				fields_to_delete=fields_to_delete, 
@@ -408,7 +409,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 	@return_curl_or_response('json')
 	def id(self,document_id, collection_name, include_vector=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/id',
+			url=self.url+'/collection/id',
 			params=dict(
 				document_id=document_id, 
 				include_vector=include_vector, 
@@ -421,7 +422,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 	@return_curl_or_response('json')
 	def bulk_id(self,document_ids, collection_name, include_vector=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/bulk_id',
+			url=self.url+'/collection/bulk_id',
 			params=dict(
 				document_ids=document_ids, 
 				include_vector=include_vector, 
@@ -445,7 +446,7 @@ document_ids: IDs of documents
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/bulk_missing_id',
+			url=self.url+'/collection/bulk_missing_id',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -457,7 +458,7 @@ document_ids: IDs of documents
 	@return_curl_or_response('json')
 	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/retrieve_documents',
+			url=self.url+'/collection/retrieve_documents',
 			params=dict(
 				include_fields=include_fields, 
 				cursor=cursor, 
@@ -474,7 +475,7 @@ document_ids: IDs of documents
 	@return_curl_or_response('json')
 	def random_documents(self,collection_name, seed=10, include_fields=[], page_size=20, include_vector=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/random_documents',
+			url=self.url+'/collection/random_documents',
 			params=dict(
 				seed=seed, 
 				include_fields=include_fields, 
@@ -506,7 +507,7 @@ filters: Query for filtering the search results
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/retrieve_documents_with_filters',
+			url=self.url+'/collection/retrieve_documents_with_filters',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -539,7 +540,7 @@ filters: Query for filtering the search results
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/random_documents_with_filters',
+			url=self.url+'/collection/random_documents_with_filters',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -555,7 +556,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def _search(self,vector, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search',
+			url=self.url+'/collection/search',
 			params=dict(
 				vector=vector, 
 				username=self.username, 
@@ -579,7 +580,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def search_by_id(self,document_id, collection_name, search_field, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_by_id',
+			url=self.url+'/collection/search_by_id',
 			params=dict(
 				document_id=document_id, 
 				username=self.username, 
@@ -603,7 +604,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def search_by_ids(self,document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_by_ids',
+			url=self.url+'/collection/search_by_ids',
 			params=dict(
 				document_ids=document_ids, 
 				vector_operation=vector_operation, 
@@ -628,7 +629,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_by_positive_negative_ids',
+			url=self.url+'/collection/search_by_positive_negative_ids',
 			params=dict(
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
@@ -654,7 +655,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_with_positive_negative_ids_as_history',
+			url=self.url+'/collection/search_with_positive_negative_ids_as_history',
 			params=dict(
 				vector=vector, 
 				positive_document_ids=positive_document_ids, 
@@ -681,7 +682,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def facets(self,collection_name, facets_fields=[], date_interval="monthly", page_size=1000, page=1, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/facets',
+			url=self.url+'/collection/facets',
 			params=dict(
 				facets_fields=facets_fields, 
 				date_interval=date_interval, 
@@ -741,7 +742,7 @@ sort: Fields to sort by
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/filters',
+			url=self.url+'/collection/filters',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -790,7 +791,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_search',
+			url=self.url+'/collection/advanced_search',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -849,7 +850,7 @@ search_fields: Vector fields to search against, and the weightings for them.
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_search_by_id',
+			url=self.url+'/collection/advanced_search_by_id',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -912,7 +913,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_search_by_ids',
+			url=self.url+'/collection/advanced_search_by_ids',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -977,7 +978,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_search_by_positive_negative_ids',
+			url=self.url+'/collection/advanced_search_by_positive_negative_ids',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1041,7 +1042,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_search_with_positive_negative_ids_as_history',
+			url=self.url+'/collection/advanced_search_with_positive_negative_ids_as_history',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1100,7 +1101,7 @@ flatten:
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/aggregate',
+			url=self.url+'/collection/aggregate',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1116,7 +1117,7 @@ flatten:
 	@return_curl_or_response('json')
 	def traditional_search(self,collection_name, text, text_fields, fuzzy=-1, join=True, page_size=20, page=1, include_fields=[], include_vector=False, include_count=True, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/traditional_search',
+			url=self.url+'/collection/traditional_search',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -1137,7 +1138,7 @@ flatten:
 	@return_curl_or_response('json')
 	def hybrid_search(self,text, vector, text_fields, collection_name, search_fields, traditional_weight=0.075, fuzzy=-1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/hybrid_search',
+			url=self.url+'/collection/hybrid_search',
 			params=dict(
 				text=text, 
 				vector=vector, 
@@ -1201,7 +1202,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_hybrid_search',
+			url=self.url+'/collection/advanced_hybrid_search',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1232,7 +1233,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 	@return_curl_or_response('json')
 	def job_status(self,job_id, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/job_status',
+			url=self.url+'/collection/job_status',
 			params=dict(
 				job_id=job_id, 
 				username=self.username, 
@@ -1244,7 +1245,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 	@return_curl_or_response('json')
 	def list_jobs(self,collection_name, show_active_only=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/list_jobs',
+			url=self.url+'/collection/list_jobs',
 			params=dict(
 				show_active_only=show_active_only, 
 				username=self.username, 
@@ -1269,7 +1270,7 @@ image_field:
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_image_field',
+			url=self.url+'/collection/encode_image_field',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1296,7 +1297,7 @@ image_field:
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_field',
+			url=self.url+'/collection/encode_field',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1322,7 +1323,7 @@ source_api_key: Api key to access the source username
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/project/copy_collection_from_another_user',
+			url=self.url+'/project/copy_collection_from_another_user',
 			json=dict(
 				collection_name=collection_name, 
 				username=self.username,
@@ -1374,7 +1375,7 @@ search_fields: Vector fields to search against
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/chunk_search',
+			url=self.url+'/collection/chunk_search',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1435,7 +1436,7 @@ multivector_query: Query for advance search that allows for multiple vector and 
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_chunk_search',
+			url=self.url+'/collection/advanced_chunk_search',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1502,7 +1503,7 @@ first_step_page_size: Size of each page of results
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_multistep_chunk_search',
+			url=self.url+'/collection/advanced_multistep_chunk_search',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1543,7 +1544,7 @@ doc_id: ID of a Document
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/id_lookup_joined',
+			url=self.url+'/collection/id_lookup_joined',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1566,7 +1567,7 @@ joined_collection_name: Name of the new collection that contains the joined resu
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/join_collections',
+			url=self.url+'/collection/join_collections',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1596,7 +1597,7 @@ start_immediately: Whether to start the published aggregation immediately
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/publish_aggregation',
+			url=self.url+'/collection/publish_aggregation',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1614,7 +1615,7 @@ start_immediately: Whether to start the published aggregation immediately
 	@return_curl_or_response('json')
 	def delete_published_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/delete_published_aggregation',
+			url=self.url+'/collection/delete_published_aggregation',
 			params=dict(
 				aggregation_name=aggregation_name, 
 				username=self.username, 
@@ -1625,7 +1626,7 @@ start_immediately: Whether to start the published aggregation immediately
 	@return_curl_or_response('json')
 	def start_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/start_aggregation',
+			url=self.url+'/collection/start_aggregation',
 			params=dict(
 				aggregation_name=aggregation_name, 
 				username=self.username, 
@@ -1636,7 +1637,7 @@ start_immediately: Whether to start the published aggregation immediately
 	@return_curl_or_response('json')
 	def stop_aggregation(self,aggregation_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/stop_aggregation',
+			url=self.url+'/collection/stop_aggregation',
 			params=dict(
 				aggregation_name=aggregation_name, 
 				username=self.username, 
@@ -1662,7 +1663,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/vector_aggregation',
+			url=self.url+'/collection/vector_aggregation',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1678,7 +1679,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 	@return_curl_or_response('json')
 	def encode_array_field(self,array_fields, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_array_field',
+			url=self.url+'/collection/encode_array_field',
 			params=dict(
 				array_fields=array_fields, 
 				username=self.username, 
@@ -1690,7 +1691,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 	@return_curl_or_response('json')
 	def encode_array(self,array_field, array, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_array',
+			url=self.url+'/collection/encode_array',
 			params=dict(
 				array_field=array_field, 
 				array=array, 
@@ -1703,7 +1704,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 	@return_curl_or_response('json')
 	def search_with_array(self,array_field, array, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_with_array',
+			url=self.url+'/collection/search_with_array',
 			params=dict(
 				array_field=array_field, 
 				array=array, 
@@ -1728,7 +1729,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 	@return_curl_or_response('json')
 	def encode_dictionary_field(self,dictionary_fields, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_dictionary_field',
+			url=self.url+'/collection/encode_dictionary_field',
 			params=dict(
 				dictionary_fields=dictionary_fields, 
 				username=self.username, 
@@ -1762,7 +1763,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_dictionary',
+			url=self.url+'/collection/encode_dictionary',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1815,7 +1816,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_with_dictionary',
+			url=self.url+'/collection/search_with_dictionary',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1868,7 +1869,7 @@ selected_fields: The fields to turn into vectors
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_fields_to_vector',
+			url=self.url+'/collection/encode_fields_to_vector',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1903,7 +1904,7 @@ vector_name: The name of the vector that the fields turn into
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/encode_fields',
+			url=self.url+'/collection/encode_fields',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1956,7 +1957,7 @@ vector_name: A name to call the vector that the fields turn into
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/search_with_fields',
+			url=self.url+'/collection/search_with_fields',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1982,7 +1983,7 @@ vector_name: A name to call the vector that the fields turn into
 	@return_curl_or_response('json')
 	def combine_vectors(self,vector_fields, vector_name, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/combine_vectors',
+			url=self.url+'/collection/combine_vectors',
 			params=dict(
 				vector_fields=vector_fields, 
 				vector_name=vector_name, 
@@ -1995,7 +1996,7 @@ vector_name: A name to call the vector that the fields turn into
 	@return_curl_or_response('json')
 	def collection_vector_mappings(self,collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/collection_vector_mappings',
+			url=self.url+'/collection/collection_vector_mappings',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -2006,7 +2007,7 @@ vector_name: A name to call the vector that the fields turn into
 	@return_curl_or_response('json')
 	def cluster(self,vector_field, collection_name, n_clusters=0, gpu=True, refresh=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/cluster',
+			url=self.url+'/collection/cluster',
 			params=dict(
 				vector_field=vector_field, 
 				n_clusters=n_clusters, 
@@ -2038,7 +2039,7 @@ flatten:
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/cluster_aggregate',
+			url=self.url+'/collection/cluster_aggregate',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -2054,7 +2055,7 @@ flatten:
 	@return_curl_or_response('json')
 	def cluster_facets(self,collection_name, facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/cluster_facets',
+			url=self.url+'/collection/cluster_facets',
 			params=dict(
 				facets_fields=facets_fields, 
 				page_size=page_size, 
@@ -2070,7 +2071,7 @@ flatten:
 	@return_curl_or_response('json')
 	def cluster_centroids(self,vector_field, collection_name, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/cluster_centroids',
+			url=self.url+'/collection/cluster_centroids',
 			params=dict(
 				vector_field=vector_field, 
 				username=self.username, 
@@ -2082,7 +2083,7 @@ flatten:
 	@return_curl_or_response('json')
 	def cluster_centroid_documents(self,vector_field, collection_name, metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/cluster_centroid_documents',
+			url=self.url+'/collection/cluster_centroid_documents',
 			params=dict(
 				vector_field=vector_field, 
 				metric=metric, 
@@ -2098,7 +2099,7 @@ flatten:
 	@return_curl_or_response('json')
 	def advanced_cluster(self,vector_field, collection_name, alias="default", n_clusters=0, n_iter=10, n_init=5, gpu=True, refresh=True, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_cluster',
+			url=self.url+'/collection/advanced_cluster',
 			params=dict(
 				vector_field=vector_field, 
 				alias=alias, 
@@ -2136,7 +2137,7 @@ filters: Query for filtering the search results
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_cluster_aggregate',
+			url=self.url+'/collection/advanced_cluster_aggregate',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -2155,7 +2156,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def advanced_cluster_facets(self,vector_field, collection_name, alias="default", facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_cluster_facets',
+			url=self.url+'/collection/advanced_cluster_facets',
 			params=dict(
 				vector_field=vector_field, 
 				alias=alias, 
@@ -2173,7 +2174,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def advanced_cluster_centroids(self,vector_field, collection_name, alias="default", **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_cluster_centroids',
+			url=self.url+'/collection/advanced_cluster_centroids',
 			params=dict(
 				vector_field=vector_field, 
 				alias=alias, 
@@ -2186,7 +2187,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def advanced_cluster_centroid_documents(self,vector_field, collection_name, alias="default", metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
 		return requests.get(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/advanced_cluster_centroid_documents',
+			url=self.url+'/collection/advanced_cluster_centroid_documents',
 			params=dict(
 				vector_field=vector_field, 
 				alias=alias, 
@@ -2218,7 +2219,7 @@ job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/insert_cluster_centroids',
+			url=self.url+'/collection/insert_cluster_centroids',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -2250,7 +2251,7 @@ n_components: The size/length to reduce the vector down to.
 
 """
 		return requests.post(
-			url='https://vecdb-aueast-api.azurewebsites.net/collection/dimensionality_reduce',
+			url=self.url+'/collection/dimensionality_reduce',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
