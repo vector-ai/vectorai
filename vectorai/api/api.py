@@ -1,7 +1,7 @@
 # This python file is auto-generated. Please do not edit.
 import requests
 import requests
-from vectorai.api.utils import retry, return_curl_or_response
+from .utils import retry, return_curl_or_response
 
 
 class _ViAPIClient:
