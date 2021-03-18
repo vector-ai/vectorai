@@ -19,13 +19,6 @@
     </a>
 </p>
 
-<div align="center">
-
-![TotalDownloads](assets/total_downloads.svg)
-![WeeklyDownloads](assets/weekly_downloads.svg)
-![MonthlyDownloads](assets/monthly_downloads.svg)
-
-</div>
 <hr>
 
 <h3 align="center">
