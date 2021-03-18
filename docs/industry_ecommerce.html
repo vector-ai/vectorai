@@ -534,7 +534,7 @@ image_encoder = ViImage2Vec(username, api_key, &#39;https://api.vctr.ai&#39;)
 </pre></div>
 </div>
 </div>
-<p>Here we insert the documents into a collection and encode it with a text2vec encoder. When a field is encoded a new field is created called ‘field_vector_’. e.g. ‘name’ -&gt; ‘name_vector_’</p>
+<p>Here we insert the documents into a collection and encode it with a text2vec encoder. When a field is encoded a new field is created called ‘field_vector_’. e.g. ‘name’ -&gt; ‘name_vector_’</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -1666,8 +1666,8 @@ vi_client.show_json(results, selected_fields=[&#39;_id&#39;, &#39;name&#39;, &#3
 </div>
 <div class="section" id="Multi-Item-Recommendations-(Many--&gt;-Many)">
 <h2>Multi Item Recommendations (Many -&gt; Many)<a class="headerlink" href="#Multi-Item-Recommendations-(Many-->-Many)" title="Permalink to this headline">¶</a></h2>
-<p>e.g. I liked product A+B, recommend me products similar to it</p>
-<p>e.g. A like Product A only about 7/10, I like Product B 10/10</p>
+<p>e.g. I liked product A+B, recommend me products similar to it</p>
+<p>e.g. A like Product A only about 7/10, I like Product B 10/10</p>
 <p><span class="math notranslate nohighlight">\(0.7\times Vector_{ProductA} + 1\times Vector_{ProductB} = Search Query\)</span></p>
 <p>Recommendations for multiple products.</p>
 <div class="nbinput docutils container">
