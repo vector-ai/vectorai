@@ -714,7 +714,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
         """
-        docs = self.retrieve_documents(collection_name, page_size=chunksize, page_size=1, 
+        docs = self.retrieve_documents(collection_name, page_size=1, 
             include_fields=['_id'])
         docs['cursor'] = None
         failed_all = {
