@@ -702,8 +702,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         self,
         collection_name: str,
         edit_fn: Callable,
-        chunksize: int = 15,
         include_fields: list=[]):
+        chunksize: int = 15):
         """
         Retrieve all documents and re-encode with new models.
         Args:
