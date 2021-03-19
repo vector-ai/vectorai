@@ -724,7 +724,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                     collection_name, cursor=docs['cursor'],
                     include_fields=list(models.keys()),
                     page_size=chunksize)
-                {self.edit_fn(d) for d in docs['documents']}}
+                {self.edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
                     documents=docs['documents'])
