@@ -5,7 +5,7 @@ from .errors import MissingFieldError
 
 class DocUtilsMixin:
     @classmethod
-    def get_field(self, field: str, doc: Dict):
+    def get_field(self, field: str, doc: Dict, ignore_missing: bool=True):
         """
             For nested dictionaries, tries to access a field.
             e.g. 
@@ -34,8 +34,7 @@ class DocUtilsMixin:
             try:
                 d = d[f]
             except KeyError:
-                try:
-                    return doc[field]
+                try: return doc[field]
                 except KeyError:
                     raise MissingFieldError("Document is missing " + field)
             except TypeError:
@@ -43,6 +42,8 @@ class DocUtilsMixin:
                     # Get the Get the chunk document out.
                     d = d[int(f)]
                 else:
+                    if ignore_missing:
+                        return None
                     raise MissingFieldError("Document is missing " + f + ' of ' + field)
         return d
     
@@ -58,7 +59,7 @@ class DocUtilsMixin:
 
 
     @classmethod
-    def get_fields(self, fields: List[str], doc: Dict) -> List[Any]:
+    def get_fields(self, fields: List[str], doc: Dict, ignore_missing=True) -> List[Any]:
         """
             For nested dictionaries, tries to access a field.
             e.g. 
@@ -82,7 +83,7 @@ class DocUtilsMixin:
                 >>> sample_document = {'kfc': {'item': 'chicken'}}
                 >>> vi_client.get_field('kfc.item', sample_document) == 'chickens'
         """
-        return [self.get_field(f, doc) for f in fields]
+        return [self.get_field(f, doc, ignore_missing) for f in fields]
 
     def get_field_across_documents(self, field: str, docs: List[Dict]):
         """
@@ -110,7 +111,16 @@ class DocUtilsMixin:
                 # returns 10 values in the nested dictionary
         """
         return [self.get_field(field, doc) for doc in docs]
-
+    
+    def get_fields_across_document(self, fields: List[str], doc: Dict):
+        """
+        Get numerous fields across a document.
+        """
+        return [self.get_field(f, doc) for f in fields]
+    
+    def set_fields_across_document(self, fields: List[str], doc: Dict, values: List):
+        [self.set_field(f, doc, values[i]) for i, f in enumerate(fields)]
+    
     @staticmethod
     def set_field(
         field: str, doc: Dict, value: Any, handle_if_missing=True
