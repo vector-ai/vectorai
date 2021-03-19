@@ -697,6 +697,41 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                     failed_all[k] += failed[k]
                 pbar.update(1)
         return failed_all
+    
+    def retrieve_and_edit(
+        self,
+        collection_name: str,
+        edit_fn: Callable,
+        chunksize: int = 15):
+        """
+        Retrieve all documents and re-encode with new models.
+        Args:
+            collection_name: Name of collection
+            models: Models as a dictionary
+            chunksize: the number of results to
+            retrieve and then encode and then edit in one go
+            use_bulk_encode: Whether to use bulk_encode on the models.
+        """
+        docs = self.retrieve_documents(collection_name, page_size=chunksize)
+        docs['cursor'] = None
+        failed_all = {
+            "failed_document_ids": []
+        }
+        num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
+            while len(docs['documents']) > 0:
+                docs = self.retrieve_documents(
+                    collection_name, cursor=docs['cursor'],
+                    include_fields=list(models.keys()),
+                    page_size=chunksize)
+                {self.edit_fn(d) for d in docs['documents']}
+                failed = self.bulk_edit_document(
+                    collection_name=collection_name,
+                    documents=docs['documents'])
+                for k in failed_all.keys():
+                    failed_all[k] += failed[k]
+                pbar.update(1)
+        return failed_all
 
     def _typecheck_collection_name(self, collection_name: str):
         """
