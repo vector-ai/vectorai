@@ -726,7 +726,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                 docs = self.retrieve_documents(
                     collection_name, cursor=docs['cursor'],
                     page_size=chunksize, include_fields=include_fields)
-                {self.edit_fn(d) for d in docs['documents']}
+                {edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
                     documents=docs['documents'])
