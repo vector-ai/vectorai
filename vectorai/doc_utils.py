@@ -112,11 +112,11 @@ class DocUtilsMixin:
         """
         return [self.get_field(field, doc) for doc in docs]
     
-    def get_fields_across_document(self, fields: List[str], doc: Dict):
+    def get_fields_across_document(self, fields: List[str], doc: Dict, ignore_missing=True):
         """
         Get numerous fields across a document.
         """
-        return [self.get_field(f, doc) for f in fields]
+        return [self.get_field(f, doc, ignore_missing=ignore_missing) for f in fields]
     
     def set_fields_across_document(self, fields: List[str], doc: Dict, values: List):
         [self.set_field(f, doc, values[i]) for i, f in enumerate(fields)]
