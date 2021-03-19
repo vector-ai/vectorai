@@ -21,7 +21,7 @@ class UtilsMixin:
             vector_length:
                 Length of a vector.
             num_of_constant_values
-                The number of constant values in a vector. This is to help make the 
+                The number of constant values in a vector. This is to help make the
                 vectors more similar
 
         Example:
@@ -49,7 +49,7 @@ class UtilsMixin:
             return pd.DataFrame(data)
         else:
             print("missing field")
-        
+
     def clean_results(self, results):
         if 'results' in results:
             return results['results']
@@ -59,15 +59,15 @@ class UtilsMixin:
 
     def results_pretty(self, results: Union[Dict, List], field: str):
         """
-        Make results pretty in a Pandas Dataframe. 
+        Make results pretty in a Pandas Dataframe.
         Args:
             results:
-                JSON of results 
-            field: 
+                JSON of results
+            field:
                 Field to prettify results.
-        
+
         Example:
-            >>> result = vi_client.search(collection_name, text_encoder.encode('No more tissue paper'), 
+            >>> result = vi_client.search(collection_name, text_encoder.encode('No more tissue paper'),
                 field='OriginalTweet_vector_', page_size=5)
             >>> vi_client.results_pretty(result, 'OriginalTweet')
         """
@@ -99,7 +99,7 @@ class UtilsMixin:
                 object:
                     Any Python instance/variable
                 value:
-                    Name of new instance 
+                    Name of new instance
 
             Example:
                 >>> from vectorai.client import ViClient
@@ -113,14 +113,14 @@ class UtilsMixin:
             Rename an object.
             Args:
                 object:
-                    Any Python object 
+                    Any Python object
 
             Example:
                 >>> from vectorai.client import ViClient
                 >>> ViClient.set_name(model, 'new_name')
         """
         object.__name__ = value
-    
+
     @staticmethod
     def get_name(object):
         """
@@ -131,12 +131,12 @@ class UtilsMixin:
             Returns:
                 object name:
                     Name of object
-                    
+
             Example:
                 >>> get_name(try_it)
         """
         return object.__name__
-        
+
     @staticmethod
     def is_in_ipython():
         """
@@ -163,7 +163,7 @@ class UtilsMixin:
             if 'IPKernelApp' in get_ipython().config:
                 is_in_notebook = True
         return is_in_notebook
-    
+
     def progress_bar(self, documents: List, total: int=None, show_progress_bar=True):
         """
         Returns a progress bar. depending on if notebook is available or not.
@@ -171,23 +171,23 @@ class UtilsMixin:
         Args:
             documents:
                 A list of documents (Python dictionaries)
-            
+
             Total:
                 Length of documents/size of update
 
         Returns:
-            Tqdm Progress Bar 
-        
+            Tqdm Progress Bar
+
         Example:
             for i in UtilsMixin.progress_bar(documents):
                 ...
         """
         if not show_progress_bar:
             return documents
-        
+
         if total is None:
             total = len(documents)
-        
+
         if self.is_in_notebook():
             from tqdm.notebook import tqdm
             return tqdm(documents, total=total)
@@ -197,7 +197,7 @@ class UtilsMixin:
                 return tqdm(documents, total=total)
             except:
                 return documents
-    
+
     @classmethod
     def create_sample_document(self, document_id: str=None, include_chunks=False):
         """
@@ -243,7 +243,7 @@ class UtilsMixin:
         if document_id is not None:
             sample_document.update({'_id': str(document_id)})
         return sample_document
-    
+
     @classmethod
     def create_sample_documents(self, num_of_documents: int, include_chunks=False):
         """
@@ -272,9 +272,9 @@ class UtilsMixin:
     def render_audio_chunk(self, row):
         return self.render_chunk(row, self.render_audio_in_html)
 
-    def show_df(self, df: pd.DataFrame, 
+    def show_df(self, df: pd.DataFrame,
     image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
-    chunk_audio_fields: List[str]=[], image_width: int=60, 
+    chunk_audio_fields: List[str]=[], image_width: int=60,
     include_vector: bool=False, return_html: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
@@ -282,7 +282,7 @@ class UtilsMixin:
                 df:
                     Pandas DataFrame
                 image_fields:
-                    List of fields with the images 
+                    List of fields with the images
                 audio_fields:
                     List of fields for the audio
                 nrows:
@@ -310,7 +310,7 @@ class UtilsMixin:
 
     def render_image_in_html(self, path, image_width) -> str:
         return '<img src="'+ path + f'" width="{image_width}" >'
-    
+
     def render_audio_in_html(self, path) -> str:
         return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
@@ -323,7 +323,7 @@ class UtilsMixin:
                 df:
                     Pandas DataFrame
                 image_fields:
-                    List of fields with the images 
+                    List of fields with the images
                 audio_fields:
                     List of fields for the audio
                 nrows:
@@ -358,7 +358,7 @@ class UtilsMixin:
             unnested_json[k] = vi.get_field_across_documents(k, json_data)
         return unnested_json
 
-    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
+    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
         audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
         nrows: int=None, image_width: int=60, include_vector=False):
         """
@@ -367,13 +367,13 @@ class UtilsMixin:
                 json:
                     Dictionary
                 selected_fields:
-                    List of fields to see in the dictionary 
+                    List of fields to see in the dictionary
                 image_fields:
-                    List of fields with the images 
+                    List of fields with the images
                 audio_fields:
                     List of fields for the audio
-                chunk_image_fields: 
-                    List of image fields that should be chunked 
+                chunk_image_fields:
+                    List of image fields that should be chunked
                 chunk_audio_fields:
                     List of audio fields that should be chunked
                 nrows:
@@ -383,24 +383,27 @@ class UtilsMixin:
                 include_vector:
                     Include the vector fields when showing JSON
         """
-        json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields)
+        if selected_fields is None:
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields)
+        else:
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields)
         if nrows is not None:
             json = json[:nrows]
         if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
-            return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields, 
+            return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields,
             chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
             image_width=image_width, include_vector=include_vector)
         return self.show_df(pd.DataFrame(json),
-            image_fields=image_fields, audio_fields=audio_fields, 
+            image_fields=image_fields, audio_fields=audio_fields,
             chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
             image_width=image_width, include_vector=include_vector)
-    
-    def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[], 
+
+    def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
     audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
         """Show results if the documents are chunked.
         For images, concatenates the chunk images into the same numpy array
         For text, puts them one after the other with smaller index.
-        No Audio chunking for now. 
+        No Audio chunking for now.
         """
         raise NotImplementedError
 
@@ -420,7 +423,7 @@ def decorate_functions_by_argument(function_decorator, argument):
         Decorate a function with an argument
         Args:
             function_decorator:
-                A decorator function in Python 
+                A decorator function in Python
             argument:
                 The Python argument that has to be altered
         Returns:
@@ -459,12 +462,12 @@ def set_default_collection(func, collection_name):
     """
     @wraps(func)
     def wrapper(*args, **kw):
-        # Set a stack level so this only effects highest level functions 
+        # Set a stack level so this only effects highest level functions
         # and not internal functions that use collection_name
         if 'collection_name' in inspect.getfullargspec(func).args \
             and getattr(args[0], 'decorator_called') is False:
                 setattr(args[0], 'decorator_called', True)
-                setattr(args[0], 'decorator_call_stack_level', 
+                setattr(args[0], 'decorator_call_stack_level',
                 get_stack_level())
                 num_of_args = len(inspect.getfullargspec(func).args)
                 collection_name = getattr(args[0], 'collection_name')
@@ -495,7 +498,7 @@ def set_default_collection(func, collection_name):
             except TypeError:
                 collection_name = getattr(args[0], 'collection_name')
                 res = func(args[0], collection_name, *args[1:], **kw)
-        
+
         if get_stack_level() == getattr(args[0], 'decorator_call_stack_level') and \
             getattr(args[0], 'decorator_called'):
             setattr(args[0], 'decorator_called', False)
