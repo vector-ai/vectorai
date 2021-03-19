@@ -702,17 +702,20 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         self,
         collection_name: str,
         edit_fn: Callable,
-        chunksize: int = 15):
+        chunksize: int = 15,
+        include_fields: list=[]):
         """
         Retrieve all documents and re-encode with new models.
         Args:
             collection_name: Name of collection
-            models: Models as a dictionary
+            edit_fn: Editing a document.
+            include_fields: The number of fields to retrieve to speed up the document
+            retrieval step
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
-            use_bulk_encode: Whether to use bulk_encode on the models.
         """
-        docs = self.retrieve_documents(collection_name, page_size=chunksize)
+        docs = self.retrieve_documents(collection_name, page_size=chunksize, page_size=1, 
+            include_fields=['_id'])
         docs['cursor'] = None
         failed_all = {
             "failed_document_ids": []
@@ -723,7 +726,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                 docs = self.retrieve_documents(
                     collection_name, cursor=docs['cursor'],
                     include_fields=list(models.keys()),
-                    page_size=chunksize)
+                    page_size=chunksize, include_fields=include_fields)
                 {self.edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
