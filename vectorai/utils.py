@@ -355,7 +355,7 @@ class UtilsMixin:
     def unnest_json(self, json_data, schema):
         unnested_json = {}
         for k in schema:
-            unnested_json[k] = vi.get_field_across_documents(k, json_data)
+            unnested_json[k] = self.get_field_across_documents(k, json_data)
         return unnested_json
 
     def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
