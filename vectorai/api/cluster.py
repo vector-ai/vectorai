@@ -214,7 +214,7 @@ Args:
         )
         return return_curl_or_response(response, return_type='json', return_curl=return_curl)
 
-    @return_curl_or_response
+    @return_curl_or_response('json')
     @retry()
     def advanced_clustering_job(
         self,
