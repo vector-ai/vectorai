@@ -54,6 +54,7 @@ def return_response(response, return_type='json'):
         return response.json()
     elif return_type == 'content':
         return response.content
+    return response
 
 def dict_to_params(data_dict):
     data_request = ''
