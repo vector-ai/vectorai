@@ -686,7 +686,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
             while len(docs['documents']) > 0:
                 docs = self.retrieve_documents(
-                    collection_name, cursor=docs['cursor'],
+                    collection_name=collection_name,
+                    cursor=docs['cursor'],
                     include_fields=list(models.keys()),
                     page_size=chunksize)
                 failed = self.bulk_edit_document(
@@ -697,7 +698,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                     failed_all[k] += failed[k]
                 pbar.update(1)
         return failed_all
-    
+
     def retrieve_and_edit(
         self,
         collection_name: str,
@@ -714,7 +715,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
         """
-        docs = self.retrieve_documents(collection_name, page_size=1, 
+        docs = self.retrieve_documents(collection_name, page_size=1,
             include_fields=['_id'])
         docs['cursor'] = None
         failed_all = {
@@ -724,8 +725,10 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
             while len(docs['documents']) > 0:
                 docs = self.retrieve_documents(
-                    collection_name, cursor=docs['cursor'],
-                    page_size=chunksize, include_fields=include_fields)
+                    collection_name,
+                    cursor=docs['cursor'],
+                    page_size=chunksize,
+                    include_fields=include_fields)
                 {edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
@@ -740,7 +743,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         Typecheck collection name
         """
         ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_-.1234567890'
-        for letter in collection_name: 
+        for letter in collection_name:
             if letter not in ACCEPTABLE_LETTERS:
                 raise CollectionNameError()
         if len(collection_name) > 240:
@@ -751,7 +754,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
 Creates a collection by infering the schema from a document
 
 If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
-    
+
 Args:
 	collection_name:
 		Name of Collection
