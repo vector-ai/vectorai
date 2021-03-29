@@ -465,7 +465,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         overwrite: bool=False,
         show_progress_bar: bool=True,
         quick: bool=False,
-        preprocess_hook: Callable,
+        preprocess_hook: Callable=None,
         **kwargs
     ):
         """
