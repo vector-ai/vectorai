@@ -548,7 +548,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=False, asc=False, include_vector=True, **kwargs):
+	def retrieve_documents(self,collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/retrieve_documents',
 			params=dict(
@@ -580,7 +580,7 @@ document_ids: IDs of documents
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=False, asc=False, include_vector=True, filters=[], **kwargs):
+	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents with filters
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
@@ -841,7 +841,7 @@ difference_fields: Fields to compare. Defaults to [], which compares all fields.
 
 	@retry()
 	@return_curl_or_response('json')
-	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=False, **kwargs):
+	def filters(self, collection_name, filters=[], page=1, page_size=20, asc=False, include_vector=False, sort=[], **kwargs):
 		"""Filters a collection
 Filter is used to retrieve documents that match the conditions set in a filter query. This is used in advance search to filter the documents that are searched.
 

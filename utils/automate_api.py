@@ -18,7 +18,8 @@ if __name__=="__main__":
             cursor=None,
             # url='https://vecdb-aueast-api.azurewebsites.net',
             url=url,
-            sort=False)
+            #sort=False
+        )
         ,
         internal_functions=[
             "list_collections",

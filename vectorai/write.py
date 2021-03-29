@@ -689,7 +689,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                     collection_name=collection_name,
                     cursor=docs['cursor'],
                     include_fields=list(models.keys()),
-                    page_size=chunksize, sort=False)
+                    page_size=chunksize)
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
                     documents=self.encode_documents_with_models(docs['documents'],
@@ -725,8 +725,10 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
             while len(docs['documents']) > 0:
                 docs = self.retrieve_documents(
-                    collection_name, cursor=docs['cursor'],
-                    page_size=chunksize, include_fields=include_fields)
+                    collection_name,
+                    cursor=docs['cursor'],
+                    page_size=chunksize,
+                    include_fields=include_fields)
                 {edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
