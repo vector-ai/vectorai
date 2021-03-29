@@ -465,6 +465,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         overwrite: bool=False,
         show_progress_bar: bool=True,
         quick: bool=False,
+        preprocess_hook: Callable,
         **kwargs
     ):
         """
@@ -486,6 +487,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             quick:
                 If True, skip the collection schema checks. Not advised if this is
                 your first time using the API until you are used to using Vector AI.
+            preprocess_hook:
+                Document-level function taht updates
 
         Example:
             >>> from vectorai.models.deployed import ViText2Vec
@@ -507,6 +510,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
 
         if workers == 1:
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
+                if self.preprocess_hook: {self.preprocess_hook(d) for d in c}
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
                     overwrite=overwrite, quick=quick, **kwargs
@@ -515,6 +519,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                 if verbose and len(result['failed_document_ids']) > 0: print(f"Failed: {result['failed_document_ids']}")
                 failed.append(result["failed_document_ids"])
         else:
+            if preprocess_hook:
+                raise NotImplementedError("Preprocess hooks are not supported with multi-processing.")
             pool = Pool(processes=workers)
             # Using partial insert for compatibility with ViCollectionClient
             partial_insert = partial(self._insert_and_encode, models=models,collection_name=collection_name,
