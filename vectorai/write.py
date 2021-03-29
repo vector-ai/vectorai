@@ -667,7 +667,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         collection_name: str,
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
-        use_bulk_encode: bool=False):
+        use_bulk_encode: bool=False,
+        refresh: bool=False):
         """
         Retrieve all documents and re-encode with new models.
         Args:
@@ -676,6 +677,9 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
             use_bulk_encode: Whether to use bulk_encode on the models.
+            refresh: If True, retrieves and encodes from scratch, otherwise, only
+                encodes for fields that are not there. Only the filter for the first
+                model is applied
         """
         docs = self.retrieve_documents(collection_name, page_size=chunksize)
         docs['cursor'] = None
@@ -683,16 +687,28 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             "failed_document_ids": []
         }
         num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        if refresh:
+            filter_query = []
+        else:
+            for f, model in models.items():
+                vector_field_name = self._get_vector_name_for_encoding(f, model)
+                filter_query.append(
+                    {'field' : vector_field_name, 'filter_type' : 'exists', "condition":"!=", "condition_value":" "}
+                )
+                break
+            
         with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
             while len(docs['documents']) > 0:
-                docs = self.retrieve_documents(
+                docs = self.retrieve_documents_with_filters(
                     collection_name, cursor=docs['cursor'],
                     include_fields=list(models.keys()),
+                    filters=filter_query,
                     page_size=chunksize)
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
                     documents=self.encode_documents_with_models(docs['documents'],
-                    models=models, use_bulk_encode=use_bulk_encode))
+                    models=models, 
+                    use_bulk_encode=use_bulk_encode))
                 for k in failed_all.keys():
                     failed_all[k] += failed[k]
                 pbar.update(1)
@@ -702,6 +718,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         self,
         collection_name: str,
         edit_fn: Callable,
+        refresh: bool=False,
+        edited_fields: [],
         include_fields: list=[],
         chunksize: int = 15):
         """
@@ -713,6 +731,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             retrieval step
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
+            edited_fields: These are the edited fields used to change
         """
         docs = self.retrieve_documents(collection_name, page_size=1, 
             include_fields=['_id'])
@@ -721,11 +740,18 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             "failed_document_ids": []
         }
         num_of_docs = self.collection_stats(collection_name)['number_of_documents']
+        if refresh:
+            filter_query = []
+        else:
+            filter_query = []
+            for f in edited_fields:
+                filter_query.append({'field' : f, 'filter_type' : 'exists', "condition":"!=", "condition_value":" "})
         with self.progress_bar(list(range(int(num_of_docs/ chunksize)))) as pbar:
             while len(docs['documents']) > 0:
-                docs = self.retrieve_documents(
+                docs = self.retrieve_documents_with_filters(
                     collection_name, cursor=docs['cursor'],
-                    page_size=chunksize, include_fields=include_fields)
+                    page_size=chunksize, include_fields=include_fields,
+                    filters=filter_query)
                 {edit_fn(d) for d in docs['documents']}
                 failed = self.bulk_edit_document(
                     collection_name=collection_name,
