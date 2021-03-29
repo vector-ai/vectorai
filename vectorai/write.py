@@ -726,7 +726,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         Retrieve all documents and re-encode with new models.
         Args:
             collection_name: Name of collection
-            edit_fn: Editing a document.
+            edit_fn: Function for editing an entire document
             include_fields: The number of fields to retrieve to speed up the document
             retrieval step
             chunksize: the number of results to
