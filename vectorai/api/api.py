@@ -1,7 +1,7 @@
 # This python file is auto-generated. Please do not edit.
 import requests
 import requests
-from .utils import retry, return_curl_or_response
+from vectorai.api.utils import retry, return_curl_or_response
 
 
 class _ViAPIClient:
@@ -9,6 +9,14 @@ class _ViAPIClient:
 		self.username = username		
 		self.api_key = api_key		
 		self.url = url		
+
+	@retry()
+	@return_curl_or_response('json')
+	def last_updated(self,**kwargs):
+		return requests.get(
+			url=self.url+'/last_updated',
+			params=dict(
+				))
 
 	@retry()
 	@return_curl_or_response('json')
@@ -159,6 +167,17 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 	def collection_vector_health(self,collection_name, **kwargs):
 		return requests.get(
 			url=self.url+'/project/collection_vector_health',
+			params=dict(
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def collection_schema_stats(self,collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/project/collection_schema_stats',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -394,6 +413,31 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 	@retry()
 	@return_curl_or_response('json')
+	def edit_search_history(self, collection_name, search_history_id, edits, **kwargs):
+		"""Edit History By ID
+Edit history by providing a key value pair of fields you are adding or changing.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+search_history_id: Search history ID of the collection.
+edits: A dictionary to edit and add fields to a document.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/edit_search_history',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				search_history_id=search_history_id, 
+				edits=edits, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def delete_document_fields(self,document_id, fields_to_delete, collection_name, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/delete_document_fields',
@@ -403,6 +447,54 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def update_by_filters(self, collection_name, updates, filters=[], **kwargs):
+		"""Updates documents by filters
+Updates documents by filters. The updates to make to the documents that is returned by a filter. The updates should be specified in a format of {"field_name": "value"}. e.g. {"item.status" : "Sold Out"}
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+updates: Updates to make to the documents. It should be specified in a format of {"field_name": "value"}. e.g. {"item.status" : "Sold Out"}
+filters: Query for filtering the search results
+
+"""
+		return requests.post(
+			url=self.url+'/collection/update_by_filters',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				updates=updates, 
+				filters=filters, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def delete_by_filters(self, collection_name, filters=[], **kwargs):
+		"""Delete documents by filters
+Delete documents by filters.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+filters: Query for filtering the search results
+
+"""
+		return requests.post(
+			url=self.url+'/collection/delete_by_filters',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				filters=filters, 
 				))
 
 	@retry()
@@ -523,6 +615,22 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
+	def retrieve_search_history(self,**kwargs):
+		return requests.get(
+			url=self.url+'/collection/retrieve_search_history',
+			params=dict(
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def id_search_history(self,**kwargs):
+		return requests.get(
+			url=self.url+'/collection/id_search_history',
+			params=dict(
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def random_documents_with_filters(self, collection_name, seed=10, include_fields=[], page_size=20, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents randomly with filters
 Mainly for testing purposes.
@@ -554,7 +662,32 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def _search(self,vector, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def compare_documents(self, doc, docs_to_compare, difference_fields=[], **kwargs):
+		"""Compare the differences between a document against multiple other documents
+Compare the differences between a document against multiple other documents.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+doc: Main document to compare other documents against.
+docs_to_compare: Other documents to compare against the main document.
+difference_fields: Fields to compare. Defaults to [], which compares all fields.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/compare_documents',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				doc=doc, 
+				docs_to_compare=docs_to_compare, 
+				difference_fields=difference_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def _search(self,vector, collection_name, search_fields, search_history_id, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, keep_search_history=True, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search',
 			params=dict(
@@ -574,11 +707,15 @@ filters: Query for filtering the search results
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_id(self,document_id, collection_name, search_field, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_id(self,document_id, collection_name, search_field, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search_by_id',
 			params=dict(
@@ -597,12 +734,14 @@ filters: Query for filtering the search results
 				include_vector=include_vector, 
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_ids(self,document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_ids(self,document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search_by_ids',
 			params=dict(
@@ -622,12 +761,14 @@ filters: Query for filtering the search results
 				include_vector=include_vector, 
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_by_positive_negative_ids(self,positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search_by_positive_negative_ids',
 			params=dict(
@@ -648,12 +789,14 @@ filters: Query for filtering the search results
 				include_vector=include_vector, 
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_positive_negative_ids_as_history(self,vector, positive_document_ids, negative_document_ids, collection_name, search_field, vector_operation="sum", approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search_with_positive_negative_ids_as_history',
 			params=dict(
@@ -675,6 +818,8 @@ filters: Query for filtering the search results
 				include_vector=include_vector, 
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				))
 
@@ -717,15 +862,17 @@ These are the available filter_type types:
         {'field' : 'category', 'filter_type' : 'categories', "condition":"==", "condition_value": ["tv", "smart", "bluetooth_compatible"]}
 4. "exists": for filtering documents that contains a field.
         {'field' : 'purchased', 'filter_type' : 'exists', "condition":">=", "condition_value":" "}
+If you are looking to filter for documents where a field doesn't exist, run this:
+        {'field' : 'purchased', 'filter_type' : 'exists', "condition":"!=", "condition_value":" "}
 5. "date": for filtering date by date range.
         {'field' : 'insert_date_', 'filter_type' : 'date', "condition":">=", "condition_value":"2020-01-01"}
-6. "numeric": for filtering by numeric range. 
+6. "numeric": for filtering by numeric range.
         {'field' : 'price', 'filter_type' : 'numeric', "condition":">=", "condition_value":90}
-7. "ids": for filtering by document ids. 
+7. "ids": for filtering by document ids.
         {'field' : 'ids', 'filter_type' : 'ids', "condition":"==", "condition_value":["1", "10"]}
 
 These are the available conditions:
- 
+
     "==", "!=", ">=", ">", "<", "<="
     
 Args
@@ -757,7 +904,7 @@ sort: Fields to sort by
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search(self, collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search(self, collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -786,7 +933,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 multivector_query: Query for advance search that allows for multiple vector and field querying
 
 """
@@ -809,13 +959,16 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				multivector_query=multivector_query, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_id(self, collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_search_by_id(self, collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Single Product Recommendations
 Single Product Recommendations (Search by an id).
 
@@ -844,7 +997,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 document_id: ID of a document
 search_fields: Vector fields to search against, and the weightings for them.
 
@@ -868,14 +1024,17 @@ search_fields: Vector fields to search against, and the weightings for them.
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				document_id=document_id, 
 				search_fields=search_fields, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_ids(self, collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_ids(self, collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations
 Advanced Multi Product Recommendations (Search by ids).
 
@@ -906,7 +1065,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 document_ids: Document IDs to get recommendations for, and the weightings of each document
 search_fields: Vector fields to search against, and the weightings for them.
 vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
@@ -931,7 +1093,10 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				document_ids=document_ids, 
 				search_fields=search_fields, 
 				vector_operation=vector_operation, 
@@ -939,7 +1104,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_positive_negative_ids(self, collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_positive_negative_ids(self, collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations with likes and dislikes
 Advanced Multi Product Recommendations with Likes and Dislikes (Search by ids).
 
@@ -970,7 +1135,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 positive_document_ids: Positive Document IDs to get recommendations for, and the weightings of each document
 negative_document_ids: Negative Document IDs to get recommendations for, and the weightings of each document
 search_fields: Vector fields to search against, and the weightings for them.
@@ -996,7 +1164,10 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
@@ -1005,7 +1176,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, multivector_query, positive_document_ids, negative_document_ids, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, vector_operation="sum", **kwargs):
+	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, multivector_query, positive_document_ids, negative_document_ids, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -1034,7 +1205,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 multivector_query: Query for advance search that allows for multiple vector and field querying
 positive_document_ids: Positive Document IDs to get recommendations for, and the weightings of each document
 negative_document_ids: Negative Document IDs to get recommendations for, and the weightings of each document
@@ -1060,7 +1234,10 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				multivector_query=multivector_query, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
@@ -1069,7 +1246,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def aggregate(self, collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
+	def aggregate(self, collection_name, aggregation_query, filters=[], page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate a collection
 Aggregation/Groupby of a collection using an aggregation query.
 The aggregation query is a json body that follows the schema of:
@@ -1078,14 +1255,29 @@ The aggregation query is a json body that follows the schema of:
         "groupby" : [
             {"name": <nickname/alias>, "field": <field in the collection>, "agg": "category"},
             {"name": <another_nickname/alias>, "field": <another groupby field in the collection>, "agg": "category"}
-        ], 
+        ],
         "metrics" : [
             {"name": <nickname/alias>, "field": <numeric field in the collection>, "agg": "avg"}
         ]
     }
+    For example, one can use the following aggregations to group kills based on region and player name.
+    {
+        "groupby" : [
+            {"name": "region", "field": "player_region.keyword", "agg": "category"},
+            {"name": "player_name", "field": "name", "agg": "category"}
+        ],
+        "metrics" : [
+            {"name": "average_kills", "field": "final_kills", "agg": "avg"},
+            {"name": "max_kills", "field": "final_kills", "agg": "max"},
+            {'name':'total_kills','field':"final_kills", 'agg':'sum'},
+            {'name':'average_deaths','field':"final_deaths", 'agg':'avg'},
+            {'name':'highest_deaths','field':"final_deaths", 'agg':'max'},
+        ]
+    }
 - "groupby" is the fields you want to split the data into. These are the available groupby types:
     - category" : groupby a field that is a category
-- "metrics" is the fields you want to metrics you want to calculate in each of those, every aggregation includes a frequency metric. These are the available metric types: 
+    - numeric: groupby a field that is a numeric
+- "metrics" is the fields you want to metrics you want to calculate in each of those, every aggregation includes a frequency metric. These are the available metric types:
     - "avg", "max", "min", "sum", "cardinality"
     
 Args
@@ -1094,6 +1286,7 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
 aggregation_query: Aggregation query to aggregate data
+filters: Query for filtering the search results
 page_size: Size of each page of results
 page: Page of the results
 asc: Whether to sort results by ascending or descending order
@@ -1107,6 +1300,7 @@ flatten:
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				aggregation_query=aggregation_query, 
+				filters=filters, 
 				page_size=page_size, 
 				page=page, 
 				asc=asc, 
@@ -1115,7 +1309,7 @@ flatten:
 
 	@retry()
 	@return_curl_or_response('json')
-	def traditional_search(self,collection_name, text, text_fields, fuzzy=-1, join=True, page_size=20, page=1, include_fields=[], include_vector=False, include_count=True, asc=False, **kwargs):
+	def traditional_search(self,collection_name, text, text_fields, search_history_id, fuzzy=-1, join=True, page_size=20, page=1, include_fields=[], include_vector=False, include_count=True, asc=False, keep_search_history=True, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/traditional_search',
 			params=dict(
@@ -1132,11 +1326,13 @@ flatten:
 				include_vector=include_vector, 
 				include_count=include_count, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def hybrid_search(self,text, vector, text_fields, collection_name, search_fields, traditional_weight=0.075, fuzzy=-1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def hybrid_search(self,text, vector, text_fields, collection_name, search_fields, search_history_id, traditional_weight=0.075, fuzzy=-1, join=True, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, keep_search_history=True, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/hybrid_search',
 			params=dict(
@@ -1161,11 +1357,15 @@ flatten:
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_hybrid_search(self, collection_name, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, text_fields=[], traditional_weight=0.075, fuzzy=-1, join=True, **kwargs):
+	def advanced_hybrid_search(self, collection_name, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, text_fields=[], traditional_weight=0.075, fuzzy=-1, join=True, **kwargs):
 		"""Advanced Search a text field with vector and text using Vector Search and Traditional Search
 Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.
 
@@ -1192,7 +1392,10 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
 multivector_query: Query for advance search that allows for multiple vector and field querying
 text: Text Search Query (not encoded as vector)
 text_fields: Text fields to search against
@@ -1220,7 +1423,10 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 				include_count=include_count, 
 				include_facets=include_facets, 
 				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
 				multivector_query=multivector_query, 
 				text=text, 
 				text_fields=text_fields, 
@@ -1255,29 +1461,15 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_image_field(self, collection_name, task, field, image_field, **kwargs):
-		"""Start job to encode image field
-Encode image field
-    
-Args
-========
-username: 
-api_key: 
-collection_name: 
-task: 
-field: 
-image_field: 
-
-"""
-		return requests.post(
+	def encode_image_field(self,image_field, collection_name, refresh=True, **kwargs):
+		return requests.get(
 			url=self.url+'/collection/encode_image_field',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				collection_name=collection_name, 
-				task=task, 
-				field=field, 
+			params=dict(
 				image_field=image_field, 
+				refresh=refresh, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
 				))
 
 	@retry()
@@ -1531,7 +1723,7 @@ first_step_page_size: Size of each page of results
 
 	@retry()
 	@return_curl_or_response('json')
-	def id_lookup_joined(self, join_query, doc_id, **kwargs):
+	def id_lookup_joined(self, doc_id, join_query={}, **kwargs):
 		"""Look up a document by its id with joins
 Look up a document by its id with joins.
     
@@ -1539,7 +1731,7 @@ Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
-join_query: 
+join_query: Join query
 doc_id: ID of a Document
 
 """
@@ -1554,7 +1746,7 @@ doc_id: ID of a Document
 
 	@retry()
 	@return_curl_or_response('json')
-	def join_collections(self, join_query, joined_collection_name, **kwargs):
+	def join_collections(self, joined_collection_name, join_query={}, **kwargs):
 		"""Join collections with a query
 Perform a join query on a whole collection and write the results to a new collection. We currently only support left joins.
     
@@ -1562,7 +1754,7 @@ Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
-join_query: 
+join_query: Join query
 joined_collection_name: Name of the new collection that contains the joined results
 
 """
@@ -1702,7 +1894,7 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_array(self,array_field, array, collection_name, search_fields, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_array(self,array_field, array, collection_name, search_fields, search_history_id, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, keep_search_history=True, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/search_with_array',
 			params=dict(
@@ -1723,6 +1915,10 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				))
 
 	@retry()
@@ -1774,7 +1970,7 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_dictionary(self, collection_name, search_fields, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_dictionary(self, collection_name, search_fields, search_history_id, dictionary, dictionary_field, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, keep_search_history=False, **kwargs):
 		"""Search a dictionary field with a dictionary using Vector Search
 Vector similarity search with a dictionary directly.
 
@@ -1811,6 +2007,8 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 hundred_scale: Whether to scale up the metric by 100
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+search_history_id: Search history ID of the collection.
 dictionary: A dictionary to encode into vectors
 dictionary_field: The dictionary field that encoding of the dictionary is trained on
 
@@ -1833,6 +2031,8 @@ dictionary_field: The dictionary field that encoding of the dictionary is traine
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
 				dictionary=dictionary, 
 				dictionary_field=dictionary_field, 
 				))
@@ -1915,7 +2115,7 @@ vector_name: The name of the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_fields(self, collection_name, search_fields, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, **kwargs):
+	def search_with_fields(self, collection_name, search_fields, search_history_id, document, selected_fields, vector_name, page_size=20, page=1, approx=0, sum_fields=True, metric="cosine", min_score=None, include_fields=[], include_vector=False, include_count=True, hundred_scale=False, asc=False, keep_search_history=False, **kwargs):
 		"""Search with fields with a document using Vector Search
 Vector similarity search with fields directly.
 
@@ -1951,6 +2151,8 @@ include_vector: Include vectors in the search results
 include_count: Include count in the search results
 hundred_scale: Whether to scale up the metric by 100
 asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+search_history_id: Search history ID of the collection.
 document: A document to encode into vectors
 selected_fields: The fields to turn into vectors
 vector_name: A name to call the vector that the fields turn into
@@ -1974,6 +2176,8 @@ vector_name: A name to call the vector that the fields turn into
 				include_count=include_count, 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
+				keep_search_history=keep_search_history, 
+				search_history_id=search_history_id, 
 				document=document, 
 				selected_fields=selected_fields, 
 				vector_name=vector_name, 
@@ -2005,13 +2209,11 @@ vector_name: A name to call the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def cluster(self,vector_field, collection_name, n_clusters=0, gpu=True, refresh=True, **kwargs):
+	def encode_text_field(self,text_field, collection_name, refresh=True, **kwargs):
 		return requests.get(
-			url=self.url+'/collection/cluster',
+			url=self.url+'/collection/encode_text_field',
 			params=dict(
-				vector_field=vector_field, 
-				n_clusters=n_clusters, 
-				gpu=gpu, 
+				text_field=text_field, 
 				refresh=refresh, 
 				username=self.username, 
 				api_key=self.api_key, 
@@ -2020,181 +2222,107 @@ vector_name: A name to call the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
-	def cluster_aggregate(self, collection_name, aggregation_query, page_size=20, page=1, asc=False, flatten=True, **kwargs):
-		"""Aggregate every cluster in a collection
-Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
+	def encode_text(self,text, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/encode_text',
+			params=dict(
+				text=text, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
 
-Only can be used after a vector field has been clustered with /cluster.
+	@retry()
+	@return_curl_or_response('json')
+	def bulk_encode_text(self,texts, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/bulk_encode_text',
+			params=dict(
+				texts=texts, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def search_with_text(self, collection_name, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+		"""Advanced Search text fields with text using Vector Search
+Vector similarity search with text directly.
+
+For example: "product_description" represents the description of a product:
+
+    "AirPods deliver effortless, all-day audio on the go. And AirPods Pro bring Active Noise Cancellation to an in-ear headphone — with a customisable fit"
+
+    -> <Encode the text to vector> ->
+
+    i.e. text vector, "product_description_vector_": [0.794617772102356, 0.3581121861934662, 0.21113917231559753, 0.24878688156604767, 0.9741804003715515 ...]
+
+    -> <Vector Search> ->
+
+    Search Results: {...}
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
-aggregation_query: Aggregation query to aggregate data
-page_size: Size of each page of results
 page: Page of the results
-asc: Whether to sort results by ascending or descending order
-flatten: 
-
-"""
-		return requests.post(
-			url=self.url+'/collection/cluster_aggregate',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				collection_name=collection_name, 
-				aggregation_query=aggregation_query, 
-				page_size=page_size, 
-				page=page, 
-				asc=asc, 
-				flatten=flatten, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def cluster_facets(self,collection_name, facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
-		return requests.get(
-			url=self.url+'/collection/cluster_facets',
-			params=dict(
-				facets_fields=facets_fields, 
-				page_size=page_size, 
-				page=page, 
-				asc=asc, 
-				date_interval=date_interval, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def cluster_centroids(self,vector_field, collection_name, **kwargs):
-		return requests.get(
-			url=self.url+'/collection/cluster_centroids',
-			params=dict(
-				vector_field=vector_field, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def cluster_centroid_documents(self,vector_field, collection_name, metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
-		return requests.get(
-			url=self.url+'/collection/cluster_centroid_documents',
-			params=dict(
-				vector_field=vector_field, 
-				metric=metric, 
-				include_vector=include_vector, 
-				page=page, 
-				page_size=page_size, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def advanced_cluster(self,vector_field, collection_name, alias="default", n_clusters=0, n_iter=10, n_init=5, gpu=True, refresh=True, **kwargs):
-		return requests.get(
-			url=self.url+'/collection/advanced_cluster',
-			params=dict(
-				vector_field=vector_field, 
-				alias=alias, 
-				n_clusters=n_clusters, 
-				n_iter=n_iter, 
-				n_init=n_init, 
-				gpu=gpu, 
-				refresh=refresh, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def advanced_cluster_aggregate(self, collection_name, aggregation_query, vector_field, alias, page_size=20, page=1, asc=False, flatten=True, filters=[], **kwargs):
-		"""Aggregate every cluster in a collection
-Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
-
-Only can be used after a vector field has been clustered with /advanced_cluster.
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-collection_name: Name of Collection
-aggregation_query: Aggregation query to aggregate data
 page_size: Size of each page of results
-page: Page of the results
-asc: Whether to sort results by ascending or descending order
-flatten: 
-vector_field: Clustered vector field
-alias: Alias of a cluster
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
 filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+text: Text to encode into vector and vector search with
+search_fields: Vector fields to search against
 
 """
 		return requests.post(
-			url=self.url+'/collection/advanced_cluster_aggregate',
+			url=self.url+'/collection/search_with_text',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				aggregation_query=aggregation_query, 
-				page_size=page_size, 
 				page=page, 
-				asc=asc, 
-				flatten=flatten, 
-				vector_field=vector_field, 
-				alias=alias, 
-				filters=filters, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def advanced_cluster_facets(self,vector_field, collection_name, alias="default", facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
-		return requests.get(
-			url=self.url+'/collection/advanced_cluster_facets',
-			params=dict(
-				vector_field=vector_field, 
-				alias=alias, 
-				facets_fields=facets_fields, 
 				page_size=page_size, 
-				page=page, 
-				asc=asc, 
-				date_interval=date_interval, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def advanced_cluster_centroids(self,vector_field, collection_name, alias="default", **kwargs):
-		return requests.get(
-			url=self.url+'/collection/advanced_cluster_centroids',
-			params=dict(
-				vector_field=vector_field, 
-				alias=alias, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def advanced_cluster_centroid_documents(self,vector_field, collection_name, alias="default", metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
-		return requests.get(
-			url=self.url+'/collection/advanced_cluster_centroid_documents',
-			params=dict(
-				vector_field=vector_field, 
-				alias=alias, 
+				approx=approx, 
+				sum_fields=sum_fields, 
 				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
 				include_vector=include_vector, 
-				page=page, 
-				page_size=page_size, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				text=text, 
+				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_image(self,image_url, model_url, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/encode_image',
+			params=dict(
+				image_url=image_url, 
+				model_url=model_url, 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
@@ -2202,63 +2330,351 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert_cluster_centroids(self, collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", **kwargs):
-		"""Insert cluster centroids
-Insert your own cluster centroids for it to be used in approximate search settings and cluster aggregations.
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-collection_name: Name of Collection
-cluster_centers: Cluster centers with the key being the index number
-vector_field: Clustered vector field
-alias: Alias is used to name a cluster
-job: Whether to run a job where each document is assigned a cluster from the cluster_center
-job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
-
-"""
-		return requests.post(
-			url=self.url+'/collection/insert_cluster_centroids',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
+	def bulk_encode_image(self,image_urls, model_url, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/bulk_encode_image',
+			params=dict(
+				image_urls=image_urls, 
+				model_url=model_url, 
+				username=self.username, 
+				api_key=self.api_key, 
 				collection_name=collection_name, 
-				cluster_centers=cluster_centers, 
-				vector_field=vector_field, 
-				alias=alias, 
-				job=job, 
-				job_metric=job_metric, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def dimensionality_reduce(self, collection_name, vectors, vector_field, alias="default", n_components=1, **kwargs):
-		"""Reduces the dimension of a list of vectors
-Reduce the dimensions of a list of vectors you input into a desired dimension. 
+	def search_with_image(self, collection_name, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+		"""Advanced Search an image field with image using Vector Search
+Vector similarity search with an image directly.
 
-This can only reduce to dimensions less than or equal to the n_components that the dimensionality reduction model is trained on.
+_note: image has to be stored somewhere and be provided as image_url, a url that stores the image_
+
+For example: an image_url represents an image of a celebrity:
+
+    "https://www.celebrity_images.com/brad_pitt.png"
+
+    -> <Encode the image to vector> ->
+
+    image vector: [0.794617772102356, 0.3581121861934662, 0.21113917231559753, 0.24878688156604767, 0.9741804003715515 ...]
+
+    -> <Vector Search> ->
+
+    Search Results: {...}
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
-vectors: Vectors to perform dimensionality reduction on
-vector_field: Vector field to perform dimensionality reduction on
-alias: Alias of the dimensionality reduced vectors
-n_components: The size/length to reduce the vector down to.
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+image_url: The image url of an image to encode into a vector
+model_url: The model url of a deployed vectorhub model
+search_fields: Vector fields to search against
 
 """
 		return requests.post(
-			url=self.url+'/collection/dimensionality_reduce',
+			url=self.url+'/collection/search_with_image',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				vectors=vectors, 
-				vector_field=vector_field, 
-				alias=alias, 
-				n_components=n_components, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				image_url=image_url, 
+				model_url=model_url, 
+				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def search_with_image_upload(self, collection_name, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+		"""Advanced Search an image field with uploaded image using Vector Search
+Vector similarity search with an uploaded image directly.
+
+_note: image has to be sent as a base64 encoded string_
+
+For example: an image represents an image of a celebrity:
+
+    "https://www.celebrity_images.com/brad_pitt.png"
+
+    -> <Encode the image to vector> ->
+
+    image vector: [0.794617772102356, 0.3581121861934662, 0.21113917231559753, 0.24878688156604767, 0.9741804003715515 ...]
+
+    -> <Vector Search> ->
+
+    Search Results: {...}
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+image: Image represented as a base64 encoded string
+model_url: The model url of a deployed vectorhub model
+search_fields: Vector fields to search against
+
+"""
+		return requests.post(
+			url=self.url+'/collection/search_with_image_upload',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				image=image, 
+				model_url=model_url, 
+				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_audio_field(self,audio_field, collection_name, refresh=True, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/encode_audio_field',
+			params=dict(
+				audio_field=audio_field, 
+				refresh=refresh, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_audio(self,audio_url, model_url, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/encode_audio',
+			params=dict(
+				audio_url=audio_url, 
+				model_url=model_url, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def bulk_encode_audio(self,audio_urls, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/bulk_encode_audio',
+			params=dict(
+				audio_urls=audio_urls, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def search_with_audio(self, collection_name, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+		"""Advanced Search an audio field with audio using Vector Search
+Vector similarity search with an audio directly.
+
+_note: audio has to be stored somewhere and be provided as audio_url, a url that stores the audio_
+
+For example: an audio_url represents sounds that a pokemon make:
+
+    "https://play.pokemonshowdown.com/audio/cries/pikachu.mp3"
+
+    -> <Encode the audio to vector> ->
+
+    audio vector: [0.794617772102356, 0.3581121861934662, 0.21113917231559753, 0.24878688156604767, 0.9741804003715515 ...]
+
+    -> <Vector Search> ->
+
+    Search Results: {...}
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+audio_url: The audio url of an audio to encode into a vector
+model_url: The model url of a deployed vectorhub model
+search_fields: Vector fields to search against
+
+"""
+		return requests.post(
+			url=self.url+'/collection/search_with_audio',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				audio_url=audio_url, 
+				model_url=model_url, 
+				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def search_with_audio_upload(self, collection_name, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+		"""Advanced Search audio fields with uploaded audio using Vector Search
+Vector similarity search with an uploaded audio directly.
+
+_note: audio has to be sent as a base64 encoded string_
+
+For example: an audio represents sounds that a pokemon make:
+
+    "https://play.pokemonshowdown.com/audio/cries/pikachu.mp3"
+
+    -> <Encode the audio to vector> ->
+
+    audio vector: [0.794617772102356, 0.3581121861934662, 0.21113917231559753, 0.24878688156604767, 0.9741804003715515 ...]
+    -> <Vector Search> ->
+
+    Search Results: {...}
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+audio: Audio represented as a base64 encoded string
+model_url: The model url of a deployed vectorhub model
+search_fields: Vector fields to search against
+
+"""
+		return requests.post(
+			url=self.url+'/collection/search_with_audio_upload',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				audio=audio, 
+				model_url=model_url, 
+				search_fields=search_fields, 
 				))
 

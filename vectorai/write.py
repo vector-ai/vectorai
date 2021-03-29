@@ -713,7 +713,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
                     failed_all[k] += failed[k]
                 pbar.update(1)
         return failed_all
-    
+
     def retrieve_and_edit(
         self,
         collection_name: str,
@@ -733,7 +733,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             retrieve and then encode and then edit in one go
             edited_fields: These are the edited fields used to change
         """
-        docs = self.retrieve_documents(collection_name, page_size=1, 
+        docs = self.retrieve_documents(collection_name, page_size=1,
             include_fields=['_id'])
         docs['cursor'] = None
         failed_all = {
@@ -766,7 +766,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         Typecheck collection name
         """
         ACCEPTABLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz_-.1234567890'
-        for letter in collection_name: 
+        for letter in collection_name:
             if letter not in ACCEPTABLE_LETTERS:
                 raise CollectionNameError()
         if len(collection_name) > 240:
@@ -777,7 +777,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
 Creates a collection by infering the schema from a document
 
 If you are inserting your own vector use the suffix (ends with)  **"\_vector\_"** for the field name. e.g. "product\_description\_vector\_"
-    
+
 Args:
 	collection_name:
 		Name of Collection
