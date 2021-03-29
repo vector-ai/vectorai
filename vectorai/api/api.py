@@ -904,7 +904,7 @@ sort: Fields to sort by
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search(self, collection_name, search_history_id, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def advanced_search(self, collection_name, multivector_query, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Vector Similarity Search. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -937,7 +937,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 multivector_query: Query for advance search that allows for multiple vector and field querying
 
 """
@@ -964,13 +963,12 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				multivector_query=multivector_query, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_id(self, collection_name, search_history_id, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def advanced_search_by_id(self, collection_name, document_id, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Single Product Recommendations
 Single Product Recommendations (Search by an id).
 
@@ -1003,7 +1001,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 document_id: ID of a document
 search_fields: Vector fields to search against, and the weightings for them.
 
@@ -1031,14 +1028,13 @@ search_fields: Vector fields to search against, and the weightings for them.
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				document_id=document_id, 
 				search_fields=search_fields, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_ids(self, collection_name, search_history_id, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_ids(self, collection_name, document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations
 Advanced Multi Product Recommendations (Search by ids).
 
@@ -1073,7 +1069,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 document_ids: Document IDs to get recommendations for, and the weightings of each document
 search_fields: Vector fields to search against, and the weightings for them.
 vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min', 'max']
@@ -1102,7 +1097,6 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				document_ids=document_ids, 
 				search_fields=search_fields, 
 				vector_operation=vector_operation, 
@@ -1110,7 +1104,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_by_positive_negative_ids(self, collection_name, search_history_id, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
+	def advanced_search_by_positive_negative_ids(self, collection_name, positive_document_ids, negative_document_ids, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Multi Product Recommendations with likes and dislikes
 Advanced Multi Product Recommendations with Likes and Dislikes (Search by ids).
 
@@ -1145,7 +1139,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 positive_document_ids: Positive Document IDs to get recommendations for, and the weightings of each document
 negative_document_ids: Negative Document IDs to get recommendations for, and the weightings of each document
 search_fields: Vector fields to search against, and the weightings for them.
@@ -1175,7 +1168,6 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
 				search_fields=search_fields, 
@@ -1184,7 +1176,7 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, search_history_id, multivector_query, positive_document_ids, negative_document_ids, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
+	def advanced_search_with_positive_negative_ids_as_history(self, collection_name, multivector_query, positive_document_ids, negative_document_ids, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, vector_operation="sum", **kwargs):
 		"""Advanced Search with Likes and Dislikes as history
 For example: Vector search of a query vector with multiple ids of liked and dislike products in the database. Then using the product's image and description vectors to find the most similar products by what it looks like and what its described to do against the positives and most disimilar products for the negatives.
 
@@ -1217,7 +1209,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 multivector_query: Query for advance search that allows for multiple vector and field querying
 positive_document_ids: Positive Document IDs to get recommendations for, and the weightings of each document
 negative_document_ids: Negative Document IDs to get recommendations for, and the weightings of each document
@@ -1247,7 +1238,6 @@ vector_operation: Aggregation for the vectors, choose from ['mean', 'sum', 'min'
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				multivector_query=multivector_query, 
 				positive_document_ids=positive_document_ids, 
 				negative_document_ids=negative_document_ids, 
@@ -1375,7 +1365,7 @@ flatten:
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_hybrid_search(self, collection_name, search_history_id, multivector_query, text, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, text_fields=[], traditional_weight=0.075, fuzzy=-1, join=True, **kwargs):
+	def advanced_hybrid_search(self, collection_name, multivector_query, text, search_history_id, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, text_fields=[], traditional_weight=0.075, fuzzy=-1, join=True, **kwargs):
 		"""Advanced Search a text field with vector and text using Vector Search and Traditional Search
 Advanced Vector similarity search + Traditional Fuzzy Search with text and vector.
 
@@ -1406,13 +1396,13 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 multivector_query: Query for advance search that allows for multiple vector and field querying
 text: Text Search Query (not encoded as vector)
 text_fields: Text fields to search against
 traditional_weight: Multiplier of traditional search. A value of 0.025~0.1 is good.
 fuzzy: Fuzziness of the search. A value of 1-3 is good. For automated fuzzines use -1.
 join: Whether to consider cases where there is a space in the word. E.g. Go Pro vs GoPro.
+search_history_id: Search history ID of the collection.
 
 """
 		return requests.post(
@@ -1438,13 +1428,13 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				multivector_query=multivector_query, 
 				text=text, 
 				text_fields=text_fields, 
 				traditional_weight=traditional_weight, 
 				fuzzy=fuzzy, 
 				join=join, 
+				search_history_id=search_history_id, 
 				))
 
 	@retry()
@@ -2519,7 +2509,7 @@ n_components: The size/length to reduce the vector down to.
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_text(self, collection_name, search_history_id, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def search_with_text(self, collection_name, text, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Search text fields with text using Vector Search
 Vector similarity search with text directly.
 
@@ -2557,7 +2547,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 text: Text to encode into vector and vector search with
 search_fields: Vector fields to search against
 
@@ -2585,7 +2574,6 @@ search_fields: Vector fields to search against
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				text=text, 
 				search_fields=search_fields, 
 				))
@@ -2618,7 +2606,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image(self, collection_name, search_history_id, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def search_with_image(self, collection_name, image_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Search an image field with image using Vector Search
 Vector similarity search with an image directly.
 
@@ -2658,7 +2646,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 image_url: The image url of an image to encode into a vector
 model_url: The model url of a deployed vectorhub model
 search_fields: Vector fields to search against
@@ -2687,7 +2674,6 @@ search_fields: Vector fields to search against
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				image_url=image_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2695,7 +2681,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_image_upload(self, collection_name, search_history_id, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def search_with_image_upload(self, collection_name, image, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Search an image field with uploaded image using Vector Search
 Vector similarity search with an uploaded image directly.
 
@@ -2735,7 +2721,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 image: Image represented as a base64 encoded string
 model_url: The model url of a deployed vectorhub model
 search_fields: Vector fields to search against
@@ -2764,7 +2749,6 @@ search_fields: Vector fields to search against
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				image=image, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2810,7 +2794,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio(self, collection_name, search_history_id, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def search_with_audio(self, collection_name, audio_url, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Search an audio field with audio using Vector Search
 Vector similarity search with an audio directly.
 
@@ -2850,7 +2834,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 audio_url: The audio url of an audio to encode into a vector
 model_url: The model url of a deployed vectorhub model
 search_fields: Vector fields to search against
@@ -2879,7 +2862,6 @@ search_fields: Vector fields to search against
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				audio_url=audio_url, 
 				model_url=model_url, 
 				search_fields=search_fields, 
@@ -2887,7 +2869,7 @@ search_fields: Vector fields to search against
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_with_audio_upload(self, collection_name, search_history_id, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
+	def search_with_audio_upload(self, collection_name, audio, model_url, search_fields, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, **kwargs):
 		"""Advanced Search audio fields with uploaded audio using Vector Search
 Vector similarity search with an uploaded audio directly.
 
@@ -2926,7 +2908,6 @@ include_search_relevance: Whether to calculate a search_relevance cutoff score t
 search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
-search_history_id: Search history ID of the collection.
 audio: Audio represented as a base64 encoded string
 model_url: The model url of a deployed vectorhub model
 search_fields: Vector fields to search against
@@ -2955,7 +2936,6 @@ search_fields: Vector fields to search against
 				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
 				asc=asc, 
 				keep_search_history=keep_search_history, 
-				search_history_id=search_history_id, 
 				audio=audio, 
 				model_url=model_url, 
 				search_fields=search_fields, 
