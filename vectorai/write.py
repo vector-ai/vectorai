@@ -510,7 +510,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
 
         if workers == 1:
             for c in self.progress_bar(iter_docs, total=iter_len, show_progress_bar=show_progress_bar):
-                if self.preprocess_hook: {self.preprocess_hook(d) for d in c}
+                if preprocess_hook: {preprocess_hook(d) for d in c}
                 result = self._insert_and_encode(
                     documents=c, collection_name=collection_name, models=models, use_bulk_encode=use_bulk_encode,
                     overwrite=overwrite, quick=quick, **kwargs
