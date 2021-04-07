@@ -32,7 +32,8 @@ class ViClient(ViWriteClient, ViAnalyticsClient):
         username: str=None, 
         api_key: str=None,
         # Old API URL: https://vecdb-aueast-api.azurewebsites.net
-        url: str="https://vectorai-development-api.azurewebsites.net",
+        url: str="https://vectorai-development-api-vectorai-test-api.azurewebsites.net/",
+        # url: str="https://vectorai-development-api.azurewebsites.net",
         analytics_url="https://vector-analytics.vctr.ai", verbose: bool = True) -> None:
         super().__init__(username, api_key, url)
         if username is None:
