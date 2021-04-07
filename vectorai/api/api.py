@@ -131,12 +131,14 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def _list_collections(self,**kwargs):
+	def _list_collections(self,sort_by_created_at_date=False, reverse=True, **kwargs):
 		return requests.get(
 			url=self.url+'/project/list_collections',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
+				sort_by_created_at_date=sort_by_created_at_date, 
+				reverse=reverse, 
 				))
 
 	@retry()
@@ -582,6 +584,7 @@ document_ids: IDs of documents
 	@return_curl_or_response('json')
 	def retrieve_documents_with_filters(self, collection_name, include_fields=[], cursor=None, page_size=20, sort=[], asc=False, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents with filters
+Retrieve documents with filters.
 Cursor is provided to retrieve even more documents. Loop through it to retrieve all documents in the database.
     
 Args
@@ -1295,6 +1298,39 @@ flatten:
 """
 		return requests.post(
 			url=self.url+'/collection/aggregate',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				aggregation_query=aggregation_query, 
+				filters=filters, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def aggregate_fetch(self, collection_name, aggregation_query, filters=[], page_size=20, page=1, asc=False, flatten=True, **kwargs):
+		"""Aggregate a collection and fetch the documents
+Perform an aggregation and then a Bulk ID Lookup using aggregated IDs.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+aggregation_query: Aggregation query to aggregate data
+filters: Query for filtering the search results
+page_size: Size of each page of results
+page: Page of the results
+asc: Whether to sort results by ascending or descending order
+flatten: 
+
+"""
+		return requests.post(
+			url=self.url+'/collection/aggregate_fetch',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -2209,6 +2245,393 @@ vector_name: A name to call the vector that the fields turn into
 
 	@retry()
 	@return_curl_or_response('json')
+	def cluster(self,vector_field, collection_name, n_clusters=0, gpu=True, refresh=True, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/cluster',
+			params=dict(
+				vector_field=vector_field, 
+				n_clusters=n_clusters, 
+				gpu=gpu, 
+				refresh=refresh, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def cluster_aggregate(self, collection_name, aggregation_query, filters=[], page_size=20, page=1, asc=False, flatten=True, **kwargs):
+		"""Aggregate every cluster in a collection
+Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
+
+Only can be used after a vector field has been clustered with /cluster.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+aggregation_query: Aggregation query to aggregate data
+filters: Query for filtering the search results
+page_size: Size of each page of results
+page: Page of the results
+asc: Whether to sort results by ascending or descending order
+flatten: 
+
+"""
+		return requests.post(
+			url=self.url+'/collection/cluster_aggregate',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				aggregation_query=aggregation_query, 
+				filters=filters, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def cluster_facets(self,collection_name, facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
+		return requests.get(
+			url=self.url+'/collection/cluster_facets',
+			params=dict(
+				facets_fields=facets_fields, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				date_interval=date_interval, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def cluster_centroids(self,vector_field, collection_name, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/cluster_centroids',
+			params=dict(
+				vector_field=vector_field, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def cluster_centroid_documents(self,vector_field, collection_name, metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/cluster_centroid_documents',
+			params=dict(
+				vector_field=vector_field, 
+				metric=metric, 
+				include_vector=include_vector, 
+				page=page, 
+				page_size=page_size, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster(self,vector_field, collection_name, alias="default", n_clusters=0, n_iter=10, n_init=5, gpu=True, refresh=True, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/advanced_cluster',
+			params=dict(
+				vector_field=vector_field, 
+				alias=alias, 
+				n_clusters=n_clusters, 
+				n_iter=n_iter, 
+				n_init=n_init, 
+				gpu=gpu, 
+				refresh=refresh, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster_aggregate(self, collection_name, aggregation_query, vector_field, alias, filters=[], page_size=20, page=1, asc=False, flatten=True, **kwargs):
+		"""Aggregate every cluster in a collection
+Takes an aggregation query and gets the aggregate of each cluster in a collection. This helps you interpret each cluster and what is in them.
+
+Only can be used after a vector field has been clustered with /advanced_cluster.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+aggregation_query: Aggregation query to aggregate data
+filters: Query for filtering the search results
+page_size: Size of each page of results
+page: Page of the results
+asc: Whether to sort results by ascending or descending order
+flatten: 
+vector_field: Clustered vector field
+alias: Alias of a cluster
+
+"""
+		return requests.post(
+			url=self.url+'/collection/advanced_cluster_aggregate',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				aggregation_query=aggregation_query, 
+				filters=filters, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				flatten=flatten, 
+				vector_field=vector_field, 
+				alias=alias, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster_facets(self,vector_field, collection_name, alias="default", facets_fields=[], page_size=1000, page=1, asc=False, date_interval="monthly", **kwargs):
+		return requests.get(
+			url=self.url+'/collection/advanced_cluster_facets',
+			params=dict(
+				vector_field=vector_field, 
+				alias=alias, 
+				facets_fields=facets_fields, 
+				page_size=page_size, 
+				page=page, 
+				asc=asc, 
+				date_interval=date_interval, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster_centroids(self,vector_field, collection_name, alias="default", **kwargs):
+		return requests.get(
+			url=self.url+'/collection/advanced_cluster_centroids',
+			params=dict(
+				vector_field=vector_field, 
+				alias=alias, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster_centroid_documents(self,vector_field, collection_name, alias="default", metric="cosine", include_vector=False, page=1, page_size=20, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/advanced_cluster_centroid_documents',
+			params=dict(
+				vector_field=vector_field, 
+				alias=alias, 
+				metric=metric, 
+				include_vector=include_vector, 
+				page=page, 
+				page_size=page_size, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_cluster_search(self, collection_name, multivector_query, vector_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, alias="default", **kwargs):
+		"""Advanced Vector Similarity Search on Clusters. 
+Only can be used after a vector field has been clustered with /advanced_cluster. Perform advanced_search on each cluster
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+multivector_query: Query for advance search that allows for multiple vector and field querying
+vector_field: Vector field to perform clustering on
+alias: Alias is used to name a cluster
+
+"""
+		return requests.post(
+			url=self.url+'/collection/advanced_cluster_search',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				multivector_query=multivector_query, 
+				vector_field=vector_field, 
+				alias=alias, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def advanced_search_post_cluster(self, collection_name, multivector_query, vector_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, n_clusters=0, n_init=5, n_iter=10, **kwargs):
+		"""Performs Clustering on Top X search results
+This will first perform an advanced search and then cluster the top X (page_size) search results.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+page: Page of the results
+page_size: Size of each page of results
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+facets: Fields to include in the facets, if [] then all
+min_score: Minimum score for similarity metric
+include_fields: Fields to include in the search results, empty array/list means all fields.
+include_vector: Include vectors in the search results
+include_count: Include count in the search results
+include_facets: Include facets in the search results
+hundred_scale: Whether to scale up the metric by 100
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+keep_search_history: Whether to store the history of search or not
+multivector_query: Query for advance search that allows for multiple vector and field querying
+vector_field: Vector field to perform clustering on
+n_clusters: Number of clusters
+n_init: Number of runs to run with different centroid seeds
+n_iter: Number of iterations in each run
+
+"""
+		return requests.post(
+			url=self.url+'/collection/advanced_search_post_cluster',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				page=page, 
+				page_size=page_size, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				metric=metric, 
+				filters=filters, 
+				facets=facets, 
+				min_score=min_score, 
+				include_fields=include_fields, 
+				include_vector=include_vector, 
+				include_count=include_count, 
+				include_facets=include_facets, 
+				hundred_scale=hundred_scale, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				keep_search_history=keep_search_history, 
+				multivector_query=multivector_query, 
+				vector_field=vector_field, 
+				n_clusters=n_clusters, 
+				n_init=n_init, 
+				n_iter=n_iter, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def insert_cluster_centroids(self, collection_name, cluster_centers, vector_field, alias="default", job=False, job_metric="cosine", **kwargs):
+		"""Insert cluster centroids
+Insert your own cluster centroids for it to be used in approximate search settings and cluster aggregations.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+cluster_centers: Cluster centers with the key being the index number
+vector_field: Clustered vector field
+alias: Alias is used to name a cluster
+job: Whether to run a job where each document is assigned a cluster from the cluster_center
+job_metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+
+"""
+		return requests.post(
+			url=self.url+'/collection/insert_cluster_centroids',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				cluster_centers=cluster_centers, 
+				vector_field=vector_field, 
+				alias=alias, 
+				job=job, 
+				job_metric=job_metric, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def dimensionality_reduce(self, collection_name, vectors, vector_field, alias="default", n_components=1, **kwargs):
+		"""Reduces the dimension of a list of vectors
+Reduce the dimensions of a list of vectors you input into a desired dimension. 
+
+This can only reduce to dimensions less than or equal to the n_components that the dimensionality reduction model is trained on.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vectors: Vectors to perform dimensionality reduction on
+vector_field: Vector field to perform dimensionality reduction on
+alias: Alias of the dimensionality reduced vectors
+n_components: The size/length to reduce the vector down to.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/dimensionality_reduce',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vectors=vectors, 
+				vector_field=vector_field, 
+				alias=alias, 
+				n_components=n_components, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def encode_text_field(self,text_field, collection_name, refresh=True, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/encode_text_field',
@@ -2676,5 +3099,84 @@ search_fields: Vector fields to search against
 				audio=audio, 
 				model_url=model_url, 
 				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def rank_comparator(self, ranked_list_1, ranked_list_2, **kwargs):
+		"""Compare ranks between 2 results list.
+Compare the ranks between 2 results list in VecDB
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+ranked_list_1: First ranked List
+ranked_list_2: Second ranked list
+
+"""
+		return requests.post(
+			url=self.url+'/experimentation/rank_comparator',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				ranked_list_1=ranked_list_1, 
+				ranked_list_2=ranked_list_2, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def bias_indicator(self, anchor_documents, documents, metadata_field, vector_field, **kwargs):
+		"""Compare bias of documents against anchor documents
+Compare bias of documents against anchor documents
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+anchor_documents: Anchor documents to compare other documents against.
+documents: Documents to compare against the anchor documents
+metadata_field: Field from which the vector was derived
+vector_field: Vector field to compare against
+
+"""
+		return requests.post(
+			url=self.url+'/experimentation/bias_indicator',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				anchor_documents=anchor_documents, 
+				documents=documents, 
+				metadata_field=metadata_field, 
+				vector_field=vector_field, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def cluster_comparator(self, collection_name, cluster_field, cluster_value, vector_field, alias, **kwargs):
+		"""Compare clusters
+Compare the clusters for cluster comparator
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: the name of the collection
+cluster_field: the cluster field
+cluster_value: the cluster values by which to compare on
+vector_field: The vector field that has been clustered
+alias: The alias of the vector field
+
+"""
+		return requests.post(
+			url=self.url+'/experimentation/cluster_comparator',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				cluster_field=cluster_field, 
+				cluster_value=cluster_value, 
+				vector_field=vector_field, 
+				alias=alias, 
 				))
 
