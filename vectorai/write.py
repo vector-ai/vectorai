@@ -691,7 +691,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             filter_query = []
         else:
             for f, model in models.items():
-                vector_field_name = self._get_vector_name_for_encoding(f, model, list(self.models.keys()))
+                vector_field_name = self._get_vector_name_for_encoding(f, model, list(models.keys()))
                 filter_query.append(
                     {'field' : vector_field_name, 'filter_type' : 'exists', "condition":"!=", "condition_value":" "}
                 )
