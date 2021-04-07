@@ -668,6 +668,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         models: Dict[str, Callable] = {},
         chunksize: int = 15,
         use_bulk_encode: bool=False,
+        filters: list = [],
         refresh: bool=False):
         """
         Retrieve all documents and re-encode with new models.
@@ -677,6 +678,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
             chunksize: the number of results to
             retrieve and then encode and then edit in one go
             use_bulk_encode: Whether to use bulk_encode on the models.
+            filter_query: Filtering
             refresh: If True, retrieves and encodes from scratch, otherwise, only
                 encodes for fields that are not there. Only the filter for the first
                 model is applied
@@ -690,6 +692,8 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         if refresh:
             filter_query = []
         else:
+            filter_query = filters
+            # Filter for documents that are missing the first document
             for f, model in models.items():
                 vector_field_name = self._get_vector_name_for_encoding(f, model, list(models.keys()))
                 filter_query.append(
