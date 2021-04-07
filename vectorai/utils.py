@@ -254,8 +254,119 @@ class UtilsMixin:
         """
         return [self.create_sample_document(i, include_chunks=include_chunks) for i in range(num_of_documents)]
 
-    @staticmethod
-    def convert_concat_list_to_html(list_input):
+        def show_df(self, df: pd.DataFrame,
+        image_fields: List[str]=[], audio_fields: List[str]=[],
+        chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
+        image_width: int=60, include_vector: bool=False, return_html: bool=False):
+            """
+                Shows a dataframe with the images and audio included inside the dataframe.
+                Args:
+                    df:
+                        Pandas DataFrame
+                    image_fields:
+                        List of fields with the images
+                    audio_fields:
+                        List of fields for the audio
+                    nrows:
+                        Number of rows to preview
+                    image_width:
+                        The width of the images
+                    include_vector:
+                        If True, includes the vector fields
+            """
+            render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+            formatters = {image:render_image_with_width for image in image_fields}
+            formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+            formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
+            formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
+            if not include_vector:
+                cols = [x for x in list(df.columns) if '_vector_' not in x]
+                df = df[cols]
+            try:
+                if return_html:
+                    return df.to_html(escape=False, formatters=formatters)
+                from IPython.core.display import HTML
+                return HTML(df.to_html(escape=False ,formatters=formatters))
+            except ImportError:
+                return df
+
+    def render_image_in_html(self, path, image_width) -> str:
+        """
+        Render image in HTML
+        """
+        return '<img src="'+ path + f'" width="{image_width}" >'
+
+    def render_audio_in_html(self, path) -> str:
+        """
+        Render the audio in HTML
+        """
+        return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
+
+    def unnest_json(self, json_data: List[Dict], schema: List[str], chunk_schema: List[str]):
+        """
+        Unnest the JSON
+        """
+        unnested_json = {}
+        for k in schema:
+            unnested_json[k] = self.access_field_across_documents(k, json_data, raise_on_error=True)
+        # Check if any of the field is a list
+        for chunk_f in chunk_schema:
+            # get the chunk field - assume the chunk field is the last field
+            chunk_field = ''.join(f + '.' for f in chunk_f.split('.')[:-1])[:-1]
+            data_field = chunk_f.split('.')[-1]
+            all_chunk_data = self.access_field_across_documents(chunk_field, json_data)
+            chunk_data = [self.access_field_across_documents(data_field, d) for d in all_chunk_data]
+            unnested_json[chunk_field + '.' + data_field] = chunk_data
+        # Include the _id in the case where it is not included
+        if '_id' in json_data[0].keys():
+            unnested_json['_id'] = self.access_field_across_documents('_id', json_data)
+        return unnested_json
+
+    @classmethod
+    def _is_string_integer(cls, x):
+        """Test if a string is numeric
+        """
+        try:
+            int(x)
+            return True
+        except:
+            return False
+
+    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
+        audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
+        nrows: int=None, image_width: int=60, include_vector=False, return_html: bool=False):
+        """
+        Function for showing the JSON field
+        """
+        if selected_fields is None:
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields, chunk_schema= chunk_image_fields + chunk_audio_fields)
+        else:
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields, chunk_schema=chunk_image_fields + chunk_audio_fields)
+        if nrows is not None:
+            json = json[:nrows]
+        if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
+            return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields,
+                chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+                image_width=image_width, include_vector=include_vector, return_html=return_html)
+        return self.show_df(pd.DataFrame(json),
+            image_fields=image_fields, audio_fields=audio_fields,
+            chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+            image_width=image_width, include_vector=include_vector, return_html=return_html)
+
+    def clean_results(self, results: dict):
+        """
+        Clean the results
+        """
+        if 'results' in results:
+            return results['results']
+        elif 'documents' in results:
+            return results['documents']
+        return results
+
+    def access_field_across_documents(self, f, docs, raise_on_error=True):
+        return [self.access_document_field(f, d, raise_on_error=raise_on_error) for d in docs]
+
+    def convert_concat_list_to_html(self, list_input):
         string = ''
         for x in list_input:
             string += '<div class="column">' + x + '</div>'
@@ -263,7 +374,7 @@ class UtilsMixin:
 
     def render_chunk(self, row, render_func):
         concat_images = [render_func(x) for x in row]
-        return UtilsMixin.convert_concat_list_to_html(concat_images)
+        return self.convert_concat_list_to_html(concat_images)
 
     def render_image_chunk(self, row, image_width=120):
         render_image_chunks = partial(self.render_image_in_html, image_width=image_width)
@@ -272,140 +383,159 @@ class UtilsMixin:
     def render_audio_chunk(self, row):
         return self.render_chunk(row, self.render_audio_in_html)
 
-    def show_df(self, df: pd.DataFrame,
-    image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
-    chunk_audio_fields: List[str]=[], image_width: int=60,
-    include_vector: bool=False, return_html: bool=False):
-        """
-            Shows a dataframe with the images and audio included inside the dataframe.
-            Args:
-                df:
-                    Pandas DataFrame
-                image_fields:
-                    List of fields with the images
-                audio_fields:
-                    List of fields for the audio
-                nrows:
-                    Number of rows to preview
-                image_width:
-                    The width of the images
-                include_vector:
-                    If True, includes the vector fields
-        """
-        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
-        formatters = {image:render_image_with_width for image in image_fields}
-        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
-        formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
-        formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
-        if not include_vector:
-            cols = [x for x in list(df.columns) if '_vector_' not in x]
-            df = df[cols]
-        try:
-            if return_html:
-                return df.to_html(escape=False, formatters=formatters)
-            from IPython.core.display import HTML
-            return HTML(df.to_html(escape=False ,formatters=formatters))
-        except ImportError:
-            return df
 
-    def render_image_in_html(self, path, image_width) -> str:
-        return '<img src="'+ path + f'" width="{image_width}" >'
+    # @staticmethod
+    # def convert_concat_list_to_html(list_input):
+    #     string = ''
+    #     for x in list_input:
+    #         string += '<div class="column">' + x + '</div>'
+    #     return string
 
-    def render_audio_in_html(self, path) -> str:
-        return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
+    # def render_chunk(self, row, render_func):
+    #     concat_images = [render_func(x) for x in row]
+    #     return UtilsMixin.convert_concat_list_to_html(concat_images)
 
-    def show_styler(self, df,
-    image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60,
-    return_as_html=False):
-        """
-            Shows a dataframe with the images and audio included inside the dataframe.
-            Args:
-                df:
-                    Pandas DataFrame
-                image_fields:
-                    List of fields with the images
-                audio_fields:
-                    List of fields for the audio
-                nrows:
-                    Number of rows to preview
-                image_width:
-                    The width of the images
-        """
-        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
-        formatters = {image:render_image_with_width for image in image_fields}
-        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+    # def render_image_chunk(self, row, image_width=120):
+    #     render_image_chunks = partial(self.render_image_in_html, image_width=image_width)
+    #     return self.render_chunk(row, render_image_chunks)
 
-        try:
-            if return_as_html:
-                return df.format(formatters).render()
-            return df.format(formatters)
-        except ImportError:
-            return df
+    # def render_audio_chunk(self, row):
+    #     return self.render_chunk(row, self.render_audio_in_html)
 
-    def get_audio_format(self, string):
-        if '.wav' in string:
-            return 'wav'
-        if '.mp3' in string:
-            return 'mpeg'
-        if '.ogg' in string:
-            return 'ogg'
-        warnings.warn("Unable to detect audio format. Must be either wav/mpeg/ogg.")
-        return ''
+    # def show_df(self, df: pd.DataFrame,
+    # image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
+    # chunk_audio_fields: List[str]=[], image_width: int=60,
+    # include_vector: bool=False, return_html: bool=False):
+    #     """
+    #         Shows a dataframe with the images and audio included inside the dataframe.
+    #         Args:
+    #             df:
+    #                 Pandas DataFrame
+    #             image_fields:
+    #                 List of fields with the images
+    #             audio_fields:
+    #                 List of fields for the audio
+    #             nrows:
+    #                 Number of rows to preview
+    #             image_width:
+    #                 The width of the images
+    #             include_vector:
+    #                 If True, includes the vector fields
+    #     """
+    #     render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+    #     formatters = {image:render_image_with_width for image in image_fields}
+    #     formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+    #     formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
+    #     formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
+    #     if not include_vector:
+    #         cols = [x for x in list(df.columns) if '_vector_' not in x]
+    #         df = df[cols]
+    #     try:
+    #         if return_html:
+    #             return df.to_html(escape=False, formatters=formatters)
+    #         from IPython.core.display import HTML
+    #         return HTML(df.to_html(escape=False ,formatters=formatters))
+    #     except ImportError:
+    #         return df
 
-    def unnest_json(self, json_data, schema):
-        unnested_json = {}
-        for k in schema:
-            unnested_json[k] = self.get_field_across_documents(k, json_data)
-        return unnested_json
+    # def render_image_in_html(self, path, image_width) -> str:
+    #     return '<img src="'+ path + f'" width="{image_width}" >'
 
-    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
-        audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
-        nrows: int=None, image_width: int=60, include_vector=False):
-        """
-            Shows the JSON with the audio and images inside a dataframe for quicker analysis.
-            Args:
-                json:
-                    Dictionary
-                selected_fields:
-                    List of fields to see in the dictionary
-                image_fields:
-                    List of fields with the images
-                audio_fields:
-                    List of fields for the audio
-                chunk_image_fields:
-                    List of image fields that should be chunked
-                chunk_audio_fields:
-                    List of audio fields that should be chunked
-                nrows:
-                    Number of rows to preview
-                image_width:
-                    The width of the images
-                include_vector:
-                    Include the vector fields when showing JSON
-        """
-        if selected_fields is None:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields)
-        else:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields)
-        if nrows is not None:
-            json = json[:nrows]
-        if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
-            return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields,
-            chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
-            image_width=image_width, include_vector=include_vector)
-        return self.show_df(pd.DataFrame(json),
-            image_fields=image_fields, audio_fields=audio_fields,
-            chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
-            image_width=image_width, include_vector=include_vector)
+    # def render_audio_in_html(self, path) -> str:
+    #     return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
-    def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
-    audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
-        """Show results if the documents are chunked.
-        For images, concatenates the chunk images into the same numpy array
-        For text, puts them one after the other with smaller index.
-        No Audio chunking for now.
-        """
-        raise NotImplementedError
+    # def show_styler(self, df,
+    # image_fields: List[str]=[], audio_fields: List[str]=[], image_width: int=60,
+    # return_as_html=False):
+    #     """
+    #         Shows a dataframe with the images and audio included inside the dataframe.
+    #         Args:
+    #             df:
+    #                 Pandas DataFrame
+    #             image_fields:
+    #                 List of fields with the images
+    #             audio_fields:
+    #                 List of fields for the audio
+    #             nrows:
+    #                 Number of rows to preview
+    #             image_width:
+    #                 The width of the images
+    #     """
+    #     render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+    #     formatters = {image:render_image_with_width for image in image_fields}
+    #     formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+
+    #     try:
+    #         if return_as_html:
+    #             return df.format(formatters).render()
+    #         return df.format(formatters)
+    #     except ImportError:
+    #         return df
+
+    # def get_audio_format(self, string):
+    #     if '.wav' in string:
+    #         return 'wav'
+    #     if '.mp3' in string:
+    #         return 'mpeg'
+    #     if '.ogg' in string:
+    #         return 'ogg'
+    #     warnings.warn("Unable to detect audio format. Must be either wav/mpeg/ogg.")
+    #     return ''
+
+    # def unnest_json(self, json_data, schema):
+    #     unnested_json = {}
+    #     for k in schema:
+    #         unnested_json[k] = self.get_field_across_documents(k, json_data)
+    #     return unnested_json
+
+    # def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
+    #     audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
+    #     nrows: int=None, image_width: int=60, include_vector=False):
+    #     """
+    #         Shows the JSON with the audio and images inside a dataframe for quicker analysis.
+    #         Args:
+    #             json:
+    #                 Dictionary
+    #             selected_fields:
+    #                 List of fields to see in the dictionary
+    #             image_fields:
+    #                 List of fields with the images
+    #             audio_fields:
+    #                 List of fields for the audio
+    #             chunk_image_fields:
+    #                 List of image fields that should be chunked
+    #             chunk_audio_fields:
+    #                 List of audio fields that should be chunked
+    #             nrows:
+    #                 Number of rows to preview
+    #             image_width:
+    #                 The width of the images
+    #             include_vector:
+    #                 Include the vector fields when showing JSON
+    #     """
+    #     if selected_fields is None:
+    #         json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields)
+    #     else:
+    #         json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields)
+    #     if nrows is not None:
+    #         json = json[:nrows]
+    #     if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
+    #         return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields,
+    #         chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+    #         image_width=image_width, include_vector=include_vector)
+    #     return self.show_df(pd.DataFrame(json),
+    #         image_fields=image_fields, audio_fields=audio_fields,
+    #         chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
+    #         image_width=image_width, include_vector=include_vector)
+
+    # def show_chunk_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
+    # audio_fields: List[str]=[], nrows: int=5, image_width: int=60, include_vector=False):
+    #     """Show results if the documents are chunked.
+    #     For images, concatenates the chunk images into the same numpy array
+    #     For text, puts them one after the other with smaller index.
+    #     No Audio chunking for now.
+    #     """
+    #     raise NotImplementedError
 
 def get_random_int(low=0, high=9999):
     """
