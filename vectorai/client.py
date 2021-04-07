@@ -28,7 +28,12 @@ class ViClient(ViWriteClient, ViAnalyticsClient):
             >>> vi_client.list_collections()
     """
 
-    def __init__(self, username: str=None, api_key: str=None, url: str="https://vecdb-aueast-api.azurewebsites.net",analytics_url="https://vector-analytics.vctr.ai", verbose: bool = True) -> None:
+    def __init__(self, 
+        username: str=None, 
+        api_key: str=None,
+        # Old API URL: https://vecdb-aueast-api.azurewebsites.net
+        url: str="https://vectorai-development-api.azurewebsites.net",
+        analytics_url="https://vector-analytics.vctr.ai", verbose: bool = True) -> None:
         super().__init__(username, api_key, url)
         if username is None:
             if 'VI_USERNAME' not in os.environ.keys():
