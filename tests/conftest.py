@@ -47,8 +47,8 @@ def test_api_key():
 def test_client(test_username, test_api_key):
     """Testing for the client login.
     """
-    client = ViClient(username=test_username, api_key=test_api_key)
-    return client
+    return ViClient(username=test_username, api_key=test_api_key,
+        url="https://vectorai-development-api-vectorai-test-api.azurewebsites.net/")
 
 @pytest.fixture(scope='class')
 def test_collection_name():
