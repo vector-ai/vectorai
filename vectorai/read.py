@@ -54,7 +54,7 @@ class ViReadClient(ViAPIClient, UtilsMixin, DocUtilsMixin):
         }
 
     def search(self,
-        collection_name: str, 
+        collection_name: str,
         vector: List,
         field: List,
 	filters: List=[],
@@ -76,7 +76,7 @@ Enables machine learning search with vector search. Search with a vector for the
 
 For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field)::
 
-    Query person's characteristics as a vector: 
+    Query person's characteristics as a vector:
     [180, 40, 70] representing [height, age, weight]
 
     Search Results:
@@ -112,8 +112,8 @@ Args:
 		Include count in the search results
     asc:
         Whether to sort the score by ascending order (default is false, for getting most similar results)
-"""                
-                
+"""
+
         search_fields ={}
         if isinstance(field, str):
             advanced_search_query = {
@@ -225,7 +225,7 @@ Args:
     def retrieve_all_documents(
         self,
         collection_name: str,
-        sort_by: List = [],
+        sort: List = [],
         asc: bool = True,
         include_vector: bool = True,
         include_fields: List = [],
@@ -258,17 +258,17 @@ Args:
         num_of_docs = self.collection_stats(collection_name)['number_of_documents']
         with self.progress_bar(list(range(int(num_of_docs/ retrieve_chunk_size)))) as pbar:
             d = self.retrieve_documents(
-                collection_name, retrieve_chunk_size, sort=sort_by, asc=asc, include_vector=include_vector, 
+                collection_name=collection_name, page_size=retrieve_chunk_size, sort=sort, asc=asc, include_vector=include_vector,
                 include_fields=include_fields, **kwargs
             )
             all_docs = d["documents"]
             pbar.update(1)
             while len(d["documents"]) > 0:
                 d = self.retrieve_documents(
-                    collection_name,
-                    retrieve_chunk_size,
-                    d["cursor"],
-                    sort=sort_by,
+                    collection_name=collection_name,
+                    page_size=retrieve_chunk_size,
+                    cursor=d["cursor"],
+                    sort=sort,
                     asc=asc,
                     include_vector=include_vector,
                     include_fields=include_fields
@@ -284,7 +284,7 @@ Args:
         Args:
             collection_name:
                 Name of collection.
-            job_id: 
+            job_id:
                 ID of the job.
             job_name:
                 Name of the job.
@@ -365,11 +365,11 @@ Args:
                 warnings.warn(
                     "Rename " + field + "to " + field.replace('_vectors_', '_vector_')
                 , MissingFieldWarning)
-        
+
         for field in document.keys():
             if VECTOR_FIELD_NAME in field:
                 IS_VECTOR_FIELD_MISSING = False
-        
+
         if not is_nested:
             if IS_VECTOR_FIELD_MISSING:
                 warnings.warn(
@@ -403,16 +403,16 @@ Args:
             >>> vi_client._check_schema(doc)
         """
         return sorted(self._list_collections())
-    
+
     def search_collections(self, keyword: str) -> List[str]:
         """
             Performs keyword matching in collections.
             Args:
                 keyword: Matches based on keywords
-            Returns: 
+            Returns:
                 List of collection names
-            Example: 
-                >>> from vectorai import ViClient 
+            Example:
+                >>> from vectorai import ViClient
                 >>> vi_client = ViClient()
                 >>> vi_client.search_collections('example')
         """
@@ -420,7 +420,7 @@ Args:
 
 
     def random_recommendation(self,
-        collection_name: str, 
+        collection_name: str,
         search_field: str,
         seed=None,
         sum_fields: bool = True,
@@ -462,7 +462,7 @@ Args:
         asc:
             Whether to sort the score by ascending order (default is false, for getting most similar results)
         """
-        random_id = self.random_documents(collection_name, page_size=1, seed=seed, 
+        random_id = self.random_documents(collection_name, page_size=1, seed=seed,
         include_fields=['_id'])['documents'][0]['_id']
         return self.search_by_id(collection_name=collection_name, document_id=random_id, search_field=search_field,
         approx=approx, sum_fields=sum_fields, page_size=page_size, page=page, metric=metric, min_score=min_score,
@@ -474,15 +474,15 @@ Args:
             Filter type can be one of contains/exact_match/categories/exists/insert_date/numeric_range
             Filter types can be one of:
             contains: Field must contain this specific string. Not case sensitive.
-            exact_match: Field must have an exact match 
+            exact_match: Field must have an exact match
             categories: Matches entire field
-            exists: If field exists in document 
+            exists: If field exists in document
             >= / > / < / <= : Larger than or equal to / Larger than / Smaller than / Smaller than or equal to
             These, however, can only be applied on numeric/date values. Check collection_schema.
 
             Args:
-            collection_name: The name of the collection 
-            field: The field to filter on 
+            collection_name: The name of the collection
+            field: The field to filter on
             filter_type: One of contains/exact_match/categories/>=/>/<=/<.
 
         """
@@ -507,7 +507,7 @@ Args:
             raise ValueError(f"{filter_type} has not been defined. Please choose one of contains/exact_match/exists/categories/>=/<=/>/<.")
 
     def search_with_filters(self,
-        collection_name: str, 
+        collection_name: str,
         vector: List,
         field: List,
         filters: List=[],
@@ -529,7 +529,7 @@ Enables machine learning search with vector search. Search with a vector for the
 
 For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field)::
 
-    Query person's characteristics as a vector: 
+    Query person's characteristics as a vector:
     [180, 40, 70] representing [height, age, weight]
 
     Search Results:
@@ -588,7 +588,7 @@ Args:
             asc=asc,
             **kwargs
         )
-    
+
     def hybrid_search_with_filters(
         self,
         collection_name: str,
@@ -617,7 +617,7 @@ You can also give weightings of each vector field towards the search, e.g. image
 
 Hybrid search with filters also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.
 
-    
+
 Args:
 	collection_name:
 		Name of Collection
