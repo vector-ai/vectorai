@@ -172,6 +172,14 @@ example_item = {
 
 <hr>
 
+## How does this differ from the VectorAI API? 
+
+The Python SDK is designed to provide a way for Pythonistas to unlock the power of VectorAI in as few lines as code as possible. It exposes all the elements of an API through our open-sourced automation tool and is the main way our data scientists and engineers interact with the VectorAI engine for quick prototyping before developers utilise API requests. 
+
+**Note**: The VectorAI SDK is built on the development server which can sometimes cause errors. However, this is important to ensure that users are able to access the most cutting-edge features as required. If you run into such issues, we recommend creating a GitHub Issue if it is non-urgent, but feel free to ping the Discord channel for more urgent enquiries.
+
+<hr>
+
 ## Building Products with Vector AI
 Creating a multi-language AI fashion assistant: https://fashionfiesta.me | [Blog](https://getvectorai.com/how-we-built-a-vector-powered-outfit-recommender/)
 

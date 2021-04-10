@@ -18,9 +18,9 @@ if __name__=="__main__":
             cursor=None,
             # url='https://vecdb-aueast-api.azurewebsites.net',
             url=url,
-            #sort=False
-        )
-        ,
+            # sort=False,
+            sort_by_created_at_date=False,
+        ),
         internal_functions=[
             "list_collections",
             "create_collection",
@@ -39,3 +39,4 @@ if __name__=="__main__":
     from vectorai.api.api import _ViAPIClient
     vi = _ViAPIClient(os.environ['VI_USERNAME'], os.environ['VI_API_KEY'], url=url)
     print(vi._list_collections())
+
