@@ -49,7 +49,7 @@ class TempClientWithDocs(TempClient):
 
     def generate_random_string(self, num_of_letters):
         letters = string.ascii_lowercase
-        return '_delete_collection_'.join(random.choice(letters) for i in range(num_of_letters))
+        return '_delete_'.join(random.choice(letters) for i in range(num_of_letters))
 
     def __enter__(self):
         # self.teardown_collection()
