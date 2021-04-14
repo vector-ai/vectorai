@@ -12,14 +12,6 @@ class _ViAPIClient:
 
 	@retry()
 	@return_curl_or_response('json')
-	def last_updated(self,**kwargs):
-		return requests.get(
-			url=self.url+'/last_updated',
-			params=dict(
-				))
-
-	@retry()
-	@return_curl_or_response('json')
 	def request_api_key(self, email, description, referral_code="api_referred", **kwargs):
 		"""Request an api key
 Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
@@ -224,7 +216,7 @@ metadata: Metadata for a collection, e.g. {'description' : 'collection for searc
 	@return_curl_or_response('json')
 	def copy_collection(self, collection_name, original_collection_name, collection_schema={}, rename_fields={}, remove_fields=[], **kwargs):
 		"""Copy a collection into a new collection
-Copy a collection into a new collection. You can use this to rename fields and change data schema.
+Copy a collection into a new collection. You can use this to rename fields and change data schema. This is considered a project job.
     
 Args
 ========
@@ -295,6 +287,46 @@ quick: This will run the quickest insertion possible, which means there will be 
 
 	@retry()
 	@return_curl_or_response('json')
+	def insert_and_encode(self, collection_name, encode_models, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+		"""Insert and encode document into a Collection
+Insert a document and encode specified fields into vectors with provided model urls or model names. {
+        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
+        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
+        "short_description" : {"model_url" : "bert", "alias" : "bert"},
+    }
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+document: A Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
+insert_date: Whether to include insert date as a field 'insert_date_'.
+overwrite: Whether to overwrite document if it exists.
+update_schema: Whether the api should check the documents for vector datatype to update the schema.
+quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
+encode_models: A json structure of models to encode fields with. {
+        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
+        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
+    }
+
+"""
+		return requests.post(
+			url=self.url+'/collection/insert_and_encode',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				document=document, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
+				update_schema=update_schema, 
+				quick=quick, 
+				encode_models=encode_models, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
 		"""Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
@@ -324,6 +356,46 @@ quick: This will run the quickest insertion possible, which means there will be 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def bulk_insert_and_encode(self, collection_name, encode_models, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+		"""Insert and encode multiple documents into a Collection
+Insert multiple document and encode specified fields into vectors with provided model urls or model names. {
+        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
+        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
+        "short_description" : {"model_url" : "bert", "alias" : "bert"},
+    }
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
+insert_date: Whether to include insert date as a field 'insert_date_'.
+overwrite: Whether to overwrite document if it exists.
+update_schema: Whether the api should check the documents for vector datatype to update the schema.
+quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
+encode_models: A json structure of models to encode fields with. {
+        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
+        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
+    }
+
+"""
+		return requests.post(
+			url=self.url+'/collection/bulk_insert_and_encode',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				documents=documents, 
+				insert_date=insert_date, 
+				overwrite=overwrite, 
+				update_schema=update_schema, 
+				quick=quick, 
+				encode_models=encode_models, 
 				))
 
 	@retry()
@@ -415,31 +487,6 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 
 	@retry()
 	@return_curl_or_response('json')
-	def edit_search_history(self, collection_name, search_history_id, edits, **kwargs):
-		"""Edit History By ID
-Edit history by providing a key value pair of fields you are adding or changing.
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-collection_name: Name of Collection
-search_history_id: Search history ID of the collection.
-edits: A dictionary to edit and add fields to a document.
-
-"""
-		return requests.post(
-			url=self.url+'/collection/edit_search_history',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				collection_name=collection_name, 
-				search_history_id=search_history_id, 
-				edits=edits, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
 	def delete_document_fields(self,document_id, fields_to_delete, collection_name, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/delete_document_fields',
@@ -497,6 +544,31 @@ filters: Query for filtering the search results
 				api_key=self.api_key,
 				collection_name=collection_name, 
 				filters=filters, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def edit_search_history(self, collection_name, search_history_id, edits, **kwargs):
+		"""Edit search history by its id
+Edit search history by providing a key value pair of fields you are adding or changing.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+search_history_id: Search history ID of the collection.
+edits: A dictionary to edit and add fields to a document.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/edit_search_history',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				search_history_id=search_history_id, 
+				edits=edits, 
 				))
 
 	@retry()
@@ -618,22 +690,6 @@ filters: Query for filtering the search results
 
 	@retry()
 	@return_curl_or_response('json')
-	def retrieve_search_history(self,**kwargs):
-		return requests.get(
-			url=self.url+'/collection/retrieve_search_history',
-			params=dict(
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def id_search_history(self,**kwargs):
-		return requests.get(
-			url=self.url+'/collection/id_search_history',
-			params=dict(
-				))
-
-	@retry()
-	@return_curl_or_response('json')
 	def random_documents_with_filters(self, collection_name, seed=10, include_fields=[], page_size=20, include_vector=True, filters=[], **kwargs):
 		"""Retrieve some documents randomly with filters
 Mainly for testing purposes.
@@ -686,6 +742,22 @@ difference_fields: Fields to compare. Defaults to [], which compares all fields.
 				doc=doc, 
 				docs_to_compare=docs_to_compare, 
 				difference_fields=difference_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def retrieve_search_history(self,**kwargs):
+		return requests.get(
+			url=self.url+'/collection/retrieve_search_history',
+			params=dict(
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def id_search_history(self,**kwargs):
+		return requests.get(
+			url=self.url+'/collection/id_search_history',
+			params=dict(
 				))
 
 	@retry()
@@ -1511,15 +1583,15 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 	@retry()
 	@return_curl_or_response('json')
 	def encode_field(self, collection_name, task, field, image_field, **kwargs):
-		"""Start job to encode image field
+		"""Start job to encode field
 Encode image field
     
 Args
 ========
-username: 
-api_key: 
-collection_name: 
-task: 
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+task: The name of the task for the job
 field: 
 image_field: 
 
@@ -1533,6 +1605,42 @@ image_field:
 				task=task, 
 				field=field, 
 				image_field=image_field, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag_image_field(self, collection_name, image_field, num_of_tags=5, only_relevant_tags=False, search_relevance_cutoff_aggressiveness=1, dictionary_name="nltk_small", alias="default", refresh=False, **kwargs):
+		"""Start job to tag an image
+Tag an image field. Limit the number of tags. If you only want relevant tags, 
+include a boolean for number of tags.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+image_field: The document field which you can use to tag an image.
+num_of_tags: The number of tags for an image.
+only_relevant_tags: Include the relevant tags.
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+dictionary_name: Name of the dictionary to use. Users can choose from `nltk_small`, `nltk_large`, `travel_tags`.
+alias: Alias is used to name a cluster
+refresh: If True, overwrites old tags. Otherwise, keeps new tags.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/tag_image_field',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				image_field=image_field, 
+				num_of_tags=num_of_tags, 
+				only_relevant_tags=only_relevant_tags, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				dictionary_name=dictionary_name, 
+				alias=alias, 
+				refresh=refresh, 
 				))
 
 	@retry()
@@ -1563,13 +1671,13 @@ source_api_key: Api key to access the source username
 
 	@retry()
 	@return_curl_or_response('json')
-	def chunk_search(self, collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def chunk_search(self, collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, chunk_page=1, chunk_page_size=3, **kwargs):
 		"""Vector Similarity Search on Chunks.
 Vector Similarity Search on chunks.
 
 For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field):
 
-    Query person's characteristics as a vector: 
+    Query person's characteristics as a vector:
     [180, 40, 70] representing [height, age, weight]
 
     Search Results:
@@ -1600,6 +1708,8 @@ hundred_scale: Whether to scale up the metric by 100
 asc: Whether to sort results by ascending or descending order
 vector: Vector, a list/array of floats that represents a piece of data
 search_fields: Vector fields to search against
+chunk_page: Page of the chunk results
+chunk_page_size: Size of each page of chunk results
 
 """
 		return requests.post(
@@ -1625,11 +1735,13 @@ search_fields: Vector fields to search against
 				asc=asc, 
 				vector=vector, 
 				search_fields=search_fields, 
+				chunk_page=chunk_page, 
+				chunk_page_size=chunk_page_size, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_chunk_search(self, collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, **kwargs):
+	def advanced_chunk_search(self, collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, chunk_page=1, chunk_page_size=3, **kwargs):
 		"""Advanced Vector Similarity Search on Chunks. Support for multiple vectors, vector weightings, facets and filtering
 Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
 
@@ -1661,6 +1773,8 @@ include_facets: Include facets in the search results
 hundred_scale: Whether to scale up the metric by 100
 asc: Whether to sort results by ascending or descending order
 multivector_query: Query for advance search that allows for multiple vector and field querying
+chunk_page: Page of the chunk results
+chunk_page_size: Size of each page of chunk results
 
 """
 		return requests.post(
@@ -1685,6 +1799,8 @@ multivector_query: Query for advance search that allows for multiple vector and 
 				hundred_scale=hundred_scale, 
 				asc=asc, 
 				multivector_query=multivector_query, 
+				chunk_page=chunk_page, 
+				chunk_page_size=chunk_page_size, 
 				))
 
 	@retry()
@@ -1695,7 +1811,7 @@ Vector Similarity Search on chunks.
 
 For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field):
 
-    Query person's characteristics as a vector: 
+    Query person's characteristics as a vector:
     [180, 40, 70] representing [height, age, weight]
 
     Search Results:
@@ -2505,9 +2621,33 @@ alias: Alias is used to name a cluster
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_post_cluster(self, collection_name, multivector_query, vector_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, n_clusters=0, n_init=5, n_iter=10, **kwargs):
+	def advanced_search_post_cluster(self, collection_name, multivector_query, cluster_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, n_clusters=0, n_init=5, n_iter=10, return_as_clusters=False, **kwargs):
 		"""Performs Clustering on Top X search results
 This will first perform an advanced search and then cluster the top X (page_size) search results.
+Results are returned as such: 
+Once you have the clusters: 
+
+```
+Cluster 0: [A, B, C]
+Cluster 1: [D, E]
+Cluster 2: [F, G]
+Cluster 3: [H, I]
+```
+(Note, each cluster is ordered by highest to lowest search score.
+
+This intermediately returns:
+
+```
+results_batch_1: [A, H, F, D] (ordered by highest search score)
+results_batch_2: [G, E, B, I] (ordered by highest search score)
+results_batch_3: [C]
+```
+
+This then returns the final results:
+
+```
+results: [A, H, F, D, G, E, B, I, C]
+```
     
 Args
 ========
@@ -2532,10 +2672,11 @@ search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cuto
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
 multivector_query: Query for advance search that allows for multiple vector and field querying
-vector_field: Vector field to perform clustering on
+cluster_field: Vector field to perform clustering on
 n_clusters: Number of clusters
 n_init: Number of runs to run with different centroid seeds
 n_iter: Number of iterations in each run
+return_as_clusters: If True, return as clusters as opposed to results list
 
 """
 		return requests.post(
@@ -2562,10 +2703,11 @@ n_iter: Number of iterations in each run
 				asc=asc, 
 				keep_search_history=keep_search_history, 
 				multivector_query=multivector_query, 
-				vector_field=vector_field, 
+				cluster_field=cluster_field, 
 				n_clusters=n_clusters, 
 				n_init=n_init, 
 				n_iter=n_iter, 
+				return_as_clusters=return_as_clusters, 
 				))
 
 	@retry()
