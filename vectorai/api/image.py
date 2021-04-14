@@ -99,7 +99,7 @@ Args:
                 params.update(kwargs)
                 return requests.post(
                     url="{}/collection/search_with_image".format(self.url),
-                    json=parms
+                    json=params
                 )
         elif type(image) == bytes:
             params = {
