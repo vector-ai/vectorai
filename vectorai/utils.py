@@ -402,41 +402,41 @@ class UtilsMixin:
     # def render_audio_chunk(self, row):
     #     return self.render_chunk(row, self.render_audio_in_html)
 
-    # def show_df(self, df: pd.DataFrame,
-    # image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
-    # chunk_audio_fields: List[str]=[], image_width: int=60,
-    # include_vector: bool=False, return_html: bool=False):
-    #     """
-    #         Shows a dataframe with the images and audio included inside the dataframe.
-    #         Args:
-    #             df:
-    #                 Pandas DataFrame
-    #             image_fields:
-    #                 List of fields with the images
-    #             audio_fields:
-    #                 List of fields for the audio
-    #             nrows:
-    #                 Number of rows to preview
-    #             image_width:
-    #                 The width of the images
-    #             include_vector:
-    #                 If True, includes the vector fields
-    #     """
-    #     render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
-    #     formatters = {image:render_image_with_width for image in image_fields}
-    #     formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
-    #     formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
-    #     formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
-    #     if not include_vector:
-    #         cols = [x for x in list(df.columns) if '_vector_' not in x]
-    #         df = df[cols]
-    #     try:
-    #         if return_html:
-    #             return df.to_html(escape=False, formatters=formatters)
-    #         from IPython.core.display import HTML
-    #         return HTML(df.to_html(escape=False ,formatters=formatters))
-    #     except ImportError:
-    #         return df
+    def show_df(self, df: pd.DataFrame,
+    image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
+    chunk_audio_fields: List[str]=[], image_width: int=60,
+    include_vector: bool=False, return_html: bool=False):
+        """
+            Shows a dataframe with the images and audio included inside the dataframe.
+            Args:
+                df:
+                    Pandas DataFrame
+                image_fields:
+                    List of fields with the images
+                audio_fields:
+                    List of fields for the audio
+                nrows:
+                    Number of rows to preview
+                image_width:
+                    The width of the images
+                include_vector:
+                    If True, includes the vector fields
+        """
+        render_image_with_width = partial(self.render_image_in_html, image_width=image_width)
+        formatters = {image:render_image_with_width for image in image_fields}
+        formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
+        formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
+        formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
+        if not include_vector:
+            cols = [x for x in list(df.columns) if '_vector_' not in x]
+            df = df[cols]
+        try:
+            if return_html:
+                return df.to_html(escape=False, formatters=formatters)
+            from IPython.core.display import HTML
+            return HTML(df.to_html(escape=False ,formatters=formatters))
+        except ImportError:
+            return df
 
     # def render_image_in_html(self, path, image_width) -> str:
     #     return '<img src="'+ path + f'" width="{image_width}" >'
