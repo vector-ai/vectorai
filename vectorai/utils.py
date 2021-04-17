@@ -364,7 +364,7 @@ class UtilsMixin:
         return results
 
     def access_field_across_documents(self, f, docs, raise_on_error=True):
-        return [self.access_document_field(f, d, raise_on_error=raise_on_error) for d in docs]
+        return [self.get_field(f, d, raise_on_error=raise_on_error) for d in docs]
 
     def convert_concat_list_to_html(self, list_input):
         string = ''
