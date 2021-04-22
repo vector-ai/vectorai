@@ -33,6 +33,8 @@ Vector AI is a framework designed to make the process of building production gra
 
 <hr>
 
+**WARNING: The documentation for Vector AI SDK is being re-vamped. We recommend waiting for the new documentation within the next week before working through any projects!** - 22/4/2021 Vector AI team
+
 ## Features
 - **Multimedia Data Vectorisation**: Image2Vec, Audio2Vec, etc (Any data can be turned into vectors through machine learning)
 - **Document Orientated Store**: Store your vectors alongside documents without having to do a db lookup for metadata about the vectors.
