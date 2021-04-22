@@ -295,7 +295,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=False, **kwargs):
+	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=[], **kwargs):
 		"""Insert a document into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -349,7 +349,9 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 encoders: An array structure of models to encode fields with.
     Encoders can be a `model_url` or a `model_name`.
-    For model_name, the options are: `image_text`, `image`, `text`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
     For model_url, you are free to deploy your own model and specify the required body as such.
 
     [
@@ -434,7 +436,9 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 encoders: An array structure of models to encode fields with.
     Encoders can be a `model_url` or a `model_name`.
-    For model_name, the options are: `image_text`, `image`, `text`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
     For model_url, you are free to deploy your own model and specify the required body as such.
 
     [
@@ -479,7 +483,9 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 encoders: An array structure of models to encode fields with.
     Encoders can be a `model_url` or a `model_name`.
-    For model_name, the options are: `image_text`, `image`, `text`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
     For model_url, you are free to deploy your own model and specify the required body as such.
 
     [
@@ -1019,7 +1025,9 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 encoders: An array structure of models to encode fields with.
     Encoders can be a `model_url` or a `model_name`.
-    For model_name, the options are: `image_text`, `image`, `text`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
     For model_url, you are free to deploy your own model and specify the required body as such.
 
     [
@@ -1059,7 +1067,9 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 encoders: An array structure of models to encode fields with.
     Encoders can be a `model_url` or a `model_name`.
-    For model_name, the options are: `image_text`, `image`, `text`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
     For model_url, you are free to deploy your own model and specify the required body as such.
 
     [
