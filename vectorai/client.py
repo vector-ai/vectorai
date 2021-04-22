@@ -63,35 +63,25 @@ class ViClient(ViWriteClient, ViAnalyticsClient):
         except:
             raise LoginError("Username, api key or url is incorrect.")
 
+def request_api_key(self,email, description, referral_code="api_referred", **kwargs):
+		"""Request an api key
+Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
+    
+Args
+========
+username: Username you'd like to create, lowercase only
+email: Email you are using to sign up
+description: Description of your intended use case
+referral_code: The referral code you've been given to allow you to register for an api key before others
 
-def request_api_key(username: str, email:str, description:str="I'd like to try it out.", referral_code: str="github_referred",
-return_curl: bool=False, **kwargs):
-    """
-        Request an api key
-        Make sure to save the api key somewhere safe. If you have a valid referral code, you can recieve the api key more quickly.
-
-        Args:
-            username:
-                Username you'd like to create, lowercase only
-            email:
-                Email you are using to sign up
-            description:
-                Description of your intended use case
-            referral_code:
-                The referral code you've been given to allow you to register for an api key before others
-    """
-    params = {
-        "username": username,
-        "email": email,
-        "referral_code": referral_code,
-        "description": description,
-    }
-    params.update(kwargs)
-    response = requests.post.json()(
-        url="{}/project/request_api_key".format("https://api.vctr.ai"),
-        json=params
-    )
-    return return_curl_or_response(response, 'json', return_curl)
+"""
+		return requests.post(
+			url='https://api.vctr.ai/project/request_api_key',
+			json=dict(
+				username=self.username,
+				email=email, 
+				description=description, 
+				**kwargs)).json()
 
 @decorate_functions_by_argument(set_default_collection, 'collection_name')
 class ViCollectionClient(ViClient):
