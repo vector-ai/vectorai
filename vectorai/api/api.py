@@ -387,7 +387,7 @@ store_to_pipeline: Whether to store the encoders to pipeline
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=False, **kwargs):
+	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=[], **kwargs):
 		"""Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
