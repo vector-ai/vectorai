@@ -56,4 +56,4 @@ jobs:
         API_KEY: ${{ secrets.API_KEY }}
         VI_USERNAME: ${{ secrets.VI_USERNAME }}
         VI_API_KEY: ${{ secrets.VI_API_KEY }}
-      run: python -m pytest ${{ matrix.test-path }} --use_client --reruns 5 --reruns-delay 1
+      run: python -m pytest ${{ matrix.test-path }} --use_client --reruns 5 --reruns-delay 10
