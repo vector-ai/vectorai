@@ -35,6 +35,17 @@ referral_code: The referral code you've been given to allow you to register for 
 
 	@retry()
 	@return_curl_or_response('json')
+	def list_jobs(self,show_active_only=True, **kwargs):
+		return requests.get(
+			url=self.url+'/project/list_jobs',
+			params=dict(
+				show_active_only=show_active_only, 
+				username=self.username, 
+				api_key=self.api_key, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def request_read_api_key(self, read_username, **kwargs):
 		"""Request a read api key for your collections
 Creates a read only key for your collections. Make sure to save the api key somewhere safe. When doing a search the admin username should still be used.
@@ -123,14 +134,60 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def _list_collections(self,sort_by_created_at_date=False, reverse=True, **kwargs):
+	def _list_collections(self,sort_by_created_at_date=False, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/project/list_collections',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
 				sort_by_created_at_date=sort_by_created_at_date, 
+				asc=asc, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def search_collections(self, collection_search_query, sort_by_created_at_date=False, reverse=False, **kwargs):
+		"""Search collections
+Search collections by their names
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_search_query: The collection search query
+sort_by_created_at_date: Sort by created at date. By default shows the newest collections. Set reverse=False to get oldest collection.
+reverse: Sort by created at date. By default shows the newest collections. Set reverse=False to get oldest collection.
+
+"""
+		return requests.post(
+			url=self.url+'/project/search_collections',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_search_query=collection_search_query, 
+				sort_by_created_at_date=sort_by_created_at_date, 
 				reverse=reverse, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def list_collections_info(self,schema=True, stats=True, metadata=True, schema_stats=False, vector_health=False, active_jobs=False, collection_names=[], sort_by_created_at_date=False, asc=False, page_size=20, page=1, **kwargs):
+		return requests.get(
+			url=self.url+'/project/list_collections_info',
+			params=dict(
+				username=self.username, 
+				api_key=self.api_key, 
+				schema=schema, 
+				stats=stats, 
+				metadata=metadata, 
+				schema_stats=schema_stats, 
+				vector_health=vector_health, 
+				active_jobs=active_jobs, 
+				collection_names=collection_names, 
+				sort_by_created_at_date=sort_by_created_at_date, 
+				asc=asc, 
+				page_size=page_size, 
+				page=page, 
 				))
 
 	@retry()
@@ -158,20 +215,21 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def collection_vector_health(self,collection_name, **kwargs):
+	def collection_schema_stats(self,collection_name, include_zero_vectors=True, **kwargs):
 		return requests.get(
-			url=self.url+'/project/collection_vector_health',
+			url=self.url+'/project/collection_schema_stats',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
+				include_zero_vectors=include_zero_vectors, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def collection_schema_stats(self,collection_name, **kwargs):
+	def collection_vector_health(self,collection_name, **kwargs):
 		return requests.get(
-			url=self.url+'/project/collection_schema_stats',
+			url=self.url+'/project/collection_vector_health',
 			params=dict(
 				username=self.username, 
 				api_key=self.api_key, 
@@ -245,7 +303,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 	@return_curl_or_response('json')
 	def job_status(self,job_id, **kwargs):
 		return requests.get(
-			url=self.url+'/project/job_status',
+			url=self.url+'/project/job/job_status',
 			params=dict(
 				job_id=job_id, 
 				username=self.username, 
@@ -254,7 +312,7 @@ remove_fields: Fields to remove ['random_field', 'another_random_field']. Defaul
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+	def insert(self, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=[], **kwargs):
 		"""Insert a document into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -270,6 +328,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 overwrite: Whether to overwrite document if it exists.
 update_schema: Whether the api should check the documents for vector datatype to update the schema.
 quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
+pipeline: This will run pipelines for the insert. example: pipeline=["encoders"]
 
 """
 		return requests.post(
@@ -283,32 +342,48 @@ quick: This will run the quickest insertion possible, which means there will be 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
+				pipeline=pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def insert_and_encode(self, collection_name, encode_models, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+	def insert_and_encode(self, encoders, collection_name, document={}, insert_date=True, overwrite=True, update_schema=True, quick=False, store_to_pipeline=True, **kwargs):
 		"""Insert and encode document into a Collection
-Insert a document and encode specified fields into vectors with provided model urls or model names. {
-        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
+Insert a document and encode specified fields into vectors with provided model urls or model names. 
+
+    {
+        "thumbnail" : {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url"},
         "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
         "short_description" : {"model_url" : "bert", "alias" : "bert"},
     }
+
+This primarily uses deployed models.
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
+encoders: An array structure of models to encode fields with.
+    Encoders can be a `model_url` or a `model_name`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
+    For model_url, you are free to deploy your own model and specify the required body as such.
+
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_name" : "text", "body" : "text", "field": "short_description", "alias":"bert"},
+        {"model_name" : "image_text", "body" : "url", "field" : "thumbnail"},
+    ]
+    
 collection_name: Name of Collection
 document: A Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
 insert_date: Whether to include insert date as a field 'insert_date_'.
 overwrite: Whether to overwrite document if it exists.
 update_schema: Whether the api should check the documents for vector datatype to update the schema.
 quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
-encode_models: A json structure of models to encode fields with. {
-        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
-        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
-    }
+store_to_pipeline: Whether to store the encoders to pipeline
 
 """
 		return requests.post(
@@ -316,18 +391,19 @@ encode_models: A json structure of models to encode fields with. {
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
+				encoders=encoders, 
 				collection_name=collection_name, 
 				document=document, 
 				insert_date=insert_date, 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
-				encode_models=encode_models, 
+				store_to_pipeline=store_to_pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+	def bulk_insert(self, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, pipeline=[], **kwargs):
 		"""Insert multiple documents into a Collection
 When inserting the document you can specify your own id for a document by using the field name **"\_id"**. 
 For specifying your own vector use the suffix (ends with)  **"\_vector\_"** for the field name.
@@ -343,6 +419,7 @@ insert_date: Whether to include insert date as a field 'insert_date_'.
 overwrite: Whether to overwrite document if it exists.
 update_schema: Whether the api should check the documents for vector datatype to update the schema.
 quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
+pipeline: This will run pipelines for the insert. example: pipeline=["encoders"]
 
 """
 		return requests.post(
@@ -356,32 +433,44 @@ quick: This will run the quickest insertion possible, which means there will be 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
+				pipeline=pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def bulk_insert_and_encode(self, collection_name, encode_models, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, **kwargs):
+	def bulk_insert_and_encode(self, encoders, collection_name, documents={}, insert_date=True, overwrite=True, update_schema=True, quick=False, store_to_pipeline=True, **kwargs):
 		"""Insert and encode multiple documents into a Collection
-Insert multiple document and encode specified fields into vectors with provided model urls or model names. {
-        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
-        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
-        "short_description" : {"model_url" : "bert", "alias" : "bert"},
-    }
+Insert multiple document and encode specified fields into vectors with provided model urls or model names. [
+        {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url", "field" : "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field" : "short_description"},
+        {"model_url" : "text", "alias" : "bert", "field" : "short_description"},
+    ]
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
+encoders: An array structure of models to encode fields with.
+    Encoders can be a `model_url` or a `model_name`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
+    For model_url, you are free to deploy your own model and specify the required body as such.
+
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_name" : "text", "body" : "text", "field": "short_description", "alias":"bert"},
+        {"model_name" : "image_text", "body" : "url", "field" : "thumbnail"},
+    ]
+    
 collection_name: Name of Collection
 documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
 insert_date: Whether to include insert date as a field 'insert_date_'.
 overwrite: Whether to overwrite document if it exists.
 update_schema: Whether the api should check the documents for vector datatype to update the schema.
 quick: This will run the quickest insertion possible, which means there will be no schema checks or collection checks.
-encode_models: A json structure of models to encode fields with. {
-        "thumbnail" : {"model_url" : ""https://a_vector_model_url.com/encode_image_url"", "body" : "url"},
-        "short_description" : {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text"},
-    }
+store_to_pipeline: Whether to store the encoders to pipeline
 
 """
 		return requests.post(
@@ -389,13 +478,49 @@ encode_models: A json structure of models to encode fields with. {
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
+				encoders=encoders, 
 				collection_name=collection_name, 
 				documents=documents, 
 				insert_date=insert_date, 
 				overwrite=overwrite, 
 				update_schema=update_schema, 
 				quick=quick, 
-				encode_models=encode_models, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def store_encoders_pipeline(self, encoders, collection_name, **kwargs):
+		"""Store encoder to the collection's pipeline
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+encoders: An array structure of models to encode fields with.
+    Encoders can be a `model_url` or a `model_name`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
+    For model_url, you are free to deploy your own model and specify the required body as such.
+
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_name" : "text", "body" : "text", "field": "short_description", "alias":"bert"},
+        {"model_name" : "image_text", "body" : "url", "field" : "thumbnail"},
+    ]
+    
+collection_name: Name of Collection
+
+"""
+		return requests.post(
+			url=self.url+'/collection/store_encoders_pipeline',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				encoders=encoders, 
+				collection_name=collection_name, 
 				))
 
 	@retry()
@@ -414,7 +539,7 @@ encode_models: A json structure of models to encode fields with. {
 	@return_curl_or_response('json')
 	def bulk_delete_by_id(self, collection_name, document_ids, **kwargs):
 		"""Delete multiple documents in a Collection by ids
-Delete a document by its id.
+Delete multiple document by its ids.
     
 Args
 ========
@@ -723,7 +848,7 @@ filters: Query for filtering the search results
 	@return_curl_or_response('json')
 	def compare_documents(self, doc, docs_to_compare, difference_fields=[], **kwargs):
 		"""Compare the differences between a document against multiple other documents
-Compare the differences between a document against multiple other documents.
+Compare the differences between a document and multiple other documents.
     
 Args
 ========
@@ -900,6 +1025,88 @@ difference_fields: Fields to compare. Defaults to [], which compares all fields.
 
 	@retry()
 	@return_curl_or_response('json')
+	def encode(self, encoders, document, **kwargs):
+		"""Encode document into vectors
+Get a document and encode specified fields into vectors with provided model urls or model names. [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_url" : "bert", "body" : "text", "field": "short_description", "alias":"bert"},
+    ]
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+encoders: An array structure of models to encode fields with.
+    Encoders can be a `model_url` or a `model_name`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
+    For model_url, you are free to deploy your own model and specify the required body as such.
+
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_name" : "text", "body" : "text", "field": "short_description", "alias":"bert"},
+        {"model_name" : "image_text", "body" : "url", "field" : "thumbnail"},
+    ]
+    
+document: A json document to encode.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/encode',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				encoders=encoders, 
+				document=document, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def bulk_encode(self, encoders, documents, **kwargs):
+		"""Bulk encode document into vectors
+Get a document and encode specified fields into vectors with provided model urls or model names. {
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_url" : "bert", "body" : "text", "field": "short_description", "alias":"bert"},
+    ]
+    }
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+encoders: An array structure of models to encode fields with.
+    Encoders can be a `model_url` or a `model_name`.
+    For model_name, the options are: `image_text`, `image`, `text`. `text_multi`, `text_image`.
+    Note: image_text encodes images for text to image search whereas text_image encodes texts
+    for text to image search (text to image search/image to text search works both ways).
+    For model_url, you are free to deploy your own model and specify the required body as such.
+
+    [
+        {"model_url" : "https://a_vector_model_url.com/encode_image_url", "body" : "url", "field": "thumbnail"},
+        {"model_url" : "https://a_vector_model_url.com/encode_text", "body" : "text", "field": "short_description"},
+        {"model_name" : "text", "body" : "text", "field": "short_description", "alias":"bert"},
+        {"model_name" : "image_text", "body" : "url", "field" : "thumbnail"},
+    ]
+    
+documents: Json documents to encode.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/bulk_encode',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				encoders=encoders, 
+				documents=documents, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def facets(self,collection_name, facets_fields=[], date_interval="monthly", page_size=1000, page=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/facets',
@@ -930,13 +1137,13 @@ The filters query is a json body that follows the schema of:
 These are the available filter_type types:
 
 1. "contains": for filtering documents that contains a string.
-        {'field' : 'category', 'filter_type' : 'contains', "condition":"==", "condition_value": "bluetoo"]}
+        {'field' : 'item_brand', 'filter_type' : 'contains', "condition":"==", "condition_value": "samsu"]}
 2. "exact_match"/"category": for filtering documents that matches a string or list of strings exactly.
-        {'field' : 'category', 'filter_type' : 'category', "condition":"==", "condition_value": "tv"]}
+        {'field' : 'item_brand', 'filter_type' : 'category', "condition":"==", "condition_value": "sumsung"]}
 3. "categories": for filtering documents that contains any of a category from a list of categories.
-        {'field' : 'category', 'filter_type' : 'categories', "condition":"==", "condition_value": ["tv", "smart", "bluetooth_compatible"]}
+        {'field' : 'item_category_tags', 'filter_type' : 'categories', "condition":"==", "condition_value": ["tv", "smart", "bluetooth_compatible"]}
 4. "exists": for filtering documents that contains a field.
-        {'field' : 'purchased', 'filter_type' : 'exists', "condition":">=", "condition_value":" "}
+        {'field' : 'purchased', 'filter_type' : 'exists', "condition":"==", "condition_value":" "}
 If you are looking to filter for documents where a field doesn't exist, run this:
         {'field' : 'purchased', 'filter_type' : 'exists', "condition":"!=", "condition_value":" "}
 5. "date": for filtering date by date range.
@@ -1328,23 +1535,24 @@ The aggregation query is a json body that follows the schema of:
 
     {
         "groupby" : [
-            {"name": <nickname/alias>, "field": <field in the collection>, "agg": "category"},
-            {"name": <another_nickname/alias>, "field": <another groupby field in the collection>, "agg": "category"}
+            {"name": <alias>, "field": <field in the collection>, "agg": "category"},
+            {"name": <alias>, "field": <another groupby field in the collection>, "agg": "numeric"}
         ],
         "metrics" : [
-            {"name": <nickname/alias>, "field": <numeric field in the collection>, "agg": "avg"}
+            {"name": <alias>, "field": <numeric field in the collection>, "agg": "avg"}
+            {"name": <alias>, "field": <another numeric field in the collection>, "agg": "max"}
         ]
     }
-    For example, one can use the following aggregations to group kills based on region and player name.
+    For example, one can use the following aggregations to group score based on region and player name.
     {
         "groupby" : [
-            {"name": "region", "field": "player_region.keyword", "agg": "category"},
+            {"name": "region", "field": "player_region", "agg": "category"},
             {"name": "player_name", "field": "name", "agg": "category"}
         ],
         "metrics" : [
-            {"name": "average_kills", "field": "final_kills", "agg": "avg"},
-            {"name": "max_kills", "field": "final_kills", "agg": "max"},
-            {'name':'total_kills','field':"final_kills", 'agg':'sum'},
+            {"name": "average_score", "field": "final_score", "agg": "avg"},
+            {"name": "max_score", "field": "final_score", "agg": "max"},
+            {'name':'total_score','field':"final_score", 'agg':'sum'},
             {'name':'average_deaths','field':"final_deaths", 'agg':'avg'},
             {'name':'highest_deaths','field':"final_deaths", 'agg':'max'},
         ]
@@ -1386,7 +1594,7 @@ flatten:
 	@return_curl_or_response('json')
 	def aggregate_fetch(self, collection_name, aggregation_query, filters=[], page_size=20, page=1, asc=False, flatten=True, **kwargs):
 		"""Aggregate a collection and fetch the documents
-Perform an aggregation and then a Bulk ID Lookup using aggregated IDs.
+Perform an aggregation and then a Bulk ID Lookup using IDs of the aggregated results to get the documents alongside the aggregations.
     
 Args
 ========
@@ -1547,7 +1755,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 	@return_curl_or_response('json')
 	def job_status(self,job_id, collection_name, **kwargs):
 		return requests.get(
-			url=self.url+'/collection/job_status',
+			url=self.url+'/collection/job/job_status',
 			params=dict(
 				job_id=job_id, 
 				username=self.username, 
@@ -1557,9 +1765,9 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def list_jobs(self,collection_name, show_active_only=True, **kwargs):
+	def list_collection_jobs(self,collection_name, show_active_only=True, **kwargs):
 		return requests.get(
-			url=self.url+'/collection/list_jobs',
+			url=self.url+'/collection/job/list_collection_jobs',
 			params=dict(
 				show_active_only=show_active_only, 
 				username=self.username, 
@@ -1569,50 +1777,67 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_image_field(self,image_field, collection_name, refresh=True, **kwargs):
-		return requests.get(
-			url=self.url+'/collection/encode_image_field',
-			params=dict(
-				image_field=image_field, 
-				refresh=refresh, 
-				username=self.username, 
-				api_key=self.api_key, 
-				collection_name=collection_name, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def encode_field(self, collection_name, task, field, image_field, **kwargs):
-		"""Start job to encode field
-Encode image field
+	def encode_image_field(self, collection_name, image_field, task="image", alias="", refresh=False, **kwargs):
+		"""Start job to encode image field
+Encode an image field with a model to add vectors to the collection, you can specify the task of "image" or "image_text".
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
-task: The name of the task for the job
-field: 
-image_field: 
+image_field: The document image field to encode.
+task: The name of the task for the job. "image" for encoding image fields with image based models, "image_text" for encoding images that can be searched against text
+alias: Alias is used to uniquely identify vector fields
+refresh: If True, overwrite all encoded vectors, otherwise it just encodes the fields that don't have vectors.
 
 """
 		return requests.post(
-			url=self.url+'/collection/encode_field',
+			url=self.url+'/collection/job/encode_image_field',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				task=task, 
-				field=field, 
 				image_field=image_field, 
+				task=task, 
+				alias=alias, 
+				refresh=refresh, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_text_field(self, collection_name, text_field, task="text", alias="", refresh=False, **kwargs):
+		"""Start job to encode text field
+Encode a text field with a model to add vectors to the collection, you can specify the task of "text", "text_image" or "text_multi".
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+text_field: The document text field to encode.
+task: The name of the task for the job. "text" for encoding english models, "text_multi" for encoding multilanguage models, "text_image" for encoding text that can be searched with images
+alias: Alias is used to uniquely identify vector fields
+refresh: If True, overwrite all encoded vectors, otherwise it just encodes the fields that don't have vectors.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/encode_text_field',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				text_field=text_field, 
+				task=task, 
+				alias=alias, 
+				refresh=refresh, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
 	def tag_image_field(self, collection_name, image_field, num_of_tags=5, only_relevant_tags=False, search_relevance_cutoff_aggressiveness=1, dictionary_name="nltk_small", alias="default", refresh=False, **kwargs):
 		"""Start job to tag an image
-Tag an image field. Limit the number of tags. If you only want relevant tags, 
-include a boolean for number of tags.
+Tag an image field. Limit the number of tags. If you only want relevant tags, include the number of tags.
     
 Args
 ========
@@ -1629,7 +1854,7 @@ refresh: If True, overwrites old tags. Otherwise, keeps new tags.
 
 """
 		return requests.post(
-			url=self.url+'/collection/tag_image_field',
+			url=self.url+'/collection/job/tag_image_field',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
@@ -1641,6 +1866,34 @@ refresh: If True, overwrites old tags. Otherwise, keeps new tags.
 				dictionary_name=dictionary_name, 
 				alias=alias, 
 				refresh=refresh, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def chunk_text_field(self, collection_name, field, model_url, refresh=False, **kwargs):
+		"""Chunk a text field
+Split text into separate sentences. Encode each sentence to create chunkvectors.
+These are stored as _chunkvector_. The chunk field created is `field` + _chunk_.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+field: Field to text
+refresh: If True, Re-encodes from scratch.
+model_url: Model URL for encoding
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/chunk_text_field',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				field=field, 
+				refresh=refresh, 
+				model_url=model_url, 
 				))
 
 	@retry()
@@ -1673,18 +1926,9 @@ source_api_key: Api key to access the source username
 	@return_curl_or_response('json')
 	def chunk_search(self, collection_name, chunk_field, vector, search_fields, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, chunk_page=1, chunk_page_size=3, **kwargs):
 		"""Vector Similarity Search on Chunks.
-Vector Similarity Search on chunks.
-
-For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field):
-
-    Query person's characteristics as a vector:
-    [180, 40, 70] representing [height, age, weight]
-
-    Search Results:
-    [
-        {"name": Adam Levine, "persons_characteristics_vector" : [180, 56, 71]},
-        {"name": Brad Pitt, "persons_characteristics_vector" : [180, 56, 65]},
-    ...]
+Chunk Search allows one to search through chunks inside a document. The major difference
+between chunk search and normal search in Vector AI is that it relies on the `_chunkvector_`
+field.
     
 Args
 ========
@@ -1743,13 +1987,9 @@ chunk_page_size: Size of each page of chunk results
 	@return_curl_or_response('json')
 	def advanced_chunk_search(self, collection_name, chunk_field, multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, chunk_page=1, chunk_page_size=3, **kwargs):
 		"""Advanced Vector Similarity Search on Chunks. Support for multiple vectors, vector weightings, facets and filtering
-Advanced Vector Similarity Search, enables machine learning search with vector search. Search with a multiple vectors for the most similar documents.
+Advanced Chunk Vector Search. Search with a multiple chunkvectors for the most similar documents.
 
-For example: Search with a product image and description vectors to find the most similar products by what it looks like and what its described to do.
-
-You can also give weightings of each vector field towards the search, e.g. image\_vector\_ weights 100%, whilst description\_vector\_ 50%.
-
-Advanced search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.
+Advanced chunk search also supports filtering to only search through filtered results and facets to get the overview of products available when a minimum score is set.
 
     
 Args
@@ -1807,18 +2047,7 @@ chunk_page_size: Size of each page of chunk results
 	@return_curl_or_response('json')
 	def advanced_multistep_chunk_search(self, collection_name, chunk_field, first_step_multivector_query, chunk_step_multivector_query, chunk_scoring="max", page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_vector=False, include_count=True, include_facets=False, hundred_scale=False, asc=False, first_step_page=1, first_step_page_size=20, **kwargs):
 		"""Vector Similarity Search on Chunks.
-Vector Similarity Search on chunks.
-
-For example: Search with a person's characteristics, who are the most similar (querying the "persons_characteristics_vector" field):
-
-    Query person's characteristics as a vector:
-    [180, 40, 70] representing [height, age, weight]
-
-    Search Results:
-    [
-        {"name": Adam Levine, "persons_characteristics_vector" : [180, 56, 71]},
-        {"name": Brad Pitt, "persons_characteristics_vector" : [180, 56, 65]},
-    ...]
+Advanced Multistep chunk search involves a simple search followed by chunk search.
     
 Args
 ========
@@ -2621,7 +2850,7 @@ alias: Alias is used to name a cluster
 
 	@retry()
 	@return_curl_or_response('json')
-	def advanced_search_post_cluster(self, collection_name, multivector_query, cluster_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, n_clusters=0, n_init=5, n_iter=10, return_as_clusters=False, **kwargs):
+	def advanced_search_post_cluster(self, collection_name, multivector_query, cluster_vector_field, page=1, page_size=20, approx=0, sum_fields=True, metric="cosine", filters=[], facets=[], min_score=None, include_fields=[], include_vector=False, include_count=True, include_facets=False, hundred_scale=False, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, keep_search_history=False, n_clusters=0, n_init=5, n_iter=10, return_as_clusters=False, **kwargs):
 		"""Performs Clustering on Top X search results
 This will first perform an advanced search and then cluster the top X (page_size) search results.
 Results are returned as such: 
@@ -2672,7 +2901,7 @@ search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cuto
 asc: Whether to sort results by ascending or descending order
 keep_search_history: Whether to store the history of search or not
 multivector_query: Query for advance search that allows for multiple vector and field querying
-cluster_field: Vector field to perform clustering on
+cluster_vector_field: Vector field to perform clustering on
 n_clusters: Number of clusters
 n_init: Number of runs to run with different centroid seeds
 n_iter: Number of iterations in each run
@@ -2703,7 +2932,7 @@ return_as_clusters: If True, return as clusters as opposed to results list
 				asc=asc, 
 				keep_search_history=keep_search_history, 
 				multivector_query=multivector_query, 
-				cluster_field=cluster_field, 
+				cluster_vector_field=cluster_vector_field, 
 				n_clusters=n_clusters, 
 				n_init=n_init, 
 				n_iter=n_iter, 
@@ -2774,12 +3003,13 @@ n_components: The size/length to reduce the vector down to.
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_text_field(self,text_field, collection_name, refresh=True, **kwargs):
+	def encode_text_field(self,text_field, collection_name, refresh=True, alias="default", **kwargs):
 		return requests.get(
 			url=self.url+'/collection/encode_text_field',
 			params=dict(
 				text_field=text_field, 
 				refresh=refresh, 
+				alias=alias, 
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
@@ -2878,6 +3108,20 @@ search_fields: Vector fields to search against
 				keep_search_history=keep_search_history, 
 				text=text, 
 				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_image_field(self,image_field, collection_name, alias="default", refresh=True, **kwargs):
+		return requests.get(
+			url=self.url+'/collection/encode_image_field',
+			params=dict(
+				image_field=image_field, 
+				alias=alias, 
+				refresh=refresh, 
+				username=self.username, 
+				api_key=self.api_key, 
+				collection_name=collection_name, 
 				))
 
 	@retry()
