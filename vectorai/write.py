@@ -601,7 +601,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         """
         return self.insert_documents(
             collection_name,
-            [ {k:v for k,v in m.items() if not isinstance(v, float) or pd.notnull(v)} for m in df.to_dict(orient='records')]
+            [ {k:v for k,v in m.items() if not isinstance(v, float) or pd.notnull(v)} for m in df.to_dict(orient='records')],
             models=models,
             chunksize=chunksize,
             workers=workers,
