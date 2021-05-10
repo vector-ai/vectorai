@@ -302,24 +302,27 @@ class UtilsMixin:
         """
         return f"<audio controls><source src='{x}' type='audio/{self.get_audio_format(x)}'></audio>"
 
-    def unnest_json(self, json_data: List[Dict], schema: List[str], chunk_schema: List[str]):
+    def unnest_json(self, json_data: List[Dict], schema: List[str], chunk_schema: List[str], 
+        missing_treatment="return_empty_string"):
         """
         Unnest the JSON
         """
         unnested_json = {}
         for k in schema:
-            unnested_json[k] = self.access_field_across_documents(k, json_data, raise_on_error=True)
+            unnested_json[k] = self.get_field_across_documents(k, json_data, 
+                missing_treatment=missing_treatment)
         # Check if any of the field is a list
         for chunk_f in chunk_schema:
             # get the chunk field - assume the chunk field is the last field
             chunk_field = ''.join(f + '.' for f in chunk_f.split('.')[:-1])[:-1]
             data_field = chunk_f.split('.')[-1]
-            all_chunk_data = self.access_field_across_documents(chunk_field, json_data)
-            chunk_data = [self.access_field_across_documents(data_field, d) for d in all_chunk_data]
+            all_chunk_data = self.get_field_across_documents(chunk_field, json_data, 
+                missing_treatment=missing_treatment)
+            chunk_data = [self.get_field_across_documents(data_field, d, missing_treatment=missing_treatment) for d in all_chunk_data]
             unnested_json[chunk_field + '.' + data_field] = chunk_data
         # Include the _id in the case where it is not included
         if '_id' in json_data[0].keys():
-            unnested_json['_id'] = self.access_field_across_documents('_id', json_data)
+            unnested_json['_id'] = self.get_field_across_documents('_id', json_data, missing_treatment=missing_treatment)
         return unnested_json
 
     @classmethod
@@ -334,14 +337,14 @@ class UtilsMixin:
 
     def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
         audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
-        nrows: int=None, image_width: int=60, include_vector=False, return_html: bool=False):
+        nrows: int=None, image_width: int=60, include_vector=False, return_html: bool=False, missing_treatment: str='return_empty_string'):
         """
         Function for showing the JSON field
         """
         if selected_fields is None:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields, chunk_schema= chunk_image_fields + chunk_audio_fields)
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields, chunk_schema= chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
         else:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields, chunk_schema=chunk_image_fields + chunk_audio_fields)
+            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields, chunk_schema=chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
         if nrows is not None:
             json = json[:nrows]
         if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
@@ -363,8 +366,8 @@ class UtilsMixin:
             return results['documents']
         return results
 
-    def access_field_across_documents(self, f, docs, raise_on_error=True):
-        return [self.get_field(f, d) for d in docs]
+    def access_field_across_documents(self, f, docs, missing_treatment="return_empty_string"):
+        return [self.get_field(f, d, missing_treatment=missing_treatment) for d in docs]
 
     def convert_concat_list_to_html(self, list_input):
         string = ''

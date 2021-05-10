@@ -36,9 +36,15 @@ class DocUtilsMixin:
             try:
                 d = d[f]
             except KeyError:
-                try: return doc[field]
+                try: 
+                    return doc[field]
                 except KeyError:
-                    raise MissingFieldError("Document is missing " + field)
+                    if missing_treatment == 'return_none':
+                        return None
+                    elif missing_treatment == 'return_empty_string':
+                        return ''
+                    raise MissingFieldError("Document is missing " + f + ' of ' + field)
+
             except TypeError:
                 if self._is_string_integer(f):
                     # Get the Get the chunk document out.
@@ -116,7 +122,7 @@ class DocUtilsMixin:
         """
         return [self.get_field(field, doc, missing_treatment) for doc in docs]
     
-    def get_fields_across_document(self, fields: List[str], doc: Dict, ignore_missing=True):
+    def get_fields_across_document(self, fields: List[str], doc: Dict, missing_treatment='return_empty_string'):
         """
         Get numerous fields across a document.
         """
