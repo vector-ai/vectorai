@@ -146,7 +146,7 @@ document: A Document is a JSON-like data that we store our metadata and vectors 
 
 	@retry()
 	@return_curl_or_response('json')
-	def search_collections(self, collection_search_query, sort_by_created_at_date=False, reverse=False, **kwargs):
+	def search_collections(self, collection_search_query, sort_by_created_at_date=False, asc=False, **kwargs):
 		"""Search collections
 Search collections by their names
     
@@ -156,7 +156,7 @@ username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_search_query: The collection search query
 sort_by_created_at_date: Sort by created at date. By default shows the newest collections. Set reverse=False to get oldest collection.
-reverse: Sort by created at date. By default shows the newest collections. Set reverse=False to get oldest collection.
+asc: Sort by created at date. By default shows the newest collections. Set reverse=False to get oldest collection.
 
 """
 		return requests.post(
@@ -166,7 +166,7 @@ reverse: Sort by created at date. By default shows the newest collections. Set r
 				api_key=self.api_key,
 				collection_search_query=collection_search_query, 
 				sort_by_created_at_date=sort_by_created_at_date, 
-				reverse=reverse, 
+				asc=asc, 
 				))
 
 	@retry()
@@ -521,6 +521,28 @@ collection_name: Name of Collection
 				api_key=self.api_key,
 				encoders=encoders, 
 				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def remove_encoder_from_pipeline(self, collection_name, vector_fields, **kwargs):
+		"""Remove an encoder from the collection's encoders pipeline
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vector_fields: Vector fields that identifies an encoder to remove from pipeline
+
+"""
+		return requests.post(
+			url=self.url+'/collection/remove_encoder_from_pipeline',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vector_fields=vector_fields, 
 				))
 
 	@retry()
@@ -1107,6 +1129,69 @@ documents: Json documents to encode.
 
 	@retry()
 	@return_curl_or_response('json')
+	def predict_knn_regression(self, collection_name, vector, search_field, target_field, impute_value, k=5, weighting=True, predict_operation="mean", **kwargs):
+		"""Predict KNN regression.
+Predict with KNN regression using normal search.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vector: Vector, a list/array of floats that represents a piece of data
+search_field: The field to search with.
+target_field: The field to perform regression on.
+k: The number of results for KNN.
+weighting: weighting
+impute_value: What value to fill if target field is missing.
+predict_operation: How to predict using the vectors.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/predict_knn_regression',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vector=vector, 
+				search_field=search_field, 
+				target_field=target_field, 
+				k=k, 
+				weighting=weighting, 
+				impute_value=impute_value, 
+				predict_operation=predict_operation, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def predict_knn_regression_from_results(self, field, results, impute_value, weighting=True, predict_operation="mean", **kwargs):
+		"""Predict KNN regression from search results
+Predict using KNN regression from search results
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+field: Field in results to weigh on.
+results: List of results in a dictionary
+weighting: weighting of the actual vectors
+impute_value: The impute value
+predict_operation: How to predict using the vectors.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/predict_knn_regression_from_results',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				field=field, 
+				results=results, 
+				weighting=weighting, 
+				impute_value=impute_value, 
+				predict_operation=predict_operation, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def facets(self,collection_name, facets_fields=[], date_interval="monthly", page_size=1000, page=1, asc=False, **kwargs):
 		return requests.get(
 			url=self.url+'/collection/facets',
@@ -1137,9 +1222,9 @@ The filters query is a json body that follows the schema of:
 These are the available filter_type types:
 
 1. "contains": for filtering documents that contains a string.
-        {'field' : 'item_brand', 'filter_type' : 'contains', "condition":"==", "condition_value": "samsu"]}
+        {'field' : 'item_brand', 'filter_type' : 'contains', "condition":"==", "condition_value": "samsu"}
 2. "exact_match"/"category": for filtering documents that matches a string or list of strings exactly.
-        {'field' : 'item_brand', 'filter_type' : 'category', "condition":"==", "condition_value": "sumsung"]}
+        {'field' : 'item_brand', 'filter_type' : 'category', "condition":"==", "condition_value": "sumsung"}
 3. "categories": for filtering documents that contains any of a category from a list of categories.
         {'field' : 'item_category_tags', 'filter_type' : 'categories', "condition":"==", "condition_value": ["tv", "smart", "bluetooth_compatible"]}
 4. "exists": for filtering documents that contains a field.
@@ -1777,7 +1862,7 @@ join: Whether to consider cases where there is a space in the word. E.g. Go Pro 
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_image_field(self, collection_name, image_field, task="image", alias="", refresh=False, **kwargs):
+	def encode_image_field(self, collection_name, image_field, task="image", alias="", refresh=False, store_to_pipeline=True, **kwargs):
 		"""Start job to encode image field
 Encode an image field with a model to add vectors to the collection, you can specify the task of "image" or "image_text".
     
@@ -1790,6 +1875,7 @@ image_field: The document image field to encode.
 task: The name of the task for the job. "image" for encoding image fields with image based models, "image_text" for encoding images that can be searched against text
 alias: Alias is used to uniquely identify vector fields
 refresh: If True, overwrite all encoded vectors, otherwise it just encodes the fields that don't have vectors.
+store_to_pipeline: Whether to store the encoder to the encoders pipeline
 
 """
 		return requests.post(
@@ -1802,11 +1888,12 @@ refresh: If True, overwrite all encoded vectors, otherwise it just encodes the f
 				task=task, 
 				alias=alias, 
 				refresh=refresh, 
+				store_to_pipeline=store_to_pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def encode_text_field(self, collection_name, text_field, task="text", alias="", refresh=False, **kwargs):
+	def encode_text_field(self, collection_name, text_field, task="text", alias="", refresh=False, store_to_pipeline=True, **kwargs):
 		"""Start job to encode text field
 Encode a text field with a model to add vectors to the collection, you can specify the task of "text", "text_image" or "text_multi".
     
@@ -1819,6 +1906,7 @@ text_field: The document text field to encode.
 task: The name of the task for the job. "text" for encoding english models, "text_multi" for encoding multilanguage models, "text_image" for encoding text that can be searched with images
 alias: Alias is used to uniquely identify vector fields
 refresh: If True, overwrite all encoded vectors, otherwise it just encodes the fields that don't have vectors.
+store_to_pipeline: Whether to store the encoder to the encoders pipeline
 
 """
 		return requests.post(
@@ -1831,46 +1919,177 @@ refresh: If True, overwrite all encoded vectors, otherwise it just encodes the f
 				task=task, 
 				alias=alias, 
 				refresh=refresh, 
+				store_to_pipeline=store_to_pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def tag_image_field(self, collection_name, image_field, num_of_tags=5, only_relevant_tags=False, search_relevance_cutoff_aggressiveness=1, dictionary_name="nltk_small", alias="default", refresh=False, **kwargs):
-		"""Start job to tag an image
-Tag an image field. Limit the number of tags. If you only want relevant tags, include the number of tags.
+	def advanced_cluster(self, collection_name, vector_field, n_clusters, alias="default", task="cluster", n_iter=10, n_init=5, refresh=False, store_to_pipeline=True, **kwargs):
+		"""Start job to cluster a vector field
+Clusters a collection into groups using unsupervised machine learning. Clusters can then be aggregated to understand whats in them and how vectors are seperating data into different groups.
+Advanced cluster allows for more parameters to tune and alias to name each differently trained clusters.
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vector_field: Vector field to perform clustering on
+alias: Alias is used to name a cluster
+task: The name of the task for the job.
+n_clusters: Number of clusters
+n_iter: Number of iterations in each run
+n_init: Number of runs to run with different centroid seeds
+refresh: If True, overwrite all labelled clusters, otherwise it just labels the fields that don't have clusters.
+store_to_pipeline: Whether to store the cluster model to the clusters pipeline
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/advanced_cluster',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vector_field=vector_field, 
+				alias=alias, 
+				task=task, 
+				n_clusters=n_clusters, 
+				n_iter=n_iter, 
+				n_init=n_init, 
+				refresh=refresh, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def dimensionality_reduction(self, collection_name, vector_field, n_components, alias="default", task="dimensionality_reduction", refresh=False, store_to_pipeline=True, **kwargs):
+		"""Start job to dimensionality reduce a vector field
+Dimensionality reduction allows your vectors to be reduced down to any dimensions greater than 0 using unsupervised machine learning. 
+
+This is useful for even faster search and visualising the vectors.
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vector_field: Vector field to perform dimensionality reduction on
+alias: Alias is used to name a dimensionality reduced vector field
+task: The name of the task for the job.
+n_components: The size/length to reduce the vector down to. If 0 is set then highest possible is of components is set, when this is done you can get reduction on demand of any length.
+refresh: If True, overwrite all labelled dimensionality reduced fields, otherwise it just adds the fields that don't have dimensionality reduced fields.
+store_to_pipeline: Whether to store the dimensionality reduction model to the dimensionality reductions pipeline
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/dimensionality_reduction',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vector_field=vector_field, 
+				alias=alias, 
+				task=task, 
+				n_components=n_components, 
+				refresh=refresh, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag_vector_job(self, collection_name, tag_collection_name, vector_field, hub_username, hub_api_key, tag_field="tag", tag_vector_field="tag_vector_", field="", alias="default", metric="cosine", number_of_tags=5, include_tag_vector=True, refresh=False, store_to_pipeline=True, **kwargs):
+		"""Start job for tagging vectors
+Search for a tag and then encode
     
 Args
 ========
 username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
-image_field: The document field which you can use to tag an image.
-num_of_tags: The number of tags for an image.
-only_relevant_tags: Include the relevant tags.
-search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
-dictionary_name: Name of the dictionary to use. Users can choose from `nltk_small`, `nltk_large`, `travel_tags`.
-alias: Alias is used to name a cluster
-refresh: If True, overwrites old tags. Otherwise, keeps new tags.
+tag_collection_name: Name of the collection you are retrieving the tags from
+vector_field: vector field from the source collection to tag on
+tag_field: The field in the tag collection to use for tagging.
+tag_vector_field: vector field in the tag collection, used for matching the vectors to tag.
+field: The field in the source collection to be tagged.
+alias: The alias of the tags. Defaults to 'default'
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+number_of_tags: The number of tags to retrieve.
+include_tag_vector: Whether to include the one hot encoded tag vector.
+refresh: If True, Re-tags from scratch.
+hub_username: The username of the hub account.
+hub_api_key: The API key of the hub account.
+store_to_pipeline: Whether to store the encoders to pipeline
 
 """
 		return requests.post(
-			url=self.url+'/collection/job/tag_image_field',
+			url=self.url+'/collection/job/tag_vector_job',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				image_field=image_field, 
-				num_of_tags=num_of_tags, 
-				only_relevant_tags=only_relevant_tags, 
-				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
-				dictionary_name=dictionary_name, 
+				tag_collection_name=tag_collection_name, 
+				vector_field=vector_field, 
+				tag_field=tag_field, 
+				tag_vector_field=tag_vector_field, 
+				field=field, 
 				alias=alias, 
+				metric=metric, 
+				number_of_tags=number_of_tags, 
+				include_tag_vector=include_tag_vector, 
 				refresh=refresh, 
+				hub_username=hub_username, 
+				hub_api_key=hub_api_key, 
+				store_to_pipeline=store_to_pipeline, 
 				))
 
 	@retry()
 	@return_curl_or_response('json')
-	def chunk_text_field(self, collection_name, field, model_url, refresh=False, **kwargs):
+	def tag_job(self, collection_name, tag_collection_name, hub_username, hub_api_key, field="", encoder_task="text", tag_field="tag", tag_vector_field="tag_vector_", alias="default", metric="cosine", number_of_tags=5, include_tag_vector=True, refresh=False, store_to_pipeline=True, **kwargs):
+		"""Start a job for encoding a field and then tagging
+Encode using an encoder and tag
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+tag_collection_name: Name of the collection you are retrieving the tags from
+field: The field in the source collection to be tagged.
+encoder_task: Name of the task to run an encoding job on. This can be one of text, text-image, text-multi, image-text.
+tag_field: The field in the tag collection to use for tagging.
+tag_vector_field: vector field in the tag collection, used for matching the vectors to tag.
+alias: The alias of the tags. Defaults to 'default'
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+number_of_tags: The number of tags to retrieve.
+include_tag_vector: Whether to include the one hot encoded tag vector.
+refresh: If True, Re-tags from scratch.
+hub_username: The username of the hub account.
+hub_api_key: The API key of the hub account.
+store_to_pipeline: Whether to store the encoders to pipeline
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/tag_job',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				tag_collection_name=tag_collection_name, 
+				field=field, 
+				encoder_task=encoder_task, 
+				tag_field=tag_field, 
+				tag_vector_field=tag_vector_field, 
+				alias=alias, 
+				metric=metric, 
+				number_of_tags=number_of_tags, 
+				include_tag_vector=include_tag_vector, 
+				refresh=refresh, 
+				hub_username=hub_username, 
+				hub_api_key=hub_api_key, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def text_chunking(self, collection_name, text_field, chunk_field, insert_results_to_seperate_collection_name, refresh=True, store_to_pipeline=True, **kwargs):
 		"""Chunk a text field
 Split text into separate sentences. Encode each sentence to create chunkvectors.
 These are stored as _chunkvector_. The chunk field created is `field` + _chunk_.
@@ -1880,20 +2099,108 @@ Args
 username: Username
 api_key: Api Key, you can request it from request_api_key
 collection_name: Name of Collection
-field: Field to text
-refresh: If True, Re-encodes from scratch.
-model_url: Model URL for encoding
+text_field: Text field to chunk
+chunk_field: Whats the field that the text chunks will belong in
+refresh: Whether to refresh the whole collection and re-encode all to vectors
+insert_results_to_seperate_collection_name: If specified the chunks will be inserted into a seperate collection. Default is None which means no seperate collection.
+store_to_pipeline: Whether to store the encoder to the chunking pipeline
 
 """
 		return requests.post(
-			url=self.url+'/collection/job/chunk_text_field',
+			url=self.url+'/collection/job/text_chunking',
 			json=dict(
 				username=self.username,
 				api_key=self.api_key,
 				collection_name=collection_name, 
-				field=field, 
+				text_field=text_field, 
+				chunk_field=chunk_field, 
 				refresh=refresh, 
-				model_url=model_url, 
+				insert_results_to_seperate_collection_name=insert_results_to_seperate_collection_name, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def text_chunking_encoder(self, collection_name, text_field, chunk_field, insert_results_to_seperate_collection_name, encoder_task="text", refresh=True, store_to_pipeline=True, **kwargs):
+		"""Chunk a text field and encode the chunks
+Split text into separate sentences. Encode each sentence to create chunkvectors.
+These are stored as \_chunkvector\_. The chunk field created is `field` + \_chunk\_.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+text_field: Text field to chunk
+chunk_field: Whats the field that the text chunks will belong in
+encoder_task: Encoder that is used to turn the text chunks into vectors
+refresh: Whether to refresh the whole collection and re-encode all to vectors
+insert_results_to_seperate_collection_name: If specified the chunks will be inserted into a seperate collection. Default is None which means no seperate collection.
+store_to_pipeline: Whether to store the encoder to the chunking pipeline
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/text_chunking_encoder',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				text_field=text_field, 
+				chunk_field=chunk_field, 
+				encoder_task=encoder_task, 
+				refresh=refresh, 
+				insert_results_to_seperate_collection_name=insert_results_to_seperate_collection_name, 
+				store_to_pipeline=store_to_pipeline, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def process_pdf(self, collection_name, file_url, filename, **kwargs):
+		"""Process pdf
+Insert a PDF into Vector AI.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: What collection to insert the PDF into
+file_url: The file url blob
+filename: The name of the PDF file.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/process_pdf',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				file_url=file_url, 
+				filename=filename, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def process_doc(self, collection_name, file_url, filename, **kwargs):
+		"""Process doc or docx
+Insert a word doc or docx file into Vector AI
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: What collection to insert the word doc into
+file_url: The file url blob
+filename: The name of the Doc or DocX file
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/process_doc',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				file_url=file_url, 
+				filename=filename, 
 				))
 
 	@retry()
@@ -2271,6 +2578,42 @@ refresh: Whether to refresh the aggregation and recalculate the vectors for ever
 				username=self.username, 
 				api_key=self.api_key, 
 				collection_name=collection_name, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def encode_multiple_arrays(self, collection_name, multiarray_query, **kwargs):
+		"""Encode multiple arrays into vectors.
+Encode Multiple arrays
+Multiarray query is in the format: 
+
+    {
+        "array_1": {"array": ["YES"], "field": "sample_array"},
+        "array_2": {"array": ["NO"], "field": "sample_array_2"},
+    }
+This will then return 
+    
+    {
+        "array_1": [1e-7, 1],
+        "array_2": [1, 1e-7]
+    }
+
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+multiarray_query: List of array fields
+
+"""
+		return requests.post(
+			url=self.url+'/collection/encode_multiple_arrays',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				multiarray_query=multiarray_query, 
 				))
 
 	@retry()
@@ -3485,6 +3828,299 @@ search_fields: Vector fields to search against
 				audio=audio, 
 				model_url=model_url, 
 				search_fields=search_fields, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def text_chunking(self, collection_name, text_field, chunk_field, insert_results_to_seperate_collection_name, refresh=True, insert_results=True, return_processed_documents=False, **kwargs):
+		"""Chunking a text field in a collection.
+Chunking a text field in a collection. e.g. a paragraph text field to sentence chunks
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+text_field: Text field to chunk
+chunk_field: Whats the field that the text chunks will belong in
+refresh: Whether to refresh the whole collection and re-encode all to vectors
+insert_results: Whether to insert the processed document chunks into the collection.
+insert_results_to_seperate_collection_name: If specified the chunks will be inserted into a seperate collection. Default is None which means no seperate collection.
+return_processed_documents: Whether to return the processed documents.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/text_chunking',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				text_field=text_field, 
+				chunk_field=chunk_field, 
+				refresh=refresh, 
+				insert_results=insert_results, 
+				insert_results_to_seperate_collection_name=insert_results_to_seperate_collection_name, 
+				return_processed_documents=return_processed_documents, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag(self, data, tag_collection_name, encoder, tag_field, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", filters=[], min_score=None, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, **kwargs):
+		"""Add tagging
+Tag
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+data: Image Url or text or any data suited for the encoder
+tag_collection_name: Name of the collection you want to tag
+encoder: Which encoder to use.
+tag_field: The field used to tag in a collection. If None, automatically uses the one stated in the encoder.
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+page_size: Size of each page of results
+page: Page of the results
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+min_score: Minimum score for similarity metric
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+
+"""
+		return requests.post(
+			url=self.url+'/collection/tag',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				data=data, 
+				tag_collection_name=tag_collection_name, 
+				encoder=encoder, 
+				tag_field=tag_field, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				page_size=page_size, 
+				page=page, 
+				metric=metric, 
+				filters=filters, 
+				min_score=min_score, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def post_cluster_tag(self, data, tag_collection_name, encoder, tag_field, cluster_vector_field, n_clusters, approx=0, sum_fields=True, page_size=20, page=1, metric="cosine", filters=[], min_score=None, include_search_relevance=False, search_relevance_cutoff_aggressiveness=1, asc=False, n_iter=10, n_init=5, **kwargs):
+		"""Post cluster tag.
+Post cluster tag.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+data: Image Url or text or any data suited for the encoder
+tag_collection_name: Name of the collection you want to tag
+encoder: Which encoder to use.
+tag_field: The field used to tag in a collection. If None, automatically uses the one stated in the encoder.
+approx: Used for approximate search
+sum_fields: Whether to sum the multiple vectors similarity search score as 1 or seperate
+page_size: Size of each page of results
+page: Page of the results
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+filters: Query for filtering the search results
+min_score: Minimum score for similarity metric
+include_search_relevance: Whether to calculate a search_relevance cutoff score to flag relevant and less relevant results
+search_relevance_cutoff_aggressiveness: How aggressive the search_relevance cutoff score is (higher value the less results will be relevant)
+asc: Whether to sort results by ascending or descending order
+cluster_vector_field: The field to cluster on.
+n_clusters: Number of clusters to be specified.
+n_iter: Number of iterations in each run
+n_init: Number of runs to run with different centroid seeds
+
+"""
+		return requests.post(
+			url=self.url+'/collection/post_cluster_tag',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				data=data, 
+				tag_collection_name=tag_collection_name, 
+				encoder=encoder, 
+				tag_field=tag_field, 
+				approx=approx, 
+				sum_fields=sum_fields, 
+				page_size=page_size, 
+				page=page, 
+				metric=metric, 
+				filters=filters, 
+				min_score=min_score, 
+				include_search_relevance=include_search_relevance, 
+				search_relevance_cutoff_aggressiveness=search_relevance_cutoff_aggressiveness, 
+				asc=asc, 
+				cluster_vector_field=cluster_vector_field, 
+				n_clusters=n_clusters, 
+				n_iter=n_iter, 
+				n_init=n_init, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag_collection_from_vectors(self, collection_name, vector_field, tag_collection_name, tag_field="tag", tag_vector_field="tag_vector_", metric="cosine", alias="default", number_of_tags=5, include_tag_vector=True, pad_vector_length=100, refresh=True, return_tagged_documents=True, **kwargs):
+		"""Add tagging
+Tag vectors
+   
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+vector_field: vector field from the source collection to tag on
+tag_collection_name: Name of the collection you are retrieving the tags from
+tag_field: The field in the tag collection to use for tagging.
+tag_vector_field: vector field in the tag collection, used for matching the vectors to tag.
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+alias: The alias of the tags. Defaults to 'default'
+number_of_tags: The number of tags to retrieve.
+include_tag_vector: Whether to include the one hot encoded tag vector.
+pad_vector_length: Whether to pad the vector length of the one hot encoded array.
+refresh: If True, retags the whole collection.
+return_tagged_documents: If True, returns the original documents with tags.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/tag_collection_from_vectors',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				vector_field=vector_field, 
+				tag_collection_name=tag_collection_name, 
+				tag_field=tag_field, 
+				tag_vector_field=tag_vector_field, 
+				metric=metric, 
+				alias=alias, 
+				number_of_tags=number_of_tags, 
+				include_tag_vector=include_tag_vector, 
+				pad_vector_length=pad_vector_length, 
+				refresh=refresh, 
+				return_tagged_documents=return_tagged_documents, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag_documents(self, tag_collection_name, vector_field, documents={}, tag_field="tag", tag_vector_field="tag_vector_", alias="default", metric="cosine", number_of_tags=5, field="", include_tag_vector=True, pad_vector_length=100, **kwargs):
+		"""Tag documents.
+Tag documents
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
+tag_collection_name: Name of the collection you are retrieving the tags from
+tag_field: The field in the tag collection to use for tagging.
+tag_vector_field: vector field in the tag collection, used for matching the vectors to tag.
+alias: The alias of the tags. Defaults to 'default'
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+number_of_tags: The number of tags to retrieve.
+field: The field in the source collection to be tagged.
+vector_field: vector field from the source collection to tag on
+include_tag_vector: Whether to include the one hot encoded tag vector.
+pad_vector_length: Whether to pad the vector length of the one hot encoded array.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/tag_documents',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				documents=documents, 
+				tag_collection_name=tag_collection_name, 
+				tag_field=tag_field, 
+				tag_vector_field=tag_vector_field, 
+				alias=alias, 
+				metric=metric, 
+				number_of_tags=number_of_tags, 
+				field=field, 
+				vector_field=vector_field, 
+				include_tag_vector=include_tag_vector, 
+				pad_vector_length=pad_vector_length, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def store_taggers_pipeline(self, collection_name, taggers, **kwargs):
+		"""Store multiple tagger pipelines
+Store pipeline for taggers.
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: Name of Collection
+taggers: Taggers contain metadata to
+encode and then use a specific collection to get data.
+
+    {"field": field, "vector_field": vector_field, "tag_field": tag_field, 
+    "tag_vector_field": tag_vector_field, "number_of_tags": number_of_tags,
+    "alias": alias, "metric": metric}
+
+    
+
+"""
+		return requests.post(
+			url=self.url+'/collection/store_taggers_pipeline',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				taggers=taggers, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def tag_documents_from_hub(self, tag_collection_name, vector_field, hub_username, hub_api_key, documents={}, tag_field="tag", tag_vector_field="tag_vector_", alias="default", metric="cosine", number_of_tags=5, field="", include_tag_vector=True, pad_vector_length=100, **kwargs):
+		"""Add tagging from the Tag Hub.
+Tag documents from hub API
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+documents: A list of documents. Document is a JSON-like data that we store our metadata and vectors with. For specifying id of the document use the field '\_id', for specifying vector field use the suffix of '\_vector\_'
+tag_collection_name: Name of the collection you are retrieving the tags from
+tag_field: The field in the tag collection to use for tagging.
+tag_vector_field: vector field in the tag collection, used for matching the vectors to tag.
+alias: The alias of the tags. Defaults to 'default'
+metric: Similarity Metric, choose from ['cosine', 'l1', 'l2', 'dp']
+number_of_tags: The number of tags to retrieve.
+field: The field in the source collection to be tagged.
+vector_field: vector field from the source collection to tag on
+include_tag_vector: Whether to include the one hot encoded tag vector.
+pad_vector_length: Whether to pad the vector length of the one hot encoded array.
+hub_username: The username of the hub for the tag.
+hub_api_key: The api key of the hub for the tag.
+
+"""
+		return requests.post(
+			url=self.url+'/collection/tag_documents_from_hub',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				documents=documents, 
+				tag_collection_name=tag_collection_name, 
+				tag_field=tag_field, 
+				tag_vector_field=tag_vector_field, 
+				alias=alias, 
+				metric=metric, 
+				number_of_tags=number_of_tags, 
+				field=field, 
+				vector_field=vector_field, 
+				include_tag_vector=include_tag_vector, 
+				pad_vector_length=pad_vector_length, 
+				hub_username=hub_username, 
+				hub_api_key=hub_api_key, 
 				))
 
 	@retry()
