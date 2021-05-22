@@ -221,6 +221,22 @@ Args:
             return pd.DataFrame.from_records(response)
         else:
             return response
+    
+    def sample(
+        self, collection_name: str, page_size: int=5, return_as_pandas_df: bool=True, filters: list=[], seed: int=10
+    ):
+        docs = self.random_documents_with_filters(
+            collection_name=collection_name,
+            filters=filters,
+            page_size=page_size,
+            seed=seed
+        )
+        if "documents" in docs:
+            docs = docs['documents']
+        if return_as_pandas_df:
+            return pd.DataFrame.from_records(response)
+        else:
+            return response
 
     def retrieve_all_documents(
         self,
