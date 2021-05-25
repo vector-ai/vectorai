@@ -69,7 +69,7 @@ class DocUtilsMixin:
 
 
     @classmethod
-    def get_fields(self, fields: List[str], doc: Dict, missing_treatment='raise_error') -> List[Any]:
+    def get_fields(self, fields: List[str], doc: Dict, missing_treatment='return_empty_string') -> List[Any]:
         """
             For nested dictionaries, tries to access a field.
             e.g. 
@@ -95,7 +95,7 @@ class DocUtilsMixin:
         """
         return [self.get_field(f, doc, missing_treatment) for f in fields]
 
-    def get_field_across_documents(self, field: str, docs: List[Dict], missing_treatment: str='raise_error'):
+    def get_field_across_documents(self, field: str, docs: List[Dict], missing_treatment: str='return_empty_string'):
         """
             For nested dictionaries, tries to access a field.
             e.g. 
