@@ -335,26 +335,42 @@ class UtilsMixin:
         except:
             return False
 
-    def show_json(self, json: dict, selected_fields: List[str]=None, image_fields: List[str]=[],
+    def highlight(self, text1, text2):
+        # Highlight text2 inside text1 in HTML
+        return text1.replace(text2, '<b>' + text2 + '</b>')
+
+    def show_json(self, json: dict, selected_fields: List[str]=[], image_fields: List[str]=[],
         audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
-        nrows: int=None, image_width: int=60, include_vector=False, return_html: bool=False, missing_treatment: str='return_empty_string'):
+        nrows: int=None, image_width: int=60, include_vector=False, return_html: bool=False, missing_treatment: str='return_empty_string',
+        highlight_fields={}):
         """
         Function for showing the JSON field
         """
+        fields_to_show = image_fields + audio_fields + selected_fields 
+        fields_to_get = fields_to_show + list(highlight_fields.keys())
+        for x in highlight_fields.values():
+            fields_to_get += x
         if selected_fields is None:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields, chunk_schema= chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
+            json = self.unnest_json(self.clean_results(json), schema=fields_to_get, chunk_schema= chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
         else:
-            json = self.unnest_json(self.clean_results(json), schema=image_fields + audio_fields + selected_fields, chunk_schema=chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
+            json = self.unnest_json(self.clean_results(json), schema=fields_to_get, chunk_schema=chunk_image_fields + chunk_audio_fields, missing_treatment=missing_treatment)
+
+        for field_to_highlight, highlight in highlight_fields.items():
+            for h in highlight:
+                highlighters = json[h]
+                json[field_to_highlight] = [self.highlight(x, highlighters[i]) for i, x in enumerate(json[field_to_highlight])]
+                if h not in fields_to_show:
+                    del json[h]
         if nrows is not None:
             json = json[:nrows]
         if selected_fields is None and len(image_fields) == 0 and len(audio_fields) == 0:
             return self.show_df(pd.DataFrame(json), image_fields=image_fields, audio_fields=audio_fields,
                 chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
-                image_width=image_width, include_vector=include_vector, return_html=return_html)
+                image_width=image_width, include_vector=include_vector, return_html=return_html, highlight_fields=highlight_fields)
         return self.show_df(pd.DataFrame(json),
             image_fields=image_fields, audio_fields=audio_fields,
             chunk_image_fields=chunk_image_fields, chunk_audio_fields=chunk_audio_fields,
-            image_width=image_width, include_vector=include_vector, return_html=return_html)
+            image_width=image_width, include_vector=include_vector, return_html=return_html, highlight_fields=highlight_fields)
 
     def clean_results(self, results: dict):
         """
@@ -407,7 +423,7 @@ class UtilsMixin:
 
     def show_df(self, df: pd.DataFrame,
     image_fields: List[str]=[], audio_fields: List[str]=[], chunk_image_fields: List[str]=[],
-    chunk_audio_fields: List[str]=[], image_width: int=60,
+    chunk_audio_fields: List[str]=[], image_width: int=60, highlight_fields={},
     include_vector: bool=False, return_html: bool=False):
         """
             Shows a dataframe with the images and audio included inside the dataframe.
@@ -430,6 +446,10 @@ class UtilsMixin:
         formatters.update({audio: self.render_audio_in_html for audio in audio_fields})
         formatters.update({chunk_image: self.render_image_chunk for chunk_image in chunk_image_fields})
         formatters.update({chunk_audio: self.render_audio_chunk for chunk_audio in chunk_audio_fields})
+        # for field_to_highlight, highlight in highlight_fields.items():
+        #     for h in highlight:
+        #         highlighters = df[h].tolist()
+        #         df[field_to_highlight] = [x.replace(highlighters[i], '<b>' + highlighters[i] + '</b>') for i, x in enumerate(df[field_to_highlight].tolist())]
         if not include_vector:
             cols = [x for x in list(df.columns) if '_vector_' not in x]
             df = df[cols]
