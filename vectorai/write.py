@@ -356,7 +356,7 @@ class ViWriteClient(ViAPIClient, UtilsMixin):
         for f, model_list in models.items():
             for model in model_list:
                 vector_field = self._get_vector_name_for_encoding(f, model, model_list)
-                values = self.get_field_across_documents(f, documents)
+                values = self.get_field_across_documents(f, documents, )
                 vectors = model.bulk_encode(values)
                 self.set_field_across_documents(vector_field, vectors, documents)
         return documents
