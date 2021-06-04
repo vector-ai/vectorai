@@ -337,7 +337,7 @@ class UtilsMixin:
 
     def highlight(self, text1, text2):
         # Highlight text2 inside text1 in HTML
-        return text1.replace(text2, '<b>' + text2 + '</b>')
+        return text1.replace(text2, '<mark>' + text2 + '</mark>')
 
     def show_json(self, json: dict, selected_fields: List[str]=[], image_fields: List[str]=[],
         audio_fields: List[str]=[], chunk_image_fields: List[str]=[], chunk_audio_fields: List[str]=[],
