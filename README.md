@@ -1,3 +1,5 @@
+(VectorAI is depreciated, and no longer maintained. We recommend using Relevance AI for using vector search, check out https://tryrelevance.com )
+
 <p align="center">
     <a href="https://getvectorai.com">
         <img src="https://getvectorai.com/assets/logo-with-text-v2.png" width="400"></img>
