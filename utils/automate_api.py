@@ -2,13 +2,9 @@ if __name__=="__main__":
     import os
     from openapi_to_sdk.sdk_automation import PythonSDKBuilder
 
-    url="https://vectorai-development-api.azurewebsites.net"
-    url="https://vectorai-development-api.azurewebsites.net"
-    # url = "https://api.vctr.ai"
+    url = "https://vectorai-production-api.azurewebsites.net"
     sdk = PythonSDKBuilder(
         url=url,
-        # url="https://vectorai-development-api.azurewebsites.net",
-        # url='https://vecdb-aueast-api.azurewebsites.net',
         inherited_properties=['username', 'api_key', 'url'],
         decorators=[
             'retry()',
@@ -16,9 +12,7 @@ if __name__=="__main__":
         override_param_defaults=dict(
             min_score=None,
             cursor=None,
-            # url='https://vecdb-aueast-api.azurewebsites.net',
             url=url,
-            # sort=False,
             sort_by_created_at_date=False,
         ),
         internal_functions=[

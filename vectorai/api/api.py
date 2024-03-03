@@ -1129,7 +1129,7 @@ documents: Json documents to encode.
 
 	@retry()
 	@return_curl_or_response('json')
-	def predict_knn_regression(self, collection_name, vector, search_field, target_field, impute_value, k=5, weighting=True, predict_operation="mean", **kwargs):
+	def predict_knn_regression(self, collection_name, vector, search_field, target_field, impute_value, k=5, weighting=True, predict_operation="mean", include_search_results=True, **kwargs):
 		"""Predict KNN regression.
 Predict with KNN regression using normal search.
     
@@ -1145,6 +1145,7 @@ k: The number of results for KNN.
 weighting: weighting
 impute_value: What value to fill if target field is missing.
 predict_operation: How to predict using the vectors.
+include_search_results: If True, returns the results as well.
 
 """
 		return requests.post(
@@ -1160,6 +1161,7 @@ predict_operation: How to predict using the vectors.
 				weighting=weighting, 
 				impute_value=impute_value, 
 				predict_operation=predict_operation, 
+				include_search_results=include_search_results, 
 				))
 
 	@retry()
@@ -1241,6 +1243,10 @@ If you are looking to filter for documents where a field doesn't exist, run this
 These are the available conditions:
 
     "==", "!=", ">=", ">", "<", "<="
+
+If you are looking to combine your filters with multiple ORs, simply add the following inside the query
+`{"strict":"must_or"}`. 
+
     
 Args
 ========
@@ -2121,7 +2127,7 @@ store_to_pipeline: Whether to store the encoder to the chunking pipeline
 
 	@retry()
 	@return_curl_or_response('json')
-	def text_chunking_encoder(self, collection_name, text_field, chunk_field, insert_results_to_seperate_collection_name, encoder_task="text", refresh=True, store_to_pipeline=True, **kwargs):
+	def text_chunking_encoder(self, collection_name, text_field, chunk_field, insert_results_to_seperate_collection_name, encoder_task="text", refresh=True, store_to_pipeline=True, alias="", **kwargs):
 		"""Chunk a text field and encode the chunks
 Split text into separate sentences. Encode each sentence to create chunkvectors.
 These are stored as \_chunkvector\_. The chunk field created is `field` + \_chunk\_.
@@ -2137,6 +2143,7 @@ encoder_task: Encoder that is used to turn the text chunks into vectors
 refresh: Whether to refresh the whole collection and re-encode all to vectors
 insert_results_to_seperate_collection_name: If specified the chunks will be inserted into a seperate collection. Default is None which means no seperate collection.
 store_to_pipeline: Whether to store the encoder to the chunking pipeline
+alias: If alias is present, it will create change the name of the created vector field into field_{alias}_chunkvector_
 
 """
 		return requests.post(
@@ -2151,6 +2158,7 @@ store_to_pipeline: Whether to store the encoder to the chunking pipeline
 				refresh=refresh, 
 				insert_results_to_seperate_collection_name=insert_results_to_seperate_collection_name, 
 				store_to_pipeline=store_to_pipeline, 
+				alias=alias, 
 				))
 
 	@retry()
@@ -2180,6 +2188,31 @@ filename: The name of the PDF file.
 
 	@retry()
 	@return_curl_or_response('json')
+	def bulk_process_pdf(self, collection_name, file_urls, filenames, **kwargs):
+		"""Process multiple pdfs
+Insert multiple PDFs into Vector AI:
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: What collection to insert the PDF into
+file_urls: The file url blobs
+filenames: The name of the PDF files
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/bulk_process_pdf',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				file_urls=file_urls, 
+				filenames=filenames, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
 	def process_doc(self, collection_name, file_url, filename, **kwargs):
 		"""Process doc or docx
 Insert a word doc or docx file into Vector AI
@@ -2201,6 +2234,31 @@ filename: The name of the Doc or DocX file
 				collection_name=collection_name, 
 				file_url=file_url, 
 				filename=filename, 
+				))
+
+	@retry()
+	@return_curl_or_response('json')
+	def bulk_process_doc(self, collection_name, file_urls, filenames, **kwargs):
+		"""Process multiple doc or docx files
+Insert multiple word docs into Vector AI
+    
+Args
+========
+username: Username
+api_key: Api Key, you can request it from request_api_key
+collection_name: What collection to insert the word doc into
+file_urls: The file url blobs
+filenames: The name of the Doc or DocX files
+
+"""
+		return requests.post(
+			url=self.url+'/collection/job/bulk_process_doc',
+			json=dict(
+				username=self.username,
+				api_key=self.api_key,
+				collection_name=collection_name, 
+				file_urls=file_urls, 
+				filenames=filenames, 
 				))
 
 	@retry()
@@ -4121,84 +4179,5 @@ hub_api_key: The api key of the hub for the tag.
 				pad_vector_length=pad_vector_length, 
 				hub_username=hub_username, 
 				hub_api_key=hub_api_key, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def rank_comparator(self, ranked_list_1, ranked_list_2, **kwargs):
-		"""Compare ranks between 2 results list.
-Compare the ranks between 2 results list in VecDB
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-ranked_list_1: First ranked List
-ranked_list_2: Second ranked list
-
-"""
-		return requests.post(
-			url=self.url+'/experimentation/rank_comparator',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				ranked_list_1=ranked_list_1, 
-				ranked_list_2=ranked_list_2, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def bias_indicator(self, anchor_documents, documents, metadata_field, vector_field, **kwargs):
-		"""Compare bias of documents against anchor documents
-Compare bias of documents against anchor documents
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-anchor_documents: Anchor documents to compare other documents against.
-documents: Documents to compare against the anchor documents
-metadata_field: Field from which the vector was derived
-vector_field: Vector field to compare against
-
-"""
-		return requests.post(
-			url=self.url+'/experimentation/bias_indicator',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				anchor_documents=anchor_documents, 
-				documents=documents, 
-				metadata_field=metadata_field, 
-				vector_field=vector_field, 
-				))
-
-	@retry()
-	@return_curl_or_response('json')
-	def cluster_comparator(self, collection_name, cluster_field, cluster_value, vector_field, alias, **kwargs):
-		"""Compare clusters
-Compare the clusters for cluster comparator
-    
-Args
-========
-username: Username
-api_key: Api Key, you can request it from request_api_key
-collection_name: the name of the collection
-cluster_field: the cluster field
-cluster_value: the cluster values by which to compare on
-vector_field: The vector field that has been clustered
-alias: The alias of the vector field
-
-"""
-		return requests.post(
-			url=self.url+'/experimentation/cluster_comparator',
-			json=dict(
-				username=self.username,
-				api_key=self.api_key,
-				collection_name=collection_name, 
-				cluster_field=cluster_field, 
-				cluster_value=cluster_value, 
-				vector_field=vector_field, 
-				alias=alias, 
 				))
 
